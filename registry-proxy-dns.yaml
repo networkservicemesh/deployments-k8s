@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: nsm-system
+  name: nsm-registry-proxy-dns
+  labels:
+    app: nsm-registry-proxy-dns
+spec:
+  selector:
+    matchLabels:
+      app: nsm-registry-proxy-dns
+  template:
+    metadata:
+      labels:
+        app: nsm-registry-proxy-dns
+    spec:
+      containers:
+        - image: networkservicemeshci/cmd-registry-proxy-dns:f2bb4611
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: REGISTRY-PROXY-DNS_LISTEN_ON
+              value: tcp://:5003
+          imagePullPolicy: IfNotPresent
+          name: nsm-registry-proxy-dns
+          ports:
+            - containerPort: 5003
+              hostPort: 5003
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate

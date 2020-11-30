@@ -1,0 +1,23 @@
+---
+name: Pull Request on update/* Branch Push
+on:
+  push:
+    branches:
+      - update/**
+jobs:
+  auto-pull-request:
+    name: Pull Request on update/* Branch Push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Construct PR message
+        run: |
+          PULL_REQUEST_BODY=$(git log -1)
+          echo ${PULL_REQUEST_BODY}
+          echo PULL_REQUEST_BODY=${PULL_REQUEST_BODY} >> $GITHUB_ENV
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@1.0.12
+        env:
+          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+          BRANCH_PREFIX: "update/"
+          PULL_REQUEST_BRANCH: "master"

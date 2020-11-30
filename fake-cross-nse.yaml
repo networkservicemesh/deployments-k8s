@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fake-cross-nse
+  namespace: nsm-system
+  labels:
+    app: fake-cross-nse
+spec:
+  selector:
+    matchLabels:
+      app: fake-cross-nse
+  template:
+    metadata:
+      labels:
+        app: fake-cross-nse
+    spec:
+      containers:
+        - image: networkservicemeshci/fake-cross-nse:latest
+          imagePullPolicy: IfNotPresent
+          name: fake-cross-nse
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: FAKE-CROSS-NSE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
