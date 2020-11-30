@@ -3,10 +3,10 @@ name: ci
 on:
   pull_request:
     branches:
-      - master
+      - main
   push:
     branches:
-      - master
+      - main
 jobs:
   yamllint:
     name: yamllint
@@ -29,13 +29,13 @@ jobs:
     steps:
       - name: Check out the code
         uses: actions/checkout@v2
-      - name: Fetch master
+      - name: Fetch main
         run: |
           git remote -v
-          git fetch --depth=1 origin master
+          git fetch --depth=1 origin main
       - name: Only allow go.mod and go.sum changes
         run: |
-          find . -type f ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/master -- {} +
+          find . -type f ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/main -- {} +
       - name: Automerge nsmbot PR
         uses: ridedott/merge-me-action@master
         with:
