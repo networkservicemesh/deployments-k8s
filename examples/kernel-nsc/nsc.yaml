@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nsc
+  labels:
+    app: nsc
+spec:
+  containers:
+    - image: networkservicemeshci/cmd-nsc:f5401987
+      imagePullPolicy: IfNotPresent
+      name: nsc
+      env:
+        - name: NSM_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NSM_NETWORK_SERVICES
+          value: kernel://icmp-responder/nsm-1
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: unix:///run/spire/sockets/agent.sock
+      volumeMounts:
+        - name: spire-agent-socket
+          mountPath: /run/spire/sockets
+          readOnly: true
+        - name: nsm-socket
+          mountPath: /var/lib/networkservicemesh
+          readOnly: true
+  volumes:
+    - name: spire-agent-socket
+      hostPath:
+        path: /run/spire/sockets
+        type: Directory
+    - name: nsm-socket
+      hostPath:
+        path: /var/lib/networkservicemesh
+        type: DirectoryOrCreate
