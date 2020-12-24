@@ -2,43 +2,29 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: nsmgr
-  namespace: nsm-system
+  name: fake-cross-nse
   labels:
-    app: nsmgr
+    app: fake-cross-nse
 spec:
   selector:
     matchLabels:
-      app: nsmgr
+      app: fake-cross-nse
   template:
     metadata:
       labels:
-        app: nsmgr
+        app: fake-cross-nse
     spec:
       containers:
-        - image: networkservicemeshci/cmd-nsmgr:12915e74
+        - image: networkservicemeshci/fake-cross-nse:latest
           imagePullPolicy: IfNotPresent
-          name: nsmgr
-          ports:
-            - containerPort: 5001
-              hostPort: 5001
+          name: fake-cross-nse
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: NSM_NAME
+            - name: FAKE-CROSS-NSE_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NSM_REGISTRY_URL
-              value: "nsm-registry-svc:5002"
-            #            - name: DLV_LISTEN_NSMGR
-            #              value: :40000
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-            - name: NSM_LISTEN_ON
-              value: unix:///var/lib/networkservicemesh/nsm.io.sock,tcp://:5001
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
