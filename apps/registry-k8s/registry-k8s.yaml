@@ -1,37 +1,36 @@
 ---
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: fake-cross-nse
-  namespace: nsm-system
+  name: nsm-registry
   labels:
-    app: fake-cross-nse
+    app: nsm-registry
 spec:
   selector:
     matchLabels:
-      app: fake-cross-nse
+      app: nsm-registry
   template:
     metadata:
       labels:
-        app: fake-cross-nse
+        app: nsm-registry
     spec:
       containers:
-        - image: networkservicemeshci/fake-cross-nse:latest
-          imagePullPolicy: IfNotPresent
-          name: fake-cross-nse
+        - image: networkservicemeshci/cmd-registry-memory:b6f1d58a
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: FAKE-CROSS-NSE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
+            - name: REGISTRY_MEMORY_LISTEN_ON
+              value: tcp://:5002
+            - name: REGISTRY_MEMORY_PROXY_REGISTRY_URL
+              value: nsm-registry-proxy-dns-svc:5003
+          imagePullPolicy: IfNotPresent
+          name: nsm-registry
+          ports:
+            - containerPort: 5002
+              hostPort: 5002
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
-              readOnly: true
-            - name: nsm-socket
-              mountPath: /var/lib/networkservicemesh
       volumes:
         - name: spire-agent-socket
           hostPath:
