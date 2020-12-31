@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse
+  labels:
+    app: nse
+spec:
+  selector:
+    matchLabels:
+      app: nse
+  template:
+    metadata:
+      labels:
+        app: nse
+    spec:
+      hostNetwork: true
+      containers:
+        - name: ponger
+          # https://github.com/Bolodya1997/docker-dpdk
+          image: rrandom312/dpdk-pingpong:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "/root/scripts/pong.sh", "eno4", "31"]
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: scripts
+              mountPath: /root/scripts
+              readOnly: true
+            - name: vfio
+              mountPath: /dev/vfio
+
+        - name: sidecar
+          image: networkservicemeshci/cmd-nse-vfio:b00ed50b
+          imagePullPolicy: Always
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSE_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSE_SERVICES
+              value: "pingpong@worker.domain: { addr: 0a:55:44:33:22:11 }"
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm
+              mountPath: /var/lib/networkservicemesh
+          # We don't actually need resources for NSE, but we need to be sure that it is going to be deployed on the
+          # correct node.
+          resources:
+            limits:
+              master.domain/10G: 1
+
+      volumes:
+        - name: scripts
+          configMap:
+            name: nse
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: Directory
+        - name: vfio
+          hostPath:
+            path: /dev/vfio
+            type: DirectoryOrCreate
