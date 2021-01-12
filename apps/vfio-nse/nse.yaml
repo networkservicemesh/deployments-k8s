@@ -54,6 +54,9 @@ spec:
           # correct node.
           resources:
             limits:
+              # We expect SR-IOV forwarders on the nodes to be configured:
+              # master - provides PCI functions targeted to the worker.domain/10G
+              # worker - provides PCI functions targeted to the master.domain/10G
               master.domain/10G: 1
 
       volumes:
