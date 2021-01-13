@@ -30,6 +30,7 @@ kubectl apply -k .
 
 ## Cleanup
 
+Delete ns:
 ```bash
 kubectl delete ns nsm-system
 ```

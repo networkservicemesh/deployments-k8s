@@ -86,7 +86,7 @@ test "${PONG_PACKETS}" -ne 0 \
 
 ## Cleanup
 
-Stop ponger
+Stop ponger:
 ```bash
 NSE_POD=$(kubectl -n ${NAMESPACE} get pods -l app=nse |
   grep -v "NAME" |
@@ -98,7 +98,7 @@ kubectl -n ${NAMESPACE} exec ${NSE_POD} --container ponger -- /bin/bash -c '    
 '
 ```
 
-Delete ns
+Delete ns:
 ```bash
 kubectl delete ns ${NAMESPACE}
 ```

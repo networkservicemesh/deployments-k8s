@@ -28,6 +28,7 @@ kubectl exec -n spire spire-server-0 -- \
 
 ## Cleanup
 
+Delete ns:
 ```bash
 kubectl delete ns spire
 ```
