@@ -15,7 +15,7 @@ spec:
         app: nse
     spec:
       containers:
-        - image: networkservicemeshci/cmd-nse-icmp-responder:9c607b32
+        - image: networkservicemeshci/cmd-nse-icmp-responder:f1417163
           imagePullPolicy: IfNotPresent
           name: nse
           env:
