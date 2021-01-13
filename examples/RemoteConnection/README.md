@@ -1,6 +1,6 @@
-# Test local connection
+# Test remote connection
 
-This example shows that nsc and nse on the different nodes could find each other.
+This example shows that NSC and NSE on the different nodes could find and work with each other.
 
 ## Run
 
@@ -22,15 +22,11 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select first node to deploy nsc
+Get nodes exclude control-plane:
 ```bash
-NODE1=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-Select second node to deploy nsc
-```bash
-NODE2=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[1])
-```
 
 Create customization file
 ```bash
@@ -63,7 +59,7 @@ spec:
   template:
     spec:
       nodeSelector: 
-        kubernetes.io/hostname: ${NODE1}
+        kubernetes.io/hostname: ${NODES[0]}
 EOF
 ```
 Create nse patch to assign to concreate NODE
@@ -78,7 +74,7 @@ spec:
   template:
     spec:
       nodeSelector: 
-        kubernetes.io/hostname: ${NODE2}
+        kubernetes.io/hostname: ${NODES[1]}
 EOF
 ```
 
