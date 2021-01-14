@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse
+  labels:
+    app: nse
+spec:
+  selector:
+    matchLabels:
+      app: nse
+  template:
+    metadata:
+      labels:
+        app: nse
+    spec:
+      containers:
+        - name: nse
+          image: networkservicemeshci/cmd-nse-icmp-responder:17ac4016
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSE_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSE_LABELS
+              value: serviceDomain:worker.domain
+            - name: NSE_CIDR_PREFIX
+              value: 10.0.0.200/31
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+          # We don't actually need resources for NSE, but we need to be sure that it is going to be deployed on the
+          # correct node.
+          resources:
+            limits:
+              # We expect SR-IOV forwarders on the nodes to be configured:
+              # master - provides PCI functions targeted to the worker.domain/10G
+              # worker - provides PCI functions targeted to the master.domain/10G
+              master.domain/10G: 1
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
