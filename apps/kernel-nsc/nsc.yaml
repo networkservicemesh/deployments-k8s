@@ -15,7 +15,7 @@ spec:
         app: nsc
     spec:
       containers:
-        - image: networkservicemeshci/cmd-nsc:9790d03f
+        - image: networkservicemeshci/cmd-nsc:2b4d12fb
           imagePullPolicy: IfNotPresent
           name: nsc
           env:
