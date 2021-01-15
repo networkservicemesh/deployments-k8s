@@ -31,9 +31,6 @@ spec:
             - name: spire-config
               mountPath: /run/spire/config
               readOnly: true
-            - name: spire-data
-              mountPath: /run/spire/data
-              readOnly: false
           livenessProbe:
             exec:
               command:
@@ -47,13 +44,3 @@ spec:
         - name: spire-config
           configMap:
             name: spire-server
-  volumeClaimTemplates:
-    - metadata:
-        name: spire-data
-        namespace: spire
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi

@@ -3,17 +3,14 @@
 ## Run
 
 To apply spire deployments following the next command:
-
 ```bash
 kubectl apply -k .
 ```
 
 Wait for PODs status ready:
-
 ```bash
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 ```
-
 ```bash
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
 ```
@@ -31,6 +28,7 @@ kubectl exec -n spire spire-server-0 -- \
 
 ## Cleanup
 
+Delete ns:
 ```bash
 kubectl delete ns spire
 ```
