@@ -7,4 +7,4 @@ namespace: nsm-system
 bases:
 - ../../apps/nsmgr
 - ../../apps/fake-forwarder
-- ../../apps/registry-k8s
+- ../../apps/registry-memory
