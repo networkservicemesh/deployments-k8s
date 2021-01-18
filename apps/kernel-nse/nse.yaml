@@ -15,18 +15,18 @@ spec:
         app: nse
     spec:
       containers:
-        - image: networkservicemeshci/cmd-nse-icmp-responder:17ac4016
+        - name: nse
+          image: networkservicemeshci/cmd-nse-icmp-responder:17ac4016
           imagePullPolicy: IfNotPresent
-          name: nse
           env:
-            - name: NSE_CONNECT_TO
-              value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSE_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: NSE_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

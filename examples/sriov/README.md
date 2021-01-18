@@ -5,6 +5,7 @@
 ## Includes
 
 - [VFIO Connection](../VFIOConnection)
+- [Kernel Connection](../SRIOVKernelConnection)
 
 ## Run
 

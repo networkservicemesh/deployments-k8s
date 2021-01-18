@@ -15,18 +15,16 @@ spec:
         app: nsc
     spec:
       containers:
-        - image: networkservicemeshci/cmd-nsc:be34b808
+        - name: nsc
+          image: networkservicemeshci/cmd-nsc:be34b808
           imagePullPolicy: IfNotPresent
-          name: nsc
           env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
             - name: NSM_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
-            - name: SPIFFE_ENDPOINT_SOCKET
-              value: unix:///run/spire/sockets/agent.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
