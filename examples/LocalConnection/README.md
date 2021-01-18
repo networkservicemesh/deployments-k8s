@@ -1,19 +1,17 @@
 # Test local connection
 
 
-This example shows that nsc and nse on the one node could find each other.
+This example shows that NSC and NSE on the one node can find each other.
 
 ## Run
 
-Create test namespace
-
+Create test namespace:
 ```bash
 NAMESPACE=($(kubectl create -f namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
 Register namespace in `spire` server:
-
 ```bash
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
@@ -23,12 +21,12 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy nsc and nse
+Select node to deploy NSC and NSE:
 ```bash
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
-Create customization file
+Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -47,7 +45,7 @@ patchesStrategicMerge:
 EOF
 ```
 
-Create nsc patch to assign to concreate NODE
+Create NSC patch:
 ```bash
 cat > patch-nsc.yaml <<EOF
 ---
@@ -58,11 +56,17 @@ metadata:
 spec:
   template:
     spec:
-      nodeSelector: 
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://icmp-responder/nsm-1
+      nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
 ```
-Create nse patch to assign to concreate NODE
+
+Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -73,13 +77,12 @@ metadata:
 spec:
   template:
     spec:
-      nodeSelector: 
+      nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
-Deploy nsc and nse:
-
+Deploy NSC and NSE:
 ```bash
 kubectl apply -k .
 ```
@@ -99,7 +102,7 @@ kubectl logs -l app=nsc -n ${NAMESPACE} | grep "All client init operations are d
 
 ## Cleanup
 
-Delete ns
+Delete ns:
 ```bash
 kubectl delete ns ${NAMESPACE}
 ```

@@ -4,15 +4,13 @@ This example shows that NSC and NSE on the different nodes could find and work w
 
 ## Run
 
-Create test namespace
-
+Create test namespace:
 ```bash
 NAMESPACE=($(kubectl create -f namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
 Register namespace in `spire` server:
-
 ```bash
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
@@ -27,8 +25,7 @@ Get nodes exclude control-plane:
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-
-Create customization file
+Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -47,7 +44,7 @@ patchesStrategicMerge:
 EOF
 ```
 
-Create nsc patch to assign to concreate NODE
+Create NSC patch:
 ```bash
 cat > patch-nsc.yaml <<EOF
 ---
@@ -58,11 +55,17 @@ metadata:
 spec:
   template:
     spec:
-      nodeSelector: 
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://icmp-responder/nsm-1
+      nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
+
 ```
-Create nse patch to assign to concreate NODE
+Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -73,19 +76,18 @@ metadata:
 spec:
   template:
     spec:
-      nodeSelector: 
+      nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
 ```
 
-Deploy nsc and nse:
-
+Deploy NSC and NSE:
 ```bash
 kubectl apply -k .
 ```
 
 Wait for applications ready:
-```bash 
+```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 ```
 ```bash
@@ -95,12 +97,11 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
 Check connection result:
 ```bash
 kubectl logs -l app=nsc -n ${NAMESPACE} | grep "All client init operations are done."
-
 ```
 
 ## Cleanup
 
-Delete ns
+Delete ns:
 ```bash
 kubectl delete ns ${NAMESPACE}
 ```

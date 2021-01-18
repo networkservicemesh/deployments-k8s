@@ -30,8 +30,60 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../apps/sriov-kernel-nsc
-- ../../apps/sriov-kernel-nse
+- ../../apps/kernel-nsc
+- ../../apps/kernel-nse
+- ../../apps/kernel-ponger
+
+
+patchesStrategicMerge:
+- patch-nsc.yaml
+- patch-nse.yaml
+EOF
+```
+
+Create NSC patch:
+```bash
+cat > patch-nsc.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc
+spec:
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://icmp-responder/nsm-1?sriovToken=worker.domain/10G
+          resources:
+            limits:
+              worker.domain/10G: 1
+EOF
+```
+
+Create NSE patch:
+```bash
+cat > patch-nse.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSE_LABELS
+              value: serviceDomain:worker.domain
+            - name: NSE_CIDR_PREFIX
+              value: 10.0.0.200/31
+          resources:
+            limits:
+              master.domain/10G: 1
 EOF
 ```
 
