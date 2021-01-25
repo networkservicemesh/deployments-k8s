@@ -8,8 +8,8 @@ Basis example contains setup and tear down logic with default NSM infrastructure
 
 ## Includes
 
-- [Local Connection](../LocalConnection)
-- [Remote Connection](../RemoteConnection)
+- [Local Connection](../use-cases/LocalConnection)
+- [Remote Connection](../use-cases/RemoteConnection)
 
 ## Run
 

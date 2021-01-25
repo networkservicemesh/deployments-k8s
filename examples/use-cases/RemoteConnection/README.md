@@ -1,13 +1,12 @@
-# Test local connection
+# Test remote connection
 
-
-This example shows that NSC and NSE on the one node can find each other.
+This example shows that NSC and NSE on the different nodes could find and work with each other.
 
 ## Run
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f ../namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -21,9 +20,9 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC and NSE:
+Get nodes exclude control-plane:
 ```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
 Create customization file:
@@ -36,8 +35,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../apps/kernel-nsc
-- ../../apps/kernel-nse
+- ../../../apps/kernel-nsc
+- ../../../apps/kernel-nse
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -61,11 +60,12 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
-EOF
-```
 
+      nodeSelector:
+        kubernetes.io/hostname: ${NODES[0]}
+EOF
+
+```
 Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -77,8 +77,15 @@ metadata:
 spec:
   template:
     spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSE_CIDR_PREFIX
+              value: 172.16.1.100/31
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://icmp-responder/nsm-1
       nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+        kubernetes.io/hostname: ${NODES[1]}
 EOF
 ```
 
@@ -88,7 +95,7 @@ kubectl apply -k .
 ```
 
 Wait for applications ready:
-```bash 
+```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 ```
 ```bash

@@ -6,7 +6,7 @@ This example shows that NSC and NSE can work with each other over the VFIO conne
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f ../namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -30,8 +30,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../apps/vfio-nsc
-- ../../apps/vfio-nse
+- ../../../apps/vfio-nsc
+- ../../../apps/vfio-nse
 EOF
 ```
 

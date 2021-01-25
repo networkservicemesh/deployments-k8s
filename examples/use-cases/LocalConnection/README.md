@@ -1,12 +1,13 @@
-# Test remote connection
+# Test local connection
 
-This example shows that NSC and NSE on the different nodes could find and work with each other.
+
+This example shows that NSC and NSE on the one node can find each other.
 
 ## Run
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f ../namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -20,9 +21,9 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Get nodes exclude control-plane:
+Select node to deploy NSC and NSE:
 ```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
+NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
 Create customization file:
@@ -35,8 +36,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../apps/kernel-nsc
-- ../../apps/kernel-nse
+- ../../../apps/kernel-nsc
+- ../../../apps/kernel-nse
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -61,10 +62,10 @@ spec:
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
       nodeSelector:
-        kubernetes.io/hostname: ${NODES[0]}
+        kubernetes.io/hostname: ${NODE}
 EOF
-
 ```
+
 Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -76,8 +77,13 @@ metadata:
 spec:
   template:
     spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://icmp-responder/nsm-1
       nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+        kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
@@ -87,7 +93,7 @@ kubectl apply -k .
 ```
 
 Wait for applications ready:
-```bash
+```bash 
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 ```
 ```bash

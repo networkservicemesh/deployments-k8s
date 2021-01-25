@@ -6,5 +6,5 @@ namespace: nsm-system
 
 bases:
 - ../../apps/nsmgr
-- ../../apps/fake-forwarder
+- ../../apps/forwarder-vpp
 - ../../apps/registry-memory
