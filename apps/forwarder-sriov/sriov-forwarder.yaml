@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: sriov-forwarder
+  name: forwarder-sriov
   labels:
-    app: sriov-forwarder
+    app: forwarder-sriov
 spec:
   selector:
     matchLabels:
-      app: sriov-forwarder
+      app: forwarder-sriov
   template:
     metadata:
       labels:
-        app: sriov-forwarder
+        app: forwarder-sriov
     spec:
       hostNetwork: true
       containers:
         - image: networkservicemeshci/cmd-forwarder-sriov:5caf3253
           imagePullPolicy: IfNotPresent
-          name: sriov-forwarder
+          name: forwarder-sriov
           securityContext:
             privileged: true
           env:

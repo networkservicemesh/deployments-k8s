@@ -30,9 +30,9 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../apps/kernel-nsc
-- ../../apps/kernel-nse
-- ../../apps/kernel-ponger
+- ../../../apps/nsc-kernel
+- ../../../apps/nse-kernel
+- ../../../apps/nsc-kernel-ponger
 
 
 patchesStrategicMerge:
