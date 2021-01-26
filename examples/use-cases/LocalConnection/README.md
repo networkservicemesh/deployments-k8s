@@ -36,8 +36,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../../apps/kernel-nsc
-- ../../../apps/kernel-nse
+- ../../../apps/nsc-kernel
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -80,6 +80,8 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSE_CIDR_PREFIX
+              value: 172.16.1.100/31
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
       nodeSelector:
@@ -100,9 +102,23 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
 ```
 
-Check connection result:
+Find nsc and nse pods by labesl:
 ```bash
-kubectl logs -l app=nsc -n ${NAMESPACE} | grep "All client init operations are done."
+NSC=$(kubectl get pods -l app=nsc -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+```bash
+NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+Ping from nsc to nse:
+```bash
+kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+```
+
+Ping from nse to nsc:
+```bash
+kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup

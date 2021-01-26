@@ -31,7 +31,7 @@ namespace: ${NAMESPACE}
 
 bases:
 - ../../../apps/vfio-nsc
-- ../../../apps/vfio-nse
+- ../../../apps/nse-vfio
 EOF
 ```
 

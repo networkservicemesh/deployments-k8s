@@ -6,5 +6,5 @@ namespace: nsm-system
 
 bases:
 - ../../apps/nsmgr
-- ../../apps/sriov-forwarder
+- ../../apps/forwarder-sriov
 - ../../apps/registry-memory
