@@ -102,11 +102,6 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
 ```
 
-Check connection result:
-```bash
-kubectl logs -l app=nsc -n ${NAMESPACE} | grep "All client init operations are done."
-```
-
 Find nsc and nse pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
