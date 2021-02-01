@@ -78,25 +78,19 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: 1.15
-      - name: Update ${{ github.repository }} locally
+      - name: Update ${{ matrix.repository }} locally
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          GOPRIVATE=github.com/networkservicemesh go get -u github.com/${{ github.repository }}
           go generate ./...
           go mod tidy
-          git diff
       - uses: benjlevesque/short-sha@v1.2
         id: short-sha
         with:
           length: 8
-      - name: Find and Replace version
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "s.Version =.*\n"
-          replace: "$s.Version =${{ steps.short-sha.outputs.sha }}\n"
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
+          sed -r -i 's/(s\.Version =.*)/s.Version = "${{ steps.short-sha.outputs.sha }}"/g' extensions/base/suite.go
           echo Starting to update repositotry ${{ matrix.repository }}
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
@@ -107,7 +101,7 @@ jobs:
           fi
           echo "Update go.mod and go.sum to latest version from ${{ github.repository }}@main ${{ github.repository }}#${{ steps.findPr.outputs.pr }}" >> /tmp/commit-message
           echo "" >> /tmp/commit-message
-          echo "${{ github.repository }} PR link: https://github.com/${{ github.repository }}/pull/${{ github.event.number }}" >> /tmp/commit-message
+          echo "${{ github.repository }} PR link: https://github.com/${{ github.repository }}/pull/${{ steps.findPr.outputs.pr }}" >> /tmp/commit-message
           echo "" >> /tmp/commit-message
           echo "${{ github.repository }} commit message:" >> /tmp/commit-message
           git log -1 >> /tmp/commit-message
