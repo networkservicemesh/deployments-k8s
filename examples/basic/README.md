@@ -8,8 +8,9 @@ Basis example contains setup and tear down logic with default NSM infrastructure
 
 ## Includes
 
-- [Local Connection](../use-cases/LocalConnection)
-- [Remote Connection](../use-cases/RemoteConnection)
+- [Memif to Memif Connection](../use-cases/Memif2Memif)
+- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
+- [Kernel to VXLAN to Kernel Connection](../use-cases/Kernel2Vxlan2Kernel)
 
 ## Run
 
