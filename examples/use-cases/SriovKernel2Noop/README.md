@@ -6,7 +6,7 @@ This example shows that NSC and NSE can work with each other over the SR-IOV ker
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f ../namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
