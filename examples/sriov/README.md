@@ -4,8 +4,8 @@
 
 ## Includes
 
-- [VFIO Connection](../use-cases/VFIOConnection)
-- [Kernel Connection](../use-cases/SRIOVKernelConnection)
+- [VFIO Connection](../use-cases/Vfio2Noop)
+- [Kernel Connection](../use-cases/SriovKernel2Noop)
 
 ## Run
 
