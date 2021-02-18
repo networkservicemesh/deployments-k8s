@@ -30,7 +30,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../../apps/vfio-nsc
+- ../../../apps/nsc-vfio
 - ../../../apps/nse-vfio
 EOF
 ```
@@ -50,33 +50,29 @@ kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse
 
 Get NSC pod:
 ```bash
-NSC_POD=$(kubectl -n ${NAMESPACE} get pods -l app=nsc |
-  grep -v "NAME" |
-  sed -E "s/([.]*) .*/\1/g")
+NSC=$(kubectl -n ${NAMESPACE} get pods -l app=nsc --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Check connection result:
 ```bash
-kubectl -n ${NAMESPACE} logs ${NSC_POD} sidecar |
+kubectl -n ${NAMESPACE} logs ${NSC} sidecar |
   grep "All client init operations are done."
 ```
 
 Test connection:
 ```bash
-PING_RESULTS=$(kubectl -n ${NAMESPACE} exec ${NSC_POD} --container pinger -- /bin/bash -c ' \
-  /root/dpdk-pingpong/build/app/pingpong                                                    \
-    --no-huge                                                                               \
-    --                                                                                      \
-    -n 500                                                                                  \
-    -c                                                                                      \
-    -C 0a:11:22:33:44:55                                                                    \
-    -S 0a:55:44:33:22:11                                                                    \
+PING_RESULTS=$(kubectl -n ${NAMESPACE} exec ${NSC} --container pinger -- /bin/bash -c ' \
+  /root/dpdk-pingpong/build/app/pingpong                                                \
+    --no-huge                                                                           \
+    --                                                                                  \
+    -n 500                                                                              \
+    -c                                                                                  \
+    -C 0a:11:22:33:44:55                                                                \
+    -S 0a:55:44:33:22:11                                                                \
 ' 2>&1) || (echo "${PING_RESULTS}" 1>&2 && false)
 ```
 ```bash
-PONG_PACKETS="$(echo "${PING_RESULTS}"                      |
-                grep "rx .* pong packets"                   |
-                sed -E 's/rx ([0-9]*) pong packets/\1/g')"  \
+PONG_PACKETS="$(echo "${PING_RESULTS}" | grep "rx .* pong packets" | sed -E 's/rx ([0-9]*) pong packets/\1/g')" \
   || (echo "${PING_RESULTS}" 1>&2 && false)
 ```
 ```bash
@@ -88,12 +84,10 @@ test "${PONG_PACKETS}" -ne 0 \
 
 Stop ponger:
 ```bash
-NSE_POD=$(kubectl -n ${NAMESPACE} get pods -l app=nse |
-  grep -v "NAME" |
-  sed -E "s/([.]*) .*/\1/g")
+NSE=$(kubectl -n ${NAMESPACE} get pods -l app=nse --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-kubectl -n ${NAMESPACE} exec ${NSE_POD} --container ponger -- /bin/bash -c '                  \
+kubectl -n ${NAMESPACE} exec ${NSE} --container ponger -- /bin/bash -c '                  \
   sleep 10 && kill $(ps -A | grep "pingpong" | sed -E "s/ *([0-9]*).*/\1/g") 1>/dev/null 2>&1 & \
 '
 ```
