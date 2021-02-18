@@ -93,18 +93,17 @@ kubectl apply -k .
 ```
 
 Wait for applications ready:
-```bash 
+```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
 ```
 
-Find nsc and nse pods by labesl:
+Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
-
 ```bash
 NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```

@@ -80,7 +80,7 @@ spec:
             - name: NSE_LABELS
               value: serviceDomain:worker.domain
             - name: NSE_CIDR_PREFIX
-              value: 10.0.0.200/31
+              value: 172.16.1.100/31
           resources:
             limits:
               master.domain/10G: 1
@@ -105,31 +105,12 @@ kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=ponge
 
 Get NSC pod:
 ```bash
-NSC_POD=$(kubectl -n ${NAMESPACE} get pods -l app=nsc |
-  grep -v "NAME" |
-  sed -E "s/([.]*) .*/\1/g")
+NSC=$(kubectl -n ${NAMESPACE} get pods -l app=nsc --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Check connection result:
+Ping from NSC to NSE:
 ```bash
-kubectl -n ${NAMESPACE} logs ${NSC_POD} |
-  grep "All client init operations are done."
-```
-
-Test connection:
-```bash
-PING_RESULTS=$(kubectl -n ${NAMESPACE} exec ${NSC_POD} -- ping -c 10 -W 1 10.0.0.200 2>&1) \
-  || (echo "${PING_RESULTS}" 1>&2 && false)
-```
-```bash
-PACKET_LOSS="$(echo "${PING_RESULTS}" |
-  grep "packet loss" |
-  sed -E 's/.* ([0-9]*)(\.[0-9]*)?% packet loss/\1/g')" \
-  || (echo "${PING_RESULTS}" 1>&2 && false)
-```
-```bash
-test "${PACKET_LOSS}" -ne 100 \
-  || (echo "${PING_RESULTS}" 1>&2 && false)
+kubectl -n ${NAMESPACE} exec ${NSC} -- ping -c 4 172.16.1.100
 ```
 
 ## Cleanup

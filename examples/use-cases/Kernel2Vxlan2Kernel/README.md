@@ -82,8 +82,6 @@ spec:
           env:
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.100/31
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
@@ -102,21 +100,20 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
 ```
 
-Find nsc and nse pods by labels:
+Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
-
 ```bash
 NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Ping from nsc to nse:
+Ping from NSC to NSE:
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 ```
 
-Ping from nse to nsc:
+Ping from NSE to NSC:
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
