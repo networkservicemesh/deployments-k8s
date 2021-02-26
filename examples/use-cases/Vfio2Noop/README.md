@@ -53,31 +53,46 @@ Get NSC pod:
 NSC=$(kubectl -n ${NAMESPACE} get pods -l app=nsc --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Check connection result:
+Check connectivity:
 ```bash
-kubectl -n ${NAMESPACE} logs ${NSC} sidecar |
-  grep "All client init operations are done."
-```
+function dpdk_ping() {
+  err_file="$(mktemp)"
+  trap 'rm -f "${err_file}"' RETURN
 
-Test connection:
-```bash
-PING_RESULTS=$(kubectl -n ${NAMESPACE} exec ${NSC} --container pinger -- /bin/bash -c ' \
-  /root/dpdk-pingpong/build/app/pingpong                                                \
-    --no-huge                                                                           \
-    --                                                                                  \
-    -n 500                                                                              \
-    -c                                                                                  \
-    -C 0a:11:22:33:44:55                                                                \
-    -S 0a:55:44:33:22:11                                                                \
-' 2>&1) || (echo "${PING_RESULTS}" 1>&2 && false)
+  out="$(kubectl -n ${NAMESPACE} exec ${NSC} --container pinger -- /bin/bash -c '\
+    /root/dpdk-pingpong/build/app/pingpong                                       \
+      --no-huge                                                                  \
+      --                                                                         \
+      -n 500                                                                     \
+      -c                                                                         \
+      -C 0a:11:22:33:44:55                                                       \
+      -S 0a:55:44:33:22:11                                                       \
+  ' 2>"${err_file}")"
+
+  if [[ "$?" != 0 ]]; then
+    cat "${err_file}" 1>&2
+    echo "${out}" 1>&2
+    return 1
+  fi
+
+  if ! pong_packets="$(echo "${out}" | grep "rx .* pong packets" | sed -E 's/rx ([0-9]*) pong packets/\1/g')"; then
+    cat "${err_file}" 1>&2
+    echo "${out}" 1>&2
+    return 1
+  fi
+
+  if [[ "${pong_packets}" == 0 ]]; then
+    cat "${err_file}" 1>&2
+    echo "${out}" 1>&2
+    return 1
+  fi
+
+  echo "${out}"
+  return 0
+}
 ```
 ```bash
-PONG_PACKETS="$(echo "${PING_RESULTS}" | grep "rx .* pong packets" | sed -E 's/rx ([0-9]*) pong packets/\1/g')" \
-  || (echo "${PING_RESULTS}" 1>&2 && false)
-```
-```bash
-test "${PONG_PACKETS}" -ne 0 \
-  || (echo "${PING_RESULTS}" 1>&2 && false)
+dpdk_ping
 ```
 
 ## Cleanup
@@ -87,8 +102,8 @@ Stop ponger:
 NSE=$(kubectl -n ${NAMESPACE} get pods -l app=nse --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-kubectl -n ${NAMESPACE} exec ${NSE} --container ponger -- /bin/bash -c '                  \
-  sleep 10 && kill $(ps -A | grep "pingpong" | sed -E "s/ *([0-9]*).*/\1/g") 1>/dev/null 2>&1 & \
+kubectl -n ${NAMESPACE} exec ${NSE} --container ponger -- /bin/bash -c '\
+  sleep 10 && kill $(pgrep "pingpong") 1>/dev/null 2>&1 &               \
 '
 ```
 
