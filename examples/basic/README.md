@@ -10,7 +10,13 @@ Basis example contains setup and tear down logic with default NSM infrastructure
 
 - [Memif to Memif Connection](../use-cases/Memif2Memif)
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
+- [Kernel to Memif Connection](../use-cases/Kernel2Memif)
+- [Memif to Kernel Connection](../use-cases/Memif2Kernel)
 - [Kernel to VXLAN to Kernel Connection](../use-cases/Kernel2Vxlan2Kernel)
+- [Memif to VXLAN to Memif Connection](../use-cases/Memif2Vxlan2Memif)
+- [Kernel to VXLAN to Memif Connection](../use-cases/Kernel2Vxlan2Memif)
+- [Memif to VXLAN to Kernel Connection](../use-cases/Memif2Vxlan2Kernel)
+
 
 ## Run
 

@@ -1,6 +1,9 @@
-# Test remote connection
+# Test kernel to vxlan to kernel connection
 
 This example shows that NSC and NSE on the different nodes could find and work with each other.
+
+NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
+Forwarders are using the `vxlan` mechanism to connect with each other.
 
 ## Run
 

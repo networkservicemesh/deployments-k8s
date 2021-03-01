@@ -1,9 +1,11 @@
-# Test kernel to kernel connection
+# Test memif to vxlan to kernel connection
+
+This example shows that NSC and NSE on the different nodes could find and work with each other.
 
 
-This example shows that NSC and NSE on the one node can find each other. 
-
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
+NSC is using the `memif` mechanism to connect to its local forwarder.
+NSE is using the `kernel` mechanism to connect to its local forwarder.
+Forwarders are using the `vxlan` mechanism to connect with each other.
 
 ## Run
 
@@ -23,9 +25,9 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC and NSE:
+Get nodes exclude control-plane:
 ```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
 Create customization file:
@@ -38,7 +40,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../../apps/nsc-kernel
+- ../../../apps/nsc-memif
 - ../../../apps/nse-kernel
 
 patchesStrategicMerge:
@@ -62,12 +64,13 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
-EOF
-```
+              value: memif://icmp-responder/nsm-1
 
+      nodeSelector:
+        kubernetes.io/hostname: ${NODES[0]}
+EOF
+
+```
 Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -85,7 +88,7 @@ spec:
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.100/31
       nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+        kubernetes.io/hostname: ${NODES[1]}
 EOF
 ```
 
@@ -95,14 +98,14 @@ kubectl apply -k .
 ```
 
 Wait for applications ready:
-```bash 
+```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
 ```
 
-Find nsc and nse pods by labels:
+Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
@@ -112,7 +115,9 @@ NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4)
+echo ${result}
+! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:

@@ -1,9 +1,9 @@
-# Test kernel to kernel connection
+# Test memif to kernel connection
 
+This example shows that NSC and NSE on the one node can find each other.
 
-This example shows that NSC and NSE on the one node can find each other. 
-
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
+NSC is using the `memif` mechanism to connect to its local forwarder.
+NSE is using the `kernel` mechanism to connect to its local forwarder.
 
 ## Run
 
@@ -38,7 +38,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- ../../../apps/nsc-kernel
+- ../../../apps/nsc-memif
 - ../../../apps/nse-kernel
 
 patchesStrategicMerge:
@@ -62,7 +62,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
+              value: memif://icmp-responder/nsm-1
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -112,7 +112,9 @@ NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4)
+echo ${result}
+! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:

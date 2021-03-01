@@ -1,7 +1,9 @@
-# Test local connection
+# Test memif to memif connection
 
 
 This example shows that NSC and NSE on the one node can find each other.
+
+NSC and NSE are using the `memif` mechanism to connect to its local forwarder.
 
 ## Run
 
@@ -110,12 +112,16 @@ NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{
 
 Check connectivity:
 ```bash
-kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4
+result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4)
+echo ${result}
+! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Check connectivity:
 ```bash
-kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.101 repeat 4
+result=$(kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.101 repeat 4)
+echo ${result}
+! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 ## Cleanup
