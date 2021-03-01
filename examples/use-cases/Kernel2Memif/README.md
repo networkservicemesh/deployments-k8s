@@ -1,9 +1,10 @@
-# Test kernel to kernel connection
+# Test kernel to memif connection
 
 
-This example shows that NSC and NSE on the one node can find each other. 
+This example shows that NSC and NSE on the one node can find each other.
 
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
+NSC is using the `kernel` mechanism to connect to its local forwarder.
+NSE is using the `memif` mechanism to connect to its local forwarder.
 
 ## Run
 
@@ -39,7 +40,7 @@ namespace: ${NAMESPACE}
 
 bases:
 - ../../../apps/nsc-kernel
-- ../../../apps/nse-kernel
+- ../../../apps/nse-memif
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -117,7 +118,9 @@ kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+result=$(kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.101 repeat 4)
+echo ${result}
+! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 ## Cleanup
