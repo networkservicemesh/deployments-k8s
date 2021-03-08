@@ -15,7 +15,7 @@ spec:
         app: forwarder-vpp
     spec:
       containers:
-        - image: networkservicemeshci/cmd-forwarder-vpp:0f71faa0
+        - image: networkservicemeshci/cmd-forwarder-vpp:37731cb6
           imagePullPolicy: IfNotPresent
           name: forwarder-vpp
           securityContext:
