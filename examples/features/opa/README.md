@@ -11,7 +11,7 @@ Each application in the path of NSM request doesn't trust anybody. Each endpoint
 Each client also doesn't trust the endpoint and checks tokens on the response.
 
 Authorization checks enabled by default in NSM. 
-For example, all e [use-cases](../../use-cases) are using valid token chains by default. 
+For example, all [use-cases](../../use-cases) are using valid token chains by default. 
 
 The example below will do token from step1 from the scheme as invalid.
 Expected that Endpoint(in this case NSMgr) will fail the Request from the client on step 4.
