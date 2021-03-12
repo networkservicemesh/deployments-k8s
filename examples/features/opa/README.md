@@ -1,6 +1,5 @@
 # Feature OPA
 
-
 Let's consider a current simplified version of NSM authorization.
 
 ![NSM Authorize Scheme](./scheme.png "NSM Authorize Scheme")
