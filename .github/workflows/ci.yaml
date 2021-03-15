@@ -37,10 +37,9 @@ jobs:
         run: |
           find . -type f ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/main -- {} +
       - name: Automerge nsmbot PR
-        uses: ridedott/merge-me-action@master
-        with:
-          GITHUB_LOGIN: nsmbot
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: "pascalgn/automerge-action@v0.13.1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
   update-dependent-repositories:
     strategy:
       matrix:
