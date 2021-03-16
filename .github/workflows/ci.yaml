@@ -39,8 +39,9 @@ jobs:
       - name: Automerge nsmbot PR
         uses: ridedott/merge-me-action@master
         with:
-          MAXIMUM_RETRIES: 10
+          GITHUB_LOGIN: nsmbot
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAXIMUM_RETRIES: 10
   update-dependent-repositories:
     strategy:
       matrix:
