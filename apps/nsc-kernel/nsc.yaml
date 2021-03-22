@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nsc
-          image: networkservicemeshci/cmd-nsc:4b0c3cfd
+          image: networkservicemeshci/cmd-nsc:8713d7dd
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
