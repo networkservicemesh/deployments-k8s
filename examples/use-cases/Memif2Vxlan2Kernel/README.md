@@ -7,6 +7,10 @@ NSC is using the `memif` mechanism to connect to its local forwarder.
 NSE is using the `kernel` mechanism to connect to its local forwarder.
 Forwarders are using the `vxlan` mechanism to connect with each other.
 
+## Requires
+
+Make sure that you have completed steps from [basic](../../basic) or [memory](../../memory) setup.
+
 ## Run
 
 Create test namespace:
