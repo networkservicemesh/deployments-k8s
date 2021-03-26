@@ -2,6 +2,10 @@
 
 This example shows that NSC and NSE can work with each other over the VFIO connection.
 
+## Requires
+
+Make sure that you have completed steps from [sriov](../../sriov) setup.
+
 ## Run
 
 Create test namespace:
