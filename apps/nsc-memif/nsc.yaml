@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc
+  name: nsc-memif
   labels:
-    app: nsc
+    app: nsc-memif
 spec:
   selector:
     matchLabels:
-      app: nsc
+      app: nsc-memif
   template:
     metadata:
       labels:
-        app: nsc
+        app: nsc-memif
     spec:
       containers:
         - name: nsc

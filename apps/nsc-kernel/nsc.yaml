@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc
+  name: nsc-kernel
   labels:
-    app: nsc
+    app: nsc-kernel
 spec:
   selector:
     matchLabels:
-      app: nsc
+      app: nsc-kernel
   template:
     metadata:
       labels:
-        app: nsc
+        app: nsc-kernel
     spec:
       containers:
         - name: nsc

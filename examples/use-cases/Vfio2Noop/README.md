@@ -46,15 +46,15 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nsc
+kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nsc-vfio
 ```
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse
+kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse-vfio
 ```
 
 Get NSC pod:
 ```bash
-NSC=$(kubectl -n ${NAMESPACE} get pods -l app=nsc --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl -n ${NAMESPACE} get pods -l app=nsc-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Check connectivity:
@@ -103,7 +103,7 @@ dpdk_ping
 
 Stop ponger:
 ```bash
-NSE=$(kubectl -n ${NAMESPACE} get pods -l app=nse --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl -n ${NAMESPACE} get pods -l app=nse-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 kubectl -n ${NAMESPACE} exec ${NSE} --container ponger -- /bin/bash -c '\
