@@ -58,7 +58,7 @@ cat > patch-nsc.yaml <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc
+  name: nsc-kernel
 spec:
   template:
     spec:
@@ -79,7 +79,7 @@ cat > patch-nse.yaml <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse
+  name: nse-kernel
 spec:
   template:
     spec:
@@ -99,19 +99,19 @@ kubectl apply -k .
 ```
 
 Wait for applications ready:
-```bash 
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc -n ${NAMESPACE}
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:

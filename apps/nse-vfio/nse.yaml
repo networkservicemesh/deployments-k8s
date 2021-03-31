@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse
+  name: nse-vfio
   labels:
-    app: nse
+    app: nse-vfio
 spec:
   selector:
     matchLabels:
-      app: nse
+      app: nse-vfio
   template:
     metadata:
       labels:
-        app: nse
+        app: nse-vfio
     spec:
       hostNetwork: true
       containers:
