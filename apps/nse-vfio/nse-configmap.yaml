@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nse
+  name: nse-vfio
 data:
   pong.sh: |
     #!/bin/bash

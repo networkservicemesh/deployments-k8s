@@ -79,7 +79,7 @@ cat > patch-nse.yaml <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse
+  name: nse-kernel
 spec:
   template:
     spec:
