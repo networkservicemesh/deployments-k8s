@@ -62,7 +62,7 @@ spec:
       volumes:
         - name: scripts
           configMap:
-            name: nse
+            name: nse-vfio
         - name: spire-agent-socket
           hostPath:
             path: /run/spire/sockets
