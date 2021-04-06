@@ -32,6 +32,10 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
+          resources:
+            limits:
+              memory: 15Mi
+              cpu: 100m
       volumes:
         - name: spire-agent-socket
           hostPath:

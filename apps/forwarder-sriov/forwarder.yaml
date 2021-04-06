@@ -44,6 +44,10 @@ spec:
               mountPath: /host/sys/fs/cgroup
             - name: vfio
               mountPath: /host/dev/vfio
+          resources:
+            limits:
+              memory: 40Mi
+              cpu: 200m
       volumes:
         - name: spire-agent-socket
           hostPath:
