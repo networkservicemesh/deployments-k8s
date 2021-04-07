@@ -14,5 +14,5 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - Heal
 - Refresh
 - Timeout
-- Admission webhook
+- [Admission webhook](./webhook)
 - DNS

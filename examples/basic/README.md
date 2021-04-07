@@ -57,5 +57,6 @@ kubectl apply -k .
 To free resouces follow the next command:
 
 ```bash
+kubectl delete mutatingwebhookconfiguration --all
 kubectl delete ns nsm-system
 ```
