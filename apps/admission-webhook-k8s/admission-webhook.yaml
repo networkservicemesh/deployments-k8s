@@ -17,7 +17,7 @@ spec:
       serviceAccount: admission-webhook-sa
       containers:
         - name: admission-webhook-k8s
-          image: networkservicemeshci/cmd-admission-webhook-k8s:master
+          image: networkservicemeshci/cmd-admission-webhook-k8s:95b68ed8
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
