@@ -36,6 +36,10 @@ spec:
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
+          resources:
+            limits:
+              memory: 40Mi
+              cpu: 100m
       volumes:
         - name: spire-agent-socket
           hostPath:
