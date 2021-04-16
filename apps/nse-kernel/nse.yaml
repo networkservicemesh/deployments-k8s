@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: networkservicemeshci/cmd-nse-icmp-responder:565972bc
+          image: networkservicemeshci/cmd-nse-icmp-responder:b700c49c
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
