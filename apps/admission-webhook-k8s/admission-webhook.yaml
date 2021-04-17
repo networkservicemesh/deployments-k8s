@@ -35,6 +35,6 @@ spec:
             - name: NSM_ANNOTATION
               value: networkservicemesh.io
             - name: NSM_CONTAINER_IMAGES
-              value: networkservicemeshci/cmd-nsc:0174a402
+              value: networkservicemeshci/cmd-nsc:cd3d7df0
             - name: NSM_INIT_CONTAINER_IMAGES
               value: networkservicemeshci/cmd-nsc-init:769ba23a
