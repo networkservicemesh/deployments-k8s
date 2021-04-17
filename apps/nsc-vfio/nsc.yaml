@@ -25,7 +25,7 @@ spec:
               mountPath: /dev/vfio
 
         - name: sidecar
-          image: networkservicemeshci/cmd-nsc:0174a402
+          image: networkservicemeshci/cmd-nsc:cd3d7df0
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
