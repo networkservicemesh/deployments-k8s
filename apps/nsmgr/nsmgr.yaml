@@ -15,7 +15,7 @@ spec:
         app: nsmgr
     spec:
       containers:
-        - image: networkservicemeshci/cmd-nsmgr:701ff05a
+        - image: networkservicemeshci/cmd-nsmgr:c0886e54
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
