@@ -40,6 +40,8 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
           resources:
+            requests:
+              cpu: 150m
             limits:
               memory: 400Mi
               cpu: 500m

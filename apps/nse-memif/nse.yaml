@@ -35,6 +35,8 @@ spec:
               mountPath: /var/lib/networkservicemesh
               readOnly: true
           resources:
+            requests:
+              cpu: 150m
             limits:
               memory: 400Mi
               cpu: 500m
