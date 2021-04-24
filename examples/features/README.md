@@ -15,4 +15,4 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - Refresh
 - Timeout
 - [Admission webhook](./webhook)
-- DNS
+- [DNS](./dns)
