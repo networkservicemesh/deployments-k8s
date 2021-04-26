@@ -9,6 +9,11 @@ Make sure that you have completed steps from [features](../)
 
 ## Run
 
+Note: Admission webhook is required and should be started at this moment.
+```bash
+! echo $(kubectl get mutatingwebhookconfigurations) | grep -E -q "No resources found"
+```
+
 1. Create test namespace:
 ```bash
 NAMESPACE=($(kubectl create -f ../../use-cases/namespace.yaml)[0])
