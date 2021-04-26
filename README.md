@@ -8,7 +8,9 @@ This repository provides kubernetes yaml deployments and markdown examples for N
 * Examples
     * [Basic examples](./examples/basic) 
     * [Features examples](./examples/features)
-        * [OPA examples](./examples/features/opa)
+        * [OPA example](./examples/features/opa)
         * [IPv6 examples](./examples/features/ipv6)
+        * [DNS Example](./examples/features/dns)
+        * [Admisson webhook Example](./examples/features/webhook)
     * [SRIOV examples](./examples/sriov)
     * [Memory examples](./examples/memory)
