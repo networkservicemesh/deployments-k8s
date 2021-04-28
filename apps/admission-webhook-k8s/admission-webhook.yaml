@@ -37,4 +37,4 @@ spec:
             - name: NSM_CONTAINER_IMAGES
               value: networkservicemeshci/cmd-nsc:3814acf7
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: networkservicemeshci/cmd-nsc-init:12928634
+              value: networkservicemeshci/cmd-nsc-init:3f917207
