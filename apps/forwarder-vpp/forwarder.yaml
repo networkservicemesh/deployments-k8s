@@ -29,6 +29,8 @@ spec:
                   fieldPath: status.podIP
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSM_LISTEN_ON
+              value: unix:///listen.on.sock
             - name: NSM_NAME
               valueFrom:
                 fieldRef:
@@ -45,6 +47,12 @@ spec:
             limits:
               memory: 400Mi
               cpu: 500m
+          readinessProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
+          livenessProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
       volumes:
         - name: spire-agent-socket
           hostPath:
