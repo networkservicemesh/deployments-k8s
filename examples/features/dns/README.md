@@ -11,7 +11,8 @@ Make sure that you have completed steps from [features](../)
 
 Note: Admission webhook is required and should be started at this moment.
 ```bash
-! echo $(kubectl get mutatingwebhookconfigurations) | grep -E -q "No resources found"
+WH=$(kubectl get mutatingwebhookconfigurations --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
 1. Create test namespace:
