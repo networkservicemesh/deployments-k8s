@@ -1,7 +1,7 @@
-# Alpine requests for postgresql service
+# Client requests for postgresql service
 
-This example demonstrates how alpine can get connectivity to Postgres deployment via NSM.
-Alpine pod and Postgres deployment located on different nodes.
+This example demonstrates how Postgres-client can get connectivity to Postgres-server deployment via NSM.
+Client pod and server deployment located on different nodes.
 
 
 ## Requires
@@ -31,24 +31,25 @@ kubectl exec -n spire spire-server-0 -- \
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create alpine deployment and set `nodeSelector` to the first node:
+4. Create postgres client deployment and set `nodeSelector` to the first node:
 ```bash
-cat > alpine.yaml <<EOF
+cat > postgres-cl.yaml <<EOF
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: alpine
+  name: postgres-cl
   annotations:
     networkservicemesh.io: kernel://my-postgres-service/nsm-1
   labels:
-    app: alpine
+    app: postgres-cl
 spec:
   containers:
-  - name: alpine
-    image: alpine
-    stdin: true
-    tty: true
+  - name: postgres-cl
+    image: postgres
+    env:
+      - name: POSTGRES_HOST_AUTH_METHOD
+        value: trust
   nodeSelector:
     kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -101,21 +102,21 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
-- alpine.yaml
+- postgres-cl.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
 EOF
 ```
 
-7. Deploy alpine and postgres-nse
+7. Deploy postgres-nsc and postgres-nse
 ```bash
 kubectl apply -k .
 ```
 
 8. Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
@@ -123,23 +124,15 @@ kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMES
 
 9. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=postgres-cl -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-10. Install to alpine psql:
+10. Try to connect from postgres-nsc to database from postgresql service:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk update 
-```
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk add postgresql
-```
-
-11. Try to connect from alpine to database from postgresql service:
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c alpine -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
+kubectl exec ${NSC} -n ${NAMESPACE} -c postgres-cl -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
 ```
 
 ## Cleanup
