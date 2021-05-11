@@ -19,6 +19,11 @@ spec:
         - name: admission-webhook-k8s
           image: networkservicemeshci/cmd-admission-webhook-k8s:1e7335c0
           imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 443
+              scheme: HTTPS
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
