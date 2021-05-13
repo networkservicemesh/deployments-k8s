@@ -16,7 +16,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: networkservicemeshci/cmd-forwarder-sriov:6f609060
+        - image: networkservicemeshci/cmd-forwarder-sriov:28a9cdd4
           imagePullPolicy: IfNotPresent
           name: forwarder-sriov
           securityContext:
