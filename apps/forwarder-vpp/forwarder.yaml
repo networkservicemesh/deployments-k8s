@@ -14,6 +14,7 @@ spec:
       labels:
         app: forwarder-vpp
     spec:
+      hostNetwork: true
       containers:
         - image: networkservicemeshci/cmd-forwarder-vpp:0f7b5329
           imagePullPolicy: IfNotPresent
