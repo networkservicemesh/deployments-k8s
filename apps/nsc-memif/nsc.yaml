@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nsc
-          image: networkservicemeshci/cmd-nsc-vpp:3bc8ddc0
+          image: networkservicemeshci/cmd-nsc-vpp:ce81a22c
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_REQUEST_TIMEOUT
