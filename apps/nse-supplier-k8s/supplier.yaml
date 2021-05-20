@@ -2,29 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc-kernel
+  name: nse-supplier-k8s
   labels:
-    app: nsc-kernel
+    app: nse-supplier-k8s
 spec:
   selector:
     matchLabels:
-      app: nsc-kernel
+      app: nse-supplier-k8s
   template:
     metadata:
       labels:
-        app: nsc-kernel
+        app: nse-supplier-k8s
     spec:
       containers:
-        - name: nsc
-          image: networkservicemeshci/cmd-nsc:c893c84c
-          imagePullPolicy: IfNotPresent
+        - name: nse-supplier
+          image: cmd-nse-supplier-k8s
+          imagePullPolicy: Never
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: NSM_NAME
+            - name: NSE_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: NSE_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
@@ -34,7 +36,7 @@ spec:
               readOnly: true
           resources:
             limits:
-              memory: 20Mi
+              memory: 40Mi
               cpu: 100m
       volumes:
         - name: spire-agent-socket
