@@ -16,7 +16,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: networkservicemeshci/cmd-forwarder-vpp:dfe42600
+        - image: networkservicemeshci/cmd-forwarder-vpp:4a1d163e
           imagePullPolicy: IfNotPresent
           name: forwarder-vpp
           securityContext:
