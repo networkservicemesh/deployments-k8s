@@ -51,6 +51,12 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s -n ${NAMESPACE}
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+```
+```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder -n ${NAMESPACE}
 ```
 
