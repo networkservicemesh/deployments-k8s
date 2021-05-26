@@ -1,6 +1,6 @@
 # Test automatic scale from zero
 
-This example shows that NSEs can be created on the fly, allowing effective scaling.
+This example shows that NSEs can be created on the fly, allowing effective scaling by the node.
 
 ## Run
 
