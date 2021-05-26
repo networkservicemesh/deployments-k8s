@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: nse-supplier
-          image: cmd-nse-supplier-k8s
-          imagePullPolicy: Never
+          image: networkservicemeshci/cmd-nse-supplier-k8s:adf56c06
+          imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
