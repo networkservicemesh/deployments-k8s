@@ -5,3 +5,8 @@ kind: Kustomization
 resources:
   - supplier.yaml
   - role.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap
+    files:
+      - pod-template.yaml

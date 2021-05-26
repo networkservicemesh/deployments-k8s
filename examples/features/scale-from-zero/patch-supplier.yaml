@@ -11,19 +11,9 @@ spec:
           env:
             - name: NSE_SERVICE_NAME
               value: autoscale-icmp-responder
-            - name: NSE_POD_DESCRIPTION_FILE
-              value: /run/supplier/pod-template.yaml
             - name: NSE_LABELS
               value: app:supplier
             - name: NSE_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          volumeMounts:
-            - name: pod-file
-              mountPath: /run/supplier
-              readOnly: true
-      volumes:
-        - name: pod-file
-          configMap:
-            name: supplier-pod-template-configmap

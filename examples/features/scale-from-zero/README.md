@@ -33,11 +33,6 @@ bases:
 - ../../../apps/nse-supplier-k8s
 - ../../../apps/nsc-kernel
 
-configMapGenerator:
-- name: supplier-pod-template-configmap
-  files:
-  - pod-template.yaml
-      
 patchesStrategicMerge:
 - patch-nsc.yaml
 - patch-supplier.yaml
