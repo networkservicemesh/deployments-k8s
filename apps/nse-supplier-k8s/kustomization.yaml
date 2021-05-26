@@ -4,3 +4,4 @@ kind: Kustomization
 
 resources:
   - supplier.yaml
+  - role.yaml

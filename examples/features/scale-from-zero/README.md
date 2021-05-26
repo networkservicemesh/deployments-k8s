@@ -33,9 +33,6 @@ bases:
 - ../../../apps/nse-supplier-k8s
 - ../../../apps/nsc-kernel
 
-resources:
-- supplier-role.yaml
-
 configMapGenerator:
 - name: supplier-pod-template-configmap
   files:
