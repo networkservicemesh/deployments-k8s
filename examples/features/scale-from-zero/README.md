@@ -34,11 +34,12 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-3. Select node to deploy NSC and supplier:
+3. Select nodes to deploy NSC and supplier:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSC_NODE=${NODES[0]}
-SUPPLIER_NODE=${NODES[0]}
+SUPPLIER_NODE=${NODES[1]}
+if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; fi
 ```
 
 4. Create patch for NSC:
