@@ -20,7 +20,7 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC:
+Select node to deploy NSC and supplier:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSC_NODE=${NODES[0]}
@@ -49,7 +49,7 @@ spec:
 EOF
 ```
 
-Create patch for NSC:
+Create patch for supplier:
 ```bash
 cat > patch-supplier.yaml <<EOF
 ---
@@ -96,7 +96,7 @@ EOF
 
 Register network service:
 ```bash
-kubectl apply -f scale-ns.yaml
+kubectl apply -f autoscale-netsvc.yaml
 ```
 
 Deploy NSC and supplier:
@@ -131,17 +131,15 @@ Check connectivity:
 kubectl exec $NSE -n $NAMESPACE -- ping -c 4 169.254.0.1
 ```
 
-Get NSE node:
+Check that the NSE spawned on the same node as NSC:
 ```bash
 NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
-
-Check that the NSE spawned on the same node as NSC:
 ```bash
 if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; false; fi
 ```
 
-Remove the client pod:
+Remove NSC:
 ```bash
 kubectl scale -n $NAMESPACE deployment nsc-kernel --replicas=0
 ```
