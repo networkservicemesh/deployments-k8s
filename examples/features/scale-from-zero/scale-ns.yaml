@@ -5,6 +5,7 @@ metadata:
   name: autoscale-icmp-responder
   namespace: nsm-system
 spec:
+  payload: ETHERNET
   name: autoscale-icmp-responder
   matches:
     - sourceSelector:
