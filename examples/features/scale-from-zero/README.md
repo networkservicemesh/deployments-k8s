@@ -39,7 +39,7 @@ kubectl exec -n spire spire-server-0 -- \
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSC_NODE=${NODES[0]}
 SUPPLIER_NODE=${NODES[1]}
-if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; fi
+if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
 ```
 
 4. Create patch for NSC:
@@ -87,6 +87,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: NSE_POD_DESCRIPTION_FILE
+              value: /run/supplier/pod-template.yaml
+          volumeMounts:
+            - name: pod-file
+              mountPath: /run/supplier
+              readOnly: true
+      volumes:
+        - name: pod-file
+          configMap:
+            name: supplier-pod-template-configmap
 EOF
 ```
 
@@ -106,6 +116,11 @@ bases:
 patchesStrategicMerge:
 - patch-nsc.yaml
 - patch-supplier.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap
+    files:
+      - pod-template.yaml
 EOF
 ```
 

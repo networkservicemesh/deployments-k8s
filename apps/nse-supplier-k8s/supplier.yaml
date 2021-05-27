@@ -27,17 +27,12 @@ spec:
                   fieldPath: metadata.name
             - name: NSE_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
-            - name: NSE_POD_DESCRIPTION_FILE
-              value: /run/supplier/pod-template.yaml
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
               readOnly: true
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
-              readOnly: true
-            - name: pod-file
-              mountPath: /run/supplier
               readOnly: true
           resources:
             limits:
@@ -52,6 +47,3 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
-        - name: pod-file
-          configMap:
-            name: supplier-pod-template-configmap
