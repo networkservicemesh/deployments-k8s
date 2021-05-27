@@ -38,7 +38,7 @@ metadata:
 spec:
   template:
     spec:
-      nodeName: ${NSC_NODE}
+      nodeName: $NSC_NODE
       containers:
         - name: nsc
           env:
@@ -60,7 +60,7 @@ metadata:
 spec:
   template:
     spec:
-      nodeName: ${SUPPLIER_NODE}
+      nodeName: $SUPPLIER_NODE
       containers:
         - name: nse-supplier
           env:
@@ -82,7 +82,7 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: $NAMESPACE
 
 bases:
 - ../../../apps/nse-supplier-k8s
@@ -106,34 +106,34 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s -n ${NAMESPACE}
+kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder -n ${NAMESPACE}
+kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pod -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-NSE=$(kubectl get pod -l app=nse-icmp-responder -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
+NSE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
 Check connectivity:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 169.254.0.0
+kubectl exec $NSC -n $NAMESPACE -- ping -c 4 169.254.0.0
 ```
 
 Check connectivity:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 169.254.0.1
+kubectl exec $NSE -n $NAMESPACE -- ping -c 4 169.254.0.1
 ```
 
 Get NSE node:
 ```bash
-NSE_NODE=$(kubectl get pod -l app=nse-icmp-responder -n $NAMESPACE --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
+NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
 Check that the NSE spawned on the same node as NSC:
@@ -143,12 +143,12 @@ if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; fals
 
 Remove the client pod:
 ```bash
-kubectl scale -n ${NAMESPACE} deployment nsc-kernel --replicas=0
+kubectl scale -n $NAMESPACE deployment nsc-kernel --replicas=0
 ```
 
 Wait for the NSE pod to be deleted:
 ```bash
-kubectl wait --for=delete --timeout=1m pod -l app=nse-icmp-responder -n ${NAMESPACE}
+kubectl wait -n $NAMESPACE --for=delete --timeout=1m pod -l app=nse-icmp-responder
 ```
 
 ## Cleanup
