@@ -1,16 +1,30 @@
 # Test automatic scale from zero
 
-This example shows that NSEs can be created on the fly, allowing effective scaling by the node.
+This example shows that NSEs can be created on the fly on NSC requests.
+This allows effective scaling for endpoints.
+The requested endpoint will be automatically spawned on the same node as NSC (see step 12),
+allowing the best performance for connectivity.
+
+Here we are using an endpoint that automatically shuts down
+when it has no active connection for specified time.
+We are using very short timeout for the purpose of the test: 15 seconds.
+
+We are only using one client in this test,
+so removing it (see step 13) will cause the NSE to shut down.
+
+Supplier watches for endpoints it created
+and clears endpoints that finished their work,
+thus saving cluster resources (see step 14).
 
 ## Run
 
-Create test namespace:
+1. Create test namespace:
 ```bash
 NAMESPACE=($(kubectl create -f ../namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
-Register namespace in `spire` server:
+2. Register namespace in `spire` server:
 ```bash
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
@@ -20,14 +34,14 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC and supplier:
+3. Select node to deploy NSC and supplier:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSC_NODE=${NODES[0]}
 SUPPLIER_NODE=${NODES[0]}
 ```
 
-Create patch for NSC:
+4. Create patch for NSC:
 ```bash
 cat > patch-nsc.yaml <<EOF
 ---
@@ -49,7 +63,7 @@ spec:
 EOF
 ```
 
-Create patch for supplier:
+5. Create patch for supplier:
 ```bash
 cat > patch-supplier.yaml <<EOF
 ---
@@ -75,7 +89,7 @@ spec:
 EOF
 ```
 
-Create customization file:
+6. Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -94,17 +108,17 @@ patchesStrategicMerge:
 EOF
 ```
 
-Register network service:
+7. Register network service:
 ```bash
 kubectl apply -f autoscale-netsvc.yaml
 ```
 
-Deploy NSC and supplier:
+8. Deploy NSC and supplier:
 ```bash
 kubectl apply -k .
 ```
 
-Wait for applications ready:
+9. Wait for applications ready:
 ```bash
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
@@ -115,23 +129,21 @@ kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nsc-ker
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
 ```
 
-Find NSC and NSE pods by labels:
+10. Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
 NSE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
-Check connectivity:
+11. Check connectivity:
 ```bash
 kubectl exec $NSC -n $NAMESPACE -- ping -c 4 169.254.0.0
 ```
-
-Check connectivity:
 ```bash
 kubectl exec $NSE -n $NAMESPACE -- ping -c 4 169.254.0.1
 ```
 
-Check that the NSE spawned on the same node as NSC:
+12. Check that the NSE spawned on the same node as NSC:
 ```bash
 NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
@@ -139,12 +151,12 @@ NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nod
 if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; false; fi
 ```
 
-Remove NSC:
+13. Remove NSC:
 ```bash
 kubectl scale -n $NAMESPACE deployment nsc-kernel --replicas=0
 ```
 
-Wait for the NSE pod to be deleted:
+14. Wait for the NSE pod to be deleted:
 ```bash
 kubectl wait -n $NAMESPACE --for=delete --timeout=1m pod -l app=nse-icmp-responder
 ```
