@@ -9,7 +9,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse-icmp-responder
-      image: networkservicemeshci/cmd-nse-icmp-responder:26aa2154
+      image: networkservicemeshci/cmd-nse-icmp-responder:3f68ee3e
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
