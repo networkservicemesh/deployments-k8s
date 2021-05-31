@@ -82,7 +82,7 @@ spec:
             - name: NSE_SERVICE_NAME
               value: autoscale-icmp-responder
             - name: NSE_LABELS
-              value: app:supplier
+              value: app:icmp-responder-supplier
             - name: NSE_NAMESPACE
               valueFrom:
                 fieldRef:

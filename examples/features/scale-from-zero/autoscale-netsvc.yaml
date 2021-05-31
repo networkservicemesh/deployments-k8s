@@ -8,9 +8,10 @@ spec:
   payload: ETHERNET
   name: autoscale-icmp-responder
   matches:
-    - sourceSelector:
+    - source_selector:
       routes:
-        - destinationSelector:
+        - destination_selector:
             app: nse-icmp-responder
-        - destinationSelector:
-            app: nse-supplier-k8s
+            NodeNameKey: "{{.NodeNameKey}}"
+        - destination_selector:
+            app: icmp-responder-supplier
