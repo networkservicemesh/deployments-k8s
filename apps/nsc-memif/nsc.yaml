@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nsc
-          image: ghcr.io/networkservicemesh/cmd-nsc-vpp/ci:0532e69
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc-vpp:0532e69
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_REQUEST_TIMEOUT
