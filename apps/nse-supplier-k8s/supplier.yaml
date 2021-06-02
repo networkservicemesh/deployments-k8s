@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nse-supplier
-          image: networkservicemeshci/cmd-nse-supplier-k8s:01fa4c77
+          image: networkservicemeshci/cmd-nse-supplier-k8s:952dc229
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
