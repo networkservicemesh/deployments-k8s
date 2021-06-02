@@ -15,7 +15,7 @@ spec:
         app: nsm-registry
     spec:
       containers:
-        - image: networkservicemeshci/cmd-registry-memory:2be98c56
+        - image: networkservicemeshci/cmd-registry-memory:025ad3c0
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
