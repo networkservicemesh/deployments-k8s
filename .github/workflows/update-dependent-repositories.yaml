@@ -49,7 +49,7 @@ jobs:
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
       - uses: actions/setup-go@v1
         with:
-          go-version: 1.15
+          go-version: 1.16
       - name: Update ${{ matrix.repository }} locally
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
