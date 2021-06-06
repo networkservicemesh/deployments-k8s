@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsm-registry
+  name: registry
   labels:
-    app: nsm-registry
+    app: registry
 spec:
   selector:
     matchLabels:
-      app: nsm-registry
+      app: registry
   template:
     metadata:
       labels:
-        app: nsm-registry
+        app: registry
     spec:
       containers:
         - image: ghcr.io/networkservicemesh/ci/cmd-registry-memory:636fef1
@@ -22,9 +22,9 @@ spec:
             - name: REGISTRY_MEMORY_LISTEN_ON
               value: tcp://:5002
             - name: REGISTRY_MEMORY_PROXY_REGISTRY_URL
-              value: nsm-registry-proxy-dns-svc:5003
+              value: registry-proxy-svc:5003
           imagePullPolicy: IfNotPresent
-          name: nsm-registry
+          name: registry
           ports:
             - containerPort: 5002
               hostPort: 5002

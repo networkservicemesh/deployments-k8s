@@ -4,6 +4,15 @@ kind: Kustomization
 
 namespace: spire
 
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+- name: spire-secret
+  files:
+  - bootstrap.key
+  - bootstrap.crt
+
 resources:
 - spire-namespace.yaml
 - agent-account.yaml

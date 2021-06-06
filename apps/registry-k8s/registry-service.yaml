@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nsm-registry-svc
+  name: registry
 spec:
   selector:
-    app: nsm-registry
+    app: registry
   ports:
-    - name: nsm-registry-svc
+    - name: registry
       protocol: TCP
       port: 5002
       targetPort: 5002

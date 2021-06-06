@@ -2,6 +2,12 @@
 
 ## Run
 
+Prepare cert and key for the spire:
+```bash
+bash selfsignedsert.sh ./
+```
+
+
 To apply spire deployments following the next command:
 ```bash
 kubectl apply -k .

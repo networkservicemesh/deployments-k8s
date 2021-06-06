@@ -2,13 +2,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: default
-
 resources:
-- crd-nse.yaml
-- crd-ns.yaml
-- sa.yaml
 - binding.yaml
+- sa.yaml
 - role.yaml
-- registry-service.yaml
-- registry-k8s.yaml
+- nsmgr-proxy.yaml
+- nsmgr-proxy-service.yaml

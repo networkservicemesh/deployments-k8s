@@ -29,7 +29,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_REGISTRY_URL
-              value: "nsm-registry-svc:5002"
+              value: "registry:5002"
             #            - name: DLV_LISTEN_NSMGR
             #              value: :40000
             - name: POD_IP
