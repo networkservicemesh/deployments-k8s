@@ -53,7 +53,13 @@ data:
           keys_path = "/run/spire/data/keys.json"
         }
       }
-
+      UpstreamAuthority "disk" {
+        plugin_data {
+          ttl = "12h"
+          key_file_path = "/run/spire/secret/bootstrap.key"
+          cert_file_path = "/run/spire/secret/bootstrap.crt"
+        }
+      }
       Notifier "k8sbundle" {
         plugin_data {
         }

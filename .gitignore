@@ -16,3 +16,6 @@
 
 # Goland files
 .idea/
+
+bootstrap.key
+bootstrap.crt

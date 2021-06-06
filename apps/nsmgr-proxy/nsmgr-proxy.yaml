@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsmgr-proxy
+  labels:
+    app: nsmgr-proxy
+spec:
+  selector:
+    matchLabels:
+      app: nsmgr-proxy
+  template:
+    metadata:
+      labels:
+        app: nsmgr-proxy
+    spec:
+      serviceAccount: nsmgr-proxy-sa
+      containers:
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:df218af
+          imagePullPolicy: IfNotPresent
+          name: nsmgr-proxy
+          ports:
+            - containerPort: 5004
+              hostPort: 5004
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_REGISTRY_URL
+              value: "registry:5002"
+            - name: NSM_REGISTRY_PROXY_URL
+              value: "registry-proxy:5005"
+            - name: NSM_LISTEN_ON
+              value: tcp://:5004
+            - name: NSM_MAP_IP_FILE_PATH
+              value: "/etc/mapip/config.yaml"
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: mapip-volume
+              mountPath: /etc/mapip
+          resources:
+            limits:
+              memory: 60Mi
+              cpu: 200m
+        - image: ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:d9bee26
+          imagePullPolicy: IfNotPresent
+          name: map-ip-k8s
+          env:
+            - name: NSM_OUTPUTPATH
+              value: "/etc/mapip/config.yaml"
+          volumeMounts:
+            - name: mapip-volume
+              mountPath: /etc/mapip
+          resources:
+            limits:
+              memory: 10Mi
+              cpu: 50m
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+        - name: mapip-volume
+          emptyDir: {}

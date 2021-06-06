@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-proxy
+spec:
+  selector:
+    app: registry-proxy
+  ports:
+    - protocol: TCP
+      port: 5005
+      targetPort: 5005
