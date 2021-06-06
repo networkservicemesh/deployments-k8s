@@ -20,8 +20,9 @@ Check `KUBECONFIG2` env:
 2. Setup spire
 
 Generate cert and key:
+
 ```bash
-bash ../../spire/selfsignedsert.sh ../../spire/
+openssl req -x509 -newkey rsa:4096 -keyout "../../spire/bootstrap.key" -out "../../spire/bootstrap.crt" -days 365 -nodes -subj '/CN=localhost' 2>/dev/null
 ```
 
 **Apply spire resources for the first cluster:**
