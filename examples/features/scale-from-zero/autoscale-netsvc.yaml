@@ -12,6 +12,6 @@ spec:
       routes:
         - destination_selector:
             app: nse-icmp-responder
-            NodeNameKey: "{{.NodeNameKey}}"
+            NodeName: "{{.NodeName}}"
         - destination_selector:
             app: icmp-responder-supplier

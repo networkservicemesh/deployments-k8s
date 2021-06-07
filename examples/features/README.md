@@ -16,4 +16,4 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - Timeout
 - [Admission webhook](./webhook)
 - [DNS](./dns)
-- [Automatic scale from zero](./scale-from-zero)
+- [Topology aware scale from zero](./scale-from-zero)
