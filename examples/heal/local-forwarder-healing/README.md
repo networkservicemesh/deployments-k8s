@@ -1,7 +1,6 @@
-# Test kernel to kernel connection
+# Test local forwarder restart
 
-
-This example shows that NSC and NSE on the one node can find each other.
+This example shows that NSM keeps working after the local Forwarder restart.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 
