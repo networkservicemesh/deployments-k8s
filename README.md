@@ -15,3 +15,4 @@ This repository provides kubernetes yaml deployments and markdown examples for N
         * [Topology aware scale from zero](./examples/features/scale-from-zero)
     * [SRIOV examples](./examples/sriov)
     * [Memory examples](./examples/memory)
+    * [Heal examples](./examples/heal)
