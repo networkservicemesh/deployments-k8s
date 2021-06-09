@@ -15,7 +15,7 @@ spec:
         app: registry
     spec:
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-registry-memory:9c5848a
+        - image: ghcr.io/networkservicemesh/ci/cmd-registry-memory:da75ca0
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
