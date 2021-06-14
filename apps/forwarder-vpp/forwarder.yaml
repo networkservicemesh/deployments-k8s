@@ -16,7 +16,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:6835d01
+        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:5a233f5
           imagePullPolicy: IfNotPresent
           name: forwarder-vpp
           securityContext:
