@@ -9,3 +9,4 @@ To run any heal example follow steps for [Basic NSM setup](../basic)
 ## Includes
 
 - [Local Forwarder restart](./local-forwarder-healing)
+- [Registry restart](./registry-restart)
