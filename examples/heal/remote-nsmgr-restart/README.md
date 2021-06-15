@@ -65,9 +65,10 @@ spec:
       containers:
         - name: nsc
           env:
+            - name: NSM_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
-
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -87,6 +88,8 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSE_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.100/31
       nodeSelector:
@@ -130,15 +133,15 @@ Find remote NSMgr pod:
 NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Restart remote NSMgr:
+Restart remote NSMgr and wait for it to start:
 ```bash
 kubectl delete pod ${NSMGR} -n nsm-system
 ```
-
-Ping from NSC to NSE again after local NSMgr restored:
 ```bash
-sleep 70
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system
 ```
+
+Ping from NSC to NSE:
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 ```

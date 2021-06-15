@@ -64,6 +64,8 @@ spec:
       containers:
         - name: nsc
           env:
+            - name: NSM_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
       nodeSelector:
@@ -85,6 +87,8 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSE_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.100/30
       nodeSelector:
@@ -128,23 +132,28 @@ Find Registry:
 REGISTRY=$(kubectl get pods -l app=registry -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Restart Registry:
+Restart Registry and wait for it to start:
 ```bash
-kubectl delete pod ${REGISTRY} -n=nsm-system
+kubectl delete pod ${REGISTRY} -n nsm-system
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=registry -n nsm=system
 ```
 
-Restart NSC and wait for a new NSC to start:
+Remove NSC and wait for a new one to start:
 ```bash
 kubectl delete pod ${NSC} -n=${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
 ```
+
+Find new NSC pod:
 ```bash
 NEW_NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Ping from new NSC to NSE again after forwarder restored:
+Ping from new NSC to NSE:
 ```bash
 kubectl exec ${NEW_NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```

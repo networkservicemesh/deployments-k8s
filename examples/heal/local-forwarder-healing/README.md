@@ -64,6 +64,8 @@ spec:
       containers:
         - name: nsc
           env:
+            - name: NSM_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
       nodeSelector:
@@ -85,8 +87,10 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSE_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSE_CIDR_PREFIX
-              value: 172.16.1.100/30
+              value: 172.16.1.100/31
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -123,31 +127,27 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Find local forwarder
+Find local Forwarder:
 ```bash
 FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Remove local forwarder
+Remove local Forwarder and wait for a new one to start:
 ```bash
-kubectl delete pod -n=nsm-system ${FORWARDER}
+kubectl delete pod -n nsm-system ${FORWARDER}
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODE} -n nsm-system
 ```
 
-Ping from NSC to NSE again after forwarder restored:
+Ping from NSC to NSE:
 ```bash
-sleep 70
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
-```
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to NSC:
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
-```
-```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup

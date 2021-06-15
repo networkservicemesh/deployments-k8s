@@ -65,6 +65,8 @@ spec:
       containers:
         - name: nsc
           env:
+            - name: NSM_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
 
@@ -87,6 +89,8 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSE_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.100/31
       nodeSelector:
@@ -160,6 +164,9 @@ spec:
     spec:
       containers:
         - name: nsmgr
+          env:
+            - name: NSM_MAX_TOKEN_LIFETIME
+              value: 10s
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -180,6 +187,8 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSE_MAX_TOKEN_LIFETIME
+              value: 10s
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.102/31
       nodeSelector:
@@ -192,17 +201,19 @@ Apply changes:
 kubectl apply -k .
 ```
 
-Ping from NSC to NSE again after local NSMgr restored:
+Wait for the new NSE to start:
 ```bash
-sleep 70
-```
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
 Find new NSE pod:
 ```bash
 NEW_NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+Ping from NSC to new NSE:
+```bash
+kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:
@@ -214,7 +225,7 @@ kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k ../../../apps/nsmgr -n nsm-system
+kubectl apply -k ../
 ```
 
 Delete ns:
