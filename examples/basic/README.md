@@ -16,6 +16,10 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 - [Memif to VXLAN to Memif Connection](../use-cases/Memif2Vxlan2Memif)
 - [Kernel to VXLAN to Memif Connection](../use-cases/Kernel2Vxlan2Memif)
 - [Memif to VXLAN to Kernel Connection](../use-cases/Memif2Vxlan2Kernel)
+- [Kernel to Wireguard to Kernel Connection](../use-cases/Kernel2Wireguard2Kernel)
+- [Memif to Wireguard to Memif Connection](../use-cases/Memif2Wireguard2Memif)
+- [Kernel to Wireguard to Memif Connection](../use-cases/Kernel2Wireguard2Memif)
+- [Memif to Wireguard to Kernel Connection](../use-cases/Memif2Wireguard2Kernel)
 
 ## Run
 
