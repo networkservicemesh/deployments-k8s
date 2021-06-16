@@ -192,17 +192,19 @@ Apply changes:
 kubectl apply -k .
 ```
 
-Ping from NSC to NSE again after local NSMgr restored:
+Wait for the new NSE to start:
 ```bash
-sleep 70
-```
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel --field-selector spec.nodeName==${NODES[0]} -n ${NAMESPACE}
 ```
 
 Find new NSE pod:
 ```bash
 NEW_NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+Ping from NSC to new NSE:
+```bash
+kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:

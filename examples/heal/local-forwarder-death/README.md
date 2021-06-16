@@ -1,6 +1,6 @@
-# Test local forwarder restart
+# Test local Forwarder death
 
-This example shows that NSM keeps working after the local Forwarder restart.
+This example shows that NSM keeps working after the local Forwarder death.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 
@@ -123,29 +123,25 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Find local forwarder
+Find local Forwarder:
 ```bash
 FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Remove local forwarder
+Remove local Forwarder and wait for a new one to start:
 ```bash
-kubectl delete pod -n=nsm-system ${FORWARDER}
+kubectl delete pod -n nsm-system ${FORWARDER}
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODE} -n nsm-system
 ```
 
-Ping from NSC to NSE again after forwarder restored:
-```bash
-sleep 70
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
-```
+Ping from NSC to NSE:
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to NSC:
-```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
-```
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```

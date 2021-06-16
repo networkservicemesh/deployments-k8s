@@ -1,6 +1,6 @@
-# Test kernel to vxlan to kernel connection
+# Test remote Forwarder death
 
-This example shows that NSC and NSE on the different nodes could find and work with each other.
+This example shows that NSM keeps working after the remote Forwarder death.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 Forwarders are using the `vxlan` mechanism to connect with each other.
@@ -67,7 +67,6 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
-
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -87,7 +86,7 @@ spec:
         - name: nse
           env:
             - name: NSE_CIDR_PREFIX
-              value: 172.16.1.100/31
+              value: 172.16.1.100/30
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
@@ -124,27 +123,27 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Find local forwarder
+Find remote Forwarder:
 ```bash
 FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Remove local forwarder
+Remove remote Forwarder and wait for a new one to start:
 ```bash
-kubectl delete pod -n=nsm-system ${FORWARDER}
+kubectl delete pod -n nsm-system ${FORWARDER}
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system
 ```
 
-Ping from NSC to NSE again after forwarder restored:
+Ping from NSC to NSE:
 ```bash
-sleep 70
-```
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup
