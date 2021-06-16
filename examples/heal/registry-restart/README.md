@@ -86,7 +86,7 @@ spec:
         - name: nse
           env:
             - name: NSE_CIDR_PREFIX
-              value: 172.16.1.100/30
+              value: 172.16.1.100/31
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -151,12 +151,12 @@ NEW_NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range
 
 Ping from new NSC to NSE:
 ```bash
-kubectl exec ${NEW_NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+kubectl exec ${NEW_NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to new NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
+kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup
