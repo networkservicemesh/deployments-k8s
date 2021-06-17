@@ -7,10 +7,6 @@ Forwarders are using the `vxlan` mechanism to connect with each other.
 
 NSE is registering in the floating registry.
 
-## Requires
-
-Make sure that you have completed steps from [Floating interdomain setup](../../)
-
 ## Run
 
 **1. Prepare cluster2**
@@ -47,7 +43,7 @@ kind: Kustomization
 namespace: ${NAMESPACE1}
 
 bases:
-- ../../../../apps/nse-kernel
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -121,7 +117,7 @@ kind: Kustomization
 namespace: ${NAMESPACE2}
 
 bases:
-- ../../../../apps/nsc-kernel
+- ../../../apps/nsc-kernel
 
 patchesStrategicMerge:
 - patch-nsc.yaml

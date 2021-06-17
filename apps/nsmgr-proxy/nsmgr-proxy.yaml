@@ -35,6 +35,10 @@ spec:
               value: "registry-proxy:5005"
             - name: NSM_LISTEN_ON
               value: tcp://:5004
+            - name: NSM_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: NSM_MAP_IP_FILE_PATH
               value: "/etc/mapip/config.yaml"
           volumeMounts:

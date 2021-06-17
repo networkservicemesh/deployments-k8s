@@ -7,8 +7,8 @@ Basic floating interdomain examples includes the next setup:
 
 ## Requires
 
-- [Floating-Interdomain-DNS](../dns)
-- [Floating-Interdomain-spire](../spire)
+- [Floating-Interdomain-DNS](./dns)
+- [Floating-Interdomain-spire](./spire)
 
 ## Includes
 
