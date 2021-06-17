@@ -86,7 +86,7 @@ spec:
         - name: nse
           env:
             - name: NSE_CIDR_PREFIX
-              value: 172.16.1.100/31
+              value: 172.16.1.100/30
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -136,27 +136,75 @@ kubectl delete pod ${REGISTRY} -n nsm-system
 kubectl wait --for=condition=ready --timeout=1m pod -l app=registry -n nsm-system
 ```
 
-Remove NSC and wait for a new one to start:
+Create customization file for a new NSC:
 ```bash
-kubectl delete pod ${NSC} -n=${NAMESPACE}
+cat > kustomization.yaml <<EOF
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ${NAMESPACE}
+
+bases:
+- ../../../apps/nsc-kernel
+
+patchesJson6902:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: nsc-kernel
+  path: patch-nsc.yaml
+EOF
 ```
+
+Create patch for a new NSC:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+cat > patch-nsc.yaml <<EOF
+---
+- op: replace
+  path: /metadata/name
+  value: nsc-kernel-new
+- op: replace
+  path: /metadata/labels/app
+  value: nsc-kernel-new
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: nsc-kernel-new
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: nsc-kernel-new
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: NSM_NETWORK_SERVICES
+    value: kernel://icmp-responder/nsm-1
+EOF
+```
+
+Apply:
+```bash
+kubectl apply -k .
+```
+
+Wait for a new NSC to start:
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel-new -n ${NAMESPACE}
 ```
 
 Find new NSC pod:
 ```bash
-NEW_NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NEW_NSC=$(kubectl get pods -l app=nsc-kernel-new -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from new NSC to NSE:
 ```bash
-kubectl exec ${NEW_NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NEW_NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to new NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup
