@@ -1,8 +1,9 @@
-# Test local forwarder restart
+# Test remote Forwarder death
 
-This example shows that NSM keeps working after the local Forwarder restart.
+This example shows that NSM keeps working after the remote Forwarder death.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
+Forwarders are using the `vxlan` mechanism to connect with each other.
 
 ## Requires
 
@@ -26,9 +27,9 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC and NSE:
+Get nodes exclude control-plane:
 ```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
 Create customization file:
@@ -67,10 +68,9 @@ spec:
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
       nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+        kubernetes.io/hostname: ${NODES[0]}
 EOF
 ```
-
 Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -88,7 +88,7 @@ spec:
             - name: NSE_CIDR_PREFIX
               value: 172.16.1.100/30
       nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+        kubernetes.io/hostname: ${NODES[1]}
 EOF
 ```
 
@@ -105,7 +105,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMES
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
-Find nsc and nse pods by labels:
+Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
@@ -123,29 +123,25 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Find local forwarder
+Find remote Forwarder:
 ```bash
-FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Remove local forwarder
+Remove remote Forwarder and wait for a new one to start:
 ```bash
-kubectl delete pod -n=nsm-system ${FORWARDER}
+kubectl delete pod -n nsm-system ${FORWARDER}
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system
 ```
 
-Ping from NSC to NSE again after forwarder restored:
-```bash
-sleep 70
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
-```
+Ping from NSC to NSE:
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to NSC:
-```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
-```
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```
