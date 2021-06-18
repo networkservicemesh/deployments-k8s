@@ -72,6 +72,12 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: 1.16
+      - name: Checkout networkservicemesh/${{ matrix.repository }}
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
+          repository: networkservicemesh/${{ matrix.repository }}
+          token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
       - name: Update ${{ matrix.repository }} locally
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
