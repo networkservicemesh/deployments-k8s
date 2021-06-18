@@ -90,7 +90,7 @@ jobs:
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          sed -r -i 's/(s\.checkout\.Version =.*)/s.checkout.Version = "tags/${{ steps.get-tag-step.outputs.tag }}"/g' extensions/base/suite.go
+          sed -r -i 's/(s\.checkout\.Version =.*)/s.checkout.Version = "tags\/${{ steps.get-tag-step.outputs.tag }}"/g' extensions/base/suite.go
           git add -- .
           echo Starting to update repositotry ${{ matrix.repository }}
           if ! [ -n "$(git diff --cached --exit-code)" ]; then
