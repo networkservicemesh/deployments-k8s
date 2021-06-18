@@ -1,0 +1,99 @@
+---
+name: Release
+on:
+  workflow_run:
+    types:
+      - completed
+    workflows:
+      - 'ci'
+jobs:
+  print-debug-info:
+    name: Print debug info for Release workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v2
+  create-release:
+    name: Create release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
+    steps:
+      - name: Get tag
+        run: |
+          branch=${{github.event.workflow_run.head_branch}}
+          echo '::set-output name=tag::'${branch#release/}
+        id: get-tag-step
+      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: ${{ steps.get-tag-step.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+        with:
+          tag_name: refs/tags/${{ steps.get-tag-step.outputs.tag }}
+          release_name: ${{ steps.get-tag-step.outputs.tag }}
+          draft: false
+          prerelease: false
+  update-dependent-repositories:
+    strategy:
+      matrix:
+        repository:
+          - integration-tests
+    name: Update ${{ matrix.repository }}
+    needs: create-release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
+    steps:
+      - name: Get tag
+        run: |
+          branch=${{github.event.workflow_run.head_branch}}
+          echo '::set-output name=tag::'${branch#release/}
+        id: get-tag-step
+      - name: Setup envs
+        run: |
+          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
+          echo GO111MODULE=on >> $GITHUB_ENV
+          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+          repository: ${{ github.repository }}
+          token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+      - name: Install gotestmd
+        run: "go get github.com/networkservicemesh/gotestmd"
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Install goimports
+        run: "go get golang.org/x/tools/cmd/goimports"
+        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+      - name: Update ${{ matrix.repository }} locally
+        working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
+        run: |
+          go generate ./...
+          go mod tidy
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 8
+      - name: Push update to the ${{ matrix.repository }}
+        working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
+        run: |
+          sed -r -i 's/(s\.checkout\.Version =.*)/s.checkout.Version = "tags/{{ steps.get-tag-step.outputs.tag }}"/g' extensions/base/suite.go
+          git add -- .
+          echo Starting to update repositotry ${{ matrix.repository }}
+          if ! [ -n "$(git diff --cached --exit-code)" ]; then
+            echo ${{ matrix.repository }} is up to date
+            exit 0;
+          fi
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+          echo "Update to ${{ github.repository }}@${{ steps.get-tag-step.outputs.tag }}" >> /tmp/commit-message
+          git commit -s -F /tmp/commit-message
+          git checkout -b ${{ github.event.workflow_run.head_branch }}
+          git push -f origin ${{ github.event.workflow_run.head_branch }}
