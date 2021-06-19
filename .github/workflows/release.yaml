@@ -17,18 +17,21 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: refs/heads/${{github.event.workflow_run.head_branch}}
       - name: Get tag
         run: |
           branch=${{github.event.workflow_run.head_branch}}
           echo '::set-output name=tag::'${branch#release/}
         id: get-tag-step
-      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        with:
-          delete_release: true
-          tag_name: ${{ steps.get-tag-step.outputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-      - name: Create Release
+      - name: Push tag ${{ steps.get-tag-step.outputs.tag }}
+        run: |
+          git status
+          git tag ${{ steps.get-tag-step.outputs.tag }}
+          git push origin ${{ steps.get-tag-step.outputs.tag }} -f
+      - name: Create release ${{ steps.get-tag-step.outputs.tag }}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
