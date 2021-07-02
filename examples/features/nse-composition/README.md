@@ -44,7 +44,7 @@ do
   f="passthrough-${i}"
   NAME="nse-passthrough-${i}"
   LABELS="app:passthrough-${i}"
-  if ((i == 4))
+  if ((i == PASS_COUNT))
   then
     f="nse-firewall"
     NAME="acl-filter"
@@ -75,7 +75,7 @@ patches:
       path: /metadata/name
       value: ${NAME}
 EOF
-if((i == 4))
+if((i == PASS_COUNT))
 then
 cat > config-patch.yaml <<EOF
 ---
@@ -105,17 +105,17 @@ kind: Deployment
 metadata:
   name: nse-firewall-vpp
 spec:
-  template:    
+  template:
     spec:
       containers:
-        - name: nse  
+        - name: nse
           env:
             - name: NSM_SERVICE_NAME
               value: "nse-composition"
             - name: NSM_LABELS
               value: ${LABELS}
-      nodeSelector:  
-        kubernetes.io/hostname: ${NODE}    
+      nodeSelector:
+        kubernetes.io/hostname: ${NODE}
 EOF
   PASS_CFG="${PASS_CFG}- ./${f}"
   if (( i < PASS_COUNT ))
@@ -177,21 +177,21 @@ metadata:
 spec:
   template:
     spec:
-      containers:    
+      containers:
         - name: nse
-          env:   
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31    
-            - name: NSM_SERVICE_NAME
-              value: "nse-composition"  
-            - name: NSM_REGISTER_SERVICE
-              value: "false"  
-            - name: NSM_LABELS
+          env:
+            - name: NSE_CIDR_PREFIX
+              value: 172.16.1.100/31
+            - name: NSE_SERVICE_NAME
+              value: "nse-composition"
+            - name: NSE_REGISTER_SERVICE
+              value: "false"
+            - name: NSE_LABELS
               value: "app:gateway"
         - name: nginx
-          image: networkservicemesh/nginx   
+          image: networkservicemesh/nginx
           imagePullPolicy: IfNotPresent
-      nodeSelector:  
+      nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF                                                                                        
 ```
@@ -219,6 +219,11 @@ data:
         srcportoricmptypelast: 65535
         dstportoricmpcodefirst: 8080
         dstportoricmpcodelast: 8080
+      forbid tcp80:
+        proto: 6
+        srcportoricmptypelast: 65535
+        dstportoricmpcodefirst: 80
+        dstportoricmpcodelast: 80
 EOF
 ```
 
@@ -267,7 +272,6 @@ Check TCP Port 80 on NSE is inaccessible to NSC
 ```bash
 kubectl exec -it ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
 ```
-
 
 Ping from NSE to NSC:
 ```bash
