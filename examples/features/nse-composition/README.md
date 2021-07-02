@@ -210,110 +210,15 @@ data:
     aclrules:
       allow icmp:
         ispermit: 1
-        srcprefix:
-          address:
-            af: 0
-            un:
-              xxx_uniondata:
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-          len: 0
-        dstprefix:
-          address:
-            af: 0
-            un:
-              xxx_uniondata:
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-          len: 0
         proto: 1
-        srcportoricmptypefirst: 0
         srcportoricmptypelast: 65535
-        dstportoricmpcodefirst: 0
         dstportoricmpcodelast: 65535
-        tcpflagsmask: 0
-        tcpflagsvalue: 0
       allow tcp8080:
         ispermit: 1
-        srcprefix:
-          address:
-            af: 0
-            un:
-              xxx_uniondata:
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-          len: 0
-        dstprefix:
-          address:
-            af: 0
-            un:
-              xxx_uniondata:
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-              - 0
-          len: 0
         proto: 6
-        srcportoricmptypefirst: 0
         srcportoricmptypelast: 65535
         dstportoricmpcodefirst: 8080
         dstportoricmpcodelast: 8080
-        tcpflagsmask: 0
-        tcpflagsvalue: 0
 EOF
 ```
 
@@ -357,6 +262,12 @@ Check TCP Port 8080 on NSE is accessible to NSC
 ```bash
 kubectl exec -it ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:8080"
 ```
+
+Check TCP Port 80 on NSE is inaccessible to NSC
+```bash
+kubectl exec -it ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
+```
+
 
 Ping from NSE to NSC:
 ```bash
