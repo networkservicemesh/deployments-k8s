@@ -38,6 +38,7 @@ PASS_CFG=""
 NAME=""
 LABELS=""
 VOLUME_PATCH=""
+NS=""
 
 for ((i = 1; i <= PASS_COUNT; i++))
 do
@@ -50,14 +51,29 @@ do
     NAME="acl-filter"
     LABELS="app:firewall"
     VOLUME_PATCH="- config-patch.yaml"
+    NS="
+    - source_selector:
+        app: firewall${NS}
+      routes:
+        - destination_selector:
+            app: gateway
+    - routes:
+        - destination_selector:
+            app: firewall"
+  else
+    NS="${NS}
+      routes:
+        - destination_selector:
+            app: passthrough-${i}
+    - source_selector:
+        app: passthrough-${i}"
   fi
   if [ -d "${f}" ]
   then
     rm -r "${f}"
   fi
   mkdir "${f}"
-  cd "${f}" || exit
-  cat > kustomization.yaml <<EOF
+  cat > "${f}"/kustomization.yaml <<EOF
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -77,7 +93,7 @@ patches:
 EOF
 if((i == PASS_COUNT))
 then
-cat > config-patch.yaml <<EOF
+cat > "${f}"/config-patch.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -98,7 +114,7 @@ spec:
             name: vppagent-firewall-config-file
 EOF
 fi
-  cat > patch-nse-firewall-vpp.yaml <<EOF
+  cat > "${f}"/patch-nse-firewall-vpp.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -122,7 +138,6 @@ EOF
   then
     PASS_CFG+=$'\n'
   fi
-  cd ../
 done
 ```
 
@@ -135,6 +150,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
+- config-file.yaml
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
 ${PASS_CFG}
@@ -227,9 +243,20 @@ data:
 EOF
 ```
 
-Deploy ConfigMap
+Create nse-composition Network Serivice
 ```bash
-kubectl apply -f config-file.yaml
+cat > nse-composition-ns.yaml <<EOF
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: nse-composition
+  namespace: nsm-system
+spec:
+  payload: ETHERNET
+  name: nse-composition
+  matches:${NS}
+EOF
 ```
 
 Deploy NS configuration
