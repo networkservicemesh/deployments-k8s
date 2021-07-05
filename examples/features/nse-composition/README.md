@@ -292,12 +292,12 @@ kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 
 Check TCP Port 8080 on NSE is accessible to NSC
 ```bash
-kubectl exec -it ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:8080"
+kubectl exec ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:8080"
 ```
 
 Check TCP Port 80 on NSE is inaccessible to NSC
 ```bash
-kubectl exec -it ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
+kubectl exec ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:80" || echo "port :80 is unavailable"
 ```
 
 Ping from NSE to NSC:
