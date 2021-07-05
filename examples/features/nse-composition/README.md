@@ -38,7 +38,7 @@ PASS_CFG=""
 NAME=""
 LABELS=""
 VOLUME_PATCH=""
-NS=""
+MATCHES=""
 
 for ((i = 1; i <= PASS_COUNT; i++))
 do
@@ -51,9 +51,9 @@ do
     NAME="acl-filter"
     LABELS="app:firewall"
     VOLUME_PATCH="- config-patch.yaml"
-    NS="
+    MATCHES="
     - source_selector:
-        app: firewall${NS}
+        app: firewall${MATCHES}
       routes:
         - destination_selector:
             app: gateway
@@ -61,7 +61,7 @@ do
         - destination_selector:
             app: firewall"
   else
-    NS="${NS}
+    MATCHES="${MATCHES}
       routes:
         - destination_selector:
             app: passthrough-${i}
@@ -223,23 +223,22 @@ metadata:
   namespace: ${NAMESPACE}
 data:
   config.yaml: |
-    aclrules:
-      allow icmp:
-        ispermit: 1
-        proto: 1
-        srcportoricmptypelast: 65535
-        dstportoricmpcodelast: 65535
-      allow tcp8080:
-        ispermit: 1
-        proto: 6
-        srcportoricmptypelast: 65535
-        dstportoricmpcodefirst: 8080
-        dstportoricmpcodelast: 8080
-      forbid tcp80:
-        proto: 6
-        srcportoricmptypelast: 65535
-        dstportoricmpcodefirst: 80
-        dstportoricmpcodelast: 80
+    allow icmp:
+      ispermit: 1
+      proto: 1
+      srcportoricmptypelast: 65535
+      dstportoricmpcodelast: 65535
+    allow tcp8080:
+      ispermit: 1
+      proto: 6
+      srcportoricmptypelast: 65535
+      dstportoricmpcodefirst: 8080
+      dstportoricmpcodelast: 8080
+    forbid tcp80:
+      proto: 6
+      srcportoricmptypelast: 65535
+      dstportoricmpcodefirst: 80
+      dstportoricmpcodelast: 80
 EOF
 ```
 
@@ -255,7 +254,7 @@ metadata:
 spec:
   payload: ETHERNET
   name: nse-composition
-  matches:${NS}
+  matches:${MATCHES}
 EOF
 ```
 
@@ -297,7 +296,13 @@ kubectl exec ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.1
 
 Check TCP Port 80 on NSE is inaccessible to NSC
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:80" || echo "port :80 is unavailable"
+kubectl exec ${NSC} -n ${NAMESPACE} -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
+if [ 0 -eq $? ]; then
+  echo "error: port :80 is available" >&2
+  false
+else
+  echo "success: port :80 is unavailable"
+fi
 ```
 
 Ping from NSE to NSC:
