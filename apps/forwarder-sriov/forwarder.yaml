@@ -16,7 +16,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-sriov:deb787f
+        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-sriov:8af5bce
           imagePullPolicy: IfNotPresent
           name: forwarder-sriov
           securityContext:
