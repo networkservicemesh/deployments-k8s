@@ -15,7 +15,7 @@ spec:
         app: registry-proxy
     spec:
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:87475e9
+        - image: ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:0776271
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
