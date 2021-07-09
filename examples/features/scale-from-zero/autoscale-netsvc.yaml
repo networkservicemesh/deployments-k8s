@@ -9,9 +9,12 @@ spec:
   name: autoscale-icmp-responder
   matches:
     - source_selector:
+      fallthrough: true
       routes:
         - destination_selector:
             app: nse-icmp-responder
             nodeName: "{{.nodeName}}"
+    - source_selector:
+      routes:
         - destination_selector:
             app: icmp-responder-supplier
