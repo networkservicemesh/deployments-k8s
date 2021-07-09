@@ -8,7 +8,6 @@ To run any heal example follow steps for [Basic NSM setup](../basic)
 
 ## Includes
 
-- [Local Forwarder death](./local-forwarder-death)
 - [Local NSMgr restart](./local-nsmgr-restart)
 - [Remote NSMgr death](./remote-nsmgr-death)
 - [Local NSE death](./local-nse-death)
