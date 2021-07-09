@@ -1,0 +1,6 @@
+kustomization.yaml
+netsvcs.yaml
+nse.yaml
+set_params.sh
+result_data-*/
+nsm_setup/logs*/
