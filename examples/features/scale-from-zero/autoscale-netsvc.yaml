@@ -6,7 +6,6 @@ metadata:
   namespace: nsm-system
 spec:
   payload: ETHERNET
-  name: autoscale-icmp-responder
   matches:
     - source_selector:
       fallthrough: true
