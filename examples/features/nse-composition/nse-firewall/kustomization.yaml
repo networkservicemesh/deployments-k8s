@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../../../../apps/nse-firewall-vpp
+patchesStrategicMerge:
+- patch-nse-firewall-vpp.yaml
+- config-patch.yaml
+patches:
+- target:
+    kind: Deployment
+    name: nse-firewall-vpp
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: acl-filter

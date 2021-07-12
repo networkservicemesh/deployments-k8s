@@ -1,0 +1,15 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-firewall-vpp
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_SERVICE_NAME
+              value: "nse-composition"
+            - name: NSM_LABELS
+              value: app:firewall
