@@ -22,7 +22,7 @@ spec:
           value: unix:///var/lib/networkservicemesh/nsm.io.sock
         - name: NSE_CIDR_PREFIX
           value: 169.254.0.0/16
-        - name: NSE_SERVICE_NAME
+        - name: NSE_SERVICE_NAMES
           value: autoscale-icmp-responder
         - name: NSE_LABELS
           value: app:nse-icmp-responder
