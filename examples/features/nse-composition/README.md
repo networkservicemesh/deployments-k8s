@@ -31,116 +31,6 @@ Select node to deploy NSC and NSE:
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
-Create Passthrough and firewall NSE configurations:
-```bash
-PASS_COUNT=4
-PASS_CFG=""
-NAME=""
-LABELS=""
-VOLUME_PATCH=""
-MATCHES=""
-
-for ((i = 1; i <= PASS_COUNT; i++))
-do
-  f="passthrough-${i}"
-  NAME="nse-passthrough-${i}"
-  LABELS="app:passthrough-${i}"
-  if ((i == PASS_COUNT))
-  then
-    f="nse-firewall"
-    NAME="acl-filter"
-    LABELS="app:firewall"
-    VOLUME_PATCH="- config-patch.yaml"
-    MATCHES="
-    - source_selector:
-        app: firewall${MATCHES}
-      routes:
-        - destination_selector:
-            app: gateway
-    - routes:
-        - destination_selector:
-            app: firewall"
-  else
-    MATCHES="${MATCHES}
-      routes:
-        - destination_selector:
-            app: passthrough-${i}
-    - source_selector:
-        app: passthrough-${i}"
-  fi
-  if [ -d "${f}" ]
-  then
-    rm -r "${f}"
-  fi
-  mkdir "${f}"
-  cat > "${f}"/kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-bases:
-- ../../../../apps/nse-firewall-vpp
-patchesStrategicMerge:
-- patch-nse-firewall-vpp.yaml
-${VOLUME_PATCH}
-patches:
-- target:
-    kind: Deployment
-    name: nse-firewall-vpp
-  patch: |-  
-    - op: replace  
-      path: /metadata/name
-      value: ${NAME}
-EOF
-if((i == PASS_COUNT))
-then
-cat > "${f}"/config-patch.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-firewall-vpp
-spec:
-  template:    
-    spec:
-      containers:
-        - name: nse  
-          volumeMounts:
-            - mountPath: /etc/vppagent-firewall/config.yaml
-              subPath: config.yaml
-              name: vppagent-firewall-config-volume
-      volumes:
-        - name: vppagent-firewall-config-volume
-          configMap:
-            name: vppagent-firewall-config-file
-EOF
-fi
-  cat > "${f}"/patch-nse-firewall-vpp.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-firewall-vpp
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_SERVICE_NAME
-              value: "nse-composition"
-            - name: NSM_LABELS
-              value: ${LABELS}
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
-EOF
-  PASS_CFG="${PASS_CFG}- ./${f}"
-  if (( i < PASS_COUNT ))
-  then
-    PASS_CFG+=$'\n'
-  fi
-done
-```
-
 Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
@@ -153,7 +43,10 @@ bases:
 - config-file.yaml
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
-${PASS_CFG}
+- ./passthrough-1
+- ./passthrough-2
+- ./passthrough-3
+- ./nse-firewall
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -212,53 +105,7 @@ spec:
 EOF                                                                                        
 ```
 
-Create ConfigMap
-```bash
-cat > config-file.yaml <<EOF
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: vppagent-firewall-config-file
-  namespace: ${NAMESPACE}
-data:
-  config.yaml: |
-    allow icmp:
-      ispermit: 1
-      proto: 1
-      srcportoricmptypelast: 65535
-      dstportoricmpcodelast: 65535
-    allow tcp8080:
-      ispermit: 1
-      proto: 6
-      srcportoricmptypelast: 65535
-      dstportoricmpcodefirst: 8080
-      dstportoricmpcodelast: 8080
-    forbid tcp80:
-      proto: 6
-      srcportoricmptypelast: 65535
-      dstportoricmpcodefirst: 80
-      dstportoricmpcodelast: 80
-EOF
-```
-
-Create nse-composition Network Serivice
-```bash
-cat > nse-composition-ns.yaml <<EOF
----
-apiVersion: networkservicemesh.io/v1
-kind: NetworkService
-metadata:
-  name: nse-composition
-  namespace: nsm-system
-spec:
-  payload: ETHERNET
-  name: nse-composition
-  matches:${MATCHES}
-EOF
-```
-
-Deploy NS configuration
+Deploy Network Service
 ```bash
 kubectl create -f ./nse-composition-ns.yaml
 ```
