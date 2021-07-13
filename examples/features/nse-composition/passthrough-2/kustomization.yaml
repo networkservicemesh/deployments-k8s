@@ -5,12 +5,10 @@ bases:
 - ../../../../apps/nse-firewall-vpp
 patchesStrategicMerge:
 - patch-nse-firewall-vpp.yaml
-
-patches:
+patchesJson6902:
 - target:
+    group: apps
+    version: v1
     kind: Deployment
     name: nse-firewall-vpp
-  patch: |-
-    - op: replace
-      path: /metadata/name
-      value: nse-passthrough-2
+  path: patch-nse-firewall-vpp-2.yaml

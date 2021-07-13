@@ -6,11 +6,10 @@ bases:
 patchesStrategicMerge:
 - patch-nse-firewall-vpp.yaml
 - config-patch.yaml
-patches:
+patchesJson6902:
 - target:
+    group: apps
+    version: v1
     kind: Deployment
     name: nse-firewall-vpp
-  patch: |-
-    - op: replace
-      path: /metadata/name
-      value: acl-filter
+  path: patch-nse-firewall-vpp-2.yaml
