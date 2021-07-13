@@ -112,7 +112,7 @@ kubectl create -f ./nse-composition-ns.yaml
 
 Deploy NSC and NSE:
 ```bash
-kustomize build . | kubectl apply -f -
+kubectl apply -k .
 ```
 
 Wait for applications ready:
