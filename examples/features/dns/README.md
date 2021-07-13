@@ -74,11 +74,11 @@ spec:
       containers:
       - name: nse
         env:
-          - name: NSE_SERVICE_NAMES
+          - name: NSM_SERVICE_NAMES
             value: my-coredns-service
-          - name: NSE_CIDR_PREFIX
+          - name: NSM_CIDR_PREFIX
             value: 172.16.1.100/31
-          - name: NSE_DNS_CONFIGS
+          - name: NSM_DNS_CONFIGS
             value: "[{\"dns_server_ips\": [\"172.16.1.100\"], \"search_domains\": [\"my.coredns.service\"]}]"
       - name: coredns
         image: coredns/coredns:1.8.3
