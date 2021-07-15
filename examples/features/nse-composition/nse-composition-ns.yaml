@@ -6,7 +6,6 @@ metadata:
   namespace: nsm-system
 spec:
   payload: ETHERNET
-  name: nse-composition
   matches:
     - source_selector:
         app: firewall
