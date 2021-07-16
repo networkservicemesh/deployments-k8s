@@ -180,7 +180,7 @@ spec:
       containers:
         - name: nse
           env:
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 172.16.1.102/31
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
