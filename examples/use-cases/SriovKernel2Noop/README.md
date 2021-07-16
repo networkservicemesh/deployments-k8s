@@ -81,9 +81,9 @@ spec:
       containers:
         - name: nse
           env:
-            - name: NSE_LABELS
+            - name: NSM_LABELS
               value: serviceDomain:worker.domain
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
           resources:
             limits:

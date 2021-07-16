@@ -86,9 +86,9 @@ spec:
               value: admin
         - name: nse
           env:
-            - name: NSE_SERVICE_NAME
+            - name: NSM_SERVICE_NAMES
               value: my-postgres-service
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}

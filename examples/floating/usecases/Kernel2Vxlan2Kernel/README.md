@@ -64,11 +64,11 @@ spec:
       containers:
         - name: nse
           env:
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 172.16.1.2/31
-            - name: NSE_SERVICE_NAME
+            - name: NSM_SERVICE_NAMES
               value: icmp-responder@my.cluster3
-            - name: NSE_NAME
+            - name: NSM_NAME
               value: icmp-server@my.cluster3
 EOF
 ```
