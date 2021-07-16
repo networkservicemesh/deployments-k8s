@@ -91,20 +91,20 @@ spec:
       containers:
         - name: nse
           env:
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-            - name: NSE_SERVICE_NAME
+            - name: NSM_SERVICE_NAMES
               value: "nse-composition"
-            - name: NSE_REGISTER_SERVICE
+            - name: NSM_REGISTER_SERVICE
               value: "false"
-            - name: NSE_LABELS
+            - name: NSM_LABELS
               value: "app:gateway"
         - name: nginx
           image: networkservicemesh/nginx
           imagePullPolicy: IfNotPresent
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
-EOF                                                                                        
+EOF
 ```
 
 Deploy Network Service
