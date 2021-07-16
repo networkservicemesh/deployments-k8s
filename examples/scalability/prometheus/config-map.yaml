@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -86,4 +87,3 @@ data:
           regex: ([^:]+):.*
           replacement: $1:9089
           target_label: __address__
-
