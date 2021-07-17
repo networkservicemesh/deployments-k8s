@@ -57,6 +57,10 @@ spec:
           env:
             - name: NSM_OUTPUTPATH
               value: "/etc/mapip/config.yaml"
+            - name: NSM_NODENAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           volumeMounts:
             - name: mapip-volume
               mountPath: /etc/mapip
