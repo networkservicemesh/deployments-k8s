@@ -43,7 +43,7 @@ kind: Kustomization
 namespace: ${NAMESPACE1}
 
 bases:
-- ../../../apps/nse-kernel
+- ../../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -60,16 +60,21 @@ metadata:
   name: nse-kernel
 spec:
   template:
+    metadata:
+      annotations:
+        registration-name: icmp-server@my.cluster3
     spec:
       containers:
         - name: nse
           env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.2/31
-            - name: NSM_SERVICE_NAMES
-              value: icmp-responder@my.cluster3
-            - name: NSM_NAME
-              value: icmp-server@my.cluster3
+          - name: NSM_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.annotations['registration-name']
+          - name: NSM_CIDR_PREFIX
+            value: 172.16.1.2/31
+          - name: NSM_SERVICE_NAMES
+            value: icmp-responder@my.cluster3
 EOF
 ```
 
@@ -117,7 +122,7 @@ kind: Kustomization
 namespace: ${NAMESPACE2}
 
 bases:
-- ../../../apps/nsc-kernel
+- ../../../../apps/nsc-kernel
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -185,18 +190,18 @@ kubectl exec ${NSE} -n ${NAMESPACE1} -- ping -c 4 172.16.1.3
 
 ## Cleanup
 
-1. Cleanup resources for *cluster1*:
-```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-```bash
-kubectl delete ns ${NAMESPACE2}
-```
-
-2. Cleanup resources for *cluster2*:
+1. Cleanup resources for *cluster2*:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 ```bash
 kubectl delete ns ${NAMESPACE1}
+```
+
+2. Cleanup resources for *cluster1*:
+```bash
+export KUBECONFIG=$KUBECONFIG1
+```
+```bash
+kubectl delete ns ${NAMESPACE2}
 ```

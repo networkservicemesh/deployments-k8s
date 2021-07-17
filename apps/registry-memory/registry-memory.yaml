@@ -22,7 +22,7 @@ spec:
             - name: REGISTRY_MEMORY_LISTEN_ON
               value: tcp://:5002
             - name: REGISTRY_MEMORY_PROXY_REGISTRY_URL
-              value: registry-proxy-svc:5003
+              value: nsmgr-proxy:5004
           imagePullPolicy: IfNotPresent
           name: registry
           ports:

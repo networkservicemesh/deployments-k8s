@@ -1,5 +1,10 @@
 # Basic interdomain examples
 
+The NSM interdomain functionality provides the ability for clients in one domain to connect to endpoints in another domain. Each domain has its own installation of NSM and domain specific configuration such that all the NSM control-planes are able to communicate with the NSM components required for connection setup.
+
+
+![NSM interdomain Scheme](./interdomain_concept.png "NSM interdomain Scheme")
+
 
 ## Requires
 
