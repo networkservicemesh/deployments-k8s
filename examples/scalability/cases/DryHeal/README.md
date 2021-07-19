@@ -55,7 +55,7 @@ kubectl apply -f netsvcs.yaml
 ```
 
 ```bash
-create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints
+create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints 0
 ```
 ```bash
 kubectl apply -k ./endpoints
@@ -151,7 +151,7 @@ curl "${PROM_URL}/-/healthy" --silent --show-error
 Save statistics:
 ```bash
 RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
-PARAM_ANNOTATION="${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
+PARAM_ANNOTATION="dry heal case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
 if [[ "${TEST_REMOTE_CASE}" == "true" ]]; then
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, remote case"
   RESULT_DIR="${RESULT_DIR}-remote"

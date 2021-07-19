@@ -54,6 +54,7 @@ generate_netsvc ${TEST_NS_COUNT}
 kubectl apply -f netsvcs.yaml
 ```
 
+Create endpoints:
 ```bash
 create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints 0
 ```
@@ -63,19 +64,21 @@ kubectl apply -k ./endpoints
 ```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
+
+Create first batch of clients:
 ```bash
-create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients
+create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-0
 ```
 ```bash
-kubectl apply -k ./clients
+kubectl apply -k ./clients-0
 ```
 ```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
-EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
-EVENT_TEXT_CONNECTIONS_READY="Connections established"
+EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY_0"
+EVENT_TIME_CONNECTIONS_READY_0="$(date -Iseconds)"
+EVENT_TEXT_CONNECTIONS_READY_0="Connections established 1"
 ```
 ```bash
 CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel)"
@@ -99,18 +102,52 @@ EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
 sleep 15
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS"
-EVENT_TIME_DELETE_CLIENTS="$(date -Iseconds)"
-EVENT_TEXT_DELETE_CLIENTS="Delete clients..."
+EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS_0"
+EVENT_TIME_DELETE_CLIENTS_0="$(date -Iseconds)"
+EVENT_TEXT_DELETE_CLIENTS_0="Delete clients 1..."
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients --cascade=foreground
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients-0 --cascade=foreground
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED"
-EVENT_TIME_CLIENTS_DELETED="$(date -Iseconds)"
-EVENT_TEXT_CLIENTS_DELETED="Clients deleted"
+EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED_0"
+EVENT_TIME_CLIENTS_DELETED_0="$(date -Iseconds)"
+EVENT_TEXT_CLIENTS_DELETED_0="Clients deleted 1"
 ```
+
+Create second batch of clients:
+```bash
+create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-1
+```
+```bash
+kubectl apply -k ./clients-1
+```
+```bash
+timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
+```
+```bash
+EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY_1"
+EVENT_TIME_CONNECTIONS_READY_1="$(date -Iseconds)"
+EVENT_TEXT_CONNECTIONS_READY_1="Connections established 2"
+```
+```bash
+sleep 15
+```
+```bash
+EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS_1"
+EVENT_TIME_DELETE_CLIENTS_1="$(date -Iseconds)"
+EVENT_TEXT_DELETE_CLIENTS_1="Delete clients 2..."
+```
+```bash
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients-1 --cascade=foreground
+```
+```bash
+EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED_1"
+EVENT_TIME_CLIENTS_DELETED_1="$(date -Iseconds)"
+EVENT_TEXT_CLIENTS_DELETED_1="Clients deleted 2"
+```
+
+Remove everything:
 ```bash
 sleep 15
 ```
@@ -151,7 +188,7 @@ curl "${PROM_URL}/-/healthy" --silent --show-error
 Save statistics:
 ```bash
 RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
-PARAM_ANNOTATION="single start case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
+PARAM_ANNOTATION="client restart case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
 if [[ "${TEST_REMOTE_CASE}" == "true" ]]; then
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, remote case"
   RESULT_DIR="${RESULT_DIR}-remote"

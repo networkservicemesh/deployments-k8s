@@ -4,6 +4,7 @@ function create_endpoint_patches() {
   local nse_count=$1
   local nse_node=$2
   local batch_name=$3
+  local ip_interfix=$4
 
   mkdir -p "./${batch_name}"
 
@@ -27,7 +28,7 @@ EOF
   cat /dev/null >"./${batch_name}/nse.yaml"
   for ((i = 0; i < nse_count; i++)); do
     sed "s/name: nse-kernel/name: nse-kernel-$i/g" ../../../../apps/nse-kernel/nse.yaml >>"./${batch_name}/nse.yaml"
-    local cidr_prefix=10.$i.0.0/16
+    local cidr_prefix=10.${ip_interfix}.$i.0/24
     cat >>"./${batch_name}/patch-nse.yaml" <<EOF
 ---
 apiVersion: apps/v1

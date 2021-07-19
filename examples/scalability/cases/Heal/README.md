@@ -55,10 +55,10 @@ kubectl apply -f netsvcs.yaml
 ```
 
 ```bash
-create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints 0
+create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints-0 0
 ```
 ```bash
-kubectl apply -k ./endpoints
+kubectl apply -k ./endpoints-0
 ```
 ```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
@@ -82,11 +82,11 @@ CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .
 for client in ${CLIENTS} ; do
   COUNT="$(kubectl -n ${NAMESPACE} logs ${client} | grep "successfully connected to scalability-local-ns" -c)"
   if [[ ${COUNT} -ne ${TEST_NS_COUNT} ]]; then
-    echo client ${client} is not yet finished: ${COUNT} connections, need ${TEST_NS_COUNT}
+    echo "client ${client} is not yet finished: ${COUNT} connections, need ${TEST_NS_COUNT}"
     $(exit 1)
     break
   else
-    echo client ${client} is good to do
+    echo "client ${client} is good to do"
   fi
 done
 ```
@@ -99,17 +99,77 @@ EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
 sleep 15
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS"
-EVENT_TIME_DELETE_CLIENTS="$(date -Iseconds)"
-EVENT_TEXT_DELETE_CLIENTS="Delete clients..."
+EVENT_LIST="${EVENT_LIST} DELETE_ENDPOINTS"
+EVENT_TIME_DELETE_ENDPOINTS="$(date -Iseconds)"
+EVENT_TEXT_DELETE_ENDPOINTS="Delete endpoints..."
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients --cascade=foreground
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./endpoints-0 --cascade=foreground
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED"
-EVENT_TIME_CLIENTS_DELETED="$(date -Iseconds)"
-EVENT_TEXT_CLIENTS_DELETED="Clients deleted"
+EVENT_LIST="${EVENT_LIST} ENDPOINTS_DELETED"
+EVENT_TIME_ENDPOINTS_DELETED="$(date -Iseconds)"
+EVENT_TEXT_ENDPOINTS_DELETED="Endpoints deleted"
+```
+
+Make sure we don't have open connections:
+```bash
+for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
+  echo client ${nsc}
+  echo $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r)
+  echo client interface count: $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "dev nsm" -c)
+  if [[ 0 -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "dev nsm" -c) ]]; then
+    echo "client still have open NSM connections: ${nsc}"
+    $(exit 1)
+    break
+  else 
+    echo "client doesn't have open NSM connections: ${nsc}"
+  fi
+done
+```
+```bash
+sleep 15
+```
+
+Redeploy endpoints:
+```bash
+create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints-1 1
+```
+```bash
+EVENT_LIST="${EVENT_LIST} RECREATE_ENDPOINTS"
+EVENT_TIME_RECREATE_ENDPOINTS="$(date -Iseconds)"
+EVENT_TEXT_RECREATE_ENDPOINTS="Create new endpoints"
+```
+```bash
+kubectl apply -k ./endpoints-1
+```
+```bash
+timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
+```
+```bash
+kubectl -n ${NAMESPACE} describe pods
+```
+```bash
+rc=0
+for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
+  echo client ${nsc}
+  kubectl -n ${NAMESPACE} exec ${nsc} -- ip r
+  echo test: ${TEST_NS_COUNT} != $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c)
+  echo test result: $([[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]])
+  if [[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]]; then
+    echo "client is still not healed: ${nsc}"
+    rc=1
+    break
+  else
+    echo "client is good to go: ${nsc}"
+  fi
+done
+$(exit ${rc})
+```
+```bash
+EVENT_LIST="${EVENT_LIST} HEAL_FINISHED"
+EVENT_TIME_HEAL_FINISHED="$(date -Iseconds)"
+EVENT_TEXT_HEAL_FINISHED="Heal finished"
 ```
 ```bash
 sleep 15
@@ -151,7 +211,7 @@ curl "${PROM_URL}/-/healthy" --silent --show-error
 Save statistics:
 ```bash
 RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
-PARAM_ANNOTATION="single start case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
+PARAM_ANNOTATION="heal case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
 if [[ "${TEST_REMOTE_CASE}" == "true" ]]; then
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, remote case"
   RESULT_DIR="${RESULT_DIR}-remote"

@@ -11,3 +11,5 @@ This folder contains scalability tests
 
 - [Single start without heal](./cases/SingleStart)
 - [Single start with unsuccessful heal](./cases/DryHeal)
+- [Clients restart](./cases/TwoClientBatches)
+- [Endpoints restart (successful heal)](./cases/Heal)
