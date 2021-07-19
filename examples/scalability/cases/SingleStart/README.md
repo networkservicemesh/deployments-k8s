@@ -1,6 +1,11 @@
-# Test kernel to kernel connection
+# Scalability single start test
 
-This is an NSM system scalability test.
+This test has the following scenario:
+1. Deploy endpoints
+2. Deploy clients
+3. Delete clients
+4. Delete endpoints
+5. Gather statistics
 
 ## Run
 
@@ -8,6 +13,8 @@ Set test parameters:
 ```bash
 . ./set_params.sh
 ```
+
+Save test time, for drawing plots:
 ```bash
 TEST_TIME_START=$(date -Iseconds)
 ```
@@ -28,7 +35,7 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC and NSE:
+Select nodes to deploy NSC and NSE:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSE_NODE=${NODES[0]}
@@ -40,7 +47,7 @@ fi
 echo NSE_NODE ${NSE_NODE}, NSC_NODE ${NSC_NODE}
 ```
 
-Deploy pods:
+Deploy everything:
 ```bash
 . ../define_generate_netsvc.sh
 . ../define_create_client_patches.sh
@@ -77,6 +84,8 @@ EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
 EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
 EVENT_TEXT_CONNECTIONS_READY="Connections established"
 ```
+
+Make sure that all requests have really finished:
 ```bash
 CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel)"
 for client in ${CLIENTS} ; do
@@ -98,6 +107,8 @@ EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
 ```bash
 sleep 15
 ```
+
+Run test scenario actions:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS"
 EVENT_TIME_DELETE_CLIENTS="$(date -Iseconds)"
@@ -163,21 +174,11 @@ fi
 ```bash
 . ../define_save_data.sh
 ```
-
-Save numeric data and plots:
 ```bash
 . ../save_metrics.sh
 ```
 
 ## Cleanup
-
-Delete ns:
-```bash
-kubectl delete ns ${NAMESPACE} --ignore-not-found
-```
-```bash
-kubectl delete -f netsvcs.yaml --ignore-not-found
-```
 
 Kill proxy to prometheus:
 ```bash
@@ -187,4 +188,12 @@ if [[ "${PORT_FORWARDER_JOB}" != "" ]]; then
   cat port_forwarder_out.log
   rm port_forwarder_out.log
 fi
+```
+
+Delete ns:
+```bash
+kubectl delete ns ${NAMESPACE} --ignore-not-found
+```
+```bash
+kubectl delete -f netsvcs.yaml --ignore-not-found
 ```

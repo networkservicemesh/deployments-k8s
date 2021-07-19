@@ -1,6 +1,14 @@
-# Test kernel to kernel connection
+# Scalability heal test
 
-This is an NSM system scalability test.
+This test has the following scenario:
+1. Deploy endpoints
+2. Deploy clients
+3. Delete endpoints
+4. Wait few seconds to capture load during healing
+5. Deploy new endpoints
+6. Wait for all connections to heal 
+7. Delete everything
+8. Gather statistics
 
 ## Run
 
@@ -8,6 +16,8 @@ Set test parameters:
 ```bash
 . ./set_params.sh
 ```
+
+Save test time, for drawing plots:
 ```bash
 TEST_TIME_START=$(date -Iseconds)
 ```
@@ -28,7 +38,7 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
-Select node to deploy NSC and NSE:
+Select nodes to deploy NSC and NSE:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSE_NODE=${NODES[0]}
@@ -40,7 +50,7 @@ fi
 echo NSE_NODE ${NSE_NODE}, NSC_NODE ${NSC_NODE}
 ```
 
-Deploy pods:
+Deploy everything:
 ```bash
 . ../define_generate_netsvc.sh
 . ../define_create_client_patches.sh
@@ -77,6 +87,8 @@ EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
 EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
 EVENT_TEXT_CONNECTIONS_READY="Connections established"
 ```
+
+Make sure that all requests have really finished:
 ```bash
 CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel)"
 for client in ${CLIENTS} ; do
@@ -98,6 +110,8 @@ EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
 ```bash
 sleep 15
 ```
+
+Run test scenario actions:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_ENDPOINTS"
 EVENT_TIME_DELETE_ENDPOINTS="$(date -Iseconds)"
@@ -112,12 +126,11 @@ EVENT_TIME_ENDPOINTS_DELETED="$(date -Iseconds)"
 EVENT_TEXT_ENDPOINTS_DELETED="Endpoints deleted"
 ```
 
-Make sure we don't have open connections:
+Make sure we don't have any open connections:
 ```bash
 for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
   echo client ${nsc}
   echo $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r)
-  echo client interface count: $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "dev nsm" -c)
   if [[ 0 -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "dev nsm" -c) ]]; then
     echo "client still have open NSM connections: ${nsc}"
     $(exit 1)
@@ -146,16 +159,13 @@ kubectl apply -k ./endpoints-1
 ```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
-```bash
-kubectl -n ${NAMESPACE} describe pods
-```
+
+Wait for all connections to heal:
 ```bash
 rc=0
 for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
   echo client ${nsc}
   kubectl -n ${NAMESPACE} exec ${nsc} -- ip r
-  echo test: ${TEST_NS_COUNT} != $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c)
-  echo test result: $([[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]])
   if [[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]]; then
     echo "client is still not healed: ${nsc}"
     rc=1
@@ -174,6 +184,8 @@ EVENT_TEXT_HEAL_FINISHED="Heal finished"
 ```bash
 sleep 15
 ```
+
+Delete everything:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_NAMESPACE"
 EVENT_TIME_DELETE_NAMESPACE="$(date -Iseconds)"
@@ -223,21 +235,11 @@ fi
 ```bash
 . ../define_save_data.sh
 ```
-
-Save numeric data and plots:
 ```bash
 . ../save_metrics.sh
 ```
 
 ## Cleanup
-
-Delete ns:
-```bash
-kubectl delete ns ${NAMESPACE} --ignore-not-found
-```
-```bash
-kubectl delete -f netsvcs.yaml --ignore-not-found
-```
 
 Kill proxy to prometheus:
 ```bash
@@ -247,4 +249,12 @@ if [[ "${PORT_FORWARDER_JOB}" != "" ]]; then
   cat port_forwarder_out.log
   rm port_forwarder_out.log
 fi
+```
+
+Delete ns:
+```bash
+kubectl delete ns ${NAMESPACE} --ignore-not-found
+```
+```bash
+kubectl delete -f netsvcs.yaml --ignore-not-found
 ```
