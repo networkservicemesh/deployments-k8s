@@ -9,4 +9,5 @@ This folder contains scalability tests
 
 ## Includes
 
-- [Single start case](./SingleStartCase)
+- [Single start without heal](./cases/SingleStart)
+- [Single start with unsuccessful heal](./cases/DryHeal)

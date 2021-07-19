@@ -7,13 +7,15 @@ function saveData() {
   local query=$4
 
   echo saving ${name}
-  echo query: $query
+  echo query: ${query}
+
+  mkdir -p "${RESULT_DIR}" || return 1
 
   local test_time_start=$(date --date="${TEST_TIME_START}" -u +%s)
   local test_time_end=$(date --date="${TEST_TIME_END}" -u +%s)
   local test_time_end_relative=$((${test_time_end} - ${test_time_start}))
 
-  styx --duration $(($(date -u +%s)-${test_time_start} + 5))s --prometheus "${PROM_URL}" "${query}" > "${RESULT_DIR}/${name}.csv" || return 1
+  styx --duration $(($(date -u +%s)-${test_time_start} + 5))s --prometheus "${PROM_URL}" "${query}" > "${RESULT_DIR}/${name}.csv" || return 2
 
   sed -E -i "${name_replacement}" "${RESULT_DIR}/${name}.csv"
 
@@ -52,7 +54,7 @@ EOF
 plot for [col=2:STATS_columns] "${RESULT_DIR}/${name}.csv" using (\$1-${test_time_start}):col with lines linewidth 2 title columnheader
 EOF
 
-  gnuplot "${RESULT_DIR}/${name}.gnu" || return 2
+  gnuplot "${RESULT_DIR}/${name}.gnu" || return 3
 
   curl \
     --silent \
@@ -63,7 +65,7 @@ EOF
     --data-urlencode "end=${TEST_TIME_END}" \
     --data-urlencode "step=1s" \
     >"${RESULT_DIR}/${name}.json" \
-    || return 3
+    || return 4
 
     echo ${name} saved successfully
 }

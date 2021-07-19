@@ -14,7 +14,7 @@ TEST_TIME_START=$(date -Iseconds)
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f ../namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f ../../namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -26,27 +26,6 @@ kubectl exec -n spire spire-server-0 -- \
 -parentID spiffe://example.org/ns/spire/sa/spire-agent \
 -selector k8s:ns:${NAMESPACE} \
 -selector k8s:sa:default
-```
-
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-  - ../../../apps/nsc-kernel
-
-resources:
-  - nse.yaml
-
-patchesStrategicMerge:
-  - patch-nsc.yaml
-  - patch-nse.yaml
-EOF
 ```
 
 Select node to deploy NSC and NSE:
@@ -61,41 +40,55 @@ fi
 echo NSE_NODE ${NSE_NODE}, NSC_NODE ${NSC_NODE}
 ```
 
-Deploy pods
+Deploy pods:
 ```bash
-. ../define_prepare_patches.sh
+. ../define_generate_netsvc.sh
+. ../define_create_client_patches.sh
+. ../define_create_endpoint_patches.sh
 ```
+
 ```bash
-prepare_patches ${TEST_NS_COUNT} ${TEST_NSE_COUNT} ${TEST_NSC_COUNT} ${NSE_NODE} ${NSC_NODE}
+generate_netsvc ${TEST_NS_COUNT}
 ```
 ```bash
 kubectl apply -f netsvcs.yaml
 ```
+
 ```bash
-kubectl apply -k .
+create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints
+```
+```bash
+kubectl apply -k ./endpoints
 ```
 ```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
 ```bash
+create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients
+```
+```bash
+kubectl apply -k ./clients
+```
+```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} CLIENTS_READY"
-EVENT_TIME_CLIENTS_READY="$(date -Iseconds)"
-EVENT_TEXT_CLIENTS_READY="Clients ready"
+EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
+EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
+EVENT_TEXT_CONNECTIONS_READY="Connections established"
 ```
 ```bash
 CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel)"
 for client in ${CLIENTS} ; do
   COUNT="$(kubectl -n ${NAMESPACE} logs ${client} | grep "successfully connected to scalability-local-ns" -c)"
   if [[ ${COUNT} -ne ${TEST_NS_COUNT} ]]; then
-    echo client ${client} is not yet finished: count ${COUNT}, need ${TEST_NS_COUNT} 
+    echo client ${client} is not yet finished: ${COUNT} connections, need ${TEST_NS_COUNT}
     $(exit 1)
     break
+  else
+    echo client ${client} is good to do
   fi
 done
-echo All clients finished requests
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} REQUESTS_FINISHED"
@@ -106,24 +99,17 @@ EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
 sleep 15
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} DELETE_1 DELETE_2"
-EVENT_TIME_DELETE_1="$(date -Iseconds)"
+EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS"
+EVENT_TIME_DELETE_CLIENTS="$(date -Iseconds)"
+EVENT_TEXT_DELETE_CLIENTS="Delete clients..."
 ```
 ```bash
-if [[ "${TEST_ENABLE_HEAL}" == "true" ]]; then
-  kubectl -n ${NAMESPACE} delete -f ./nse.yaml &&
-  timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait --for=delete --timeout=3m pod -l app=nse-kernel &&
-  EVENT_TEXT_DELETE_1="Delete endpoints..." &&
-  EVENT_TEXT_DELETE_2="Endpoints deleted"
-else
-  kubectl -n ${NAMESPACE} delete deployment nsc-kernel &&
-  timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait --for=delete --timeout=3m pod -l app=nsc-kernel &&
-  EVENT_TEXT_DELETE_1="Delete clients..." &&
-  EVENT_TEXT_DELETE_2="Clients deleted"
-fi
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients --cascade=foreground
 ```
 ```bash
-EVENT_TIME_DELETE_2="$(date -Iseconds)"
+EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED"
+EVENT_TIME_CLIENTS_DELETED="$(date -Iseconds)"
+EVENT_TEXT_CLIENTS_DELETED="Clients deleted"
 ```
 ```bash
 sleep 15
@@ -164,13 +150,8 @@ curl "${PROM_URL}/-/healthy" --silent --show-error
 
 Save statistics:
 ```bash
-RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}-heal=${TEST_ENABLE_HEAL}"
-PARAM_ANNOTATION="${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)" 
-if [[ "${TEST_ENABLE_HEAL}" == "true" ]]; then
-  PARAM_ANNOTATION="${PARAM_ANNOTATION}, with heal"
-else
-  PARAM_ANNOTATION="${PARAM_ANNOTATION}, without heal"
-fi
+RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
+PARAM_ANNOTATION="${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
 if [[ "${TEST_REMOTE_CASE}" == "true" ]]; then
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, remote case"
   RESULT_DIR="${RESULT_DIR}-remote"
@@ -178,9 +159,6 @@ else
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, local case"
   RESULT_DIR="${RESULT_DIR}-local"
 fi
-```
-```bash
-mkdir "${RESULT_DIR}"
 ```
 ```bash
 . ../define_save_data.sh

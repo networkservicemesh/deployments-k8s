@@ -117,5 +117,5 @@ To free resources follow the next command:
 kubectl delete mutatingwebhookconfiguration --all
 ```
 ```bash
-kubectl delete -k .
+kubectl delete -k . --ignore-not-found
 ```
