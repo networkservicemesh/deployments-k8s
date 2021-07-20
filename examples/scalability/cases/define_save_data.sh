@@ -14,7 +14,7 @@ function saveData() {
   local test_time_start=$(date --date="${TEST_TIME_START}" -u +%s)
   local test_time_end=$(date --date="${TEST_TIME_END}" -u +%s)
   local test_time_end_relative=$((${test_time_end} - ${test_time_start}))
-  local prom_url="http://localhost:9090/"
+  local prom_url="http://localhost:9090"
 
   styx --duration $(($(date -u +%s)-${test_time_start} + 5))s --prometheus "${prom_url}" "${query}" > "${RESULT_DIR}/${name}.csv" || return 2
 
