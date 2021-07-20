@@ -138,9 +138,15 @@ EVENT_LIST="${EVENT_LIST} NAMESPACE_DELETED"
 EVENT_TIME_NAMESPACE_DELETED="$(date -Iseconds)"
 EVENT_TEXT_NAMESPACE_DELETED="Namespace deleted"
 ```
+
+## Cleanup
+
+Wait few seconds to capture performance after test end:
 ```bash
 sleep 15
 ```
+
+Mark test end:
 ```bash
 TEST_TIME_END="$(date -Iseconds)"
 ```
@@ -164,9 +170,7 @@ fi
 . ../save_metrics.sh
 ```
 
-## Cleanup
-
-Delete ns:
+Delete resources:
 ```bash
 kubectl delete ns ${NAMESPACE} --ignore-not-found
 ```

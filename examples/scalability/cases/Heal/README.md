@@ -162,19 +162,21 @@ timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l 
 
 Wait for all connections to heal:
 ```bash
-rc=0
-for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-  echo client ${nsc}
-  kubectl -n ${NAMESPACE} exec ${nsc} -- ip r
-  if [[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]]; then
-    echo "client is still not healed: ${nsc}"
-    rc=1
-    break
-  else
-    echo "client is good to go: ${nsc}"
-  fi
-done
-$(exit ${rc})
+function waitHealFinish() {
+  for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
+    echo client ${nsc}
+    kubectl -n ${NAMESPACE} exec ${nsc} -- ip r
+    if [[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]]; then
+      echo "client is still not healed: ${nsc}"
+      return 1
+    else
+      echo "client is good to go: ${nsc}"
+    fi
+  done
+}
+```
+```bash
+waitHealFinish
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} HEAL_FINISHED"
@@ -199,9 +201,15 @@ EVENT_LIST="${EVENT_LIST} NAMESPACE_DELETED"
 EVENT_TIME_NAMESPACE_DELETED="$(date -Iseconds)"
 EVENT_TEXT_NAMESPACE_DELETED="Namespace deleted"
 ```
+
+## Cleanup
+
+Wait few seconds to capture performance after test end:
 ```bash
 sleep 15
 ```
+
+Mark test end:
 ```bash
 TEST_TIME_END="$(date -Iseconds)"
 ```
@@ -225,9 +233,7 @@ fi
 . ../save_metrics.sh
 ```
 
-## Cleanup
-
-Delete ns:
+Delete resources:
 ```bash
 kubectl delete ns ${NAMESPACE} --ignore-not-found
 ```
