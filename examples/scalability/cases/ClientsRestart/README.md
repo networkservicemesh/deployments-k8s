@@ -183,20 +183,6 @@ sleep 15
 TEST_TIME_END="$(date -Iseconds)"
 ```
 
-Open connection to prometheus:
-```bash
-set +m
-```
-```bash
-kubectl -n prometheus port-forward $(kubectl -n prometheus get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=prometheus-server) 9090:9090 2>&1 >port_forwarder_out.log &
-```
-```bash
-PROM_URL="http://localhost:9090"
-```
-```bash
-curl "${PROM_URL}/-/healthy" --silent --show-error
-```
-
 Save statistics:
 ```bash
 RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
@@ -217,16 +203,6 @@ fi
 ```
 
 ## Cleanup
-
-Kill proxy to prometheus:
-```bash
-PORT_FORWARDER_JOB=$(jobs | grep "prometheus port-forward" | cut -d] -f1 | cut -c 2-)
-if [[ "${PORT_FORWARDER_JOB}" != "" ]]; then
-  kill %${PORT_FORWARDER_JOB}
-  cat port_forwarder_out.log
-  rm port_forwarder_out.log
-fi
-```
 
 Delete ns:
 ```bash
