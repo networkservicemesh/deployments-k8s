@@ -1,6 +1,6 @@
-# Prometheus
+# kube-state-metrics
 
-Contains setup for cAdvisor.
+Contains setup for kube-state-metrics.
 
 ## Run
 

@@ -1,4 +1,4 @@
-# Prometheus
+# cAdvisor
 
 Contains setup for cAdvisor.
 
