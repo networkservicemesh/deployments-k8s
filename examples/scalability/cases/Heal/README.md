@@ -50,13 +50,12 @@ fi
 echo NSE_NODE ${NSE_NODE}, NSC_NODE ${NSC_NODE}
 ```
 
-Deploy everything:
+Create helper functions:
 ```bash
-. ../define_generate_netsvc.sh
-. ../define_create_client_patches.sh
-. ../define_create_endpoint_patches.sh
+. ../define_helper_functions.sh
 ```
 
+Deploy network services:
 ```bash
 generate_netsvc ${TEST_NS_COUNT}
 ```
@@ -64,6 +63,7 @@ generate_netsvc ${TEST_NS_COUNT}
 kubectl apply -f netsvcs.yaml
 ```
 
+Deploy endpoints:
 ```bash
 create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints-0 0
 ```
@@ -71,8 +71,20 @@ create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints-0 0
 kubectl apply -k ./endpoints-0
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
+
+Make sure that all endpoints have finished registration:
+```bash
+waitEndpointsStart ${NAMESPACE}
+```
+```bash
+EVENT_LIST="${EVENT_LIST} ENDPOINTS_0_STARTED"
+EVENT_TIME_ENDPOINTS_0_STARTED="$(date -Iseconds)"
+EVENT_TEXT_ENDPOINTS_0_STARTED="All endpoints-0 started"
+```
+
+Deploy clients:
 ```bash
 create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients
 ```
@@ -82,30 +94,23 @@ kubectl apply -k ./clients
 ```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
+
+```bash
+waitClientsSvid ${NAMESPACE}
+```
+```bash
+EVENT_LIST="${EVENT_LIST} CLIENTS_GOT_SVID"
+EVENT_TIME_CLIENTS_GOT_SVID="$(date -Iseconds)"
+EVENT_TEXT_CLIENTS_GOT_SVID="All clients obtained svid"
+```
+
+```bash
+waitConnectionsCount ${NAMESPACE} "10.0" ${TEST_NS_COUNT}
+```
 ```bash
 EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
 EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
 EVENT_TEXT_CONNECTIONS_READY="Connections established"
-```
-
-Make sure that all requests have really finished:
-```bash
-CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel)"
-for client in ${CLIENTS} ; do
-  COUNT="$(kubectl -n ${NAMESPACE} logs ${client} | grep "successfully connected to scalability-local-ns" -c)"
-  if [[ ${COUNT} -ne ${TEST_NS_COUNT} ]]; then
-    echo "client ${client} is not yet finished: ${COUNT} connections, need ${TEST_NS_COUNT}"
-    $(exit 1)
-    break
-  else
-    echo "client ${client} is good to do"
-  fi
-done
-```
-```bash
-EVENT_LIST="${EVENT_LIST} REQUESTS_FINISHED"
-EVENT_TIME_REQUESTS_FINISHED="$(date -Iseconds)"
-EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
 ```
 ```bash
 sleep 15
@@ -115,30 +120,25 @@ Run test scenario actions:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_ENDPOINTS"
 EVENT_TIME_DELETE_ENDPOINTS="$(date -Iseconds)"
-EVENT_TEXT_DELETE_ENDPOINTS="Delete endpoints..."
+EVENT_TEXT_DELETE_ENDPOINTS="Delete endpoints-0..."
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./endpoints-0 --cascade=foreground
+kubectl -n ${NAMESPACE} delete -k ./endpoints-0 --cascade=foreground
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} ENDPOINTS_DELETED"
 EVENT_TIME_ENDPOINTS_DELETED="$(date -Iseconds)"
-EVENT_TEXT_ENDPOINTS_DELETED="Endpoints deleted"
+EVENT_TEXT_ENDPOINTS_DELETED="Endpoints-0 deleted"
 ```
 
-Make sure we don't have any open connections:
+Make sure clients don't have any open connections:
 ```bash
-for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-  echo client ${nsc}
-  echo $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r)
-  if [[ 0 -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "dev nsm" -c) ]]; then
-    echo "client still have open NSM connections: ${nsc}"
-    $(exit 1)
-    break
-  else 
-    echo "client doesn't have open NSM connections: ${nsc}"
-  fi
-done
+waitConnectionsCount ${NAMESPACE} "10.0" 0
+```
+```bash
+EVENT_LIST="${EVENT_LIST} CLIENT_ROUTES_DELETED"
+EVENT_TIME_CLIENT_ROUTES_DELETED="$(date -Iseconds)"
+EVENT_TEXT_CLIENT_ROUTES_DELETED="Client routes deleted"
 ```
 ```bash
 sleep 15
@@ -151,7 +151,7 @@ create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints-1 1
 ```bash
 EVENT_LIST="${EVENT_LIST} RECREATE_ENDPOINTS"
 EVENT_TIME_RECREATE_ENDPOINTS="$(date -Iseconds)"
-EVENT_TEXT_RECREATE_ENDPOINTS="Create new endpoints"
+EVENT_TEXT_RECREATE_ENDPOINTS="Create endpoints-1"
 ```
 ```bash
 kubectl apply -k ./endpoints-1
@@ -160,23 +160,19 @@ kubectl apply -k ./endpoints-1
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
 
-Wait for all connections to heal:
+Make sure that all endpoints have finished registration:
 ```bash
-function waitHealFinish() {
-  for nsc in $(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-    echo client ${nsc}
-    kubectl -n ${NAMESPACE} exec ${nsc} -- ip r
-    if [[ ${TEST_NS_COUNT} -ne $(kubectl -n ${NAMESPACE} exec ${nsc} -- ip r | grep "10.1" | grep "dev nsm" -c) ]]; then
-      echo "client is still not healed: ${nsc}"
-      return 1
-    else
-      echo "client is good to go: ${nsc}"
-    fi
-  done
-}
+waitSomeEndpointsStart ${NAMESPACE}
 ```
 ```bash
-waitHealFinish
+EVENT_LIST="${EVENT_LIST} ENDPOINTS_1_STARTED"
+EVENT_TIME_ENDPOINTS_1_STARTED="$(date -Iseconds)"
+EVENT_TEXT_ENDPOINTS_1_STARTED="${ENDPOINTS_1_STARTED} of endpoints-1 started"
+```
+
+Wait for all connections to heal:
+```bash
+waitHealFinish ${NAMESPACE} "10.1" ${TEST_NS_COUNT}
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} HEAL_FINISHED"
@@ -194,6 +190,9 @@ EVENT_TIME_DELETE_NAMESPACE="$(date -Iseconds)"
 EVENT_TEXT_DELETE_NAMESPACE="Delete namespace..."
 ```
 ```bash
+kubectl -n ${NAMESPACE} delete -k ./clients --cascade=foreground
+```
+```bash
 kubectl delete ns ${NAMESPACE}
 ```
 ```bash
@@ -203,6 +202,15 @@ EVENT_TEXT_NAMESPACE_DELETED="Namespace deleted"
 ```
 
 ## Cleanup
+
+Save possible test fail event:
+```bash
+if [[ "${EVENT_TIME_NAMESPACE_DELETED}" == "" ]]; then
+    EVENT_LIST="${EVENT_LIST} TEST_FAIL"
+    EVENT_TIME_TEST_FAIL="$(date -Iseconds)"
+    EVENT_TEXT_TEST_FAIL="Fail"
+fi
+```
 
 Wait few seconds to capture performance after test end:
 ```bash
@@ -225,9 +233,6 @@ else
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, local case"
   RESULT_DIR="${RESULT_DIR}-local"
 fi
-```
-```bash
-. ../define_save_data.sh
 ```
 ```bash
 . ../save_metrics.sh

@@ -48,13 +48,12 @@ fi
 echo NSE_NODE ${NSE_NODE}, NSC_NODE ${NSC_NODE}
 ```
 
-Deploy everything:
+Create helper functions:
 ```bash
-. ../define_generate_netsvc.sh
-. ../define_create_client_patches.sh
-. ../define_create_endpoint_patches.sh
+. ../define_helper_functions.sh
 ```
 
+Deploy network services:
 ```bash
 generate_netsvc ${TEST_NS_COUNT}
 ```
@@ -62,7 +61,7 @@ generate_netsvc ${TEST_NS_COUNT}
 kubectl apply -f netsvcs.yaml
 ```
 
-Create endpoints:
+Deploy endpoints:
 ```bash
 create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints 0
 ```
@@ -70,10 +69,20 @@ create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints 0
 kubectl apply -k ./endpoints
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
 
-Create first batch of clients:
+Make sure that all endpoints have finished registration:
+```bash
+waitEndpointsStart ${NAMESPACE}
+```
+```bash
+EVENT_LIST="${EVENT_LIST} ENDPOINTS_0_STARTED"
+EVENT_TIME_ENDPOINTS_0_STARTED="$(date -Iseconds)"
+EVENT_TEXT_ENDPOINTS_0_STARTED="All endpoints started"
+```
+
+Deploy clients:
 ```bash
 create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-0
 ```
@@ -81,50 +90,43 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-0
 kubectl apply -k ./clients-0
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
-```
-```bash
-EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY_0"
-EVENT_TIME_CONNECTIONS_READY_0="$(date -Iseconds)"
-EVENT_TEXT_CONNECTIONS_READY_0="Connections established 1"
+kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 
-Make sure that all requests have really finished:
 ```bash
-CLIENTS="$(kubectl -n ${NAMESPACE} get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel)"
-for client in ${CLIENTS} ; do
-  COUNT="$(kubectl -n ${NAMESPACE} logs ${client} | grep "successfully connected to scalability-local-ns" -c)"
-  if [[ ${COUNT} -ne ${TEST_NS_COUNT} ]]; then
-    echo client ${client} is not yet finished: ${COUNT} connections, need ${TEST_NS_COUNT}
-    $(exit 1)
-    break
-  else
-    echo client ${client} is good to do
-  fi
-done
+waitClientsSvid ${NAMESPACE}
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} REQUESTS_FINISHED"
-EVENT_TIME_REQUESTS_FINISHED="$(date -Iseconds)"
-EVENT_TEXT_REQUESTS_FINISHED="Requests finished"
+EVENT_LIST="${EVENT_LIST} CLIENTS_GOT_SVID"
+EVENT_TIME_CLIENTS_GOT_SVID="$(date -Iseconds)"
+EVENT_TEXT_CLIENTS_GOT_SVID="All clients-0 obtained svid"
+```
+
+```bash
+waitConnectionsCount ${NAMESPACE} "10.0" ${TEST_NS_COUNT}
+```
+```bash
+EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
+EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
+EVENT_TEXT_CONNECTIONS_READY="Connections established"
 ```
 ```bash
 sleep 15
 ```
 
-Run test scenario actions:
+Delete first batch of clients:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS_0"
 EVENT_TIME_DELETE_CLIENTS_0="$(date -Iseconds)"
 EVENT_TEXT_DELETE_CLIENTS_0="Delete clients 1..."
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients-0 --cascade=foreground
+kubectl -n ${NAMESPACE} delete -k ./clients-0 --cascade=foreground
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED_0"
 EVENT_TIME_CLIENTS_DELETED_0="$(date -Iseconds)"
-EVENT_TEXT_CLIENTS_DELETED_0="Clients deleted 1"
+EVENT_TEXT_CLIENTS_DELETED_0="Clients deleted 0"
 ```
 
 Create second batch of clients:
@@ -135,12 +137,20 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-1
 kubectl apply -k ./clients-1
 ```
 ```bash
+waitClientsSvid ${NAMESPACE}
+```
+```bash
+EVENT_LIST="${EVENT_LIST} CLIENTS_1_GOT_SVID"
+EVENT_TIME_CLIENTS_1_GOT_SVID="$(date -Iseconds)"
+EVENT_TEXT_CLIENTS_1_GOT_SVID="All clients-1 obtained svid"
+```
+```bash
 timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY_1"
 EVENT_TIME_CONNECTIONS_READY_1="$(date -Iseconds)"
-EVENT_TEXT_CONNECTIONS_READY_1="Connections established 2"
+EVENT_TEXT_CONNECTIONS_READY_1="Connections established 1"
 ```
 ```bash
 sleep 15
@@ -148,7 +158,7 @@ sleep 15
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS_1"
 EVENT_TIME_DELETE_CLIENTS_1="$(date -Iseconds)"
-EVENT_TEXT_DELETE_CLIENTS_1="Delete clients 2..."
+EVENT_TEXT_DELETE_CLIENTS_1="Delete clients 1..."
 ```
 ```bash
 timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients-1 --cascade=foreground
@@ -158,11 +168,11 @@ EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED_1"
 EVENT_TIME_CLIENTS_DELETED_1="$(date -Iseconds)"
 EVENT_TEXT_CLIENTS_DELETED_1="Clients deleted 2"
 ```
-
-Remove everything:
 ```bash
 sleep 15
 ```
+
+Delete everything:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_NAMESPACE"
 EVENT_TIME_DELETE_NAMESPACE="$(date -Iseconds)"
@@ -178,6 +188,15 @@ EVENT_TEXT_NAMESPACE_DELETED="Namespace deleted"
 ```
 
 ## Cleanup
+
+Save possible test fail event:
+```bash
+if [[ "${EVENT_TIME_NAMESPACE_DELETED}" == "" ]]; then
+    EVENT_LIST="${EVENT_LIST} TEST_FAIL"
+    EVENT_TIME_TEST_FAIL="$(date -Iseconds)"
+    EVENT_TEXT_TEST_FAIL="Fail"
+fi
+```
 
 Wait few seconds to capture performance after test end:
 ```bash
@@ -200,9 +219,6 @@ else
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, local case"
   RESULT_DIR="${RESULT_DIR}-local"
 fi
-```
-```bash
-. ../define_save_data.sh
 ```
 ```bash
 . ../save_metrics.sh

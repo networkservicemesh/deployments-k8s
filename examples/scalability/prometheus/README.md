@@ -9,13 +9,14 @@ Contains setup for Prometheus.
 
 ## Run
 
-1. Create ns for deployments:
+Deploy prometheus:
 ```bash
 kubectl apply -k .
 ```
 
+Wait till prometheus pod is created:
 ```bash
-kubectl -n monitoring --timeout=1m wait pod --for=condition=ready $(kubectl -n monitoring get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=prometheus-server)
+kubectl -n prometheus --timeout=1m wait pod --for=condition=ready $(kubectl -n prometheus get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=prometheus-server)
 ```
 
 Disable terminal interactive mode.

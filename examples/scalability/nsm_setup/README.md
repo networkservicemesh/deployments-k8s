@@ -87,7 +87,7 @@ kubectl apply -k .
 ```
 
 ```bash
-timeout -v --kill-after=10s 1m kubectl wait pod -n nsm-system --timeout=1m --all --for=condition=ready
+timeout -v --kill-after=10s 1m kubectl -n nsm-system wait pod --timeout=1m --all --for=condition=ready
 ```
 
 ```bash
