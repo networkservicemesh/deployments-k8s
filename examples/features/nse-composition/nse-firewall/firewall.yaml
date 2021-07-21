@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nse-firewall-vpp
+  name: acl-filter
+spec:
+  selector:
+    matchLabels:
+      app: nse-firewall-vpp
+  template:
+    metadata:
+      labels:
+        app: nse-firewall-vpp
+    spec:
+      containers:
+      - env:
+        - name: NSM_SERVICE_NAME
+          value: nse-composition
+        - name: NSM_LABELS
+          value: app:firewall
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: unix:///run/spire/sockets/agent.sock
+        - name: NSM_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NSM_CONNECT_TO
+          value: unix:///var/lib/networkservicemesh/nsm.io.sock
+        image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:27f0c90
+        imagePullPolicy: IfNotPresent
+        name: nse
+        resources:
+          limits:
+            cpu: 500m
+            memory: 400Mi
+          requests:
+            cpu: 150m
+        volumeMounts:
+        - mountPath: /etc/vppagent-firewall/config.yaml
+          name: vppagent-firewall-config-volume
+          subPath: config.yaml
+        - mountPath: /run/spire/sockets
+          name: spire-agent-socket
+          readOnly: true
+        - mountPath: /var/lib/networkservicemesh
+          name: nsm-socket
+          readOnly: true
+      volumes:
+      - configMap:
+          name: vppagent-firewall-config-file
+        name: vppagent-firewall-config-volume
+      - hostPath:
+          path: /run/spire/sockets
+          type: Directory
+        name: spire-agent-socket
+      - hostPath:
+          path: /var/lib/networkservicemesh
+          type: DirectoryOrCreate
+        name: nsm-socket

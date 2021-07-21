@@ -39,8 +39,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: ${NAMESPACE}
 
-bases:
+resources:
 - config-file.yaml
+bases:
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
 - ./passthrough-1
@@ -112,7 +113,7 @@ kubectl create -f ./nse-composition-ns.yaml
 
 Deploy NSC and NSE:
 ```bash
-kustomize build . | kubectl apply -f -
+kubectl apply -k .
 ```
 
 Wait for applications ready:
