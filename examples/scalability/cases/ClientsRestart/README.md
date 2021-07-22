@@ -74,7 +74,7 @@ timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l 
 
 Make sure that all endpoints have finished registration:
 ```bash
-waitEndpointsStart ${NAMESPACE}
+waitEndpointsStart ${NAMESPACE} endpoints
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} ENDPOINTS_0_STARTED"
@@ -90,7 +90,7 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-0
 kubectl apply -k ./clients-0
 ```
 ```bash
-kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 
 ```bash
@@ -106,9 +106,9 @@ EVENT_TEXT_CLIENTS_GOT_SVID="All clients-0 obtained svid"
 waitConnectionsCount ${NAMESPACE} "10.0" ${TEST_NS_COUNT}
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
-EVENT_TIME_CONNECTIONS_READY="$(date -Iseconds)"
-EVENT_TEXT_CONNECTIONS_READY="Connections established"
+EVENT_LIST="${EVENT_LIST} CONNECTIONS_0_READY"
+EVENT_TIME_CONNECTIONS_0_READY="$(date -Iseconds)"
+EVENT_TEXT_CONNECTIONS_0_READY="Conns 0 ready"
 ```
 ```bash
 sleep 15
@@ -118,7 +118,7 @@ Delete first batch of clients:
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS_0"
 EVENT_TIME_DELETE_CLIENTS_0="$(date -Iseconds)"
-EVENT_TEXT_DELETE_CLIENTS_0="Delete clients 1..."
+EVENT_TEXT_DELETE_CLIENTS_0="Delete clients-0..."
 ```
 ```bash
 kubectl -n ${NAMESPACE} delete -k ./clients-0 --cascade=foreground
@@ -126,7 +126,7 @@ kubectl -n ${NAMESPACE} delete -k ./clients-0 --cascade=foreground
 ```bash
 EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED_0"
 EVENT_TIME_CLIENTS_DELETED_0="$(date -Iseconds)"
-EVENT_TEXT_CLIENTS_DELETED_0="Clients deleted 0"
+EVENT_TEXT_CLIENTS_DELETED_0="Clients-0 deleted"
 ```
 
 Create second batch of clients:
@@ -137,6 +137,10 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients-1
 kubectl apply -k ./clients-1
 ```
 ```bash
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nsc-kernel --for=condition=ready
+```
+
+```bash
 waitClientsSvid ${NAMESPACE}
 ```
 ```bash
@@ -144,29 +148,31 @@ EVENT_LIST="${EVENT_LIST} CLIENTS_1_GOT_SVID"
 EVENT_TIME_CLIENTS_1_GOT_SVID="$(date -Iseconds)"
 EVENT_TEXT_CLIENTS_1_GOT_SVID="All clients-1 obtained svid"
 ```
+
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
+waitConnectionsCount ${NAMESPACE} "10.0" ${TEST_NS_COUNT}
 ```
 ```bash
-EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY_1"
-EVENT_TIME_CONNECTIONS_READY_1="$(date -Iseconds)"
-EVENT_TEXT_CONNECTIONS_READY_1="Connections established 1"
+EVENT_LIST="${EVENT_LIST} CONNECTIONS_1_READY"
+EVENT_TIME_CONNECTIONS_1_READY="$(date -Iseconds)"
+EVENT_TEXT_CONNECTIONS_1_READY="Conns 1 ready"
 ```
 ```bash
 sleep 15
 ```
+
 ```bash
 EVENT_LIST="${EVENT_LIST} DELETE_CLIENTS_1"
 EVENT_TIME_DELETE_CLIENTS_1="$(date -Iseconds)"
-EVENT_TEXT_DELETE_CLIENTS_1="Delete clients 1..."
+EVENT_TEXT_DELETE_CLIENTS_1="Delete clients-1..."
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} delete -k ./clients-1 --cascade=foreground
+kubectl delete -k ./clients-1 --cascade=foreground
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} CLIENTS_DELETED_1"
 EVENT_TIME_CLIENTS_DELETED_1="$(date -Iseconds)"
-EVENT_TEXT_CLIENTS_DELETED_1="Clients deleted 2"
+EVENT_TEXT_CLIENTS_DELETED_1="Clients-1 deleted"
 ```
 ```bash
 sleep 15

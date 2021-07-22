@@ -46,6 +46,9 @@ namespace: ${NAMESPACE}
 
 namePrefix: ${batch_name}-
 
+commonLabels:
+  scalability-batch: ${batch_name}
+
 resources:
   - nse.yaml
 
@@ -100,6 +103,9 @@ namespace: ${NAMESPACE}
 
 namePrefix: ${batch_name}-
 
+commonLabels:
+  scalability-batch: ${batch_name}
+
 bases:
   - ../../../../../apps/nsc-kernel
 
@@ -134,12 +140,13 @@ EOF
 
 function waitEndpointsStart() {
   local namespace=$1
-  for endpoint in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nse-kernel); do
+  local batch_label=$2
+  for endpoint in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l "scalability-batch=${batch_label}"); do
     if [[ "$(kubectl -n "${namespace}" logs "${endpoint}" | grep "startup completed in" -c)" -ne 1 ]]; then
-      echo "endpoint ${endpoint} has not yet finished startup"
+      echo "endpoint has not yet finished startup: ${endpoint}"
       return 1
     else
-      echo "endpoint ${endpoint} is good to do"
+      echo "endpoint is good to do: ${endpoint} "
     fi
   done
 }
@@ -156,38 +163,18 @@ function waitClientsSvid() {
   done
 }
 
-function waitSomeEndpointsStart() {
-  local namespace=$1
-  ENDPOINTS_STARTED=0
-  for endpoint in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nse-kernel); do
-    COUNT="$(kubectl -n "${namespace}" logs "${endpoint}" | grep "startup completed in" -c)"
-    if [[ ${COUNT} -ne 1 ]]; then
-      echo "endpoint ${endpoint} has not yet finished startup"
-    else
-      echo "endpoint ${endpoint} is good to do"
-      ENDPOINTS_STARTED=$((ENDPOINTS_STARTED + 1))
-    fi
-  done
-  [[ "${ENDPOINTS_STARTED}" -ne 0 ]]
-}
-
 function waitConnectionsCount() {
   local namespace=$1
   local grep_pattern=$2
   local grepDesiredCount=$3
   for client in $(kubectl -n "${namespace}" get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-    echo "checking client ${client}"
-    echo "ip route"
-    kubectl -n "${namespace}" exec "${client}" -- ip route
-    echo "ip link"
-    kubectl -n "${namespace}" exec "${client}" -- ip link
     local count
     count="$(kubectl -n "${namespace}" exec "${client}" -- ip route | grep "dev nsm" -c)"
     if [[ "${grepDesiredCount}" -ne ${count} ]]; then
-      echo "client ${client} have incorrect number of open NSM connections: ${count}"
+      echo "client have ${count} open NSM connections, need ${grepDesiredCount}: ${client}"
       return 1
     else
-      echo "client ${client} is good to go"
+      echo "client is good to go: ${client}"
     fi
   done
 }
@@ -196,14 +183,16 @@ function waitHealFinish() {
   local namespace=$1
   local grep_pattern=$2
   local grepDesiredCount=$3
-  for nsc in $(kubectl -n "${namespace}" get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-    echo checking client "${nsc}"
-    kubectl -n "${namespace}" exec "${nsc}" -- ip route
-    if [[ "${grepDesiredCount}" -ne $(kubectl -n "${namespace}" exec "${nsc}" -- ip route | grep "${grep_pattern}" | grep "dev nsm" -c) ]]; then
-      echo "client has not healed yet: ${nsc}"
+  for client in $(kubectl -n "${namespace}" get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
+    echo checking client "${client}"
+    local routes
+    routes=$(kubectl -n "${namespace}" exec "${client}" -- ip route)
+    echo "${routes}"
+    if [[ "${grepDesiredCount}" -ne $(echo "${routes}" | grep "${grep_pattern}" | grep "dev nsm" -c) ]]; then
+      echo "client has not healed yet: ${client}"
       return 1
     else
-      echo "client is good to go: ${nsc}"
+      echo "client is good to go: ${client}"
     fi
   done
 }

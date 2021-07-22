@@ -73,7 +73,7 @@ timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l 
 
 Make sure that all endpoints have finished registration:
 ```bash
-waitEndpointsStart ${NAMESPACE}
+waitEndpointsStart ${NAMESPACE} endpoints
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} ENDPOINTS_0_STARTED"
@@ -89,7 +89,7 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients
 kubectl apply -k ./clients
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl  -n ${NAMESPACE}wait pod --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 
 ```bash

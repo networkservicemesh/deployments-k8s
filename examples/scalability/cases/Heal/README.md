@@ -76,7 +76,7 @@ timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l 
 
 Make sure that all endpoints have finished registration:
 ```bash
-waitEndpointsStart ${NAMESPACE}
+waitEndpointsStart ${NAMESPACE} endpoints-0
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} ENDPOINTS_0_STARTED"
@@ -92,7 +92,7 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients
 kubectl apply -k ./clients
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nsc-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 
 ```bash
@@ -116,35 +116,7 @@ EVENT_TEXT_CONNECTIONS_READY="Connections established"
 sleep 15
 ```
 
-Run test scenario actions:
-```bash
-EVENT_LIST="${EVENT_LIST} DELETE_ENDPOINTS"
-EVENT_TIME_DELETE_ENDPOINTS="$(date -Iseconds)"
-EVENT_TEXT_DELETE_ENDPOINTS="Delete endpoints-0..."
-```
-```bash
-kubectl -n ${NAMESPACE} delete -k ./endpoints-0 --cascade=foreground
-```
-```bash
-EVENT_LIST="${EVENT_LIST} ENDPOINTS_DELETED"
-EVENT_TIME_ENDPOINTS_DELETED="$(date -Iseconds)"
-EVENT_TEXT_ENDPOINTS_DELETED="Endpoints-0 deleted"
-```
-
-Make sure clients don't have any open connections:
-```bash
-waitConnectionsCount ${NAMESPACE} "10.0" 0
-```
-```bash
-EVENT_LIST="${EVENT_LIST} CLIENT_ROUTES_DELETED"
-EVENT_TIME_CLIENT_ROUTES_DELETED="$(date -Iseconds)"
-EVENT_TEXT_CLIENT_ROUTES_DELETED="Client routes deleted"
-```
-```bash
-sleep 15
-```
-
-Redeploy endpoints:
+Deploy second batch of endpoints:
 ```bash
 create_endpoint_patches ${TEST_NSE_COUNT} ${NSE_NODE} endpoints-1 1
 ```
@@ -157,17 +129,32 @@ EVENT_TEXT_RECREATE_ENDPOINTS="Create endpoints-1"
 kubectl apply -k ./endpoints-1
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl wait pod -n ${NAMESPACE} --timeout=3m -l app=nse-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nse-kernel --for=condition=ready
 ```
 
 Make sure that all endpoints have finished registration:
 ```bash
-waitSomeEndpointsStart ${NAMESPACE}
+waitEndpointsStart ${NAMESPACE} endpoints-1
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} ENDPOINTS_1_STARTED"
 EVENT_TIME_ENDPOINTS_1_STARTED="$(date -Iseconds)"
-EVENT_TEXT_ENDPOINTS_1_STARTED="${ENDPOINTS_1_STARTED} of endpoints-1 started"
+EVENT_TEXT_ENDPOINTS_1_STARTED="All endpoints-1 started"
+```
+
+Delete first batch of endpoints:
+```bash
+EVENT_LIST="${EVENT_LIST} DELETE_ENDPOINTS"
+EVENT_TIME_DELETE_ENDPOINTS="$(date -Iseconds)"
+EVENT_TEXT_DELETE_ENDPOINTS="Delete endpoints-0..."
+```
+```bash
+kubectl -n ${NAMESPACE} delete -k ./endpoints-0 --cascade=foreground
+```
+```bash
+EVENT_LIST="${EVENT_LIST} ENDPOINTS_DELETED"
+EVENT_TIME_ENDPOINTS_DELETED="$(date -Iseconds)"
+EVENT_TEXT_ENDPOINTS_DELETED="Endpoints-0 deleted"
 ```
 
 Wait for all connections to heal:
