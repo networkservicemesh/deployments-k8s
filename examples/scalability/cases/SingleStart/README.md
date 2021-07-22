@@ -157,6 +157,14 @@ if [[ "${EVENT_TIME_NAMESPACE_DELETED}" == "" ]]; then
 fi
 ```
 
+Delete resources:
+```bash
+kubectl delete ns ${NAMESPACE} --ignore-not-found
+```
+```bash
+kubectl delete -f netsvcs.yaml --ignore-not-found
+```
+
 Wait few seconds to capture performance after test end:
 ```bash
 sleep 15
@@ -181,12 +189,4 @@ fi
 ```
 ```bash
 . ../save_metrics.sh
-```
-
-Delete resources:
-```bash
-kubectl delete ns ${NAMESPACE} --ignore-not-found
-```
-```bash
-kubectl delete -f netsvcs.yaml --ignore-not-found
 ```

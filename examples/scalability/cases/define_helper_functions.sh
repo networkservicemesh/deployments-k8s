@@ -168,8 +168,12 @@ function waitConnectionsCount() {
   local grep_pattern=$2
   local grepDesiredCount=$3
   for client in $(kubectl -n "${namespace}" get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
+    echo "checking client ${client}"
+    local routes
+    routes="$(kubectl -n "${namespace}" exec "${client}" -- ip route)"
+    echo "${routes}"
     local count
-    count="$(kubectl -n "${namespace}" exec "${client}" -- ip route | grep "dev nsm" -c)"
+    count="$(echo "${routes}" | grep "dev nsm" -c)"
     if [[ "${grepDesiredCount}" -ne ${count} ]]; then
       echo "client have ${count} open NSM connections, need ${grepDesiredCount}: ${client}"
       return 1
