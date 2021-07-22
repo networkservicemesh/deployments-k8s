@@ -8,7 +8,8 @@ sum by (container_label_io_kubernetes_container_name, kubernetes_io_hostname) (
   rate(container_cpu_usage_seconds_total{
     container_label_io_kubernetes_pod_namespace=~'nsm-system|spire',
     container_label_io_kubernetes_container_name!='',
-    id=~'/kubelet.*',
+    container_label_io_kubernetes_container_name!='POD',
+    id!~'/docker.*',
     kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
   }[5s])
 )" || return $((10 + $?))
@@ -18,7 +19,8 @@ sum by (container_label_io_kubernetes_container_name, kubernetes_io_hostname) (
   container_memory_working_set_bytes{
     container_label_io_kubernetes_pod_namespace=~'nsm-system|spire',
     container_label_io_kubernetes_container_name!='',
-    id=~'/kubelet.*',
+    container_label_io_kubernetes_container_name!='POD',
+    id!~'/docker.*',
     kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
   }
 ) / 1024 / 1024" || return $((20 + $?))
@@ -29,7 +31,8 @@ saveData test-cpu "Test CPU Usage in cores, ${PARAM_ANNOTATION}" "${POD_REPLACE}
     rate(container_cpu_usage_seconds_total{
       container_label_io_kubernetes_pod_namespace='${NAMESPACE}',
       container_label_io_kubernetes_container_name!='',
-      id=~'/kubelet.*',
+      container_label_io_kubernetes_container_name!='POD',
+      id!~'/docker.*',
       kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
     }[5s]),
     'uid', '\$1', 'id', '.*/pod(.*)/.*'
@@ -42,7 +45,8 @@ sum by (pod, kubernetes_io_hostname) (
     container_memory_working_set_bytes{
       container_label_io_kubernetes_pod_namespace='${NAMESPACE}',
       container_label_io_kubernetes_container_name!='',
-      id=~'/kubelet.*',
+      container_label_io_kubernetes_container_name!='POD',
+      id!~'/docker.*',
       kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
     },
     'uid', '\$1', 'id', '.*/pod(.*)/.*'
@@ -54,7 +58,8 @@ avg by (container_label_io_kubernetes_container_name, kubernetes_io_hostname) (
   rate(container_cpu_usage_seconds_total{
     container_label_io_kubernetes_pod_namespace='${NAMESPACE}',
     container_label_io_kubernetes_container_name!='',
-    id=~'/kubelet.*',
+    container_label_io_kubernetes_container_name!='POD',
+    id!~'/docker.*',
     kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
   }[5s])
 )" || return $((50 + $?))
@@ -64,7 +69,8 @@ avg by (container_label_io_kubernetes_container_name, kubernetes_io_hostname) (
   container_memory_working_set_bytes{
     container_label_io_kubernetes_pod_namespace='${NAMESPACE}',
     container_label_io_kubernetes_container_name!='',
-    id=~'/kubelet.*',
+    container_label_io_kubernetes_container_name!='POD',
+    id!~'/docker.*',
     kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
   }
 ) / 1024 / 1024" || return $((60 + $?))
@@ -74,7 +80,8 @@ sum by (container_label_io_kubernetes_container_name, kubernetes_io_hostname) (
   rate(container_cpu_usage_seconds_total{
     container_label_io_kubernetes_pod_namespace='${NAMESPACE}',
     container_label_io_kubernetes_container_name!='',
-    id=~'/kubelet.*',
+    container_label_io_kubernetes_container_name!='POD',
+    id!~'/docker.*',
     kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
   }[5s])
 )" || return $((70 + $?))
@@ -84,7 +91,8 @@ sum by (container_label_io_kubernetes_container_name, kubernetes_io_hostname) (
   container_memory_working_set_bytes{
     container_label_io_kubernetes_pod_namespace='${NAMESPACE}',
     container_label_io_kubernetes_container_name!='',
-    id=~'/kubelet.*',
+    container_label_io_kubernetes_container_name!='POD',
+    id!~'/docker.*',
     kubernetes_io_hostname=~'${NSC_NODE}|${NSE_NODE}'
   }
 ) / 1024 / 1024" || return $((80 + $?))
