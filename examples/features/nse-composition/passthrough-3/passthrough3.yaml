@@ -15,7 +15,10 @@ spec:
         app: nse-firewall-vpp
     spec:
       containers:
-      - env:
+      - name: nse
+        image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:27f0c90
+        imagePullPolicy: IfNotPresent
+        env:
         - name: NSM_SERVICE_NAME
           value: nse-composition
         - name: NSM_LABELS
@@ -28,22 +31,19 @@ spec:
               fieldPath: metadata.name
         - name: NSM_CONNECT_TO
           value: unix:///var/lib/networkservicemesh/nsm.io.sock
-        image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:27f0c90
-        imagePullPolicy: IfNotPresent
-        name: nse
+        volumeMounts:
+          - mountPath: /run/spire/sockets
+            name: spire-agent-socket
+            readOnly: true
+          - mountPath: /var/lib/networkservicemesh
+            name: nsm-socket
+            readOnly: true
         resources:
+          requests:
+            cpu: 150m
           limits:
             cpu: 500m
             memory: 400Mi
-          requests:
-            cpu: 150m
-        volumeMounts:
-        - mountPath: /run/spire/sockets
-          name: spire-agent-socket
-          readOnly: true
-        - mountPath: /var/lib/networkservicemesh
-          name: nsm-socket
-          readOnly: true
       volumes:
       - hostPath:
           path: /run/spire/sockets
