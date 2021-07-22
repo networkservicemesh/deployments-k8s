@@ -41,12 +41,12 @@ namespace: ${NAMESPACE}
 
 resources:
 - config-file.yaml
+- passthrough-1.yaml
+- passthrough-2.yaml
+- passthrough-3.yaml
 bases:
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
-- ./passthrough-1
-- ./passthrough-2
-- ./passthrough-3
 - ./nse-firewall
 
 patchesStrategicMerge:
