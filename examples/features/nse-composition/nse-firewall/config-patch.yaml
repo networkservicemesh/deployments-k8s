@@ -15,4 +15,4 @@ spec:
       volumes:
         - name: vppagent-firewall-config-volume
           configMap:
-            name: vppagent-firewall-config-file
+            name: vppagent-firewall-config-
