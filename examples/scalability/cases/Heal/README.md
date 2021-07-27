@@ -228,6 +228,9 @@ else
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, local case"
   RESULT_DIR="${RESULT_DIR}-local"
 fi
+PARAM_ANNOTATION="${PARAM_ANNOTATION}, run at ${TEST_TIME_START}"
+echo result dir: ${RESULT_DIR}
+echo param annotation: ${PARAM_ANNOTATION}
 ```
 ```bash
 . ../save_metrics.sh

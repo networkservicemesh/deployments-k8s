@@ -143,7 +143,7 @@ function waitEndpointsStart() {
   local batch_label=$2
   for endpoint in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l "scalability-batch=${batch_label}"); do
     if [[ "$(kubectl -n "${namespace}" logs "${endpoint}" | grep "startup completed in" -c)" -ne 1 ]]; then
-      echo "endpoint has not yet finished startup: ${endpoint}"
+      echo "endpoint hasn't finished startup yet: ${endpoint}"
       return 1
     else
       echo "endpoint is good to do: ${endpoint} "
@@ -155,7 +155,7 @@ function waitClientsSvid() {
   local namespace=$1
   for client in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel); do
     if [[ "$(kubectl -n "${namespace}" logs "${client}" | grep "sVID: " -c)" -ne 1 ]]; then
-      echo "client ${client} has not obtained svid yet"
+      echo "client ${client} hasn't obtained svid yet"
       return 1
     else
       echo "client ${client} is good to do"
@@ -175,7 +175,7 @@ function waitConnectionsCount() {
     local count
     count="$(echo "${routes}" | grep "dev nsm" -c)"
     if [[ "${grepDesiredCount}" -ne ${count} ]]; then
-      echo "client have ${count} open NSM connections, need ${grepDesiredCount}: ${client}"
+      echo "client has ${count} open NSM connection(s), need ${grepDesiredCount}: ${client}"
       return 1
     else
       echo "client is good to go: ${client}"
@@ -193,7 +193,7 @@ function waitHealFinish() {
     routes=$(kubectl -n "${namespace}" exec "${client}" -- ip route)
     echo "${routes}"
     if [[ "${grepDesiredCount}" -ne $(echo "${routes}" | grep "${grep_pattern}" | grep "dev nsm" -c) ]]; then
-      echo "client has not healed yet: ${client}"
+      echo "client hasn't healed yet: ${client}"
       return 1
     else
       echo "client is good to go: ${client}"

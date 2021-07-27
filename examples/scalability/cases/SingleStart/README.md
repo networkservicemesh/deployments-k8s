@@ -89,7 +89,7 @@ create_client_patches ${TEST_NSC_COUNT} ${NSC_NODE} clients
 kubectl apply -k ./clients
 ```
 ```bash
-timeout -v --kill-after=10s 3m kubectl  -n ${NAMESPACE}wait pod --timeout=3m -l app=nsc-kernel --for=condition=ready
+timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l app=nsc-kernel --for=condition=ready
 ```
 
 ```bash
