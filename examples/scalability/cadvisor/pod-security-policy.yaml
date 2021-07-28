@@ -13,10 +13,10 @@ spec:
   fsGroup:
     rule: RunAsAny
   volumes:
-  - '*'
+    - '*'
   allowedHostPaths:
-  - pathPrefix: "/"
-  - pathPrefix: "/var/run"
-  - pathPrefix: "/sys"
-  - pathPrefix: "/var/lib/docker"
-  - pathPrefix: "/dev/disk"
+    - pathPrefix: "/"
+    - pathPrefix: "/var/run"
+    - pathPrefix: "/sys"
+    - pathPrefix: "/var/lib/docker"
+    - pathPrefix: "/dev/disk"

@@ -18,6 +18,7 @@ spec:
       containers:
         - name: prometheus
           image: prom/prometheus:v2.28.1
+          imagePullPolicy: IfNotPresent
           args:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.path=/prometheus/
@@ -29,10 +30,17 @@ spec:
               mountPath: /etc/prometheus/
             - name: prometheus-storage-volume
               mountPath: /prometheus/
+          readinessProbe:
+            exec:
+              command:
+                - wget
+                - localhost:9090/-/healthy
+                - -O
+                - /dev/null
       volumes:
         - name: prometheus-config-volume
           configMap:
             defaultMode: 420
             name: prometheus-server-conf
         - name: prometheus-storage-volume
-          emptyDir: {}
+          emptyDir: { }

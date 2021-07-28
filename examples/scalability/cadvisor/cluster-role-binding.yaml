@@ -8,6 +8,6 @@ roleRef:
   kind: ClusterRole
   name: cadvisor
 subjects:
-- kind: ServiceAccount
-  name: cadvisor
-  namespace: cadvisor
+  - kind: ServiceAccount
+    name: cadvisor
+    namespace: cadvisor

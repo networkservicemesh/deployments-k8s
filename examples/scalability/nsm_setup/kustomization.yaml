@@ -11,10 +11,10 @@ bases:
   - ../../../apps/admission-webhook-k8s
 
 resources:
-  - ./nsm-namespace.yaml
+  - ./namespace.yaml
 
 patchesStrategicMerge:
-  - patch-admission-webhook.yaml
-  - patch-nsmgr.yaml
-  - patch-fwd-vpp.yaml
-  - patch-registry-k8s.yaml
+  - ./patch-admission-webhook.yaml
+  - ./patch-nsmgr.yaml
+  - ./patch-fwd-vpp.yaml
+  - ./patch-registry-k8s.yaml

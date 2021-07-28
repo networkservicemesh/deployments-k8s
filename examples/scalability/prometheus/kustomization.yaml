@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: prometheus
 
 resources:
-  - prometheus-namespace.yaml
+  - ./namespace.yaml
   - ./clusterRole.yaml
   - ./config-map.yaml
-  - ./prometheus-deployment.yaml
+  - ./deployment.yaml
