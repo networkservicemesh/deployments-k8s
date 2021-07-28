@@ -138,7 +138,7 @@ spec:
 EOF
 }
 
-function waitEndpointsStart() {
+function checkEndpointsStart() {
   local namespace=$1
   local batch_label=$2
   for endpoint in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l "scalability-batch=${batch_label}"); do
@@ -151,7 +151,7 @@ function waitEndpointsStart() {
   done
 }
 
-function waitClientsSvid() {
+function checkClientsSvid() {
   local namespace=$1
   for client in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel); do
     if [[ "$(kubectl -n "${namespace}" logs "${client}" | grep "sVID: " -c)" -ne 1 ]]; then
@@ -163,7 +163,7 @@ function waitClientsSvid() {
   done
 }
 
-function waitConnectionsCount() {
+function checkConnectionsCount() {
   local namespace=$1
   local grep_pattern=$2
   local grepDesiredCount=$3
@@ -183,7 +183,7 @@ function waitConnectionsCount() {
   done
 }
 
-function waitHealFinish() {
+function checkHealFinish() {
   local namespace=$1
   local grep_pattern=$2
   local grepDesiredCount=$3

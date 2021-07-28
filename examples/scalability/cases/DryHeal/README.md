@@ -74,7 +74,7 @@ timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l 
 
 Make sure that all endpoints have finished registration:
 ```bash
-waitEndpointsStart ${NAMESPACE} endpoints
+checkEndpointsStart ${NAMESPACE} endpoints
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} ENDPOINTS_0_STARTED"
@@ -94,7 +94,7 @@ timeout -v --kill-after=10s 3m kubectl -n ${NAMESPACE} wait pod --timeout=3m -l 
 ```
 
 ```bash
-waitClientsSvid ${NAMESPACE}
+checkClientsSvid ${NAMESPACE}
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} CLIENTS_GOT_SVID"
@@ -103,7 +103,7 @@ EVENT_TEXT_CLIENTS_GOT_SVID="All clients obtained svid"
 ```
 
 ```bash
-waitConnectionsCount ${NAMESPACE} "10.0" ${TEST_NS_COUNT}
+checkConnectionsCount ${NAMESPACE} "10.0" ${TEST_NS_COUNT}
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} CONNECTIONS_READY"
@@ -131,7 +131,7 @@ EVENT_TEXT_ENDPOINTS_DELETED="Endpoints deleted"
 
 Make sure clients don't have any open connections:
 ```bash
-waitConnectionsCount ${NAMESPACE} "10.0" 0
+checkConnectionsCount ${NAMESPACE} "10.0" 0
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} CLIENT_ROUTES_DELETED"
@@ -188,7 +188,7 @@ TEST_TIME_END="$(date -Iseconds)"
 
 Save statistics:
 ```bash
-RESULT_DIR="result_data-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
+RESULT_DIR="results-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
 PARAM_ANNOTATION="dry heal case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
 if [[ "${TEST_REMOTE_CASE}" == "true" ]]; then
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, remote case"
