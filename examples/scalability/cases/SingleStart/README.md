@@ -9,11 +9,6 @@ This test has the following scenario:
 
 ## Run
 
-Set test parameters:
-```bash
-. ./set_params.sh
-```
-
 Save test time, for drawing plots:
 ```bash
 TEST_TIME_START=$(date -Iseconds)
@@ -33,6 +28,11 @@ kubectl exec -n spire spire-server-0 -- \
 -parentID spiffe://example.org/ns/spire/sa/spire-agent \
 -selector k8s:ns:${NAMESPACE} \
 -selector k8s:sa:default
+```
+
+Set test parameters:
+```bash
+. ../set_params.sh
 ```
 
 Select nodes to deploy NSC and NSE:
