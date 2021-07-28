@@ -201,6 +201,60 @@ function waitHealFinish() {
   done
 }
 
+function createGnuplotFile() {
+  local result_dir=$1
+  local event_list=$2
+  local event_text_prefix=$3
+  local event_time_prefix=$4
+  local test_time_start=$5
+  local test_time_end=$6
+
+  local test_time_start_u=$(date --date="${test_time_start}" -u +%s)
+  local test_time_end_u=$(date --date="${test_time_end}" -u +%s)
+  local test_time_end_relative=$((test_time_end_u - test_time_start_u))
+
+  mkdir -p "${result_dir}" || return 1
+
+  cat > "${result_dir}/plot.gp" <<EOF
+set terminal pngcairo dashed size 1600,900
+set output 'result.png'
+
+set datafile separator ';'
+stats "data.csv" skip 1 nooutput
+
+set title "${title}"
+set grid
+set xtics time format "%tM:%tS"
+set xrange [0:${test_time_end_relative}]
+set key center bmargin horizontal
+
+set for [i=5:300:9] linetype i linecolor rgb "dark-orange"
+
+EOF
+
+  local i=1
+  for event in ${event_list}
+  do
+    event_text_var=${event_text_prefix}_${event}
+    event_time_var=${event_time_prefix}_${event}
+    event_time_relative=$(($(date --date="${!event_time_var}" -u +%s) - test_time_start_u))
+    cat >> "${result_dir}/plot.gp" <<EOF
+set arrow from ${event_time_relative}, graph 0 to ${event_time_relative}, graph 1 nohead linetype ${i} linewidth 2 dashtype 2
+set label "${!event_text_var}" at ${event_time_relative}, graph 1 textcolor lt ${i} offset 1,-${i}
+
+EOF
+    i=$((i + 1))
+  done
+
+  cat >> "${result_dir}/plot.gp" <<EOF
+plot for [col=2:STATS_columns] "data.csv" using (\$1-${test_time_start_u}):col with lines linewidth 2 title columnheader
+EOF
+
+  local gnuplot_pod
+  gnuplot_pod=$(kubectl -n gnuplot get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=gnuplot)
+  kubectl -n gnuplot exec "${gnuplot_pod}" -i -- cp /dev/stdin plot.gp <"${result_dir}/plot.gp" || return 2
+}
+
 function saveData() {
   local name=$1
   local title=$2
@@ -214,49 +268,17 @@ function saveData() {
 
   local test_time_start=$(date --date="${TEST_TIME_START}" -u +%s)
   local test_time_end=$(date --date="${TEST_TIME_END}" -u +%s)
-  local test_time_end_relative=$((${test_time_end} - ${test_time_start}))
   local prom_url="http://localhost:9090"
 
   styx --duration $(($(date -u +%s)-${test_time_start} + 5))s --prometheus "${prom_url}" "${query}" > "${RESULT_DIR}/${name}.csv" || return 2
 
   sed -E -i "${name_replacement}" "${RESULT_DIR}/${name}.csv"
 
-  cat > "${RESULT_DIR}/${name}.gnu" <<EOF
-set terminal pngcairo dashed size 1600,900
-set output '${RESULT_DIR}/${name}.png'
-
-set datafile separator ';'
-stats "${RESULT_DIR}/${name}.csv" skip 1 nooutput
-
-set title "${title}"
-set grid
-set xtics time format "%tM:%tS"
-set xrange [0:${test_time_end_relative}]
-set key center bmargin horizontal
-
-set for [i=5:300:9] linetype i linecolor rgb "dark-orange"
-
-EOF
-
-  local i=1
-  for event in ${EVENT_LIST}
-  do
-    event_text_var=EVENT_TEXT_${event}
-    event_time_var=EVENT_TIME_${event}
-    event_time_relative=$(($(date --date="${!event_time_var}" -u +%s) - ${test_time_start}))
-    cat >> "${RESULT_DIR}/${name}.gnu" <<EOF
-set arrow from ${event_time_relative}, graph 0 to ${event_time_relative}, graph 1 nohead linetype ${i} linewidth 2 dashtype 2
-set label "${!event_text_var}" at ${event_time_relative}, graph 1 textcolor lt ${i} offset 1,-${i}
-
-EOF
-    i=$((${i} + 1))
-  done
-
-  cat >> "${RESULT_DIR}/${name}.gnu" <<EOF
-plot for [col=2:STATS_columns] "${RESULT_DIR}/${name}.csv" using (\$1-${test_time_start}):col with lines linewidth 2 title columnheader
-EOF
-
-  gnuplot "${RESULT_DIR}/${name}.gnu" || return 3
+  local gnuplot_pod
+  gnuplot_pod=$(kubectl -n gnuplot get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=gnuplot)
+  <"${RESULT_DIR}/${name}.csv" kubectl -n gnuplot exec "${gnuplot_pod}" -i -- cp /dev/stdin data.csv || return 3
+  kubectl -n gnuplot exec "${gnuplot_pod}" -- gnuplot /work/plot.gp || return 4
+  kubectl -n gnuplot exec "${gnuplot_pod}" -- cat result.png >"${RESULT_DIR}/${name}.png" || return 5
 
   curl \
     --silent \
@@ -267,7 +289,7 @@ EOF
     --data-urlencode "end=${TEST_TIME_END}" \
     --data-urlencode "step=1s" \
     >"${RESULT_DIR}/${name}.json" \
-    || return 4
+    || return 6
 
-    echo "${name} saved successfully"
+  echo "${name} saved successfully"
 }

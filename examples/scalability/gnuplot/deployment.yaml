@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gnuplot
+  labels:
+    app: gnuplot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gnuplot
+  template:
+    metadata:
+      labels:
+        app: gnuplot
+    spec:
+      containers:
+        - name: gnuplot
+          image: remuslazar/gnuplot
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - "trap : TERM INT; sleep 9999999999d & wait"

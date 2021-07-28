@@ -1,5 +1,7 @@
 #!/bin/bash
 
+createGnuplotFile "${RESULT_DIR}" "${EVENT_LIST}" "EVENT_TEXT" "EVENT_TIME" "${TEST_TIME_START}" "${TEST_TIME_END}"
+
 CONT_REPLACE='s/\{container_label_io_kubernetes_container_name="([^"]*)",kubernetes_io_hostname="([^"]*)"}/\1 on \2/g'
 POD_REPLACE='s/\{kubernetes_io_hostname="([^"]*)",pod="([^"]*)"}/\2 on \1/g'
 

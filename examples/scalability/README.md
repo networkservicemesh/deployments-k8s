@@ -6,6 +6,7 @@ This folder contains scalability tests
 
 - [Basic NSM setup](./nsm_setup)
 - [Prometheus](./prometheus)
+- [Gnuplot deployment](./gnuplot)
 
 ## Includes
 
