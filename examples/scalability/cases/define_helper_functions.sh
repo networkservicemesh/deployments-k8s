@@ -141,64 +141,84 @@ EOF
 function checkEndpointsStart() {
   local namespace=$1
   local batch_label=$2
+  local wait_list
   for endpoint in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l "scalability-batch=${batch_label}"); do
-    if [[ "$(kubectl -n "${namespace}" logs "${endpoint}" | grep "startup completed in" -c)" -ne 1 ]]; then
-      echo "endpoint hasn't finished startup yet: ${endpoint}"
-      return 1
-    else
+    [[ "$(kubectl -n "${namespace}" logs "${endpoint}" | grep "startup completed in" -c)" -eq 1 ]] &
+    wait_list="${wait_list} $!"
+  done
+
+  local result_code=0
+  for pid in ${wait_list}; do
+    if wait "${pid}"; then
       echo "endpoint is good to do: ${endpoint} "
+    else
+      echo "endpoint hasn't finished startup yet: ${endpoint}"
+      result_code=1
     fi
   done
+  return ${result_code}
 }
 
 function checkClientsSvid() {
   local namespace=$1
+
+  local wait_list
+
   for client in $(kubectl -n "${namespace}" get pods -o go-template='{{range .items}}{{ .metadata.name }} {{end}}' -l app=nsc-kernel); do
-    if [[ "$(kubectl -n "${namespace}" logs "${client}" | grep "sVID: " -c)" -ne 1 ]]; then
-      echo "client ${client} hasn't obtained svid yet"
-      return 1
+    [[ "$(kubectl -n "${namespace}" logs "${client}" | grep "sVID: " -c)" -eq 1 ]] &
+    wait_list="${wait_list} $!"
+  done
+
+  local result_code=0
+  for pid in ${wait_list}; do
+    if wait "${pid}"; then
+      echo "client has svid: ${client}"
     else
-      echo "client ${client} is good to do"
+      echo "client hasn't obtained svid yet: ${client}"
+      result_code=1
     fi
   done
+  return ${result_code}
+}
+
+function getClientConnections() {
+  local namespace=$1
+  local podName=$2
+  local grep_pattern=$3
+
+  local routes
+  routes="$(kubectl -n "${namespace}" exec "${podName}" -- ip route)"
+
+  local count
+  count="$(echo "${routes}" | grep "dev nsm" | grep "${grep_pattern}" -c)"
+
+  return "${count}"
 }
 
 function checkConnectionsCount() {
   local namespace=$1
   local grep_pattern=$2
   local grepDesiredCount=$3
-  for client in $(kubectl -n "${namespace}" get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-    echo "checking client ${client}"
-    local routes
-    routes="$(kubectl -n "${namespace}" exec "${client}" -- ip route)"
-    echo "${routes}"
-    local count
-    count="$(echo "${routes}" | grep "dev nsm" -c)"
-    if [[ "${grepDesiredCount}" -ne ${count} ]]; then
-      echo "client has ${count} open NSM connection(s), need ${grepDesiredCount}: ${client}"
-      return 1
-    else
-      echo "client is good to go: ${client}"
-    fi
-  done
-}
 
-function checkHealFinish() {
-  local namespace=$1
-  local grep_pattern=$2
-  local grepDesiredCount=$3
+  local wait_list
+
   for client in $(kubectl -n "${namespace}" get pods -l app=nsc-kernel -o go-template='{{range .items}}{{ .metadata.name }} {{end}}'); do
-    echo checking client "${client}"
-    local routes
-    routes=$(kubectl -n "${namespace}" exec "${client}" -- ip route)
-    echo "${routes}"
-    if [[ "${grepDesiredCount}" -ne $(echo "${routes}" | grep "${grep_pattern}" | grep "dev nsm" -c) ]]; then
-      echo "client hasn't healed yet: ${client}"
-      return 1
+    getClientConnections "${namespace}" "${client}" "${grep_pattern}" &
+    wait_list="${wait_list} $!"
+  done
+
+  local result_code=0
+  for pid in ${wait_list}; do
+    wait "${pid}"
+    local count=$?
+    if [[ "${count}" -eq "${grepDesiredCount}" ]]; then
+      echo "client has ${count} connection(s): ${client}"
     else
-      echo "client is good to go: ${client}"
+      echo "client has ${count} connection(s), need ${grepDesiredCount}: ${client}"
+      result_code=1
     fi
   done
+  return ${result_code}
 }
 
 function createGnuplotFile() {

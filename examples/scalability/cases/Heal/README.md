@@ -159,7 +159,7 @@ EVENT_TEXT_ENDPOINTS_DELETED="Endpoints-0 deleted"
 
 Wait for all connections to heal:
 ```bash
-checkHealFinish ${NAMESPACE} "10.1" ${TEST_NS_COUNT}
+checkConnectionsCount ${NAMESPACE} "10.1" ${TEST_NS_COUNT}
 ```
 ```bash
 EVENT_LIST="${EVENT_LIST} HEAL_FINISHED"
