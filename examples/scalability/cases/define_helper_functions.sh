@@ -300,16 +300,5 @@ function saveData() {
   sed 's/set title ""/set title "'"${title}"'"/' "${RESULT_DIR}/plot.gp" | kubectl -n gnuplot exec "${gnuplot_pod}" -i -- gnuplot || return 4
   kubectl -n gnuplot exec "${gnuplot_pod}" -- cat result.png >"${RESULT_DIR}/${name}.png" || return 5
 
-  curl \
-    --silent \
-    --show-error \
-    "${prom_url}/api/v1/query_range" \
-    --data-urlencode "query=${query}" \
-    --data-urlencode "start=${TEST_TIME_START}" \
-    --data-urlencode "end=${TEST_TIME_END}" \
-    --data-urlencode "step=1s" \
-    >"${RESULT_DIR}/${name}.json" \
-    || return 6
-
   echo "${name} saved successfully"
 }
