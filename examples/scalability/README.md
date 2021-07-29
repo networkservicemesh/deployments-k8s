@@ -17,6 +17,9 @@ TEST_NSC_COUNT=1
 TEST_REMOTE_CASE=false
 ```
 
+Note, that you need [styx](https://github.com/go-pluto/styx) installed
+for statistics gathering to work.
+
 ## Requires
 
 - [Prometheus](./prometheus)
