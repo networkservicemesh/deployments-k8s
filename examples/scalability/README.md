@@ -19,8 +19,8 @@ TEST_REMOTE_CASE=false
 
 ## Requires
 
-- [Basic NSM setup](./nsm_setup)
 - [Prometheus](./prometheus)
+- [Basic NSM setup](./nsm_setup)
 - [Gnuplot deployment](./gnuplot)
 
 ## Includes
