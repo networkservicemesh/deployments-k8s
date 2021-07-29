@@ -54,8 +54,11 @@ spec:
               readOnly: true
           resources:
             requests:
+              memory: 100Mi
+              cpu: 200m
+            limits:
               memory: 400Mi
-              cpu: 2000m
+              cpu: 1000m
           readinessProbe:
             exec:
               command:
