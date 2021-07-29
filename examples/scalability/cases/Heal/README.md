@@ -3,11 +3,11 @@
 This test has the following scenario:
 1. Deploy endpoints
 2. Deploy clients
-3. Delete endpoints
-4. Wait few seconds to capture load during healing
-5. Deploy new endpoints
-6. Wait for all connections to heal 
-7. Delete everything
+3. Deploy new endpoints
+4. Delete old endpoints
+5. Wait for all connections to heal 
+6. Delete clients
+7. Delete endpoints
 8. Gather statistics
 
 ## Run
@@ -229,8 +229,6 @@ else
   RESULT_DIR="${RESULT_DIR}-local"
 fi
 PARAM_ANNOTATION="${PARAM_ANNOTATION}, run at ${TEST_TIME_START}"
-echo result dir: ${RESULT_DIR}
-echo param annotation: ${PARAM_ANNOTATION}
 ```
 ```bash
 . ../save_metrics.sh
