@@ -1,4 +1,4 @@
-# Basic examples
+# NSM setup
 
 Contain NSM setup for scalability tests. Identical to basic setup, expect without limits. 
 
