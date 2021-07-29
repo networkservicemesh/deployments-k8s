@@ -9,7 +9,7 @@ Deploy cAdvisor:
 kubectl apply -k .
 ```
 
-Wait till cAdvisor pod is created:
+Wait for application ready:
 ```bash
 kubectl -n cadvisor --timeout=1m wait pod --for=condition=ready -l app=cadvisor
 ```

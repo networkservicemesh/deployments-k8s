@@ -9,7 +9,7 @@ Deploy kube-state-metrics:
 kubectl apply -k .
 ```
 
-Wait till kube-state-metrics is up and running:
+Wait for application ready:
 ```bash
 kubectl -n kube-system --timeout=1m wait pod --for=condition=ready -l app=kube-state-metrics
 ```

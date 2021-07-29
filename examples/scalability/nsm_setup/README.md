@@ -30,11 +30,12 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:registry-k8s-sa
 ```
 
-Choose node for NSM components:
+4. Choose node for NSM components:
 ```bash
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}')[0])
 ```
 
+5. Create patches for registry and webhook:
 ```bash
 cat > patch-registry-k8s.yaml <<EOF
 ---
@@ -57,7 +58,6 @@ spec:
               cpu: "0"
 EOF
 ```
-
 ```bash
 cat > patch-admission-webhook.yaml <<EOF
 ---
@@ -81,37 +81,19 @@ spec:
 EOF
 ```
 
-4. Deploy NSM resources:
+6. Deploy NSM resources:
 ```bash
 kubectl apply -k .
 ```
 
+7. Wait for applications ready:
 ```bash
 timeout -v --kill-after=10s 1m kubectl -n nsm-system wait pod --timeout=1m --all --for=condition=ready
 ```
 
-```bash
-LOGS_FOLDER=./logs-$(date -Iseconds)
-```
-
-```bash
-mkdir ${LOGS_FOLDER}
-```
-
-```bash
-set +m
-```
-```bash
-NSM_PODS=$(kubectl -n nsm-system get pods -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}')
-for pod in ${NSM_PODS}
-do 
-  kubectl -n nsm-system logs ${pod} -f >${LOGS_FOLDER}/${pod}.log &
-done
-```
-
 ## Cleanup
 
-To free resources follow the next command:
+Free resources:
 ```bash
 kubectl delete mutatingwebhookconfiguration --all
 ```

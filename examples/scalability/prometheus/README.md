@@ -14,7 +14,7 @@ Deploy prometheus:
 kubectl apply -k .
 ```
 
-Wait till prometheus pod is created:
+Wait for application ready:
 ```bash
 kubectl -n prometheus --timeout=1m wait pod --for=condition=ready $(kubectl -n prometheus get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=prometheus-server)
 ```
@@ -30,7 +30,7 @@ Open proxy connection to Prometheus:
 kubectl -n prometheus port-forward $(kubectl -n prometheus get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=prometheus-server) 9090:9090 >port_forwarder_out.log 2>&1 &
 ```
 
-Make sure that the proxy is working, and we can access Prometheus through it:
+Make sure the proxy is working, and we can access Prometheus through it:
 ```bash
 curl "http://localhost:9090/-/healthy" --silent --show-error
 ```
