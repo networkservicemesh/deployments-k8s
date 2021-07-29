@@ -222,7 +222,7 @@ set output 'result.png'
 set datafile separator ';'
 stats "data.csv" skip 1 nooutput
 
-set title "${title}"
+set title ""
 set grid
 set xtics time format "%tM:%tS"
 set xrange [0:${test_time_end_relative}]
@@ -277,7 +277,7 @@ function saveData() {
   local gnuplot_pod
   gnuplot_pod=$(kubectl -n gnuplot get pod --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=gnuplot)
   <"${RESULT_DIR}/${name}.csv" kubectl -n gnuplot exec "${gnuplot_pod}" -i -- cp /dev/stdin data.csv || return 3
-  kubectl -n gnuplot exec "${gnuplot_pod}" -- gnuplot /work/plot.gp || return 4
+  sed 's/set title ""/set title "'"${title}"'"/' "${RESULT_DIR}/plot.gp" | kubectl -n gnuplot exec "${gnuplot_pod}" -i -- gnuplot || return 4
   kubectl -n gnuplot exec "${gnuplot_pod}" -- cat result.png >"${RESULT_DIR}/${name}.png" || return 5
 
   curl \
