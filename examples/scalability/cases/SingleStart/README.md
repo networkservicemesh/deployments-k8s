@@ -30,9 +30,14 @@ kubectl exec -n spire spire-server-0 -- \
 -selector k8s:sa:default
 ```
 
+Create helper functions:
+```bash
+. ../define_helper_functions.sh
+```
+
 Set test parameters:
 ```bash
-. ../set_params.sh
+readParams ..
 ```
 
 Select nodes to deploy NSC and NSE:
@@ -45,11 +50,6 @@ else
   NSC_NODE=${NODES[0]}
 fi
 echo NSE_NODE ${NSE_NODE}, NSC_NODE ${NSC_NODE}
-```
-
-Create helper functions:
-```bash
-. ../define_helper_functions.sh
 ```
 
 Deploy network services:

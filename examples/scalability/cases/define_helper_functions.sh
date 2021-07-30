@@ -1,5 +1,29 @@
 #!/bin/bash
 
+function readParams() {
+  local params_folder=$1
+
+  if [[ -f "${params_folder}/set_params.sh" ]]; then
+    . "${params_folder}/set_params.sh"
+  fi
+
+  if [[ "${TEST_NS_COUNT}" == "" ]]; then
+    TEST_NS_COUNT=1
+  fi
+
+  if [[ "${TEST_NSE_COUNT}" == "" ]]; then
+    TEST_NSE_COUNT=1
+  fi
+
+  if [[ "${TEST_NSC_COUNT}" == "" ]]; then
+    TEST_NSC_COUNT=1
+  fi
+
+  if [[ "${TEST_REMOTE_CASE}" == "" ]]; then
+    TEST_REMOTE_CASE=false
+  fi
+}
+
 function generate_netsvc() {
   local ns_count=$1
 
