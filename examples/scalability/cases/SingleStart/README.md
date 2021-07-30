@@ -177,7 +177,7 @@ TEST_TIME_END="$(date -Iseconds)"
 
 Save statistics:
 ```bash
-RESULT_DIR="results-${TEST_TIME_START}-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
+RESULT_DIR="./${RESULTS_PARENT_DIR}/results-$(date --date="${TEST_TIME_START}" -u +%FT%H-%M-%S%z)-netsvc=${TEST_NS_COUNT}-nse=${TEST_NSE_COUNT}-nsc=${TEST_NSC_COUNT}"
 PARAM_ANNOTATION="single start case, ${TEST_NS_COUNT} service(s), ${TEST_NSE_COUNT} NSE(s), ${TEST_NSC_COUNT} NSC(s)"
 if [[ "${TEST_REMOTE_CASE}" == "true" ]]; then
   PARAM_ANNOTATION="${PARAM_ANNOTATION}, remote case"
