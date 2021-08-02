@@ -12,9 +12,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Construct PR message
         run: |
-          PULL_REQUEST_BODY=$(git log -1)
-          echo ${PULL_REQUEST_BODY}
-          echo PULL_REQUEST_BODY=${PULL_REQUEST_BODY} >> $GITHUB_ENV
+          PULL_REQUEST_BODY=$(git log --pretty='format:%B' -1 | sed '/^$/d;$d' | sed 's/#/# /g')
+          echo "$PULL_REQUEST_BODY"
+          echo "PULL_REQUEST_BODY<<EOF" >> $GITHUB_ENV
+          echo "$PULL_REQUEST_BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       - name: pull-request-action
         uses: vsoch/pull-request-action@1.0.12
         env:
