@@ -64,7 +64,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: memif://icmp-responder/nsm-1
+              value: memif://icmp-responder-ip/nsm-1
 
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
@@ -88,6 +88,8 @@ spec:
               value: 2001:db8::/116
             - name: NSM_PAYLOAD
               value: IP
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-ip
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF

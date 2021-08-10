@@ -66,7 +66,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder-wireguard/nsm-1
+              value: kernel://icmp-responder-ip/nsm-1
 
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
@@ -92,7 +92,7 @@ spec:
             - name: NSM_PAYLOAD
               value: IP
             - name: NSM_SERVICE_NAMES
-              value: icmp-responder-wireguard
+              value: icmp-responder-ip
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
