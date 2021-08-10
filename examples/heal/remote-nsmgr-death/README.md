@@ -71,7 +71,6 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
-
 ```
 Create NSE patch:
 ```bash
@@ -125,7 +124,7 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Kill remote NSMgr, NSE, start local NSE:
+Kill remote NSMgr:
 
 Customization file:
 ```bash
@@ -134,13 +133,13 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: nsm-system
+
 bases:
 - ../../../apps/nsmgr
-- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
-- patch-nse.yaml
 EOF
 ```
 
@@ -152,7 +151,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nsmgr
-  namespace: nsm-system
 spec:
   updateStrategy:
     type: OnDelete
@@ -165,6 +163,30 @@ spec:
 EOF
 ```
 
+Apply changes:
+```bash
+kubectl apply -k .
+```
+
+Start local NSE instead of the remote one:
+
+Customization file:
+```bash
+cat > kustomization.yaml <<EOF
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ${NAMESPACE}
+
+bases:
+- ../../../apps/nse-kernel
+
+patchesStrategicMerge:
+- patch-nse.yaml
+EOF
+```
+
 NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -173,7 +195,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nse-kernel
-  namespace: ${NAMESPACE}
 spec:
   template:
     spec:
