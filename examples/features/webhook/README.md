@@ -122,10 +122,10 @@ kubectl apply -k .
 
 8. Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ${NAMESPACE}
 ```
 
 9. Find NSC and NSE pods by labels:
