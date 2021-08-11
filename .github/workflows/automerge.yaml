@@ -28,4 +28,3 @@ jobs:
           ENABLED_FOR_MANUAL_CHANGES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAXIMUM_RETRIES: 25
-          MERGE_METHOD: REBASE
