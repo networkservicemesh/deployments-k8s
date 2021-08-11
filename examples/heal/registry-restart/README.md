@@ -177,6 +177,11 @@ cat > patch-nsc.yaml <<EOF
 - op: add
   path: /spec/template/spec/containers/0/env/-
   value:
+    name: NSM_REQUEST_TIMEOUT
+    value: 45s  
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
     name: NSM_NETWORK_SERVICES
     value: kernel://icmp-responder/nsm-1
 EOF
