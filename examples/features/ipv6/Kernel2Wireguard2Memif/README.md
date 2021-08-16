@@ -83,9 +83,9 @@ spec:
       containers:
         - name: nse
           env:
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 2001:db8::/116
-            - name: NSE_PAYLOAD
+            - name: NSM_PAYLOAD
               value: IP
             - name: NSM_SERVICE_NAMES
               value: icmp-responder-ip

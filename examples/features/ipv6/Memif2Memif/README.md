@@ -81,7 +81,7 @@ spec:
       containers:
         - name: nse
           env:
-            - name: NSE_CIDR_PREFIX
+            - name: NSM_CIDR_PREFIX
               value: 2001:db8::/116
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
