@@ -160,6 +160,11 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .it
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- ping -c 4 my.coredns.service
 ```
 
+11. Ping from alpine to the internet by domain-name:`google.com`
+```bash
+kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- ping -c 4 google.com
+```
+
 ## Cleanup
 
 Delete ns:
