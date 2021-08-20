@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- ../../apps/nsmgr
-- ../../apps/forwarder-vpp
-- ../../apps/registry-k8s
-- ../../apps/admission-webhook-k8s
+- github.com/Mixaster995/deployments-k8s/apps/nsmgr
+- github.com/Mixaster995/deployments-k8s/apps/forwarder-vpp
+- github.com/Mixaster995/deployments-k8s/apps/registry-k8s
+- github.com/Mixaster995/deployments-k8s/apps/admission-webhook-k8s
