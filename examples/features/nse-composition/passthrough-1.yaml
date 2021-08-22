@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:80192cc
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:6df53ba
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_SERVICE_NAME
