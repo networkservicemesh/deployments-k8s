@@ -15,7 +15,7 @@ spec:
         app: nsmgr
     spec:
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:e224684
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:d1e578f
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
