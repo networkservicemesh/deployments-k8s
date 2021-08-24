@@ -1,14 +1,11 @@
 ---
 name: Update dependent repositories
 on:
-  push:
-    branches:
-      - main
   workflow_run:
     types:
       - completed
     workflows:
-      - 'automerge'
+      - 'Update references'
 jobs:
   update-dependent-repositories:
     strategy:
@@ -17,7 +14,7 @@ jobs:
           - integration-tests
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.event_name == 'push' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Setup envs
         run: |
@@ -30,17 +27,23 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
           repository: ${{ github.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+          fetch-depth: 2
       - name: Install gotestmd
         run: "go get github.com/networkservicemesh/gotestmd"
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Install goimports
         run: "go get golang.org/x/tools/cmd/goimports"
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - name: Get hash of PR commit
+        working-directory: ${{ github.repository }}
+        id: get-pr-hash
+        run: |
+          echo '::set-output name=hash::'$(git rev-parse HEAD^)
       - name: Find merged PR
         uses: jwalton/gh-find-current-pr@v1.0.2
         id: findPr
         with:
-          sha: ${{ github.sha }}
+          sha: ${{ steps.get-pr-hash.outputs.hash }}
           github-token: ${{ github.token }}
       - name: Checkout networkservicemesh/${{ matrix.repository }}
         uses: actions/checkout@v2
