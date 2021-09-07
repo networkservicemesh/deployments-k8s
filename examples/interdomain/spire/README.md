@@ -1,11 +1,10 @@
-## Setup spire for two clusters
+## Setup spire for three clusters
 
-This example shows how to simply configure two spire from clusters to know each other.
-
+This example shows how to simply configure three spire servers from different clusters to know each other.
 
 ## Run
 
-1. Make sure that you have two KUBECONFIG files.
+1. Make sure that you have three KUBECONFIG files.
 
 Check `KUBECONFIG1` env:
 ```bash
@@ -16,6 +15,12 @@ Check `KUBECONFIG2` env:
 ```bash
 [[ ! -z $KUBECONFIG2 ]]
 ```
+
+Check `KUBECONFIG3` env:
+```bash
+[[ ! -z $KUBECONFIG3 ]]
+```
+
 
 2. Setup spire
 
@@ -81,6 +86,34 @@ kubectl exec -n spire spire-server-0 -- \
 -node
 ```
 
+**Apply spire resources for the third cluster:**
+```bash
+export KUBECONFIG=$KUBECONFIG3
+```
+
+```bash
+kubectl apply -k ../../spire
+```
+
+Wait for PODs status ready:
+```bash
+kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
+```
+```bash
+kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
+```
+
+Register spire agents in the spire server:
+```bash
+kubectl exec -n spire spire-server-0 -- \
+/opt/spire/bin/spire-server entry create \
+-spiffeID spiffe://example.org/ns/spire/sa/spire-agent \
+-selector k8s_sat:cluster:nsm-cluster \
+-selector k8s_sat:agent_ns:spire \
+-selector k8s_sat:agent_sa:spire-agent \
+-node
+```
+
 ## Cleanup
 
 Cleanup spire for the first cluster:
@@ -96,6 +129,16 @@ kubectl delete ns spire
 Cleanup spire for the second cluster:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
+```
+
+Delete ns:
+```bash
+kubectl delete ns spire
+```
+
+Cleanup spire for the third cluster:
+```bash
+export KUBECONFIG=$KUBECONFIG3
 ```
 
 Delete ns:

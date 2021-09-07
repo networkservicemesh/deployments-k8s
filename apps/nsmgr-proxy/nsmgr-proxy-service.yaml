@@ -10,3 +10,4 @@ spec:
     - protocol: TCP
       port: 5004
       targetPort: 5004
+  type: LoadBalancer
