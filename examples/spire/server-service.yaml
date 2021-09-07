@@ -5,7 +5,7 @@ metadata:
   name: spire-server
   namespace: spire
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: grpc
       port: 8081
@@ -13,4 +13,3 @@ spec:
       protocol: TCP
   selector:
     app: spire-server
-type: LoadBalancer
