@@ -7,6 +7,11 @@ Forwarders are using the `vxlan` mechanism to connect with each other.
 
 NSE is registering in the floating registry.
 
+
+## Requires
+
+Make sure that you have completed steps from [interdomain](../../)
+
 ## Run
 
 **1. Prepare cluster2**

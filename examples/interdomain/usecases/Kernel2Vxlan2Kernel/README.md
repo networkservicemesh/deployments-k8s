@@ -7,7 +7,7 @@ Forwarders are using the `vxlan` mechanism to connect with each other.
 
 ## Requires
 
-Make sure that you have completed steps from [basic](../../basic)
+Make sure that you have completed steps from [interdomain](../../)
 
 ## Run
 
