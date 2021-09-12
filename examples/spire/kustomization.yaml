@@ -10,11 +10,11 @@ generatorOptions:
 configMapGenerator:
 - name: spire-server
   namespace: spire
-  files: 
+  files:
   - server.conf
 - name: spire-agent
   namespace: spire
-  files: 
+  files:
   - agent.conf
 
 
