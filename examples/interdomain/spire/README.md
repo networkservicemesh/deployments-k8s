@@ -24,11 +24,6 @@ Check `KUBECONFIG3` env:
 
 2. Setup spire
 
-Generate cert and key:
-
-```bash
-openssl req -x509 -newkey rsa:4096 -keyout "../../spire/bootstrap.key" -out "../../spire/bootstrap.crt" -days 365 -nodes -subj '/CN=localhost' 2>/dev/null
-```
 
 **Apply spire resources for the first cluster:**
 ```bash
@@ -36,7 +31,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
-kubectl apply -k ../../spire/
+kubectl apply -k cluster1/
 ```
 
 Wait for PODs status ready:
@@ -51,8 +46,8 @@ Register spire agents in the spire server:
 ```bash
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm-cluster \
+-spiffeID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
+-selector k8s_sat:cluster:nsm.cluster1 \
 -selector k8s_sat:agent_ns:spire \
 -selector k8s_sat:agent_sa:spire-agent \
 -node
@@ -64,7 +59,7 @@ export KUBECONFIG=$KUBECONFIG2
 ```
 
 ```bash
-kubectl apply -k ../../spire
+kubectl apply -k cluster2/
 ```
 
 Wait for PODs status ready:
@@ -79,8 +74,8 @@ Register spire agents in the spire server:
 ```bash
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm-cluster \
+-spiffeID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
+-selector k8s_sat:cluster:nsm.cluster1 \
 -selector k8s_sat:agent_ns:spire \
 -selector k8s_sat:agent_sa:spire-agent \
 -node
@@ -92,7 +87,7 @@ export KUBECONFIG=$KUBECONFIG3
 ```
 
 ```bash
-kubectl apply -k ../../spire
+kubectl apply -k cluster3/
 ```
 
 Wait for PODs status ready:
@@ -107,41 +102,66 @@ Register spire agents in the spire server:
 ```bash
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm-cluster \
+-spiffeID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
+-selector k8s_sat:cluster:nsm.cluster1 \
 -selector k8s_sat:agent_ns:spire \
 -selector k8s_sat:agent_sa:spire-agent \
 -node
 ```
 
-## Cleanup
+3. Bootstrap Federation
 
-Cleanup spire for the first cluster:
+To enable the SPIRE Servers to fetch the trust bundles from each other they need each other's trust bundle first, because they have to authenticate the SPIFFE identity of the federated server that is trying to access the federation endpoint. Once federation is bootstrapped, the trust bundle updates are fetched trough the federation endpoint API using the current trust bundle.
+
+
+Get and store bundles of clusters:
+```bash
+export KUBECONFIG=$KUBECONFIG1 && bundle1=$(kubectl exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)
+export KUBECONFIG=$KUBECONFIG2 && bundle2=$(kubectl exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)
+export KUBECONFIG=$KUBECONFIG3 && bundle3=$(kubectl exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)
+```
+
+Switch to the first cluster:
 ```bash
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-Delete ns:
+Set bundles for the first cluster:
+
 ```bash
-kubectl delete ns spire
+echo $bundle2 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster2"
+echo $bundle3 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster3"
 ```
 
-Cleanup spire for the second cluster:
+Switch to the second cluster:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-Delete ns:
+Set bundles for the second cluster:
 ```bash
-kubectl delete ns spire
+echo $bundle1 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster1"
+echo $bundle3 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster3"
 ```
 
-Cleanup spire for the third cluster:
+Switch to the third cluster:
 ```bash
 export KUBECONFIG=$KUBECONFIG3
 ```
 
-Delete ns:
+Set bundles for the third cluster:
 ```bash
-kubectl delete ns spire
+echo $bundle1 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster1"
+echo $bundle2 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://nsm.cluster2"
+```
+
+
+## Cleanup
+
+Cleanup spire resources for all clusters
+
+```bash
+export KUBECONFIG=$KUBECONFIG1 && kubectl delete ns spire
+export KUBECONFIG=$KUBECONFIG2 && kubectl delete ns spire
+export KUBECONFIG=$KUBECONFIG3 && kubectl delete ns spire
 ```
