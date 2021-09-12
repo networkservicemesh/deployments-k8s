@@ -46,7 +46,7 @@ kubectl apply -f metallb-config.yaml
 
 Wait for deployment ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m -l app=metallb -n metallb-system
+kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 ```
 
 Switch to the second cluster:
@@ -86,7 +86,7 @@ kubectl apply -f metallb-config.yaml
 
 Wait for deployment ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m -l app=metallb -n metallb-system
+kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 ```
 
 
@@ -128,7 +128,7 @@ kubectl apply -f metallb-config.yaml
 
 Wait for deployment ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m -l app=metallb -n metallb-system
+kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 ```
 
 ## Cleanup

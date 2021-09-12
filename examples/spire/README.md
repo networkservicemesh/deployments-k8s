@@ -2,13 +2,6 @@
 
 ## Run
 
-Prepare cert and key for the spire:
-
-```bash
-openssl req -x509 -newkey rsa:4096 -keyout "bootstrap.key" -out "bootstrap.crt" -days 365 -nodes -subj '/CN=localhost' 2>/dev/null
-```
-
-
 To apply spire deployments following the next command:
 ```bash
 kubectl apply -k .
