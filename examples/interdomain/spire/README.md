@@ -75,7 +75,7 @@ Register spire agents in the spire server:
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
 -spiffeID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm.cluster1 \
+-selector k8s_sat:cluster:nsm.cluster2 \
 -selector k8s_sat:agent_ns:spire \
 -selector k8s_sat:agent_sa:spire-agent \
 -node
@@ -103,7 +103,7 @@ Register spire agents in the spire server:
 kubectl exec -n spire spire-server-0 -- \
 /opt/spire/bin/spire-server entry create \
 -spiffeID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm.cluster1 \
+-selector k8s_sat:cluster:nsm.cluster3 \
 -selector k8s_sat:agent_ns:spire \
 -selector k8s_sat:agent_sa:spire-agent \
 -node
