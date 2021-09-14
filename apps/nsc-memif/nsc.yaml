@@ -14,6 +14,7 @@ spec:
       labels:
         app: nsc-memif
     spec:
+      hostPID: true
       containers:
         - name: nsc
           image: rrandom312/cmd-nsc-vpp:socket
@@ -27,6 +28,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+#            - name: NSM_VPP_API_SOCKET
+#              value: /var/run/vpp/api.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
@@ -34,6 +37,8 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
+#            - name: vpp
+#              mountPath: /var/run/vpp
           resources:
             requests:
               cpu: 150m
@@ -49,3 +54,7 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
+#        - name: vpp
+#          hostPath:
+#            path: /var/run/vpp
+#            type: Directory

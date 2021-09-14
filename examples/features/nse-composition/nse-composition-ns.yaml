@@ -16,16 +16,6 @@ spec:
         app: passthrough-1
       routes:
         - destination_selector:
-            app: passthrough-2
-    - source_selector:
-        app: passthrough-2
-      routes:
-        - destination_selector:
-            app: passthrough-3
-    - source_selector:
-        app: passthrough-3
-      routes:
-        - destination_selector:
             app: gateway
     - routes:
         - destination_selector:

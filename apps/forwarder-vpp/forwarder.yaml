@@ -15,6 +15,7 @@ spec:
         app: forwarder-vpp
     spec:
       hostNetwork: true
+      hostPID: true
       containers:
         - image: rrandom312/cmd-forwarder-vpp:socket
           imagePullPolicy: Always
@@ -44,16 +45,9 @@ spec:
               readOnly: true
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
-          resources:
-            requests:
-              cpu: 150m
-            limits:
-              memory: 500Mi
-              cpu: 500m
+#            - name: vpp
+#              mountPath: /var/run/vpp
           readinessProbe:
-            exec:
-              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
-          livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
       volumes:
@@ -65,3 +59,7 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
+#        - name: vpp
+#          hostPath:
+#            path: /var/run/vpp
+#            type: DirectoryOrCreate

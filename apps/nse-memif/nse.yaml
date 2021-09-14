@@ -14,6 +14,7 @@ spec:
       labels:
         app: nse-memif
     spec:
+      hostPID: true
       containers:
         - name: nse
           image: rrandom312/cmd-nse-icmp-responder-vpp:socket
@@ -21,12 +22,14 @@ spec:
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: NSE_NAME
+            - name: NSM_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NSE_CONNECT_TO
+            - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
+#            - name: NSM_VPP_API_SOCKET
+#              value: /var/run/vpp/api.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
@@ -34,6 +37,8 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
+#            - name: vpp
+#              mountPath: /var/run/vpp
           resources:
             requests:
               cpu: 150m
@@ -49,3 +54,7 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
+#        - name: vpp
+#          hostPath:
+#            path: /var/run/vpp
+#            type: Directory
