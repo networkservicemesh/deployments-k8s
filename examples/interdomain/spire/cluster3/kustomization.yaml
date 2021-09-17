@@ -7,10 +7,12 @@ namespace: spire
 configMapGenerator:
 - name: spire-server
   behavior: merge
+  namespace: spire
   files:
   - server.conf
 - name: spire-agent
   behavior: merge
+  namespace: spire
   files:
   - agent.conf
 
