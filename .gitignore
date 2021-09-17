@@ -26,3 +26,5 @@
 bootstrap.key
 bootstrap.crt
 
+*.DS_Store
+/examples/spire/test/
