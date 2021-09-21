@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: registry-proxy
+        "spiffe.io/spiffe-id": "true"
     spec:
       containers:
         - image: ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:d13b54a

@@ -49,7 +49,7 @@ spec:
             timeoutSeconds: 3
           readinessProbe:
             exec:
-              command: [ "/opt/spire/bin/spire-server", "healthcheck", "--shallow" ]
+              command: ["/opt/spire/bin/spire-server", "healthcheck", "--shallow"]
             initialDelaySeconds: 5
             periodSeconds: 5
         - name: k8s-workload-registrar

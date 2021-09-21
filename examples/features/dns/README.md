@@ -21,16 +21,6 @@ NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicem
 NAMESPACE=${NAMESPACE:10}
 ```
 
-2. Register namespace in `spire` server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/${NAMESPACE}/sa/default \
--parentID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s:ns:${NAMESPACE} \
--selector k8s:sa:default
-```
-
 3. Get all available nodes to deploy:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
@@ -48,6 +38,7 @@ metadata:
     networkservicemesh.io: kernel://my-coredns-service/nsm-1
   labels:
     app: alpine
+    "spiffe.io/spiffe-id": "true"
 spec:
   containers:
   - name: alpine

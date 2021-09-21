@@ -3,16 +3,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: nse-firewall-vpp
+    app: nse-passthrough-1
   name: nse-passthrough-1
 spec:
   selector:
     matchLabels:
-      app: nse-firewall-vpp
+      app: nse-passthrough-1
   template:
     metadata:
       labels:
-        app: nse-firewall-vpp
+        app: nse-passthrough-1
+        "spiffe.io/spiffe-id": "true"
     spec:
       containers:
         - name: nse

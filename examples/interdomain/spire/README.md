@@ -42,17 +42,6 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
 ```
 
-Register spire agents in the spire server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm.cluster1 \
--selector k8s_sat:agent_ns:spire \
--selector k8s_sat:agent_sa:spire-agent \
--node
-```
-
 **Apply spire resources for the second cluster:**
 ```bash
 export KUBECONFIG=$KUBECONFIG2
@@ -70,17 +59,6 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
 ```
 
-Register spire agents in the spire server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm.cluster2 \
--selector k8s_sat:agent_ns:spire \
--selector k8s_sat:agent_sa:spire-agent \
--node
-```
-
 **Apply spire resources for the third cluster:**
 ```bash
 export KUBECONFIG=$KUBECONFIG3
@@ -96,17 +74,6 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 ```
 ```bash
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
-```
-
-Register spire agents in the spire server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
--selector k8s_sat:cluster:nsm.cluster3 \
--selector k8s_sat:agent_ns:spire \
--selector k8s_sat:agent_sa:spire-agent \
--node
 ```
 
 3. Bootstrap Federation

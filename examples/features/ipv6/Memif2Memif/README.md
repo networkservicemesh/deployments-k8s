@@ -12,16 +12,6 @@ NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicem
 NAMESPACE=${NAMESPACE:10}
 ```
 
-Register namespace in `spire` server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/${NAMESPACE}/sa/default \
--parentID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s:ns:${NAMESPACE} \
--selector k8s:sa:default
-```
-
 Select node to deploy NSC and NSE:
 ```bash
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
