@@ -36,45 +36,6 @@ export KUBECONFIG=$KUBECONFIG1
 kubectl create ns nsm-system
 ```
 
-Register `nsm-system` namespace in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/nsm-system/sa/default \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:default \
--federatesWith spiffe://nsm.cluster2 \
--federatesWith spiffe://nsm.cluster3
-```
-
-Register `registry-k8s-sa` in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/nsm-system/sa/registry-k8s-sa \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:registry-k8s-sa \
--federatesWith spiffe://nsm.cluster2 \
--federatesWith spiffe://nsm.cluster3
-```
-
-Register `nsmgr-proxy-sa` in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/nsm-system/sa/nsmgr-proxy-sa \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:nsmgr-proxy-sa \
--federatesWith spiffe://nsm.cluster2 \
--federatesWith spiffe://nsm.cluster3
-```
-
 Apply NSM resources for basic tests:
 
 ```bash
@@ -89,45 +50,6 @@ export KUBECONFIG=$KUBECONFIG2
 
 ```bash
 kubectl create ns nsm-system
-```
-
-Register `nsm-system` namespace in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/nsm-system/sa/default \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:default \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster3
-```
-
-Register `registry-k8s-sa` in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/nsm-system/sa/registry-k8s-sa \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:registry-k8s-sa \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster3
-```
-
-Register `nsmgr-proxy-sa` in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/nsm-system/sa/nsmgr-proxy-sa \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:nsmgr-proxy-sa \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster3
 ```
 
 Apply NSM resources for basic tests:
@@ -145,32 +67,6 @@ export KUBECONFIG=$KUBECONFIG3
 
 ```bash
 kubectl create ns nsm-system
-```
-
-Register `nsm-system` namespace in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster3/ns/nsm-system/sa/default \
--parentID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:default \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster2
-```
-
-Register `registry-k8s-sa` in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster3/ns/nsm-system/sa/registry-k8s-sa \
--parentID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:registry-k8s-sa \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster2
 ```
 
 Apply NSM resources for basic tests:
