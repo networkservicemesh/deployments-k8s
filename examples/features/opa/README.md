@@ -23,12 +23,12 @@ NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicem
 NAMESPACE=${NAMESPACE:10}
 ```
 
-3. Select node to deploy NSC and NSE:
+2. Select node to deploy NSC and NSE:
 ```bash
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
-4. Create customization file:
+3. Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -47,7 +47,7 @@ patchesStrategicMerge:
 EOF
 ```
 
-5. **Create NSC patch that making any generated token invalid:**
+4. **Create NSC patch that making any generated token invalid:**
 ```bash
 cat > patch-nsc.yaml <<EOF
 ---
@@ -70,7 +70,7 @@ spec:
 EOF
 ```
 
-6. Create NSE patch:
+5. Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -91,12 +91,12 @@ spec:
 EOF
 ```
 
-7. Deploy NSC and NSE:
+6. Deploy NSC and NSE:
 ```bash
 kubectl apply -k .
 ```
 
-8. Wait for applications ready:
+7. Wait for applications ready:
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
 ```
@@ -104,7 +104,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMES
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
-9. Find nsc and nse pods by labels:
+8. Find nsc and nse pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
@@ -112,7 +112,7 @@ NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .it
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-10. Check that NSC is not privileged and it cannot connect to NSE.
+9. Check that NSC is not privileged and it cannot connect to NSE.
 
 ```bash
 kubectl logs ${NSC} -n ${NAMESPACE} | grep "PermissionDenied desc = no sufficient privileges"

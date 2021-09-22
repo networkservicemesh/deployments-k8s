@@ -56,7 +56,7 @@ spec:
           image: gcr.io/spiffe-io/k8s-workload-registrar:1.0.2
           args:
             - -config
-            - /run/spire/config/registrar.conf
+            - /run/spire/config/k8s-workload-registrar.conf
           env:
             - name: MY_POD_NAMESPACE
               valueFrom:

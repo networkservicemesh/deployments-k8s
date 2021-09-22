@@ -5,6 +5,7 @@ metadata:
   name: k8s-workload-registrar
   namespace: spire
 spec:
+  type: ClusterIP
   ports:
     - name: webhook
       protocol: TCP

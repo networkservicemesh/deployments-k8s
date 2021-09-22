@@ -6,7 +6,6 @@ metadata:
   namespace: spire
   labels:
     app: spire-agent
-#    spiffe.io/spiffe-id: true
 spec:
   selector:
     matchLabels:
