@@ -16,7 +16,7 @@ spec:
     spec:
       serviceAccountName: registry-k8s-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-registry-k8s:3b83ec0
+        - image: ghcr.io/networkservicemesh/ci/cmd-registry-k8s:29772b5
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
