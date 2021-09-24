@@ -36,6 +36,32 @@ export KUBECONFIG=$KUBECONFIG1
 kubectl create ns nsm-system
 ```
 
+Create proxy manager patch:
+
+```bash
+cat > patch-nsmgr-proxy.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsmgr-proxy
+  spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+EOF
+```
+
+Create proxy registry patch:
+
+```bash
+cat > patch-registry-proxy.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-proxy
+  spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+EOF
+```
+
 Apply NSM resources for basic tests:
 
 ```bash
@@ -50,6 +76,32 @@ export KUBECONFIG=$KUBECONFIG2
 
 ```bash
 kubectl create ns nsm-system
+```
+
+Create proxy manager patch:
+
+```bash
+cat > patch-nsmgr-proxy.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsmgr-proxy
+  spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+EOF
+```
+
+Create proxy registry patch:
+
+```bash
+cat > patch-registry-proxy.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-proxy
+  spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+EOF
 ```
 
 Apply NSM resources for basic tests:

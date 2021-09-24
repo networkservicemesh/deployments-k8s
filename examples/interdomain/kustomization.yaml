@@ -10,3 +10,7 @@ bases:
 - ../../apps/registry-memory
 - ../../apps/registry-proxy-dns
 - ../../apps/nsmgr-proxy
+
+patchesStrategicMerge:
+- patch-registry-proxy.yaml
+- patch-nsmgr-proxy.yaml
