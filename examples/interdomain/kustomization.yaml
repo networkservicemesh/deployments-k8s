@@ -12,5 +12,6 @@ bases:
 - ../../apps/nsmgr-proxy
 
 patchesStrategicMerge:
-- patch-registry-proxy.yaml
 - patch-nsmgr-proxy.yaml
+- patch-registry-proxy-dns.yaml
+- patch-registry-memory.yaml

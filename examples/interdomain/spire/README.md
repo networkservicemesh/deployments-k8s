@@ -128,7 +128,15 @@ echo $bundle2 | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bund
 Cleanup spire resources for all clusters
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete ns spire
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete ns spire
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete ns spire
+export KUBECONFIG=$KUBECONFIG1 
+kubectl delete crd spiffeids.spiffeid.spiffe.io
+kubectl delete ns spire
+
+export KUBECONFIG=$KUBECONFIG2
+kubectl delete crd spiffeids.spiffeid.spiffe.io
+kubectl delete ns spire
+
+export KUBECONFIG=$KUBECONFIG3
+kubectl delete crd spiffeids.spiffeid.spiffe.io
+kubectl delete ns spire
 ```

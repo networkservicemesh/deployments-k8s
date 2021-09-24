@@ -105,6 +105,7 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manif
 Create metallb config to setup addresses pool:
 ```bash
 cat > metallb-config.yaml <<EOF
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:

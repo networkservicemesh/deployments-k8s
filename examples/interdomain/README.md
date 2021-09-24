@@ -36,8 +36,7 @@ export KUBECONFIG=$KUBECONFIG1
 kubectl create ns nsm-system
 ```
 
-Create proxy manager patch:
-
+Create nsmgr-proxy patch:
 ```bash
 cat > patch-nsmgr-proxy.yaml <<EOF
 ---
@@ -45,25 +44,47 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nsmgr-proxy
-  spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
 EOF
 ```
 
-Create proxy registry patch:
-
+Create registry-proxy patch:
 ```bash
-cat > patch-registry-proxy.yaml <<EOF
+cat > patch-registry-proxy-dns.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: registry-proxy
-  spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+EOF
+```
+
+Create registry-memory patch:
+```bash
+cat > patch-registry-memory.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
 EOF
 ```
 
 Apply NSM resources for basic tests:
-
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=050a5817cb8104b907e2c241a7af38c08d3102d1
 ```
@@ -78,8 +99,7 @@ export KUBECONFIG=$KUBECONFIG2
 kubectl create ns nsm-system
 ```
 
-Create proxy manager patch:
-
+Create nsmgr-proxy patch:
 ```bash
 cat > patch-nsmgr-proxy.yaml <<EOF
 ---
@@ -87,20 +107,43 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nsmgr-proxy
-  spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
 EOF
 ```
 
-Create proxy registry patch:
-
+Create registry-proxy patch:
 ```bash
-cat > patch-registry-proxy.yaml <<EOF
+cat > patch-registry-proxy-dns.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: registry-proxy
-  spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+EOF
+```
+
+Create registry-memory patch:
+```bash
+cat > patch-registry-memory.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
 EOF
 ```
 
@@ -119,6 +162,22 @@ export KUBECONFIG=$KUBECONFIG3
 
 ```bash
 kubectl create ns nsm-system
+```
+
+Create registry-k8s patch:
+```bash
+cat > ./registry-k8s-kustomization/patch-registry-k8s.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-k8s
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster2
+EOF
 ```
 
 Apply NSM resources for basic tests:
