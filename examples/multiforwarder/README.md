@@ -41,7 +41,7 @@ kubectl exec -n spire spire-server-0 -- \
 
 4. Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=9a68b654687d71c2e4eb77b18c7bd29976c8da77
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=ec3751cfaf308445b10a03b77bfd08bf6255725b
 ```
 
 ## Cleanup
