@@ -14,8 +14,15 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
+# Emacs tmp backup
+*~
 # Goland files
 .idea/
+*.iml
+# vscode proj files
+.vscode
+.DS_Store
 
 bootstrap.key
 bootstrap.crt
+
