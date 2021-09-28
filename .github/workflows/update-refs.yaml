@@ -1,0 +1,24 @@
+---
+name: Update references
+on:
+  push:
+    branches:
+      - main
+jobs:
+  update-refs:
+    name: Update references
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: Update references
+        run: |
+          sed -r -i 's/(ref=.*)/ref='"$GITHUB_SHA"'/g' `grep 'ref=' -rl *`
+          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-zA-Z0-9_.-]*)/deployments-k8s\/'"$GITHUB_SHA"'/g' `grep 'raw.githubusercontent.com' -rl *`
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+          git add -- .
+          git commit -s -m "Update references"
+          git push
