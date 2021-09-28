@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ec3751cfaf308445b10a03b77bfd08bf6255725b/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cb0d04d4d13423165e15a6733072cc27b7c9b44f/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -42,8 +42,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ec3751cfaf308445b10a03b77bfd08bf6255725b
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ec3751cfaf308445b10a03b77bfd08bf6255725b
+- github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=cb0d04d4d13423165e15a6733072cc27b7c9b44f
+- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=cb0d04d4d13423165e15a6733072cc27b7c9b44f
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -138,7 +138,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=ec3751cfaf308445b10a03b77bfd08bf6255725b
+- github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=cb0d04d4d13423165e15a6733072cc27b7c9b44f
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
@@ -182,7 +182,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ec3751cfaf308445b10a03b77bfd08bf6255725b
+- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=cb0d04d4d13423165e15a6733072cc27b7c9b44f
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -239,7 +239,7 @@ kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=ec3751cfaf308445b10a03b77bfd08bf6255725b
+kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=cb0d04d4d13423165e15a6733072cc27b7c9b44f
 ```
 
 Delete ns:
