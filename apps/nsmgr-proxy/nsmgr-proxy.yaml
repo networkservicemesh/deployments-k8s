@@ -16,7 +16,7 @@ spec:
     spec:
       serviceAccount: nsmgr-proxy-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:22fb892
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:6368aec
           imagePullPolicy: IfNotPresent
           name: nsmgr-proxy
           ports:
