@@ -55,7 +55,7 @@ EOF
 
 5. Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=c20b9b0be858485afa6a5760fce3a100c453550b
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=3cfc8b7c01018e38949cdfd31611d8105e74079f
 ```
 
 ## Cleanup
