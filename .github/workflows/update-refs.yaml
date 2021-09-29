@@ -15,8 +15,8 @@ jobs:
           ref: main
       - name: Update references
         run: |
-          sed -r -i 's/(ref=.*)/ref='"$GITHUB_SHA"'/g' `grep 'ref=' -rl *`
-          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-zA-Z0-9_.-]*)/deployments-k8s\/'"$GITHUB_SHA"'/g' `grep 'raw.githubusercontent.com' -rl *`
+          sed -r -i 's/(ref=[a-z0-9]*)/ref='"$GITHUB_SHA"'/g' `grep 'ref=' -rl *`
+          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9]*)/deployments-k8s\/'"$GITHUB_SHA"'/g' `grep 'raw.githubusercontent.com' -rl *`
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
           git add -- .

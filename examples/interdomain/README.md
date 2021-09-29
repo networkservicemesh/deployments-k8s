@@ -78,7 +78,7 @@ kubectl exec -n spire spire-server-0 -- \
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=280fe1d7c5e7017803fa1052bc7b444593ce0eb9
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=0943f3a41c56dea4600a822ff18c48f513d30066
 ```
 
 **2. Apply deployments for cluster2:**
@@ -133,7 +133,7 @@ kubectl exec -n spire spire-server-0 -- \
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=280fe1d7c5e7017803fa1052bc7b444593ce0eb9
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=0943f3a41c56dea4600a822ff18c48f513d30066
 ```
 
 
@@ -176,7 +176,7 @@ kubectl exec -n spire spire-server-0 -- \
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=280fe1d7c5e7017803fa1052bc7b444593ce0eb9
+kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=0943f3a41c56dea4600a822ff18c48f513d30066
 ```
 
 ## Cleanup
