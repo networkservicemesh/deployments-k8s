@@ -42,8 +42,8 @@ spec:
             requests:
               cpu: 150m
             limits:
+              memory: 450Mi
               cpu: 500m
-              memory: 400Mi
       volumes:
         - hostPath:
             path: /run/spire/sockets

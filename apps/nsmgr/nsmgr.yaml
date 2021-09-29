@@ -50,7 +50,7 @@ spec:
               mountPath: /var/lib/networkservicemesh
           resources:
             limits:
-              memory: 60Mi
+              memory: 100Mi
               cpu: 200m
           readinessProbe:
             exec:
