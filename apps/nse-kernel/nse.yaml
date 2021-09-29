@@ -36,7 +36,7 @@ spec:
               readOnly: true
           resources:
             limits:
-              memory: 20Mi
+              memory: 40Mi
               cpu: 100m
       volumes:
         - name: spire-agent-socket

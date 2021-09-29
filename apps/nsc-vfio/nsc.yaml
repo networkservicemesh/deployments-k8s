@@ -48,7 +48,7 @@ spec:
               mountPath: /dev/vfio
           resources:
             limits:
-              memory: 15Mi
+              memory: 40Mi
               cpu: 100m
               # We expect SR-IOV forwarders on the nodes to be configured:
               # master - provides PCI functions targeted to the worker.domain/10G
