@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/06446e059197e15971d7f1fff23c3d298928597e/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7c1c95e489bfee77696b35d6581eedc25bd91875/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -42,8 +42,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=06446e059197e15971d7f1fff23c3d298928597e
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=06446e059197e15971d7f1fff23c3d298928597e
+- github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7c1c95e489bfee77696b35d6581eedc25bd91875
+- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7c1c95e489bfee77696b35d6581eedc25bd91875
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -138,7 +138,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=06446e059197e15971d7f1fff23c3d298928597e
+- github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=7c1c95e489bfee77696b35d6581eedc25bd91875
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
@@ -182,7 +182,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=06446e059197e15971d7f1fff23c3d298928597e
+- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7c1c95e489bfee77696b35d6581eedc25bd91875
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -239,7 +239,7 @@ kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=06446e059197e15971d7f1fff23c3d298928597e -n nsm-system
+kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=7c1c95e489bfee77696b35d6581eedc25bd91875 -n nsm-system
 ```
 
 Delete ns:
