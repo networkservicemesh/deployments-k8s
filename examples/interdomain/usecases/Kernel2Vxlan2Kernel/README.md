@@ -76,6 +76,11 @@ Deploy NSE:
 kubectl apply -k .
 ```
 
+Wait for applications ready:
+```bash
+kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE1}
+```
+
 Find NSE pod by labels:
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE1} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
