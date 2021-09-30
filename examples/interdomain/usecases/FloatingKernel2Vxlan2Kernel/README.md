@@ -91,6 +91,7 @@ kubectl apply -k .
 Find NSE pod by labels:
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE1} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+[[ ! -z $NSE ]]
 ```
 
 **2. Prepare cluster1**
