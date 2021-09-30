@@ -10,4 +10,4 @@ bases:
   - ../../apps/registry-k8s
 
 patchesStrategicMerge:
-  - patch-forwarder-vpp.yaml
+  - forwarder-vpp.yaml
