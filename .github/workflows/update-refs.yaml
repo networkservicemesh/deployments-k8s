@@ -13,6 +13,7 @@ jobs:
   update-refs:
     name: Update references
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.event_name == 'push' }}
     steps:
       - name: Check out the code
         uses: actions/checkout@v2
