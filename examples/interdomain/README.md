@@ -16,8 +16,8 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 ## Requires
 
 - [Interdomain-DNS](./dns)
-- [Interdomain-spire](./spire)
 - [Load balancer](./loadbalancer)
+- [Interdomain-spire](./spire)
 
 ## Includes
 
