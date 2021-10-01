@@ -19,3 +19,6 @@ This repository provides kubernetes yaml deployments and markdown examples for N
     * [OVS examples](./examples/ovs)
     * [Memory examples](./examples/memory)
     * [Heal examples](./examples/heal)
+
+## Requirements
+Minimum required ```kubectl``` client version is ```v1.21.0```
