@@ -50,8 +50,6 @@ spec:
           readinessProbe:
             exec:
               command: ["/opt/spire/bin/spire-server", "healthcheck", "--shallow"]
-            initialDelaySeconds: 5
-            periodSeconds: 5
         - name: k8s-workload-registrar
           image: gcr.io/spiffe-io/k8s-workload-registrar:1.0.2
           args:

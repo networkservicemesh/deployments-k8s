@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: nse-memif
-        "spiffe.io/spiffe-id": "true"
+        "spiffe.io/spiffe-id": true
     spec:
       containers:
         - name: nse
