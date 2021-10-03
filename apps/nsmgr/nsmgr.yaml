@@ -49,9 +49,11 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
           resources:
+            requests:
+              cpu: 200m
             limits:
               memory: 100Mi
-              cpu: 200m
+              cpu: 400m
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
