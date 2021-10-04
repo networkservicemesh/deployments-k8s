@@ -32,7 +32,7 @@ kubectl exec -n spire spire-server-0 -- \
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=050a5817cb8104b907e2c241a7af38c08d3102d1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=6e3822bc93f80ea7c6c345fe3b9ab184f284c9c0
 ```
 
 ## Cleanup
