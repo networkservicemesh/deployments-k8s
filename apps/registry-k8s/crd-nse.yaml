@@ -26,4 +26,3 @@ spec:
           properties:
             spec:
               x-kubernetes-preserve-unknown-fields: true
-
