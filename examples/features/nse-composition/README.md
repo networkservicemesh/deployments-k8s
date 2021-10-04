@@ -71,8 +71,6 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://nse-composition/nsm-1
-            - name: NSM_REQUEST_TIMEOUT
-              value: 75s
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF

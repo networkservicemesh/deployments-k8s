@@ -49,7 +49,7 @@ spec:
           resources:
             limits:
               memory: 40Mi
-              cpu: 100m
+              cpu: 200m
               # We expect SR-IOV forwarders on the nodes to be configured:
               # master - provides PCI functions targeted to the worker.domain/10G
               # worker - provides PCI functions targeted to the master.domain/10G
