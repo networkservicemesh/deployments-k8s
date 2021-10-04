@@ -5,7 +5,7 @@ metadata:
   name: spire-server
   namespace: spire
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - name: spire-server
       port: 8081

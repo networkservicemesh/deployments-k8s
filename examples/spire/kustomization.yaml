@@ -16,9 +16,13 @@ configMapGenerator:
   namespace: spire
   files:
   - agent.conf
-
+- name: k8s-workload-registrar
+  namespace: spire
+  files:
+    - k8s-workload-registrar.conf
 
 resources:
+- k8s-workload-registrar-crd.yaml
 - spire-namespace.yaml
 - agent-account.yaml
 - agent-cluster-role.yaml
@@ -28,3 +32,6 @@ resources:
 - server-service.yaml
 - server-statefulset.yaml
 - spire-bundle-configmap.yaml
+- k8s-workload-registrar-cluster-role.yaml
+- k8s-workload-registrar-service.yaml
+- k8s-workload-registrar-validating-webhook-configuration.yaml

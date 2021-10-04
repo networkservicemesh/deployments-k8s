@@ -28,16 +28,6 @@ NAMESPACE1=($(kubectl create -f https://raw.githubusercontent.com/networkservice
 NAMESPACE1=${NAMESPACE1:10}
 ```
 
-Register namespace in `spire` server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/${NAMESPACE1}/sa/default \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:${NAMESPACE1} \
--selector k8s:sa:default
-```
-
 Create kustomization file:
 ```bash
 cat > kustomization.yaml <<EOF
@@ -106,16 +96,6 @@ Create test namespace:
 ```bash
 NAMESPACE2=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/84d3b2ad11dd55df10ac863540fb3049a1949581/examples/interdomain/usecases/namespace.yaml)[0])
 NAMESPACE2=${NAMESPACE2:10}
-```
-
-Register namespace in `spire` server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/${NAMESPACE2}/sa/default \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:${NAMESPACE2} \
--selector k8s:sa:default
 ```
 
 Create kustomization file:

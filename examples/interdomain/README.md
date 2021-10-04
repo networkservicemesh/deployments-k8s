@@ -36,47 +36,55 @@ export KUBECONFIG=$KUBECONFIG1
 kubectl create ns nsm-system
 ```
 
-Register `nsm-system` namespace in spire:
-
+Create nsmgr-proxy patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/nsm-system/sa/default \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:default \
--federatesWith spiffe://nsm.cluster2 \
--federatesWith spiffe://nsm.cluster3
+cat > patch-nsmgr-proxy.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsmgr-proxy
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+EOF
 ```
 
-Register `registry-k8s-sa` in spire:
-
+Create registry-proxy patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/nsm-system/sa/registry-k8s-sa \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:registry-k8s-sa \
--federatesWith spiffe://nsm.cluster2 \
--federatesWith spiffe://nsm.cluster3
+cat > patch-registry-proxy-dns.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-proxy
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+EOF
 ```
 
-Register `nsmgr-proxy-sa` in spire:
-
+Create registry-memory patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster1/ns/nsm-system/sa/nsmgr-proxy-sa \
--parentID spiffe://nsm.cluster1/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:nsmgr-proxy-sa \
--federatesWith spiffe://nsm.cluster2 \
--federatesWith spiffe://nsm.cluster3
+cat > patch-registry-memory.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+EOF
 ```
 
 Apply NSM resources for basic tests:
-
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=84d3b2ad11dd55df10ac863540fb3049a1949581
 ```
@@ -91,43 +99,52 @@ export KUBECONFIG=$KUBECONFIG2
 kubectl create ns nsm-system
 ```
 
-Register `nsm-system` namespace in spire:
-
+Create nsmgr-proxy patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/nsm-system/sa/default \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:default \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster3
+cat > patch-nsmgr-proxy.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsmgr-proxy
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+EOF
 ```
 
-Register `registry-k8s-sa` in spire:
-
+Create registry-proxy patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/nsm-system/sa/registry-k8s-sa \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:registry-k8s-sa \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster3
+cat > patch-registry-proxy-dns.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-proxy
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+EOF
 ```
 
-Register `nsmgr-proxy-sa` in spire:
-
+Create registry-memory patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster2/ns/nsm-system/sa/nsmgr-proxy-sa \
--parentID spiffe://nsm.cluster2/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:nsmgr-proxy-sa \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster3
+cat > patch-registry-memory.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+EOF
 ```
 
 Apply NSM resources for basic tests:
@@ -147,30 +164,20 @@ export KUBECONFIG=$KUBECONFIG3
 kubectl create ns nsm-system
 ```
 
-Register `nsm-system` namespace in spire:
-
+Create registry-k8s patch:
 ```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster3/ns/nsm-system/sa/default \
--parentID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:default \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster2
-```
-
-Register `registry-k8s-sa` in spire:
-
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://nsm.cluster3/ns/nsm-system/sa/registry-k8s-sa \
--parentID spiffe://nsm.cluster3/ns/spire/sa/spire-agent \
--selector k8s:ns:nsm-system \
--selector k8s:sa:registry-k8s-sa \
--federatesWith spiffe://nsm.cluster1 \
--federatesWith spiffe://nsm.cluster2
+cat > ./registry-k8s-kustomization/patch-registry-k8s.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-k8s
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster2
+EOF
 ```
 
 Apply NSM resources for basic tests:

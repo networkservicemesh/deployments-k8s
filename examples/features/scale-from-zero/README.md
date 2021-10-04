@@ -24,17 +24,7 @@ NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicem
 NAMESPACE=${NAMESPACE:10}
 ```
 
-2. Register namespace in `spire` server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/${NAMESPACE}/sa/default \
--parentID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s:ns:${NAMESPACE} \
--selector k8s:sa:default
-```
-
-3. Select nodes to deploy NSC and supplier:
+2. Select nodes to deploy NSC and supplier:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSC_NODE=${NODES[0]}
@@ -42,7 +32,7 @@ SUPPLIER_NODE=${NODES[1]}
 if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
 ```
 
-4. Create patch for NSC:
+3. Create patch for NSC:
 ```bash
 cat > patch-nsc.yaml <<EOF
 ---
@@ -64,7 +54,7 @@ spec:
 EOF
 ```
 
-5. Create patch for supplier:
+4. Create patch for supplier:
 ```bash
 cat > patch-supplier.yaml <<EOF
 ---
@@ -100,7 +90,7 @@ spec:
 EOF
 ```
 
-6. Create customization file:
+5. Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -124,17 +114,17 @@ configMapGenerator:
 EOF
 ```
 
-7. Register network service:
+6. Register network service:
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/84d3b2ad11dd55df10ac863540fb3049a1949581/examples/features/scale-from-zero/autoscale-netsvc.yaml
 ```
 
-8. Deploy NSC and supplier:
+7. Deploy NSC and supplier:
 ```bash
 kubectl apply -k .
 ```
 
-9. Wait for applications ready:
+8. Wait for applications ready:
 ```bash
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
@@ -145,13 +135,13 @@ kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nsc-ker
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
 ```
 
-10. Find NSC and NSE pods by labels:
+9. Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
 NSE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
-11. Check connectivity:
+10. Check connectivity:
 ```bash
 kubectl exec $NSC -n $NAMESPACE -- ping -c 4 169.254.0.0
 ```
@@ -159,7 +149,7 @@ kubectl exec $NSC -n $NAMESPACE -- ping -c 4 169.254.0.0
 kubectl exec $NSE -n $NAMESPACE -- ping -c 4 169.254.0.1
 ```
 
-12. Check that the NSE spawned on the same node as NSC:
+11. Check that the NSE spawned on the same node as NSC:
 ```bash
 NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
@@ -167,12 +157,12 @@ NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nod
 if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; false; fi
 ```
 
-13. Remove NSC:
+12. Remove NSC:
 ```bash
 kubectl scale -n $NAMESPACE deployment nsc-kernel --replicas=0
 ```
 
-14. Wait for the NSE pod to be deleted:
+13. Wait for the NSE pod to be deleted:
 ```bash
 kubectl wait -n $NAMESPACE --for=delete --timeout=1m pod -l app=nse-icmp-responder
 ```

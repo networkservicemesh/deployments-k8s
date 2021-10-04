@@ -41,6 +41,8 @@ spec:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
               readOnly: false
+            - name: spire-token
+              mountPath: /var/run/secrets/tokens
           livenessProbe:
             exec:
               command:
@@ -52,6 +54,11 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 60
             timeoutSeconds: 3
+          readinessProbe:
+            exec:
+              command: ["/opt/spire/bin/spire-agent", "healthcheck", "-socketPath", "/run/spire/sockets/agent.sock", "--shallow"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
       volumes:
         - name: spire-config
           configMap:
@@ -63,3 +70,10 @@ spec:
           hostPath:
             path: /run/spire/sockets
             type: DirectoryOrCreate
+        - name: spire-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: spire-agent
+                  expirationSeconds: 7200
+                  audience: spire-server

@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: nse-vfio
+        "spiffe.io/spiffe-id": true
     spec:
       hostNetwork: true
       containers:

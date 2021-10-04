@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: nse-kernel
+        "spiffe.io/spiffe-id": true
     spec:
       containers:
         - name: nse

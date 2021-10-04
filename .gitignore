@@ -23,6 +23,4 @@
 .vscode
 .DS_Store
 
-bootstrap.key
-bootstrap.crt
-
+*.DS_Store

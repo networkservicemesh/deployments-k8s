@@ -15,6 +15,11 @@ configMapGenerator:
   namespace: spire
   files:
   - agent.conf
+- name: k8s-workload-registrar
+  behavior: merge
+  namespace: spire
+  files:
+    - k8s-workload-registrar.conf
 
 bases:
 - ../../../spire

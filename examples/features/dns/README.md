@@ -21,22 +21,12 @@ NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicem
 NAMESPACE=${NAMESPACE:10}
 ```
 
-2. Register namespace in `spire` server:
-```bash
-kubectl exec -n spire spire-server-0 -- \
-/opt/spire/bin/spire-server entry create \
--spiffeID spiffe://example.org/ns/${NAMESPACE}/sa/default \
--parentID spiffe://example.org/ns/spire/sa/spire-agent \
--selector k8s:ns:${NAMESPACE} \
--selector k8s:sa:default
-```
-
-3. Get all available nodes to deploy:
+2. Get all available nodes to deploy:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create alpine deployment and set `nodeSelector` to the first node:
+3. Create alpine deployment and set `nodeSelector` to the first node:
 ```bash
 cat > alpine.yaml <<EOF
 ---
@@ -48,6 +38,7 @@ metadata:
     networkservicemesh.io: kernel://my-coredns-service/nsm-1
   labels:
     app: alpine
+    "spiffe.io/spiffe-id": "true"
 spec:
   containers:
   - name: alpine
@@ -61,7 +52,7 @@ EOF
 ```
 
 
-5. Add to nse-kernel the corends container and set `nodeSelector` it to the second node:
+4. Add to nse-kernel the corends container and set `nodeSelector` it to the second node:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -114,7 +105,7 @@ spec:
 EOF
 ```
 
-6. Create kustomization file:
+5. Create kustomization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -135,12 +126,12 @@ patchesStrategicMerge:
 EOF
 ```
 
-7. Deploy alpine and nse
+6. Deploy alpine and nse
 ```bash
 kubectl apply -k .
 ```
 
-8. Wait for applications ready:
+7. Wait for applications ready:
 ```bash
 kubectl wait --for=condition=ready --timeout=5m pod alpine -n ${NAMESPACE}
 ```
@@ -148,7 +139,7 @@ kubectl wait --for=condition=ready --timeout=5m pod alpine -n ${NAMESPACE}
 kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
-9. Find NSC and NSE pods by labels:
+8. Find NSC and NSE pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
@@ -156,12 +147,12 @@ NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-10. Install `nslookup` to alpine:
+9. Install `nslookup` to alpine:
 ```bash
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- sh -c "apk update && apk add bind-tools"
 ```
 
-11. Ping from alpine to NSE by domain name:
+10. Ping from alpine to NSE by domain name:
 ```bash
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef -norec my.coredns.service
 ```
@@ -169,7 +160,7 @@ kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef -norec my.cored
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- ping -c 4 my.coredns.service
 ```
 
-12. Validate that default DNS server is working:
+11. Validate that default DNS server is working:
 ```bash
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef google.com
 ```

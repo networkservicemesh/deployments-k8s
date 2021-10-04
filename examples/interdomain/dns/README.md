@@ -125,6 +125,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
+---
 cat > configmap.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
