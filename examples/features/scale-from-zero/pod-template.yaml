@@ -5,7 +5,7 @@ metadata:
   name: nse-icmp-responder
   labels:
     app: nse-icmp-responder
-    "spiffe.io/spiffe-id": "true"
+    "spiffe.io/spiffe-id": true
 spec:
   restartPolicy: Never
   containers:

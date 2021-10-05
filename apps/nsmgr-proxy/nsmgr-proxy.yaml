@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: nsmgr-proxy
-        "spiffe.io/spiffe-id": "true"
+        "spiffe.io/spiffe-id": true
     spec:
       serviceAccount: nsmgr-proxy-sa
       containers:

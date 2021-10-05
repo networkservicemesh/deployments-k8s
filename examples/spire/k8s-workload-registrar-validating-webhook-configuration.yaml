@@ -4,7 +4,7 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: k8s-workload-registrar
   labels:
-    spiffe.io/webhook: "true"
+    spiffe.io/webhook: true
 webhooks:
   - name: k8s-workload-registrar.spire.svc
     clientConfig:
