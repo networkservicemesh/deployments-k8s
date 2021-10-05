@@ -86,7 +86,7 @@ EOF
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=ba43641855e79ff5b1d2a18a007caa723d229d62
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=e530ea613da751c02d6df0ee5ec7d8b867b42e04
 ```
 
 **2. Apply deployments for cluster2:**
@@ -150,7 +150,7 @@ EOF
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=ba43641855e79ff5b1d2a18a007caa723d229d62
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=e530ea613da751c02d6df0ee5ec7d8b867b42e04
 ```
 
 
@@ -183,7 +183,7 @@ EOF
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=ba43641855e79ff5b1d2a18a007caa723d229d62
+kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=e530ea613da751c02d6df0ee5ec7d8b867b42e04
 ```
 
 ## Cleanup
