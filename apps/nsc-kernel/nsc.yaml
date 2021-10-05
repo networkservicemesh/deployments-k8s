@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: nsc-kernel
-        "spiffe.io/spiffe-id": true
+        "spiffe.io/spiffe-id": "true"
     spec:
       containers:
         - name: nsc
