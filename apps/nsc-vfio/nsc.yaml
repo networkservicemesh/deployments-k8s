@@ -48,6 +48,8 @@ spec:
             - name: vfio
               mountPath: /dev/vfio
           resources:
+            requests:
+              cpu: 100m
             limits:
               memory: 40Mi
               cpu: 200m
