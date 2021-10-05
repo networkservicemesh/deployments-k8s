@@ -183,7 +183,7 @@ EOF
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
 ```
 
 ## Cleanup

@@ -98,7 +98,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
 
 resources:
 - postgres-cl.yaml
