@@ -35,9 +35,9 @@ resources:
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/763c667eeac02957b36ee2d03e8e437e8d51b7cd/examples/features/nse-composition/passthrough-2.yaml
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/763c667eeac02957b36ee2d03e8e437e8d51b7cd/examples/features/nse-composition/passthrough-3.yaml
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
-- github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
 
 patchesStrategicMerge:
 - patch-nsc.yaml

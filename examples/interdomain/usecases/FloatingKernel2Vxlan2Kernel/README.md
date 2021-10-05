@@ -38,7 +38,7 @@ kind: Kustomization
 namespace: ${NAMESPACE1}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -108,7 +108,7 @@ kind: Kustomization
 namespace: ${NAMESPACE2}
 
 bases:
-- github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=763c667eeac02957b36ee2d03e8e437e8d51b7cd
 
 patchesStrategicMerge:
 - patch-nsc.yaml
