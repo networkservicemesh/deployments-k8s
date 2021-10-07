@@ -52,8 +52,6 @@ spec:
               mountPath: /host/sys/fs/cgroup
             - name: vfio
               mountPath: /host/dev/vfio
-            - name: linux-modules
-              mountPath: /lib/modules
           resources:
             limits:
               memory: 1Gi
@@ -79,7 +77,3 @@ spec:
           hostPath:
             path: /dev/vfio
             type: DirectoryOrCreate
-        - name: linux-modules
-          hostPath:
-            path: /lib/modules
-            type: Directory
