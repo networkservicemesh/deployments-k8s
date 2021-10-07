@@ -32,9 +32,6 @@ spec:
             - name: spire-config
               mountPath: /run/spire/config
               readOnly: true
-            - name: spire-data
-              mountPath: /run/spire/data
-              readOnly: false
             - name: spire-registration-socket
               mountPath: /tmp
               readOnly: false
@@ -87,13 +84,3 @@ spec:
             name: k8s-workload-registrar
         - name: spire-registration-socket
           emptyDir: {}
-  volumeClaimTemplates:
-    - metadata:
-        name: spire-data
-        namespace: spire
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
