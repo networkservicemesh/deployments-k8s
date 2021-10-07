@@ -36,57 +36,9 @@ export KUBECONFIG=$KUBECONFIG1
 kubectl create ns nsm-system
 ```
 
-Create nsmgr-proxy patch:
-```bash
-cat > patch-nsmgr-proxy.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsmgr-proxy
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
-EOF
-```
-
-Create registry-proxy patch:
-```bash
-cat > patch-registry-proxy-dns.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: registry-proxy
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
-EOF
-```
-
-Create registry-memory patch:
-```bash
-cat > patch-registry-memory.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: registry
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
-EOF
-```
-
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=ea7883abae1ebf2c09156e737c9b1b9531d47626
+kubectl apply -k ./clusters-configuration/cluster1
 ```
 
 **2. Apply deployments for cluster2:**
@@ -99,58 +51,10 @@ export KUBECONFIG=$KUBECONFIG2
 kubectl create ns nsm-system
 ```
 
-Create nsmgr-proxy patch:
-```bash
-cat > patch-nsmgr-proxy.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsmgr-proxy
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
-EOF
-```
-
-Create registry-proxy patch:
-```bash
-cat > patch-registry-proxy-dns.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: registry-proxy
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
-EOF
-```
-
-Create registry-memory patch:
-```bash
-cat > patch-registry-memory.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: registry
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
-EOF
-```
-
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain?ref=ea7883abae1ebf2c09156e737c9b1b9531d47626
+kubectl apply -k ./clusters-configuration/cluster2
 ```
 
 
@@ -164,26 +68,10 @@ export KUBECONFIG=$KUBECONFIG3
 kubectl create ns nsm-system
 ```
 
-Create registry-k8s patch:
-```bash
-cat > ./registry-k8s-kustomization/patch-registry-k8s.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: registry-k8s
-spec:
-  template:
-    metadata:
-      annotations:
-        spiffe.io/federatesWith: nsm.cluster1,nsm.cluster2
-EOF
-```
-
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=ea7883abae1ebf2c09156e737c9b1b9531d47626
+kubectl apply -k ./clusters-configuration/cluster3
 ```
 
 ## Cleanup

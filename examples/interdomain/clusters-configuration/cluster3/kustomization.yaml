@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- ../../../apps/registry-k8s
+- ../../../../apps/registry-k8s
 
 patchesStrategicMerge:
 - patch-registry-k8s.yaml
