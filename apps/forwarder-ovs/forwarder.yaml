@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: forwarder-ovs
+        "spiffe.io/spiffe-id": "true"
     spec:
       hostPID: true
       hostNetwork: true
