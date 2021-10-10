@@ -16,37 +16,27 @@ export KUBECONFIG=$KUBECONFIG1
 
 Apply metallb for the first cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-```
-
-Create metallb config to setup addresses pool:
-```bash
-cat > metallb-config.yaml <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - $CLUSTER_CIDR1
+if [[ ! -z $CLUSTER1_CIDR ]]; then
+  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
+  kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
+  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+  cat > metallb-config.yaml <<EOF
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    namespace: metallb-system
+    name: config
+  data:
+    config: |
+      address-pools:
+      - name: default
+        protocol: layer2
+        addresses:
+        - $CLUSTER1_CIDR
 EOF
-```
-
-Apply the configmap:
-```bash
-kubectl apply -f metallb-config.yaml
-```
-
-Wait for deployment ready:
-```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+  kubectl apply -f metallb-config.yaml
+  kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+fi
 ```
 
 Switch to the second cluster:
@@ -56,91 +46,80 @@ export KUBECONFIG=$KUBECONFIG2
 
 Apply metallb for the second cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-```
-Create metallb config to setup addresses pool:
-```bash
-cat > metallb-config.yaml <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - $CLUSTER_CIDR2
+if [[ ! -z $CLUSTER2_CIDR ]]; then
+  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
+  kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
+  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+  cat > metallb-config.yaml <<EOF
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    namespace: metallb-system
+    name: config
+  data:
+    config: |
+      address-pools:
+      - name: default
+        protocol: layer2
+        addresses:
+        - $CLUSTER2_CIDR
 EOF
+  kubectl apply -f metallb-config.yaml
+  kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+fi
 ```
-
-Apply the configmap:
-
-```bash
-kubectl apply -f metallb-config.yaml
-```
-
-Wait for deployment ready:
-```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
-```
-
 
 Switch to the third cluster:
 ```bash
 export KUBECONFIG=$KUBECONFIG3
 ```
 
-Apply metallb for the third cluster:
+Apply metallb for the second cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-```
-
-Create metallb config to setup addresses pool:
-```bash
-cat > metallb-config.yaml <<EOF
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - $CLUSTER_CIDR3
+if [[ ! -z $CLUSTER3_CIDR ]]; then
+  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
+  kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
+  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+  cat > metallb-config.yaml <<EOF
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    namespace: metallb-system
+    name: config
+  data:
+    config: |
+      address-pools:
+      - name: default
+        protocol: layer2
+        addresses:
+        - $CLUSTER3_CIDR
 EOF
-```
-
-Apply the configmap:
-
-```bash
-kubectl apply -f metallb-config.yaml
-```
-
-Wait for deployment ready:
-```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+  kubectl apply -f metallb-config.yaml
+  kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+fi
 ```
 
 ## Cleanup
 
+Delete metallb-system namespace from all clusters:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete ns metallb-system 
+export KUBECONFIG=$KUBECONFIG1 
+if [[ ! -z $CLUSTER1_CIDR ]]; then
+  kubectl delete ns metallb-system  
+fi
 ```
+
 ```bash
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete ns metallb-system 
+export KUBECONFIG=$KUBECONFIG2
+if [[ ! -z $CLUSTER2_CIDR ]]; then
+  kubectl delete ns metallb-system  
+fi
 ```
+
 ```bash
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete ns metallb-system 
+export KUBECONFIG=$KUBECONFIG3
+if [[ ! -z $CLUSTER3_CIDR ]]; then
+  kubectl delete ns metallb-system  
+fi
 ```

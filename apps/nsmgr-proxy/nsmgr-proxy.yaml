@@ -71,7 +71,7 @@ spec:
               mountPath: /etc/mapip
           resources:
             limits:
-              memory: 10Mi
+              memory: 25Mi
               cpu: 50m
       volumes:
         - name: spire-agent-socket
