@@ -29,6 +29,8 @@ spec:
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_SERVICE_NAME
               value: admission-webhook-svc
+            - name: NSM_LOG_LEVEL
+              value: TRACE
             - name: NSM_NAME
               valueFrom:
                 fieldRef:

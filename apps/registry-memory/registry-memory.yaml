@@ -22,6 +22,8 @@ spec:
               value: unix:///run/spire/sockets/agent.sock
             - name: REGISTRY_MEMORY_LISTEN_ON
               value: tcp://:5002
+            - name: NSM_LOG_LEVEL
+              value: TRACE
             - name: REGISTRY_MEMORY_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
           imagePullPolicy: IfNotPresent
