@@ -59,14 +59,10 @@ jobs:
         run: |
           go generate ./...
           go mod tidy
-      - uses: benjlevesque/short-sha@v1.2
-        id: short-sha
-        with:
-          length: 8
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          sed -r -i 's/(s\.checkout\.Version =.*)/s.checkout.Version = "${{ steps.short-sha.outputs.sha }}"/g' extensions/base/suite.go
+          sed -r -i 's/sha = [a-z0-9]*/sha = "${{ github.sha }}"/g' extensions/base/suite.go
           echo Starting to update repositotry ${{ matrix.repository }}
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
