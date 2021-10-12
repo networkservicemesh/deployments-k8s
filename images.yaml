@@ -14,7 +14,7 @@ nsm:
   - ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:d91da6e
   - ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:a6c0eec
   - ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:540f76c
-  - ghcr.io/networkservicemesh/ci/cmd-forwarder-sriov:3858efa  # sriov
+  - ghcr.io/networkservicemesh/ci/cmd-forwarder-sriov:1dfb5e5
   - ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:33072e8
   - ghcr.io/networkservicemesh/ci/cmd-nse-vfio:b1e0928  # sriov
   - ghcr.io/networkservicemesh/ci/cmd-registry-memory:34b9c80
