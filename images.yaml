@@ -4,7 +4,7 @@ nsm:
   - ghcr.io/networkservicemesh/ci/cmd-registry-k8s:9407d3f
   - ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:bdcb9e5
   - ghcr.io/networkservicemesh/ci/cmd-nsmgr:3eecbef
-  - ghcr.io/networkservicemesh/ci/cmd-nsc-vpp:5f06bee
+  - ghcr.io/networkservicemesh/ci/cmd-nsc-vpp:4772a01
   - ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:0b8d021
   - ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:85e5a4f
   - ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:06b814d
