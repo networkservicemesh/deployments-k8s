@@ -32,6 +32,8 @@ spec:
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSM_LOG_LEVEL
+              value: TRACE
             - name: NSM_SRIOV_CONFIG_FILE
               value: /var/lib/networkservicemesh/sriov.config
             - name: NSM_BRIDGE_NAME

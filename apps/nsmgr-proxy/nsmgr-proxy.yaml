@@ -30,6 +30,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
             - name: NSM_REGISTRY_URL
               value: "registry:5002"
             - name: NSM_REGISTRY_PROXY_URL

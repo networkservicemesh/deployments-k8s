@@ -22,6 +22,8 @@ spec:
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_LISTEN_ON
               value: tcp://:5005
+            - name: NSM_LOG_LEVEL
+              value: TRACE
           imagePullPolicy: IfNotPresent
           name: registry
           ports:

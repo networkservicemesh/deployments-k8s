@@ -24,6 +24,8 @@ spec:
               value: 1m
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_LOG_LEVEL
+              value: TRACE
             - name: NSM_NAME
               valueFrom:
                 fieldRef:

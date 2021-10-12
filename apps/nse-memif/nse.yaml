@@ -26,6 +26,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
             - name: NSE_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
           volumeMounts:
