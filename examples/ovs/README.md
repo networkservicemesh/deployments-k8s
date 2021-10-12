@@ -18,8 +18,6 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 kubectl create ns nsm-system
 ```
 
-```
-
 2. Apply NSM resources for basic tests:
 
 ```bash
