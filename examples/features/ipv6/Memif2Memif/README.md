@@ -8,7 +8,7 @@ NSC and NSE are using the `memif` mechanism to connect to its local forwarder.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9762fda2a8f6374b4ac5b489dfdadb1fccc58843/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fbdc3511177f50ce98b636f2aa4704b86bf2df09/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -27,8 +27,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=9762fda2a8f6374b4ac5b489dfdadb1fccc58843
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=9762fda2a8f6374b4ac5b489dfdadb1fccc58843
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=fbdc3511177f50ce98b636f2aa4704b86bf2df09
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=fbdc3511177f50ce98b636f2aa4704b86bf2df09
 
 patchesStrategicMerge:
 - patch-nsc.yaml
