@@ -6,7 +6,7 @@ nsm:
   - ghcr.io/networkservicemesh/ci/cmd-nsmgr:3eecbef
   - ghcr.io/networkservicemesh/ci/cmd-nsc-vpp:84300bc
   - ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:d66c978
-  - ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:84d23a0
+  - ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:bc00c5d
   - ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:06b814d
   - ghcr.io/networkservicemesh/ci/cmd-forwarder-ovs:76a6f94
   - ghcr.io/networkservicemesh/ci/cmd-forwarder-ovs-use-host-ovs:76a6f94
