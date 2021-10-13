@@ -1,6 +1,6 @@
 ---
 nsm:
-  - ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder-vpp:a60ed79
+  - ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder-vpp:ef9f2e5
   - ghcr.io/networkservicemesh/ci/cmd-registry-k8s:186f15d
   - ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:bdcb9e5
   - ghcr.io/networkservicemesh/ci/cmd-nsmgr:3eecbef
