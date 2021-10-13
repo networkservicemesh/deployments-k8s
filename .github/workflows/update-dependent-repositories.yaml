@@ -62,7 +62,7 @@ jobs:
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          sed -r -i 's/sha = [a-z0-9]*/sha = "${{ github.sha }}"/g' extensions/base/suite.go
+          sed -r -i 's/sha = "[a-z0-9]*"/sha = "${{ github.sha }}"/g' extensions/base/suite.go
           echo Starting to update repositotry ${{ matrix.repository }}
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
