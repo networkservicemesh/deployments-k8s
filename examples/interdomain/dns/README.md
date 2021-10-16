@@ -46,7 +46,7 @@ kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (in
 Get and store externalIP of the coredns
 ```bash
 ip1=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-echo "Cluster1: External IP of exposed-kube-dns is $ip1"
+ping -c 4 $ip1
 ```
 
 Switch to cluster2:
@@ -68,7 +68,7 @@ kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (in
 Get and store externalIP of the coredns
 ```bash
 ip2=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-echo "Cluster2: External IP of exposed-kube-dns is $ip2"
+ping -c 4 $ip2
 ```
 
 Switch to cluster3:
@@ -90,7 +90,7 @@ kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (in
 Get and store externalIP of the coredns
 ```bash
 ip3=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-echo "Cluster3: External IP of exposed-kube-dns is $ip3"
+ping -c 4 $ip3
 ```
 
 
