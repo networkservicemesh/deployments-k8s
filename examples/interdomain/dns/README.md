@@ -35,7 +35,7 @@ export KUBECONFIG=$KUBECONFIG1
 
 Expose kube-dns service:
 ```bash
-kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=UDP --name=exposed-kube-dns --type=LoadBalancer
+  kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:
@@ -46,7 +46,12 @@ kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (in
 Get and store externalIP of the coredns
 ```bash
 ip1=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-ping -c 4 $ip1
+if [[ $ip1 == *"no value"* ]]; then 
+    ip1=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
+    ip1=$(dig +short $ip1 | head -1)
+fi
+echo Selected externalIP: $ip1 for cluster1
+[[ ! -z $ip1 ]]
 ```
 
 Switch to cluster2:
@@ -57,7 +62,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Expose kube-dns service:
 ```bash
-kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=UDP --name=exposed-kube-dns --type=LoadBalancer
+kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:
@@ -68,8 +73,14 @@ kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (in
 Get and store externalIP of the coredns
 ```bash
 ip2=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-ping -c 4 $ip2
+if [[ $ip2 == *"no value"* ]]; then 
+    ip2=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
+    ip2=$(dig +short $ip2 | head -1)
+fi
+echo Selected externalIP: $ip2 for cluster1
+[[ ! -z $ip2 ]]
 ```
+
 
 Switch to cluster3:
 
@@ -79,7 +90,7 @@ export KUBECONFIG=$KUBECONFIG3
 
 Expose kube-dns service:
 ```bash
-kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=UDP --name=exposed-kube-dns --type=LoadBalancer
+kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:
@@ -90,9 +101,13 @@ kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (in
 Get and store externalIP of the coredns
 ```bash
 ip3=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-ping -c 4 $ip3
+if [[ $ip3 == *"no value"* ]]; then 
+    ip3=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
+    ip3=$(dig +short $ip3 | head -1)
+fi
+echo Selected externalIP: $ip3 for cluster1
+[[ ! -z $ip3 ]]
 ```
-
 
 3. Update CoreDNS configmaps:
 
@@ -132,10 +147,14 @@ data:
         reload 5s
     }
     my.cluster2:53 {
-      forward . ${ip2}:53
+      forward . ${ip2}:53 {
+        force_tcp
+      }
     }
     my.cluster3:53 {
-      forward . ${ip3}:53
+      forward . ${ip3}:53 {
+        force_tcp
+      }
     }
 EOF
 ```
@@ -160,11 +179,15 @@ data:
     k8s_external my.cluster1
   proxy2.server: |
     my.cluster2:53 {
-      forward . ${ip2}:53
+      forward . ${ip2}:53 {
+        force_tcp
+      }
     }
   proxy3.server: |
     my.cluster3:53 {
-      forward . ${ip3}:53
+      forward . ${ip3}:53 {
+        force_tcp
+      }
     }
 EOF
 ```
@@ -210,10 +233,14 @@ data:
         reload 5s
     }
     my.cluster1:53 {
-      forward . ${ip1}:53
+      forward . ${ip1}:53 {
+        force_tcp
+      }
     }
     my.cluster3:53 {
-      forward . ${ip3}:53
+      forward . ${ip3}:53 {
+        force_tcp
+      }
     }
 EOF
 ```
@@ -232,11 +259,15 @@ data:
     k8s_external my.cluster2
   proxy1.server: |
     my.cluster1:53 {
-      forward . ${ip1}:53
+      forward . ${ip1}:53 {
+        force_tcp
+      }
     }
   proxy3.server: |
     my.cluster3:53 {
-      forward . ${ip3}:53
+      forward . ${ip3}:53 {
+        force_tcp
+      }
     }
 EOF
 ```
@@ -288,10 +319,14 @@ data:
         reload 5s
     }
     my.cluster1:53 {
-      forward . ${ip1}:53
+      forward . ${ip1}:53 {
+        force_tcp
+      }
     }
     my.cluster2:53 {
-      forward . ${ip2}:53
+      forward . ${ip2}:53 {
+        force_tcp
+      }
     }
 EOF
 ```
@@ -315,11 +350,15 @@ data:
     k8s_external my.cluster3
   proxy1.server: |
     my.cluster1:53 {
-      forward . ${ip1}:53
+      forward . ${ip1}:53 {
+        force_tcp
+      }
     }
   proxy2.server: |
     my.cluster2:53 {
-      forward . ${ip2}:53
+      forward . ${ip2}:53 {
+        force_tcp
+      }
     }
 EOF
 ```
