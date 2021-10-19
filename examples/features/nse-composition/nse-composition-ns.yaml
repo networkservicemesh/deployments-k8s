@@ -3,7 +3,6 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: nse-composition
-  namespace: nsm-system
 spec:
   payload: ETHERNET
   matches:

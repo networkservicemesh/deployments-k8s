@@ -34,6 +34,7 @@ resources:
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d27aeb8686f26b9cd4026eb42047d1e8eecbdc39/examples/features/nse-composition/passthrough-1.yaml
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d27aeb8686f26b9cd4026eb42047d1e8eecbdc39/examples/features/nse-composition/passthrough-2.yaml
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d27aeb8686f26b9cd4026eb42047d1e8eecbdc39/examples/features/nse-composition/passthrough-3.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d27aeb8686f26b9cd4026eb42047d1e8eecbdc39/examples/features/nse-composition/nse-composition-ns.yaml
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=d27aeb8686f26b9cd4026eb42047d1e8eecbdc39
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=d27aeb8686f26b9cd4026eb42047d1e8eecbdc39
@@ -94,11 +95,6 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
-```
-
-Deploy Network Service
-```bash
-kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d27aeb8686f26b9cd4026eb42047d1e8eecbdc39/examples/features/nse-composition/nse-composition-ns.yaml
 ```
 
 Deploy NSC and NSE:
