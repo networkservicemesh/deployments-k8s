@@ -18,9 +18,9 @@ jobs:
         run: |
           git remote -v
           git fetch --depth=1 origin main
-      - name: Only allow go.mod, go.sum, *.gen.go files
-        run: |
-          find . -type f ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/main -- {} +
+#      - name: Only allow go.mod, go.sum, *.gen.go files
+#        run: |
+#          find . -type f ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/main -- {} +
       - name: Merge PR
         uses: ridedott/merge-me-action@master
         with:
