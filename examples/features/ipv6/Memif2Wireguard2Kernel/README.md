@@ -11,7 +11,7 @@ Forwarders are using the `wireguard` mechanism to connect with each other.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/99773adbb3f8db614324aa08afd2c486541e3747/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/96364db2354a00b420680f0d2002e2c4dd8ad3cd/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -30,8 +30,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=99773adbb3f8db614324aa08afd2c486541e3747
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=99773adbb3f8db614324aa08afd2c486541e3747
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=96364db2354a00b420680f0d2002e2c4dd8ad3cd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=96364db2354a00b420680f0d2002e2c4dd8ad3cd
 
 patchesStrategicMerge:
 - patch-nsc.yaml
