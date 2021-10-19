@@ -10,7 +10,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse-icmp-responder
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:0227317
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:182333f
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
