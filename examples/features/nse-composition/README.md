@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -30,38 +30,42 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/nse-composition/config-file.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/nse-composition/passthrough-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/nse-composition/passthrough-2.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/nse-composition/passthrough-3.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/nse-composition/nse-composition-ns.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/nse-composition/config-file.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/nse-composition/passthrough-1.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/nse-composition/passthrough-2.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/nse-composition/passthrough-3.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ac7af207eeeb83630b2f296e349f9de352c474af
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ac7af207eeeb83630b2f296e349f9de352c474af
-- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=ac7af207eeeb83630b2f296e349f9de352c474af
+- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
+- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
 
 patchesStrategicMerge:
-- patch-nsc.yaml
+- patch-client-app.yaml
 - patch-nse.yaml
 EOF
 ```
 
-Create NSC patch:
+Create a client patch:
 ```bash
-cat > patch-nsc.yaml <<EOF
+cat > patch-client-app.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc-kernel
+  name: client-app
 spec:
   template:
+    metadata:
+      annotations:
+        networkservicemesh.io: kernel://nse-composition/nsm-1
     spec:
       containers:
-        - name: nsc
+        - name: alpine
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://nse-composition/nsm-1
+            - name: NSM_REQUEST_TIMEOUT
+              value: 75s
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -97,22 +101,27 @@ spec:
 EOF
 ```
 
-Deploy NSC and NSE:
+Deploy Network Service
+```bash
+kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/nse-composition/nse-composition-ns.yaml
+```
+
+Deploy the client-app and NSE:
 ```bash
 kubectl apply -k .
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=client-app -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
-Find nsc and nse pods by labels:
+Find client-app and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=client-app -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')

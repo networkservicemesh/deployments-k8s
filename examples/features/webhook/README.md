@@ -10,12 +10,6 @@ Make sure that you have completed steps from [features](../)
 
 ## Run
 
-Note: Admission webhook is required and should be started at this moment.
-```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
-```
-
 1. Create test namespace:
 ```bash
 NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/namespace.yaml)[0])

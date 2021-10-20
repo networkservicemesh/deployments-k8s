@@ -17,7 +17,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -26,31 +26,24 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-3. Create alpine deployment and set `nodeSelector` to the first node:
+3. Create client deployment and set `nodeSelector` to the first node:
 ```bash
-cat > alpine.yaml <<EOF
+cat > patch-client-app.yaml <<EOF
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: alpine
-  annotations:
-    networkservicemesh.io: kernel://my-coredns-service/nsm-1
-  labels:
-    app: alpine
-    "spiffe.io/spiffe-id": "true"
+  name: client-app
 spec:
-  containers:
-  - name: alpine
-    image: alpine
-    imagePullPolicy: IfNotPresent
-    stdin: true
-    tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODES[0]}
+  template:
+    metadata:
+      annotations:
+        networkservicemesh.io: kernel://my-coredns-service/nsm-1
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ${NODES[0]}
 EOF
 ```
-
 
 4. Add to nse-kernel the corends container and set `nodeSelector` it to the second node:
 ```bash
@@ -115,25 +108,26 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ac7af207eeeb83630b2f296e349f9de352c474af
+- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
 
 resources:
-- alpine.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/dns/coredns-config-map.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/dns/coredns-config-map.yaml
 
 patchesStrategicMerge:
+- patch-client-app.yaml
 - patch-nse.yaml
 EOF
 ```
 
-6. Deploy alpine and nse
+6. Deploy the client-app and nse
 ```bash
 kubectl apply -k .
 ```
 
 7. Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=client-app -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
@@ -141,28 +135,15 @@ kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMES
 
 8. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=client-app -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-9. Install `nslookup` to alpine:
-```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- sh -c "apk update && apk add bind-tools"
-```
-
-10. Ping from alpine to NSE by domain name:
-```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef -norec my.coredns.service
-```
+9. Ping from client-app to NSE by domain-name:`my.coredns.service`
 ```bash
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- ping -c 4 my.coredns.service
-```
-
-11. Validate that default DNS server is working:
-```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef google.com
 ```
 
 ## Cleanup

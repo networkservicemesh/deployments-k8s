@@ -20,7 +20,7 @@ thus saving cluster resources (see step 14).
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,23 +32,24 @@ SUPPLIER_NODE=${NODES[1]}
 if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
 ```
 
-3. Create patch for NSC:
+3. Create a client patch:
 ```bash
-cat > patch-nsc.yaml <<EOF
+cat > patch-client-app.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc-kernel
+  name: client-app
 spec:
   template:
+    metadata:
+      annotations:
+        networkservicemesh.io: kernel://autoscale-icmp-responder/nsm-1
     spec:
       nodeName: $NSC_NODE
       containers:
-        - name: nsc
+        - name: alpine
           env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://autoscale-icmp-responder/nsm-1
             - name: NSM_REQUEST_TIMEOUT
               value: 30s
 EOF
@@ -100,23 +101,23 @@ kind: Kustomization
 namespace: $NAMESPACE
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=ac7af207eeeb83630b2f296e349f9de352c474af
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ac7af207eeeb83630b2f296e349f9de352c474af
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
+- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
 
 patchesStrategicMerge:
-- patch-nsc.yaml
+- patch-client-app.yaml
 - patch-supplier.yaml
 
 configMapGenerator:
   - name: supplier-pod-template-configmap
     files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/scale-from-zero/pod-template.yaml
+      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/scale-from-zero/pod-template.yaml
 EOF
 ```
 
 6. Register network service:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/scale-from-zero/autoscale-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/scale-from-zero/autoscale-netsvc.yaml
 ```
 
 7. Deploy NSC and supplier:
@@ -129,7 +130,7 @@ kubectl apply -k .
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n $NAMESPACE --for=condition=ready --timeout=5m pod -l app=client-app
 ```
 ```bash
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
@@ -137,7 +138,7 @@ kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icm
 
 9. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
+NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=client-app)
 NSE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
@@ -159,7 +160,7 @@ if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; fals
 
 12. Remove NSC:
 ```bash
-kubectl scale -n $NAMESPACE deployment nsc-kernel --replicas=0
+kubectl scale -n $NAMESPACE deployment client-app --replicas=0
 ```
 
 13. Wait for the NSE pod to be deleted:

@@ -25,6 +25,13 @@ Apply NSM resources for basic tests:
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=ac7af207eeeb83630b2f296e349f9de352c474af
 ```
 
+Wait for admission-webhook-k8s:
+
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+```
+
 ## Cleanup
 
 ```bash

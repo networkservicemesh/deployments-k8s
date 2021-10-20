@@ -10,7 +10,7 @@ Forwarders are using the `wireguard` mechanism to connect with each other.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ac7af207eeeb83630b2f296e349f9de352c474af/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7cce92bc969715668d8be2f78b02de8fcdfacc93/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -29,36 +29,34 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ac7af207eeeb83630b2f296e349f9de352c474af
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=ac7af207eeeb83630b2f296e349f9de352c474af
+- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=7cce92bc969715668d8be2f78b02de8fcdfacc93
 
 patchesStrategicMerge:
-- patch-nsc.yaml
+- patch-client-app.yaml
 - patch-nse.yaml
 EOF
 ```
 
-Create NSC patch:
+Create a client patch:
 ```bash
-cat > patch-nsc.yaml <<EOF
+cat > patch-client-app.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nsc-kernel
+  name: client-app
 spec:
   template:
+    metadata:
+      annotations:
+        networkservicemesh.io: kernel://icmp-responder-ip/nsm-1
     spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder-ip/nsm-1
-
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
 ```
+
 Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -91,7 +89,7 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=client-app -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESPACE}
@@ -99,7 +97,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESP
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=client-app -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
