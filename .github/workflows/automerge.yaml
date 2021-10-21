@@ -12,15 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' }}
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v2
-      - name: Fetch main
-        run: |
-          git remote -v
-          git fetch --depth=1 origin main
-#      - name: Only allow go.mod, go.sum, *.gen.go files
-#        run: |
-#          find . -type f ! -name '*.yaml' ! -name '*.yml' -exec git diff --exit-code origin/main -- {} +
       - name: Merge PR
         uses: ridedott/merge-me-action@master
         with:
