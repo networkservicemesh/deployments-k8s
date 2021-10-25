@@ -141,9 +141,22 @@ NSC=$(kubectl get pods -l app=client-app -n ${NAMESPACE} --template '{{range .it
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-9. Ping from client-app to NSE by domain-name:`my.coredns.service`
+9. Install `nslookup` to alpine:
+```bash
+kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- sh -c "apk update && apk add bind-tools"
+```
+
+10. Ping from client-app to NSE by domain name:
+```bash
+kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef -norec my.coredns.service
+```
 ```bash
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- ping -c 4 my.coredns.service
+```
+
+11. Validate that default DNS server is working:
+```bash
+kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef google.com
 ```
 
 ## Cleanup
