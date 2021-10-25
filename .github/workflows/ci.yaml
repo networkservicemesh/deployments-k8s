@@ -35,10 +35,10 @@ jobs:
           ./to-local.sh
           ./to-ref.sh
           git diff --name-only --exit-code
-  nsmbot-ci:
-    name: nsmbot-ci
+  diff-correctness-check:
+    name: diff-correctness-check
     runs-on: ubuntu-latest
-    if: ${{github.actor == 'nsmbot'}}
+    if: ${{ github.actor == 'nsmbot' }}
     steps:
       - name: Check out the code
         uses: actions/checkout@v2
@@ -47,12 +47,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Only allow yaml files
         run: |
-          CURR_HEAD=$(git rev-parse HEAD)
-          echo "$CURR_HEAD"
-          COMMIT_ARR=$(git rev-list origin/main..HEAD)
-          LAST_COMMIT=${COMMIT_ARR: -40}
-          echo "$LAST_COMMIT"
-          git checkout "$LAST_COMMIT"
-          BRANCH_POINT=$(git rev-parse HEAD^)
-          echo "$BRANCH_POINT"
-          find . -type f -not -path "./.github/*" ! -name '*.yaml' ! -name '*.yml' -exec git diff "$CURR_HEAD".."$BRANCH_POINT" --exit-code -- {} +
+          BRANCH_POINT=$(git merge-base ${{github.event.pull_request.base.sha}} HEAD)
+          echo "branch point: $BRANCH_POINT"
+          find . -type f -not -path "./.github/*" ! -name '*.yaml' ! -name '*.yml' -exec git diff "${{ github.event.pull_request.head.sha }}".."$BRANCH_POINT" --exit-code -- {} +
