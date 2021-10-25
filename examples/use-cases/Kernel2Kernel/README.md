@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=ac7af207eeeb83630b2f296e349f9de352c474af
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ac7af207eeeb83630b2f296e349f9de352c474af
+- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=af62e7cfab0b31b71c091b500ec6684692c05e97
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=af62e7cfab0b31b71c091b500ec6684692c05e97
 
 
 patchesStrategicMerge:
