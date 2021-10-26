@@ -92,7 +92,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3c5b2f08571e6bfd999854b20e680b15da5d12aa/examples/interdomain/dns/service.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/55bee1dcc6f00ac3c28ad21324151b4daff39db3/examples/interdomain/dns/service.yaml
 ```
 
 **For the second cluster:**
@@ -102,7 +102,7 @@ export KUBECONFIG=$KUBECONFIG2
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3c5b2f08571e6bfd999854b20e680b15da5d12aa/examples/interdomain/dns/service.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/55bee1dcc6f00ac3c28ad21324151b4daff39db3/examples/interdomain/dns/service.yaml
 ```
 
 **For the third cluster:**
@@ -112,7 +112,7 @@ export KUBECONFIG=$KUBECONFIG3
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3c5b2f08571e6bfd999854b20e680b15da5d12aa/examples/interdomain/dns/service.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/55bee1dcc6f00ac3c28ad21324151b4daff39db3/examples/interdomain/dns/service.yaml
 ```
 
 
