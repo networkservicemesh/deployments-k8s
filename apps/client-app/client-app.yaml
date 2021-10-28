@@ -15,7 +15,6 @@ spec:
         networkservicemesh.io: kernel://icmp-responder/nsm-1
       labels:
         app: client-app
-        "spiffe.io/spiffe-id": "true"
     spec:
       containers:
         - name: alpine
