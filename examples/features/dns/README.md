@@ -26,23 +26,23 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-3. Create alpine deployment and set `nodeSelector` to the first node:
+3. Create dnsutils deployment and set `nodeSelector` to the first node:
 ```bash
-cat > alpine.yaml <<EOF
+cat > dnsutils.yaml <<EOF
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: alpine
+  name: dnsutils
   annotations:
     networkservicemesh.io: kernel://my-coredns-service/nsm-1
   labels:
-    app: alpine
+    app: dnsutils
     "spiffe.io/spiffe-id": "true"
 spec:
   containers:
-  - name: alpine
-    image: alpine
+  - name: dnsutils
+    image: gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
@@ -118,7 +118,7 @@ bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
 
 resources:
-- alpine.yaml
+- dnsutils.yaml
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2c1f246f3248eef85b6c5e4e40dae74eaad20571/examples/features/dns/coredns-config-map.yaml
 
 patchesStrategicMerge:
@@ -133,7 +133,7 @@ kubectl apply -k .
 
 7. Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod dnsutils -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
@@ -141,28 +141,23 @@ kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMES
 
 8. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=dnsutils -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-9. Install `nslookup` to alpine:
+9. Ping from dnsutils to NSE by domain name:
 ```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- sh -c "apk update && apk add bind-tools"
+kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- nslookup -norec my.coredns.service
+```
+```bash
+kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- ping -c 4 my.coredns.service
 ```
 
-10. Ping from alpine to NSE by domain name:
+10. Validate that default DNS server is working:
 ```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef -norec my.coredns.service
-```
-```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- ping -c 4 my.coredns.service
-```
-
-11. Validate that default DNS server is working:
-```bash
-kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef google.com
+kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- nslookup kubernetes.default
 ```
 
 ## Cleanup
