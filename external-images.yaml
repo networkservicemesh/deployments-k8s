@@ -12,3 +12,4 @@ images:
   - quay.io/metallb/controller:v0.10.2
   - docker.io/library/alpine:latest
   - docker.io/frolvlad/alpine-bash:latest
+  - gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
