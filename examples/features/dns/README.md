@@ -149,7 +149,7 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .it
 
 9. Ping from dnsutils to NSE by domain name:
 ```bash
-kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- nslookup -norec my.coredns.service
+kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- nslookup -norec -nodef my.coredns.service
 ```
 ```bash
 kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- ping -c 4 my.coredns.service
