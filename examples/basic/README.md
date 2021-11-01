@@ -29,9 +29,12 @@ kubectl create ns nsm-system
 ```
 
 2. Apply NSM resources for basic tests:
-
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+if [[ "${CALICO}" == "on" ]]; then # calico
+  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic/calico?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+else
+  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic/base?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+fi
 ```
 
 ## Cleanup

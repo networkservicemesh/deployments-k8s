@@ -34,9 +34,13 @@ For the `worker` node:
 kubectl create ns nsm-system
 ```
 
-Apply NSM resources for basic tests:
+2. Apply NSM resources for SR-IOV tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+if [[ "${CALICO}" == on ]]; then # calico
+  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov/calico?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+else
+  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov/base?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+fi
 ```
 
 ## Cleanup

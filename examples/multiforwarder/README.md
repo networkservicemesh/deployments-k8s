@@ -39,9 +39,13 @@ For the `worker` node:
 kubectl create ns nsm-system
 ```
 
-Apply NSM resources for basic tests:
+2. Apply NSM resources for multiforwarder tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+if [[ "${CALICO}" == "on" ]]; then # calico
+  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder/calico?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+else
+  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder/base?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+fi
 ```
 
 ## Cleanup
