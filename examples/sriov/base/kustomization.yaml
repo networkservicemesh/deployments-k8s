@@ -5,9 +5,9 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-  - ../../apps/nsmgr
-  - ../../apps/forwarder-vpp
-  - ../../apps/registry-k8s
+  - ../../../apps/nsmgr
+  - ../../../apps/forwarder-vpp
+  - ../../../apps/registry-k8s
 
 patchesStrategicMerge:
-  - forwarder-vpp.yaml
+  - sriov-patch.yaml
