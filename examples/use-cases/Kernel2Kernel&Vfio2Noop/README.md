@@ -6,7 +6,7 @@ This example shows that local kernel connection and VFIO connection can be setup
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fbc6ad46f4cf21db6a54c3782a853675902c8790/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f8d197290e199f651768f61cf9991cd30c2cb4d4/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -25,10 +25,10 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=fbc6ad46f4cf21db6a54c3782a853675902c8790
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=fbc6ad46f4cf21db6a54c3782a853675902c8790
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=fbc6ad46f4cf21db6a54c3782a853675902c8790
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=fbc6ad46f4cf21db6a54c3782a853675902c8790
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=f8d197290e199f651768f61cf9991cd30c2cb4d4
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=f8d197290e199f651768f61cf9991cd30c2cb4d4
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=f8d197290e199f651768f61cf9991cd30c2cb4d4
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=f8d197290e199f651768f61cf9991cd30c2cb4d4
 
 patchesStrategicMerge:
 - patch-nsc.yaml
