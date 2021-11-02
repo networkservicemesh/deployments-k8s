@@ -12,6 +12,26 @@
 - [Kernel to Kernel Connection & VFIO Connection](../use-cases/Kernel2Kernel&Vfio2Noop)
 - [Kernel to VXLAN to Kernel Connection & VFIO Connection](../use-cases/Kernel2Vxlan2Kernel&Vfio2Noop)
 
+## SR-IOV config
+
+These tests require [SR-IOV config](../../doc/SRIOV_config.md) created on both `master` and `worker` nodes and located
+under `/var/lib/networkservicemesh/sriov.config`.
+
+Required service domains and capabilities for the `master` node are:
+```yaml
+    capabilities:
+      - 10G
+    serviceDomains:
+      - worker.domain
+```
+For the `worker` node:
+```yaml
+    capabilities:
+      - 10G
+    serviceDomains:
+      - master.domain
+```
+
 ## Run
 
 1. Create ns for deployments:

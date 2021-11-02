@@ -11,6 +11,26 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
 - [SmartVF to SmartVF Connection](../use-cases/SmartVF2SmartVF)
 
+## SR-IOV config
+
+These tests require [SR-IOV config](../../doc/SRIOV_config.md) created on both `master` and `worker` nodes and located
+under `/var/lib/networkservicemesh/smartnic.config`.
+
+Required service domains and capabilities for the `master` node are:
+```yaml
+    capabilities:
+      - 100G
+    serviceDomains:
+      - worker.domain
+```
+For the `worker` node:
+```yaml
+    capabilities:
+      - 100G
+    serviceDomains:
+      - master.domain
+```
+
 ## Run
 
 1. Create ns for deployments:
