@@ -58,7 +58,7 @@ spec:
             - name: NSM_REQUEST_TIMEOUT
               value: 45s
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
+              value: kernel://icmp-responder-ip/nsm-1
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -79,6 +79,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/30
+            - name: NSM_PAYLOAD
+              value: IP
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-ip
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
