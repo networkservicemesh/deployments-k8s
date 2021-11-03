@@ -17,7 +17,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6c85cfc8faff0be9f45a98c3306de3f9fa699878/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e998c0d1dbd4ca2d0a4fb6f3b14ed2ff7a0c0603/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -115,11 +115,11 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=6c85cfc8faff0be9f45a98c3306de3f9fa699878
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=e998c0d1dbd4ca2d0a4fb6f3b14ed2ff7a0c0603
 
 resources:
 - dnsutils.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6c85cfc8faff0be9f45a98c3306de3f9fa699878/examples/features/dns/coredns-config-map.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e998c0d1dbd4ca2d0a4fb6f3b14ed2ff7a0c0603/examples/features/dns/coredns-config-map.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
