@@ -16,7 +16,7 @@ spec:
         "spiffe.io/spiffe-id": "true"
     spec:
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:98b2dda
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:582eb36
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
