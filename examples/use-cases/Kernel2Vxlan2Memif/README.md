@@ -33,28 +33,37 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
 
+resources:
+- patch-alpine.yaml
+
 patchesStrategicMerge:
-- patch-client-app.yaml
 - patch-nse.yaml
 EOF
 ```
 
 Create a client patch:
 ```bash
-cat > patch-client-app.yaml <<EOF
+cat > patch-alpine.yaml <<EOF
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: client-app
+  name: alpine
+  labels:
+    app: alpine    
+  annotations:
+    networkservicemesh.io: kernel://icmp-responder/nsm-1
 spec:
-  template:
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[0]}
+  containers:
+  - name: alpine
+    image: alpine
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+  nodeSelector:
+    kubernetes.io/hostname: ${NODES[0]}
 EOF
 ```
 
@@ -86,7 +95,7 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=client-app -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESPACE}
@@ -94,7 +103,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESP
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=client-app -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')

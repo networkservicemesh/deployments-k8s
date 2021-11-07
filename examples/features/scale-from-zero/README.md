@@ -34,21 +34,32 @@ if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node f
 
 3. Create a client patch:
 ```bash
-cat > patch-client-app.yaml <<EOF
+cat > patch-alpine.yaml <<EOF
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-app
+  name: alpine
+  labels:
+    app: alpine
 spec:
+  selector:
+    matchLabels:
+      app: alpine
   template:
     metadata:
+      labels:
+        app: alpine
       annotations:
         networkservicemesh.io: kernel://autoscale-icmp-responder/nsm-1
     spec:
       nodeName: $NSC_NODE
       containers:
         - name: alpine
+          image: alpine
+          imagePullPolicy: IfNotPresent
+          stdin: true
+          tty: true
           env:
             - name: NSM_REQUEST_TIMEOUT
               value: 30s
@@ -102,10 +113,11 @@ namespace: $NAMESPACE
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
-- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
+
+resources:
+- patch-alpine.yaml
 
 patchesStrategicMerge:
-- patch-client-app.yaml
 - patch-supplier.yaml
 
 configMapGenerator:
@@ -130,7 +142,7 @@ kubectl apply -k .
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n $NAMESPACE --for=condition=ready --timeout=5m pod -l app=client-app
+kubectl wait -n $NAMESPACE --for=condition=ready --timeout=5m pod -l app=alpine
 ```
 ```bash
 kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
@@ -138,7 +150,7 @@ kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icm
 
 9. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=client-app)
+NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=alpine)
 NSE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
@@ -160,7 +172,7 @@ if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; fals
 
 12. Remove NSC:
 ```bash
-kubectl scale -n $NAMESPACE deployment client-app --replicas=0
+kubectl scale -n $NAMESPACE deployment alpine --replicas=0
 ```
 
 13. Wait for the NSE pod to be deleted:

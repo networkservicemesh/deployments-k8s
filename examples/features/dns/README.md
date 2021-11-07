@@ -28,20 +28,25 @@ NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taint
 
 3. Create client deployment and set `nodeSelector` to the first node:
 ```bash
-cat > patch-client-app.yaml <<EOF
+cat > patch-alpine.yaml <<EOF
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: client-app
-spec:
-  template:
-    metadata:
-      annotations:
+  name: alpine
+  labels:
+    app: alpine
+  annotations:
         networkservicemesh.io: kernel://my-coredns-service/nsm-1
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[0]}
+spec:
+  containers:
+  - name: alpine
+    image: alpine
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+  nodeSelector:
+    kubernetes.io/hostname: ${NODES[0]}
 EOF
 ```
 
@@ -108,26 +113,25 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/client-app?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=2c1f246f3248eef85b6c5e4e40dae74eaad20571
 
 resources:
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2c1f246f3248eef85b6c5e4e40dae74eaad20571/examples/features/dns/coredns-config-map.yaml
+- patch-alpine.yaml
 
 patchesStrategicMerge:
-- patch-client-app.yaml
 - patch-nse.yaml
 EOF
 ```
 
-6. Deploy the client-app and nse
+6. Deploy the alpine and nse
 ```bash
 kubectl apply -k .
 ```
 
 7. Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=client-app -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
@@ -135,7 +139,7 @@ kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMES
 
 8. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=client-app -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -146,7 +150,7 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .it
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- sh -c "apk update && apk add bind-tools"
 ```
 
-10. Ping from client-app to NSE by domain name:
+10. Ping from alpine to NSE by domain name:
 ```bash
 kubectl exec ${NSC} -c alpine -n ${NAMESPACE} -- nslookup -nodef -norec my.coredns.service
 ```
