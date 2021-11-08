@@ -42,4 +42,4 @@ spec:
             - name: NSM_CONTAINER_IMAGES
               value: ghcr.io/networkservicemesh/ci/cmd-nsc:6ba3280
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:d76e2e6
+              value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:7d78c91
