@@ -9,7 +9,7 @@ NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ce1a2edecddfd82567f086e13161f1eb6c62deee/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e55f765a1894e03fec63339690cdb032dc8a015b/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -28,8 +28,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ce1a2edecddfd82567f086e13161f1eb6c62deee
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ce1a2edecddfd82567f086e13161f1eb6c62deee
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=e55f765a1894e03fec63339690cdb032dc8a015b
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=e55f765a1894e03fec63339690cdb032dc8a015b
 
 patchesStrategicMerge:
 - patch-nsc.yaml
