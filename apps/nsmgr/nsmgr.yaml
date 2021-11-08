@@ -52,7 +52,7 @@ spec:
               readOnly: true
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
-            - name: exclide-prefixes-volume
+            - name: exclude-prefixes-volume
               mountPath: /var/lib/networkservicemesh/config/
           resources:
             requests:
@@ -73,7 +73,7 @@ spec:
             - name: NSM_LOG_LEVEL
               value: TRACE
           volumeMounts:
-            - name: exclide-prefixes-volume
+            - name: exclude-prefixes-volume
               mountPath: /var/lib/networkservicemesh/config/
           resources:
             limits:
@@ -88,5 +88,5 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
-        - name: exclide-prefixes-volume
+        - name: exclude-prefixes-volume
           emptyDir: {}

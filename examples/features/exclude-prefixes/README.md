@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/62cd2a41268e0d9e87422e9608a9afffc8745495/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9b6509e1285857935f3c9f72155c105bb02f097c/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -31,8 +31,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=62cd2a41268e0d9e87422e9608a9afffc8745495
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=62cd2a41268e0d9e87422e9608a9afffc8745495
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9b6509e1285857935f3c9f72155c105bb02f097c
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9b6509e1285857935f3c9f72155c105bb02f097c
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -82,7 +82,7 @@ spec:
 EOF
 ```
 
-asdfasdf
+Create config map with excluded prefixes
 ```bash
 kubectl apply -f exclude-prefixes-config-map.yaml
 ```
