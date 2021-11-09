@@ -16,7 +16,7 @@ spec:
         "spiffe.io/spiffe-id": "true"
     spec:
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:010069f
+        - image: ghcr.io/networkservicemesh/ci/cmd-registry-proxy-dns:e6f7417
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
