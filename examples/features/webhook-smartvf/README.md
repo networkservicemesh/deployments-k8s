@@ -18,7 +18,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9948922016185ac53315d0f847b231ae8db14ac7/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1089cd64cd1c7e415ae7f92013a55bbfdfd8ea55/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -36,8 +36,8 @@ kind: Pod
 metadata:
   name: postgres-cl
   annotations:
-    networkservicemesh.io: kernel://my-postgres-service/nsm-1?sriovToken=<add SmartVF interface pool name>
-    # e.g.: networkservicemesh.io: kernel://my-postgres-service/nsm-1?sriovToken=worker.domain/100G
+    # Add in the sriovToken label your own SmartVF interface pool
+    networkservicemesh.io: kernel://my-postgres-service/nsm-1?sriovToken=worker.domain/100G
   labels:
     app: postgres-cl
     "spiffe.io/spiffe-id": "true"
@@ -81,16 +81,16 @@ spec:
         - name: nse
           env:
             - name: NSM_LABELS
-              <Add SmartVF interface pool serviceDomain>
-              # e.g.: value: serviceDomain:worker.domain
+              # Add your own serviceDomain
+              value: serviceDomain:worker.domain
             - name: NSM_SERVICE_NAMES
               value: my-postgres-service
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
           resources:
             limits:
-              <SmartVF interface pool name and amount>
-              # e.g.: worker.domain/100G: 1
+              # Add your own SmartVF interface pool
+              worker.domain/100G: 1
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
@@ -106,7 +106,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9948922016185ac53315d0f847b231ae8db14ac7
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=1089cd64cd1c7e415ae7f92013a55bbfdfd8ea55
 
 resources:
 - postgres-cl.yaml
