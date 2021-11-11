@@ -130,12 +130,12 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
+kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup

@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7a82fa91df7819ebcec16dbbf7eb6cb88770a648/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7113942326f9001fa67b7a9effdf38d4eba2dbdd/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7a82fa91df7819ebcec16dbbf7eb6cb88770a648
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7a82fa91df7819ebcec16dbbf7eb6cb88770a648
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7113942326f9001fa67b7a9effdf38d4eba2dbdd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7113942326f9001fa67b7a9effdf38d4eba2dbdd
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -58,7 +58,7 @@ spec:
             - name: NSM_REQUEST_TIMEOUT
               value: 45s
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
+              value: kernel://icmp-responder-ip/nsm-1
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -80,6 +80,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/30
+            - name: NSM_PAYLOAD
+              value: IP
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-ip
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF

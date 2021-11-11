@@ -1,6 +1,6 @@
-# Remote NSMgr restart
+# Test remote Forwarder death
 
-This example shows that NSM keeps working after the remote NSMgr restart.
+This example shows that NSM keeps working after the remote Forwarder death.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 Forwarders are using the `vxlan` mechanism to connect with each other.
@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7a82fa91df7819ebcec16dbbf7eb6cb88770a648/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7113942326f9001fa67b7a9effdf38d4eba2dbdd/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7a82fa91df7819ebcec16dbbf7eb6cb88770a648
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7a82fa91df7819ebcec16dbbf7eb6cb88770a648
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7113942326f9001fa67b7a9effdf38d4eba2dbdd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7113942326f9001fa67b7a9effdf38d4eba2dbdd
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -58,11 +58,10 @@ spec:
             - name: NSM_REQUEST_TIMEOUT
               value: 45s
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
+              value: kernel://icmp-responder-ip/nsm-1
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
-
 ```
 Create NSE patch:
 ```bash
@@ -80,6 +79,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/30
+            - name: NSM_PAYLOAD
+              value: IP
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-ip
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
@@ -116,17 +119,17 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Find remote NSMgr pod:
+Find remote Forwarder:
 ```bash
-NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Restart remote NSMgr and wait for it to start:
+Remove remote Forwarder and wait for a new one to start:
 ```bash
-kubectl delete pod ${NSMGR} -n nsm-system
+kubectl delete pod -n nsm-system ${FORWARDER}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system
 ```
 
 Ping from NSC to NSE:

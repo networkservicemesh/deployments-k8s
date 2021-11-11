@@ -1,6 +1,6 @@
-# Remote NSMgr restart
+# Local NSE death
 
-This example shows that NSM keeps working after the remote NSMgr restart.
+This example shows that NSM keeps working after the remote NSE death.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 Forwarders are using the `vxlan` mechanism to connect with each other.
@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7a82fa91df7819ebcec16dbbf7eb6cb88770a648/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7113942326f9001fa67b7a9effdf38d4eba2dbdd/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7a82fa91df7819ebcec16dbbf7eb6cb88770a648
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7a82fa91df7819ebcec16dbbf7eb6cb88770a648
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=7113942326f9001fa67b7a9effdf38d4eba2dbdd
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7113942326f9001fa67b7a9effdf38d4eba2dbdd
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -58,7 +58,8 @@ spec:
             - name: NSM_REQUEST_TIMEOUT
               value: 45s
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
+              value: kernel://icmp-responder-ip/nsm-1
+
       nodeSelector:
         kubernetes.io/hostname: ${NODES[0]}
 EOF
@@ -79,7 +80,11 @@ spec:
         - name: nse
           env:
             - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/30
+              value: 172.16.1.100/31
+            - name: NSM_PAYLOAD
+              value: IP
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-ip
       nodeSelector:
         kubernetes.io/hostname: ${NODES[1]}
 EOF
@@ -116,27 +121,57 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Find remote NSMgr pod:
+Create a new NSE patch:
 ```bash
-NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+cat > patch-nse.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-kernel
+spec:
+  template:
+    metadata:
+      labels:
+        version: new
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.102/31
+            - name: NSM_PAYLOAD
+              value: IP
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-ip
+      nodeSelector:
+        kubernetes.io/hostname: ${NODES[1]}
+EOF
 ```
 
-Restart remote NSMgr and wait for it to start:
+Apply patch:
 ```bash
-kubectl delete pod ${NSMGR} -n nsm-system
-```
-```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system
+kubectl apply -k .
 ```
 
-Ping from NSC to NSE:
+Wait for new NSE to start:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -l version=new -n ${NAMESPACE}
 ```
 
-Ping from NSE to NSC:
+Find new NSE pod:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+NEW_NSE=$(kubectl get pods -l app=nse-kernel -l version=new -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+Ping from NSC to new NSE:
+```bash
+kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+```
+
+Ping from new NSE to NSC:
+```bash
+kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup
