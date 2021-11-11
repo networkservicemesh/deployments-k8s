@@ -14,15 +14,22 @@ Memory example contains setup and tear down logic with default NSM infrastructur
 
 ## Run
 
-Create ns for deployments:
+1. Create ns for deployments:
 ```bash
 kubectl create ns nsm-system
 ```
 
-Apply NSM resources for basic tests:
+2. Apply NSM resources for basic tests:
 
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
+```
+
+3. Wait for admission-webhook-k8s:
+
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
 ## Cleanup

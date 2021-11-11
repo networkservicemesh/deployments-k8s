@@ -27,37 +27,38 @@ kind: Kustomization
 
 namespace: ${NAMESPACE}
 
+resources: 
+- client.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5012a8aafd293534e2a9d98903f6d339ef44ceab
 
 patchesStrategicMerge:
-- patch-nsc.yaml
 - patch-nse.yaml
 EOF
 ```
 
-Create NSC patch:
+Create Client:
 ```bash
-cat > patch-nsc.yaml <<EOF
+cat > client.yaml <<EOF
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: nsc-kernel
+  name: alpine
+  labels:
+    app: alpine    
+  annotations:
+    networkservicemesh.io: kernel://icmp-responder-ip/nsm-1
 spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder-ip/nsm-1
-
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[0]}
+  containers:
+  - name: alpine
+    image: alpine
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+  nodeSelector:
+    kubernetes.io/hostname: ${NODES[0]}
 EOF
-
 ```
 Create NSE patch:
 ```bash
@@ -91,15 +92,15 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
