@@ -18,7 +18,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:9319b1a
+        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:19e2612
           imagePullPolicy: IfNotPresent
           name: forwarder-vpp
           securityContext:
