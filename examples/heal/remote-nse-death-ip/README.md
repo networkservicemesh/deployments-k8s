@@ -55,8 +55,6 @@ spec:
       containers:
         - name: nsc
           env:
-            - name: NSM_REQUEST_TIMEOUT
-              value: 45s
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder-ip/nsm-1
 
