@@ -22,14 +22,12 @@ spec:
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: NSE_NAME
+            - name: NSM_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
               value: TRACE
-            - name: NSE_CONNECT_TO
-              value: unix:///var/lib/networkservicemesh/nsm.io.sock
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
