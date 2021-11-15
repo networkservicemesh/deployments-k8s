@@ -69,15 +69,15 @@ spec:
       containers:
         - name: nse-supplier
           env:
-            - name: NSE_SERVICE_NAME
+            - name: NSM_SERVICE_NAME
               value: autoscale-icmp-responder
-            - name: NSE_LABELS
+            - name: NSM_LABELS
               value: app:icmp-responder-supplier
-            - name: NSE_NAMESPACE
+            - name: NSM_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: NSE_POD_DESCRIPTION_FILE
+            - name: NSM_POD_DESCRIPTION_FILE
               value: /run/supplier/pod-template.yaml
           volumeMounts:
             - name: pod-file

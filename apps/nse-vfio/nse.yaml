@@ -36,15 +36,13 @@ spec:
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: NSE_NAME
+            - name: NSM_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
               value: TRACE
-            - name: NSE_CONNECT_TO
-              value: unix:///var/lib/networkservicemesh/nsm.io.sock
-            - name: NSE_SERVICES
+            - name: NSM_SERVICES
               value: "pingpong@worker.domain: { addr: 0a:55:44:33:22:11 }"
           volumeMounts:
             - name: spire-agent-socket
