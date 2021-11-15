@@ -8,11 +8,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: nse-firewall-vpp
+      app: passthrough-2
   template:
     metadata:
       labels:
-        app: nse-firewall-vpp
+        app: passthrough-2
         "spiffe.io/spiffe-id": "true"
     spec:
       containers:
@@ -23,7 +23,9 @@ spec:
             - name: NSM_SERVICE_NAME
               value: nse-composition
             - name: NSM_LABELS
-              value: app:passthrough-2
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_NAME
