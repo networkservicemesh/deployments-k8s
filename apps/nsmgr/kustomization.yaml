@@ -4,3 +4,6 @@ kind: Kustomization
 
 resources:
 - nsmgr.yaml
+- binding.yaml
+- sa.yaml
+- role.yaml

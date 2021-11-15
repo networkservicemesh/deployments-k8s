@@ -1,0 +1,12 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nsmgr-binding-role
+#  labels:
+#    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+#    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["patch", "get", "list", "watch"]

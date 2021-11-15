@@ -15,6 +15,7 @@ spec:
         app: nsmgr
         "spiffe.io/spiffe-id": "true"
     spec:
+      serviceAccount: nsmgr-sa
       containers:
         - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:bb0fe65
           imagePullPolicy: IfNotPresent
@@ -51,6 +52,8 @@ spec:
               readOnly: true
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
+            - name: exclude-prefixes-volume
+              mountPath: /var/lib/networkservicemesh/config/
           resources:
             requests:
               cpu: 200m
@@ -63,6 +66,19 @@ spec:
           livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:a363fa9
+          imagePullPolicy: IfNotPresent
+          name: exclude-prefixes
+          env:
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+          volumeMounts:
+            - name: exclude-prefixes-volume
+              mountPath: /var/lib/networkservicemesh/config/
+          resources:
+            limits:
+              memory: 10Mi
+              cpu: 50m
       volumes:
         - name: spire-agent-socket
           hostPath:
@@ -72,3 +88,5 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
+        - name: exclude-prefixes-volume
+          emptyDir: {}
