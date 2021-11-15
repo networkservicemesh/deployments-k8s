@@ -20,8 +20,6 @@ spec:
           image: ghcr.io/networkservicemesh/ci/cmd-nsc-vpp:32bb2e1
           imagePullPolicy: IfNotPresent
           env:
-            - name: NSM_REQUEST_TIMEOUT
-              value: 1m
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_LOG_LEVEL
