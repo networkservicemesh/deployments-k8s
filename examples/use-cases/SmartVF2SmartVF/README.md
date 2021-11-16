@@ -67,16 +67,11 @@ metadata:
 spec:
   template:
     spec:
-      metadata:
-        labels:
-          serviceDomain:worker.domain
       containers:
         - name: nse
           env:
             - name: NSM_LABELS
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels
+              value: serviceDomain:worker.domain
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
           resources:

@@ -77,9 +77,6 @@ metadata:
   name: nse-kernel
 spec:
   template:
-    metadata:
-      labels:
-        app: gateway
     spec:
       containers:
         - name: nse
@@ -91,9 +88,7 @@ spec:
             - name: NSM_REGISTER_SERVICE
               value: "false"
             - name: NSM_LABELS
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels
+              value: "app:gateway"
         - name: nginx
           image: networkservicemesh/nginx
           imagePullPolicy: IfNotPresent

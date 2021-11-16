@@ -26,9 +26,7 @@ spec:
         - name: NSM_SERVICE_NAMES
           value: autoscale-icmp-responder
         - name: NSM_LABELS
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.labels
+          value: app:nse-icmp-responder
         - name: NSM_IDLE_TIMEOUT
           value: 15s
       volumeMounts:
