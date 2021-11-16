@@ -41,6 +41,11 @@ Apply NSM resources for basic tests:
 kubectl apply -k ./clusters-configuration/cluster1
 ```
 
+Wait for nsmgr-proxy-service exposing:
+```bash
+kubectl get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+```
+
 **2. Apply deployments for cluster2:**
 
 ```bash
@@ -57,6 +62,10 @@ Apply NSM resources for basic tests:
 kubectl apply -k ./clusters-configuration/cluster2
 ```
 
+Wait for nsmgr-proxy-service exposing:
+```bash
+kubectl get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+```
 
 **3. Apply deployments for cluster3:**
 
@@ -72,6 +81,11 @@ Apply NSM resources for basic tests:
 
 ```bash
 kubectl apply -k ./clusters-configuration/cluster3
+```
+
+Wait for nsmgr-proxy-service exposing:
+```bash
+kubectl get services registry -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 ## Cleanup
