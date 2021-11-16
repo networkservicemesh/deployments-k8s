@@ -5,9 +5,6 @@ metadata:
   name: nse-firewall-vpp
 spec:
   template:
-    metadata:
-      labels:
-        app: firewall
     spec:
       containers:
         - name: nse
@@ -15,6 +12,4 @@ spec:
             - name: NSM_SERVICE_NAME
               value: "nse-composition"
             - name: NSM_LABELS
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels
+              value: app:firewall
