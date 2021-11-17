@@ -6,5 +6,5 @@ metadata:
 data:
   excluded_prefixes_input.yaml: |
     prefixes:
-    - 172.16.1.101/32
-    - 172.16.1.102/32
+    - 172.16.1.105/32
+    - 172.16.1.106/32
