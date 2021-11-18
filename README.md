@@ -14,7 +14,6 @@ This repository provides kubernetes yaml deployments and markdown examples for N
         * [IPv6 examples](./examples/features/ipv6)
         * [DNS Example](./examples/features/dns)
         * [Admisson webhook Example](./examples/features/webhook)
-        * [Admission webhook SmartVF example](./examples/features/webhook-smartvf)
         * [Topology aware scale from zero](./examples/features/scale-from-zero)
     * [SRIOV examples](./examples/sriov)
     * [OVS examples](./examples/ovs)
