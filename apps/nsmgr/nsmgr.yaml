@@ -77,8 +77,8 @@ spec:
               mountPath: /var/lib/networkservicemesh/config/
           resources:
             limits:
-              memory: 10Mi
-              cpu: 50m
+              memory: 40Mi
+              cpu: 75m
       volumes:
         - name: spire-agent-socket
           hostPath:
