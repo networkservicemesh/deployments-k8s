@@ -10,6 +10,7 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
 - [SmartVF to SmartVF Connection](../use-cases/SmartVF2SmartVF)
+- [Admission webhook SmartVF example](../features/webhook-smartvf)
 
 ## Run
 
