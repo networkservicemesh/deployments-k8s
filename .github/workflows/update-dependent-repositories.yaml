@@ -57,7 +57,7 @@ jobs:
       - name: Update ${{ matrix.repository }} locally
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          go generate ./...
+          go generate
           go mod tidy
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
