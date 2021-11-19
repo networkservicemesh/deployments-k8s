@@ -18,7 +18,7 @@ spec:
       hostPID: true
       hostNetwork: true
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-ovs:ebdd263
+        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-ovs:61f4063
           imagePullPolicy: IfNotPresent
           name: forwarder-ovs
           securityContext:
