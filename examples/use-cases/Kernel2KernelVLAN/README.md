@@ -9,12 +9,14 @@ The NS Client connections are multiplexed over single veth pair interface on the
 ## Requires
 
 Make sure that you have completed steps from [basic](../../basic) or [memory](../../memory) setup.
+There is more consumption of heap memory by NSE pod due to vpp process when host is configured with
+hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 
 ## Run
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e26f8f6acc508396a81075b45f802618a70e8e36/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5eef6b60aeccaafc4f3caac0a4b3fc2fcf32ab16/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -33,8 +35,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=e26f8f6acc508396a81075b45f802618a70e8e36
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=e26f8f6acc508396a81075b45f802618a70e8e36
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=5eef6b60aeccaafc4f3caac0a4b3fc2fcf32ab16
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=5eef6b60aeccaafc4f3caac0a4b3fc2fcf32ab16
 
 patchesStrategicMerge:
 - patch-nsc.yaml

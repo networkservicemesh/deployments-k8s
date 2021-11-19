@@ -41,11 +41,10 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 1
-              memory: 4Gi
+              cpu: 150m
             limits:
-              memory: 4Gi
-              cpu: 1
+              memory: 400Mi
+              cpu: 500m
       volumes:
         - name: spire-agent-socket
           hostPath:
