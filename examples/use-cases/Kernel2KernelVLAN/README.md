@@ -8,7 +8,7 @@ The NS Client connections are multiplexed over single veth pair interface on the
 
 ## Requires
 
-Make sure that you have completed steps from [basic](../../basic) or [memory](../../memory) setup.
+Make sure that you have completed steps from [ovs](../../ovs) setup.
 There is more consumption of heap memory by NSE pod due to vpp process when host is configured with
 hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 
