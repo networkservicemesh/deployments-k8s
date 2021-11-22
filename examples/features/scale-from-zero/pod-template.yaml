@@ -29,6 +29,8 @@ spec:
           value: app:nse-icmp-responder
         - name: NSM_IDLE_TIMEOUT
           value: 15s
+        - name: NSM_LOG_LEVEL
+          value: TRACE
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
