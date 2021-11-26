@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nsm-system
+
+bases:
+- ../../apps/nsmgr
+- ../../apps/registry-k8s
+- ../../apps/nse-remote-vlan
+- ../../apps/admission-webhook-k8s

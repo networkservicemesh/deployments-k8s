@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-remote-vlan
+  labels:
+    app: nse-remote-vlan
+spec:
+  selector:
+    matchLabels:
+      app: nse-remote-vlan
+  template:
+    metadata:
+      labels:
+        app: nse-remote-vlan
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      containers:
+        - name: nse
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-remote-vlan:c65eba3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5003
+              hostPort: 5003
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_CONNECT_TO
+              value: "registry:5002"
+            - name: NSM_SERVICES
+              value: "finance-bridge { vlan: 100; via: gw1}"
+            - name: NSM_CIDR_PREFIX
+              value: "172.10.0.0/24"
+            - name: NSM_IPV6_PREFIX
+              value: "100:200::/64"
+            - name: NSM_POINT2POINT
+              value: "False"
+            - name: NSM_REGISTER_SERVICE
+              value: "True"
+            - name: NSM_LISTEN_ON
+              value: "tcp://:5003"
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: false
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              memory: 40Mi
+              cpu: 200m
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
