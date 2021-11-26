@@ -41,7 +41,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=228b9484f69f3c7bb005460f66958770e91ce438
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=89cb1e5ab1fb8b322d9f993df898934f3b91acea
 ```
 
 ## Cleanup
