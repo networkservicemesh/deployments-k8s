@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccount: nsmgr-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:bbd9e11
+        - image: ghcr.io/networkservicemesh/cmd-nsmgr:v1.1.0
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
@@ -67,7 +67,7 @@ spec:
           livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:905f5b2
+        - image: ghcr.io/networkservicemesh/cmd-exclude-prefixes-k8s:v1.1.0
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:
