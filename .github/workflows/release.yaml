@@ -5,7 +5,7 @@ on:
     types:
       - completed
     workflows:
-      - 'ci'
+      - "ci"
 jobs:
   print-debug-info:
     name: Print debug info for Release workflow
@@ -66,6 +66,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
           repository: ${{ github.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+          ref: ${{github.event.workflow_run.head_branch}}
       - name: Install gotestmd
         run: "go get github.com/networkservicemesh/gotestmd"
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -93,7 +94,7 @@ jobs:
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          sed -r -i 's/(s\.checkout\.Version =.*)/s.checkout.Version = "tags\/${{ steps.get-tag-step.outputs.tag }}"/g' extensions/base/suite.go
+          sed -r -i 's/sha = "[a-z0-9]*"/sha = "tags\/${{ steps.get-tag-step.outputs.tag }}"/g' extensions/base/suite.go
           git add -- .
           echo Starting to update repositotry ${{ matrix.repository }}
           if ! [ -n "$(git diff --cached --exit-code)" ]; then
