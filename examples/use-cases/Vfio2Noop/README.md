@@ -24,8 +24,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=v1.1.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=v1.1.1-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=v1.1.1-rc.2
 EOF
 ```
 

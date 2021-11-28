@@ -30,8 +30,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=v1.1.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=v1.1.1-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1-rc.2
 
 patchesStrategicMerge:
 - patch-nsc.yaml

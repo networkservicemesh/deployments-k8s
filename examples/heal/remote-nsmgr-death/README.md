@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.1.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.1.1-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1-rc.2
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -126,7 +126,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.1.1-rc.2
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
@@ -170,7 +170,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1-rc.2
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -227,7 +227,7 @@ kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.1.1 -n nsm-system
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.1.1-rc.2 -n nsm-system
 ```
 
 Delete ns:

@@ -100,8 +100,8 @@ kind: Kustomization
 namespace: $NAMESPACE
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=v1.1.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=v1.1.1-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.1.1-rc.2
 
 patchesStrategicMerge:
 - patch-nsc.yaml

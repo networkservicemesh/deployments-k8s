@@ -36,9 +36,9 @@ resources:
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/v1.1.1/examples/features/nse-composition/passthrough-3.yaml
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/v1.1.1/examples/features/nse-composition/nse-composition-ns.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.1.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1
-- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=v1.1.1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.1.1-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.1.1-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=v1.1.1-rc.2
 
 patchesStrategicMerge:
 - patch-nsc.yaml
