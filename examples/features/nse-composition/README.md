@@ -60,7 +60,7 @@ metadata:
 spec:
   containers:
   - name: alpine
-    image: alpine
+    image: alpine:3.15.0
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true

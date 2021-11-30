@@ -10,6 +10,6 @@ images:
   - gcr.io/spiffe-io/wait-for-it:latest
   - gcr.io/spiffe-io/k8s-workload-registrar:1.0.2
   - quay.io/metallb/controller:v0.10.2
-  - docker.io/library/alpine:latest
+  - docker.io/library/alpine:3.15.0
   - docker.io/frolvlad/alpine-bash:latest
   - gcr.io/kubernetes-e2e-test-images/dnsutils:1.3

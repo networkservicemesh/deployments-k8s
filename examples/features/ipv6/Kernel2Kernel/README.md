@@ -52,7 +52,7 @@ metadata:
 spec:
   containers:
   - name: alpine
-    image: alpine
+    image: alpine:3.15.0
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
@@ -88,10 +88,10 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
 Find NSC and NSE pods by labels:
