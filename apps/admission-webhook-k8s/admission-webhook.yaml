@@ -45,3 +45,5 @@ spec:
               value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:7568090
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
+            - name: NSM_ENVS
+              value: NSM_LOG_LEVEL=TRACE
