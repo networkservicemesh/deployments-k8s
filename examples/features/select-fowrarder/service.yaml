@@ -1,0 +1,15 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: my-networkservice
+  namespace: select-forwarder
+spec:
+  payload: ETHERNET
+  matches:
+    - source_selector:
+      routes:
+        - destination_selector:
+          metadata:
+            labels:
+              my_forwarder_capability: true
