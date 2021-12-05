@@ -51,12 +51,12 @@ FORWARDER=$(kubectl get pods -l app=my-forwarder-vpp -n select-forwarder --templ
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n select-forwarder -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n select-forwarder -- ping -c 4 169.254.0.0
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n select-forwarder -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n select-forwarder -- ping -c 4 169.254.0.1
 ```
 
 Verify that NSMgr selected the correct forwarder:
