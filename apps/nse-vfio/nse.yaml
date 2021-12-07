@@ -32,7 +32,7 @@ spec:
               mountPath: /dev/vfio
 
         - name: sidecar
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:9ac1a9e
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:2500951
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
