@@ -7,9 +7,9 @@ metadata:
 spec:
   payload: ETHERNET
   matches:
-    - source_selector:
-      routes:
-        - destination_selector:
-          metadata:
-            labels:
-              my_forwarder_capability: true
+  - source_selector: {}
+    routes:
+    - destination_selector: {}
+    metadata:
+      labels:
+        my_forwarder_capability: true
