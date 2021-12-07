@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+  annotations:
+    networkservicemesh.io: kernel://my-networkservice/my-iface
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.15.0
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 40Mi
+      limits:
+        memory: 80Mi
+        cpu: 100m
