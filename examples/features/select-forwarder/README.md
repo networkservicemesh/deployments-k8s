@@ -6,7 +6,7 @@ Important points:
  - [client](./client.yaml) requests `my-networkservice` service.
  - [forwarder](./forwarder.yaml) registers itself with label `my_forwarder_capability: true`
  - [network service](./service.yaml) declaretes network service `my-networkservice` that contains match for label `my_forwarder_capability: true`
- - [network service-endpoint](./nse-patch.yaml) registers as an [endpoint](https://networkservicemesh.io/docs/concepts/architecture/#network-service-endpoint for service `my-networkservice`
+ - [network service-endpoint](./nse-patch.yaml) registers as an [endpoint](https://networkservicemesh.io/docs/concepts/architecture/#network-service-endpoint) for service `my-networkservice`
 
 See at example resources in [kustomization.yaml](./kustomization.yaml)
 
