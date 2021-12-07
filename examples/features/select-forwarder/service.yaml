@@ -7,8 +7,7 @@ metadata:
 spec:
   payload: ETHERNET
   matches:
-  - source_selector: {}
-    routes:
+  - routes:
     - destination_selector: {}
     metadata:
       labels:
