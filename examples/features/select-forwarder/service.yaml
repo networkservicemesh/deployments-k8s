@@ -11,4 +11,4 @@ spec:
         - destination_selector: {}
       metadata:
         labels:
-          my_forwarder_capability: true
+          my_forwarder_capability: "true"
