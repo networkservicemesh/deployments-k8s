@@ -58,7 +58,7 @@ kubectl exec ${NSE} -n select-forwarder -- ping -c 4 169.254.0.1
 
 Verify that NSMgr selected the correct forwarder:
 ```bash
-kubectl logs ${NSC} -n select-forwarder | grep "my-forwarder-vpp"
+kubectl logs ${NSC} -c cmd-nsc -n select-forwarder | grep "my-forwarder-vpp"
 ```
 
 ## Cleanup
