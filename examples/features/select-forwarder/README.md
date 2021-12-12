@@ -38,15 +38,12 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n select-forw
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n select-forwarder
 ```
 
-Find nsc, nse, forwarder pods by labels:
+Find nsc, nse pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=alpine -n select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-FORWARDER=$(kubectl get pods -l app=my-forwarder-vpp -n select-forwarder --template '{{(index .items 0).metadata.name}}')
 ```
 
 Ping from NSC to NSE:
@@ -61,7 +58,7 @@ kubectl exec ${NSE} -n select-forwarder -- ping -c 4 169.254.0.1
 
 Verify that NSMgr selected the correct forwarder:
 ```bash
-kubectl logs ${FORWARDER} -n select-forwarder | grep $NSC
+kubectl logs ${NSC} -n select-forwarder | grep "my-forwarder-vpp"
 ```
 
 ## Cleanup
