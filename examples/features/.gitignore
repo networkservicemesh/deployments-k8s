@@ -1,1 +1,4 @@
 **/kustomization.yaml
+**/nse-kernel-*.yaml
+**/nsm-service-*.yaml
+**/test-*.yaml
