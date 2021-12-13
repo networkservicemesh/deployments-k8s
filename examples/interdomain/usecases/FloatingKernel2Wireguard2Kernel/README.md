@@ -63,7 +63,7 @@ spec:
         - name: nse
           env:
           - name: NSM_NAME
-            value: "icmp-server@my.cluster3"
+            value: icmp-server@my.cluster3
           - name: NSM_CIDR_PREFIX
             value: 172.16.1.2/31
           - name: NSM_SERVICE_NAMES
