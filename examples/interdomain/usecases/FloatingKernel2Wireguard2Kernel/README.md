@@ -58,12 +58,17 @@ metadata:
   name: nse-kernel
 spec:
   template:
+    metadata:
+      annotations:
+        registration-name: icmp-server@my.cluster3
     spec:
       containers:
         - name: nse
           env:
           - name: NSM_NAME
-            value: icmp-server@my.cluster3
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.annotations['registration-name']
           - name: NSM_CIDR_PREFIX
             value: 172.16.1.2/31
           - name: NSM_SERVICE_NAMES
