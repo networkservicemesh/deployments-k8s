@@ -40,36 +40,9 @@ kind: Kustomization
 
 namespace: ${NAMESPACE1}
 
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5c91e94418078c19145f1d3354761176e8e3b716
+resources:
+- nse.yaml
 
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-          - name: NSM_NAME
-            value: icmp-server@my.cluster3
-          - name: NSM_CIDR_PREFIX
-            value: 172.16.1.2/31
-          - name: NSM_SERVICE_NAMES
-            value: my-networkservice-ip@my.cluster3
-          - name: NSM_PAYLOAD
-            value: IP
 EOF
 ```
 
