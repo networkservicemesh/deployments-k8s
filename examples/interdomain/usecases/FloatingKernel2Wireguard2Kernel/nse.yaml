@@ -23,11 +23,17 @@ spec:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_NAME
-              value: icmp-server@my.cluster3
+              value: icmp-server-ip@my.cluster3
             - name: NSM_LOG_LEVEL
               value: TRACE
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.2/31
+            - name: NSM_SERVICE_NAMES
+              value: my-networkservice-ip@my.cluster3
+            - name: NSM_PAYLOAD
+              value: IP
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
