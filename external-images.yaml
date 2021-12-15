@@ -4,8 +4,8 @@
 images:
   - docker.io/library/postgres:latest
   - docker.io/coredns/coredns:1.8.3
-  - gcr.io/spiffe-io/spire-agent:1.0.2
-  - gcr.io/spiffe-io/spire-server:1.0.2
+  - gcr.io/spiffe-io/spire-agent:1.1.0
+  - gcr.io/spiffe-io/spire-server:1.1.0
   - quay.io/metallb/speaker:v0.10.2
   - gcr.io/spiffe-io/wait-for-it:latest
   - gcr.io/spiffe-io/k8s-workload-registrar:1.0.2
