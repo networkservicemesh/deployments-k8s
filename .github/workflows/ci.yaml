@@ -48,7 +48,7 @@ jobs:
         timeout_minutes: 1
         max_attempts: 3
         retry_on: timeout
-        command: | 
+        command: |
           repoName=${GITHUB_REF#refs/heads/update/}
           images=$(grep -roh 'apps' -e "ghcr.io/networkservicemesh/ci/${repoName}.*")
           for image in $images; do
