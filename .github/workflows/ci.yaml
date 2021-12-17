@@ -40,6 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: hmarr/debug-action@v2
+      - name: test
+        run: |
+          echo ${{ github.pull_request.head.ref }}
   image-check:
     name: Check that image is pullable
     runs-on: ubuntu-latest
