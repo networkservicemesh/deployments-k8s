@@ -38,7 +38,7 @@ jobs:
   image-check:
     name: Check that image is pullable
     runs-on: ubuntu-latest
-    if: ${{  contains(github.ref_name, 'update/')  }}
+    if: ${{  contains(github.head_ref, 'update/')  }}
     steps:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
@@ -49,7 +49,7 @@ jobs:
         max_attempts: 3
         retry_on: timeout
         command: |
-          repoName=${GITHUB_REF#refs/heads/update/}
+          repoName=${GITHUB_REF#refs/heads/update/networkservicemesh/}
           images=$(grep -roh 'apps' -e "ghcr.io/networkservicemesh/ci/${repoName}.*")
           for image in $images; do
             docker pull $image
