@@ -35,6 +35,11 @@ jobs:
           ./to-local.sh
           ./to-ref.sh
           git diff --name-only --exit-code
+  print-debug-info:
+    name: Print debug info for ci workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v2
   image-check:
     name: Check that image is pullable
     runs-on: ubuntu-latest
