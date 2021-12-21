@@ -5,9 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-  - ../../apps/nsmgr
-  - ../../apps/forwarder-vpp
-  - ../../apps/registry-k8s
+  - ../base
 
 patchesStrategicMerge:
-  - forwarder-vpp.yaml
+  - calico-patch.yaml
