@@ -12,13 +12,8 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b4e64d2c715cb540ea58400cd042412e9d67d42e/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ff435d849d751c401e3cf63a3b75ec1874255200/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
-```
-
-Select node to deploy NSC and NSE:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
 Create customization file:
@@ -58,8 +53,6 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
@@ -153,8 +146,6 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
@@ -222,8 +213,6 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
