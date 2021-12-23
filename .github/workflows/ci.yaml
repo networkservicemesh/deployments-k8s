@@ -69,3 +69,16 @@ jobs:
           BRANCH_POINT=$(git merge-base ${{github.event.pull_request.base.sha}} HEAD)
           echo "branch point: $BRANCH_POINT"
           find . -type f -not -path "./.github/*" ! -name '*.yaml' ! -name '*.yml' -exec git diff "${{ github.event.pull_request.head.sha }}".."$BRANCH_POINT" --exit-code -- {} +
+
+  linkChecker:
+    runs-on: ubuntu-latest
+    container:
+      image: lycheeverse/lychee:20211216183321587853
+      env:
+        GITHUB_TOKEN: $LYCHEE_GITHUB_TOKEN
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check external links using lychee
+        run: |
+          lychee -v '**/*.md' --exclude-mail --exclude '.*?ref=.*'
