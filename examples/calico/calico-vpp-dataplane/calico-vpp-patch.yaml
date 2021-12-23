@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: calico-vpp-config
+  namespace: calico-vpp-dataplane
+data:
+  vpp_dataplane_interface: eno2
