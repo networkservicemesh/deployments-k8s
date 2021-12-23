@@ -73,7 +73,7 @@ jobs:
   linkChecker:
     runs-on: ubuntu-latest
     container:
-      image: lycheeverse/lychee:latest
+      image: lycheeverse/lychee:20211216183321587853
       env:
         GITHUB_TOKEN: $LYCHEE_GITHUB_TOKEN
     steps:
@@ -81,14 +81,4 @@ jobs:
         uses: actions/checkout@v2
       - name: Check external links using lychee
         run: |
-          REF=$(grep --include=\*.md -r . -e '?ref=' | head -1 | cut -d '=' -f2)
-          grep --include=\*.md -r . -e '?ref=' | while IFS= read -r line ; do
-              NEW_FILENAME=$(echo "$line" | cut -d ':' -f1)
-              if [ "$FILENAME" = "$NEW_FILENAME" ]; then
-                  continue
-              fi
-              FILENAME="$NEW_FILENAME"
-              sed -i -e "s/github.com\/networkservicemesh\/deployments-k8s/github.com\/networkservicemesh\/deployments-k8s\/tree\/$REF/g" "$FILENAME"
-              sed -i -e "s/?ref=$REF//g" "$FILENAME"
-          done
-          lychee -v '**/*.md' --exclude-mail
+          lychee -v '**/*.md' --exclude-mail --exclude '.*?ref=.*'
