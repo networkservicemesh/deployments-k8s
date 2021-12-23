@@ -6,4 +6,4 @@ resources:
   - https://raw.githubusercontent.com/projectcalico/vpp-dataplane/v0.17.0-calicov3.20.2/yaml/generated/calico-vpp-nohuge.yaml
 
 patchesStrategicMerge:
-  - patch.yaml
+  - calico-vpp-patch.yaml

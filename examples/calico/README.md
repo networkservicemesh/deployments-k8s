@@ -1,6 +1,6 @@
-# Basic examples
+# Calico examples
 
-Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8s`. This setup can be used to check mechanisms combination or some kind of NSM [features](../features).
+Contain calico setup for NSM.
 
 ## Requires
 
@@ -20,6 +20,13 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 - [Memif to Wireguard to Memif Connection](../use-cases/Memif2Wireguard2Memif)
 - [Kernel to Wireguard to Memif Connection](../use-cases/Kernel2Wireguard2Memif)
 - [Memif to Wireguard to Kernel Connection](../use-cases/Memif2Wireguard2Kernel)
+- [Kernel to Kernel IPv6](../features/ipv6/Kernel2Kernel)
+- [Kernel to Wireguard to Kernel IPv6](../features/ipv6/Kernel2Wireguard2Kernel)
+- [Kernel to Wireguard to Memif IPv6](../features/ipv6/Kernel2Wireguard2Memif)
+- [Memif to Memif IPv6](../features/ipv6/Memif2Memif)
+- [Memif to Wireguard to Kernel IPv6](../features/ipv6/Memif2Wireguard2Kernel)
+- [Memif to Wireguard to Memif IPv6](../features/ipv6/Memif2Wireguard2Memif)
+- [Nse composition](../features/nse-composition)
 
 ## Run
 
@@ -28,10 +35,10 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 kubectl create ns nsm-system
 ```
 
-2. Apply NSM resources for basic tests:
+2. Apply NSM resources for calico tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=bbe46ecf104280e96ae3a32d4757149e792f0d11
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/calico/?ref=bbe46ecf104280e96ae3a32d4757149e792f0d11
 ```
 
 3. Wait for admission-webhook-k8s:

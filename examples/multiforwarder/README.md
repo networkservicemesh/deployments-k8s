@@ -41,11 +41,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-if [[ "${CALICO}" == "on" ]]; then # calico
-  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder/calico?ref=bbe46ecf104280e96ae3a32d4757149e792f0d11
-else
-  kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder/base?ref=bbe46ecf104280e96ae3a32d4757149e792f0d11
-fi
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=bbe46ecf104280e96ae3a32d4757149e792f0d11
 ```
 
 ## Cleanup
