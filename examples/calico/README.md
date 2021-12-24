@@ -20,12 +20,6 @@ Contain calico setup for NSM.
 - [Memif to Wireguard to Memif Connection](../use-cases/Memif2Wireguard2Memif)
 - [Kernel to Wireguard to Memif Connection](../use-cases/Kernel2Wireguard2Memif)
 - [Memif to Wireguard to Kernel Connection](../use-cases/Memif2Wireguard2Kernel)
-- [Kernel to Kernel IPv6](../features/ipv6/Kernel2Kernel)
-- [Kernel to Wireguard to Kernel IPv6](../features/ipv6/Kernel2Wireguard2Kernel)
-- [Kernel to Wireguard to Memif IPv6](../features/ipv6/Kernel2Wireguard2Memif)
-- [Memif to Memif IPv6](../features/ipv6/Memif2Memif)
-- [Memif to Wireguard to Kernel IPv6](../features/ipv6/Memif2Wireguard2Kernel)
-- [Memif to Wireguard to Memif IPv6](../features/ipv6/Memif2Wireguard2Memif)
 - [Nse composition](../features/nse-composition)
 
 ## Run
