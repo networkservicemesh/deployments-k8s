@@ -39,14 +39,22 @@ For the `worker` node:
 kubectl create ns nsm-system
 ```
 
-Apply NSM resources for basic tests:
+2. Apply NSM resources for basic tests:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=80d3265c42c78c3f699b9f7d4ba47e014f204324
+```
+
+3. Wait for admission-webhook-k8s:
+
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
+kubectl delete mutatingwebhookconfiguration --all
 kubectl delete ns nsm-system
 ```

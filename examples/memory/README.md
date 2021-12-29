@@ -35,5 +35,6 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ## Cleanup
 
 ```bash
+kubectl delete mutatingwebhookconfiguration --all
 kubectl delete ns nsm-system
 ```
