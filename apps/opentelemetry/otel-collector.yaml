@@ -81,12 +81,12 @@ spec:
         - command:
             - "/otelcol"
             - "--config=/conf/otel-collector-config.yaml"
-          image: otel/opentelemetry-collector:0.31.0
+          image: otel/opentelemetry-collector:latest
           name: otel-collector
           ports:
             - containerPort: 14250 # Default endpoint for Jaeger gRPC receiver.
-            - containerPort: 8889  # Default endpoint for querying metrics.
-            - containerPort: 4317  # Default endpoint for OpenTelemetry receiver.
+            - containerPort: 8889 # Default endpoint for querying metrics.
+            - containerPort: 4317 # Default endpoint for OpenTelemetry receiver.
           volumeMounts:
             - name: otel-collector-config-vol
               mountPath: /conf

@@ -59,10 +59,10 @@ spec:
         - command:
             - "/otelcol"
             - "--config=/etc/otel/otel-agent-config.yaml"
-          image: otel/opentelemetry-collector:0.31.0
+          image: otel/opentelemetry-collector:latest
           name: otel-agent
           ports:
-            - containerPort: 4317  # Default endpoint for OpenTelemetry receiver.
+            - containerPort: 4317 # Default endpoint for OpenTelemetry receiver.
               hostPort: 4317
           volumeMounts:
             - name: otel-agent-config-vol
