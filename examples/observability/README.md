@@ -9,21 +9,45 @@ Basis example contains setup and tear down logic with default NSM infrastructure
 ## Run
 
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
+
 ```bash
 kubectl apply -k .
 ```
 
 Expose ports to access Jaeger and Prometheus UI:
+
 ```bash
 kubectl port-forward service/jaeger -n observability 16686:16686&
 kubectl port-forward service/prometheus -n observability 9090:9090&
 ```
 
-1. Create ns for deployments:
+Create ns for deployments:
+
 ```bash
 kubectl create ns nsm-system
 ```
-Create nsmgr patch:
+
+Create customization file:
+
+```bash
+cat > nsm-system/kustomization.yaml <<EOF
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nsm-system
+
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=b777192bd492104226e3ea75fe05d874a6a725b7
+
+patchesStrategicMerge:
+- patch-nsmgr.yaml
+- patch-forwarder.yaml
+EOF
+```
+
+Create NSMGR patch:
+
 ```bash
 cat > nsm-system/patch-nsmgr.yaml <<EOF
 ---
@@ -45,6 +69,7 @@ EOF
 ```
 
 Create forwarder patch:
+
 ```bash
 cat > nsm-system/patch-forwarder.yaml <<EOF
 ---
@@ -65,53 +90,34 @@ spec:
 EOF
 ```
 
-Create kustomization file:
-```bash
-cat > nsm-system/kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: nsm-system
-
-bases:
-- ../../memory
-
-patchesStrategicMerge:
-- patch-nsmgr.yaml
-- patch-forwarder.yaml
-EOF
-```
-
-
-
-2. Apply NSM resources for basic tests:
+Apply NSM resources for basic tests:
 
 ```bash
 kubectl apply -k nsm-system
 ```
 
-3. Wait for admission-webhook-k8s:
+Wait for admission-webhook-k8s:
 
 ```bash
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
-Run Kernel2Kernel example:
-
 Create test namespace:
+
 ```bash
 NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/774f9f7281bb12a5956d943ea7a5fdd4e040be96/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
 Select node to deploy NSC and NSE:
+
 ```bash
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
 Create customization file:
+
 ```bash
 cat > example/kustomization.yaml <<EOF
 ---
@@ -130,7 +136,8 @@ patchesStrategicMerge:
 EOF
 ```
 
-Create NSC patch:
+Create Client:
+
 ```bash
 cat > example/client.yaml <<EOF
 ---
@@ -155,6 +162,7 @@ EOF
 ```
 
 Create NSE patch:
+
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
@@ -180,39 +188,50 @@ EOF
 ```
 
 Deploy NSC and NSE:
+
 ```bash
 kubectl apply -k example
 ```
 
 Wait for applications ready:
+
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
 ```
+
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 
 Find nsc and nse pods by labels:
+
 ```bash
 NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
+
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
+
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
+
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-
 ## Cleanup
 
 ```bash
+kubectl delete ns ${NAMESPACE}
+```
+
+```bash
+kubectl delete mutatingwebhookconfiguration --all
 kubectl delete ns nsm-system
 ```
