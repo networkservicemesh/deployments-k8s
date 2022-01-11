@@ -1,0 +1,15 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nsmgr
+spec:
+  template:
+    spec:
+      containers:
+        - name: nsmgr
+          env:
+            - name: TELEMETRY
+              value: enabled
+            - name: COLLECTOR_ADDR
+              value: otel-collector.observability.svc.cluster.local:4317
