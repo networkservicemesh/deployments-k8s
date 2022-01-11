@@ -38,7 +38,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=b777192bd492104226e3ea75fe05d874a6a725b7
+- ../../memory
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
@@ -225,6 +225,20 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
+## Retrieve traces and metrics
+
+Retrieve traces from Jaeger (ugly):
+
+```bash
+curl -X GET localhost:16686/api/traces?service=nsmgr&lookback=20m&prettyPrint=true&limit=1
+```
+
+Retrieve metrics from Prometheus:
+
+``` bash
+curl -X GET localhost:9090/api/v1/query?query=up
+```
+
 ## Cleanup
 
 ```bash
@@ -234,4 +248,8 @@ kubectl delete ns ${NAMESPACE}
 ```bash
 kubectl delete mutatingwebhookconfiguration --all
 kubectl delete ns nsm-system
+```
+
+```bash
+kubectl delete ns observability
 ```
