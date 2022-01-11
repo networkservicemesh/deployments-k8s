@@ -27,10 +27,7 @@ One component:
  - [Local NSMgr + Remote NSMgr](./local-nsmgr-remote-nsmgr)
  - [Local Forwarder + Remote Forwarder](./local-forwarder-remote-forwarder)
  - [Remote NSMgr + Remote Endpoint](./remote-nsmgr-remote-endpoint)
- - [Registry + Local Endpoint](./registry-local-endpoint)
- - [Registry + Remote Forwarder](./registry-remote-forwarder)
  - [Registry + Remote NSMgr](./registry-remote-nsmgr)
 
  NSM-system:
  - [NSM system restart - local](./local-nsm-system-restart)
- - [NSM system restart - remote memif ip](./remote-nsm-system-restart-memif-ip)
