@@ -29,8 +29,8 @@ resources:
 - test-client.yaml
 - nsm-service-1.yaml
 - nsm-service-2.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/608aefdce3bb82b2b9cc898b61ac3488915d3c2e/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/608aefdce3bb82b2b9cc898b61ac3488915d3c2e/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
+- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/ee8edce890d900dd0afaebe39213dee676f72c1b/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
+- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/ee8edce890d900dd0afaebe39213dee676f72c1b/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
 EOF
 ```
 
