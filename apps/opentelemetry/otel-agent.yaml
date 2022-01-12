@@ -62,7 +62,7 @@ spec:
           image: otel/opentelemetry-collector:latest
           name: otel-agent
           ports:
-            - containerPort: 4317 # Default endpoint for OpenTelemetry receiver.
+            - containerPort: 4317  # Default endpoint for OpenTelemetry receiver.
               hostPort: 4317
           volumeMounts:
             - name: otel-agent-config-vol
@@ -70,11 +70,11 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 13133 # Health Check extension default port.
+              port: 13133  # Health Check extension default port.
           readinessProbe:
             httpGet:
               path: /
-              port: 13133 # Health Check extension default port.
+              port: 13133  # Health Check extension default port.
       volumes:
         - configMap:
             name: otel-agent-conf
