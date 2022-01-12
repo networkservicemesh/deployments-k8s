@@ -1,0 +1,3 @@
+kustomization.yaml
+nsm-service-*.yaml
+test-*.yaml
