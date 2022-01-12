@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+  annotations:
+    networkservicemesh.io: kernel://nsm-service-1/nsm-1,kernel://nsm-service-2/nsm-2
+spec:
+  containers:
+    - name: alpine
+      image: alpine:3.15.0
+      imagePullPolicy: IfNotPresent
+      stdin: true
+      tty: true
