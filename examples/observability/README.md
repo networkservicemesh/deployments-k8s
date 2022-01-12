@@ -13,10 +13,9 @@ Apply Jaeger, Prometheus and OpenTelemetry Collector:
 kubectl apply -k .
 ```
 
-Expose ports to access Jaeger and Prometheus UI:
+Wait for POD status ready:
 ```bash
-kubectl port-forward service/jaeger -n observability 16686:16686&
-kubectl port-forward service/prometheus -n observability 9090:9090&
+kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=opentelemetry
 ```
 
 Create ns for deployments:
@@ -150,14 +149,24 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
+Expose ports to access Jaeger and Prometheus UI:
+```bash
+kubectl port-forward service/jaeger -n observability 16686:16686&
+kubectl port-forward service/prometheus -n observability 9090:9090&
+```
+
 Retrieve traces from Jaeger:
 ```bash
-curl -X GET localhost:16686/api/traces?service=nsmgr&lookback=5m&prettyPrint=true&limit=1
+result=$(curl -X GET localhost:16686/api/traces?service=nsmgr&lookback=5m&limit=1)
+echo ${result}
+echo ${result} | grep -q "nsmgr"
 ```
 
 Retrieve metrics from Prometheus:
 ``` bash
-curl -X GET localhost:9090/api/v1/query?query=up
+result=$(curl -X GET localhost:9090/api/v1/query?query=up)
+echo ${result}
+echo ${result} | grep -q "up"
 ```
 
 ## Cleanup
