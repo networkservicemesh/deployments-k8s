@@ -24,8 +24,6 @@ spec:
           securityContext:
             privileged: true
           env:
-            - name: TELEMETRY
-              value: opentelemetry
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_LOG_LEVEL
@@ -42,10 +40,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NSM_HOST_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

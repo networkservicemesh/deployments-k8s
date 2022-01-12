@@ -46,8 +46,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            - name: OTEL_ENDPOINT
-              value: "otel-collector.observability:4317"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
