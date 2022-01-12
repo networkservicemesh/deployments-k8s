@@ -26,11 +26,11 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 resources:
-- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/test-client.yaml
-- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nsm-service-1.yaml
-- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nsm-service-2.yaml
-- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
-- https://raw.githubusercontent.com/d-uzlov/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/test-client.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nsm-service-1.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nsm-service-2.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d83b996d75efc0f1099b4e2e73f1b22666567241/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
 EOF
 ```
 
