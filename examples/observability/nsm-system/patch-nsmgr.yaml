@@ -10,6 +10,4 @@ spec:
         - name: nsmgr
           env:
             - name: TELEMETRY
-              value: enabled
-            - name: COLLECTOR_ADDR
-              value: otel-collector.observability.svc.cluster.local:4317
+              value: "true"

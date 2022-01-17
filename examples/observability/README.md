@@ -110,9 +110,7 @@ spec:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
             - name: TELEMETRY
-              value: opentelemetry
-            - name: COLLECTOR_ADDR
-              value: otel-collector.observability.svc.cluster.local:4317
+              value: "true"
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -149,6 +147,12 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
+Select manager:
+```bash
+NSMGR=$(kubectl get pods -l app=nsmgr -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSMGR=${NSMGR:0:11}
+```
+
 Expose ports to access Jaeger and Prometheus UI:
 ```bash
 kubectl port-forward service/jaeger -n observability 16686:16686&
@@ -157,13 +161,13 @@ kubectl port-forward service/prometheus -n observability 9090:9090&
 
 Retrieve traces from Jaeger:
 ```bash
-result=$(curl -X GET localhost:16686/api/traces?service=nsmgr&lookback=5m&limit=1)
+result=$(curl -X GET localhost:16686/api/traces?service=${NSMGR}&lookback=5m&limit=1)
 echo ${result}
 echo ${result} | grep -q "nsmgr"
 ```
 
 Retrieve metrics from Prometheus:
-``` bash
+```bash
 result=$(curl -X GET localhost:9090/api/v1/query?query=up)
 echo ${result}
 echo ${result} | grep -q "up"
@@ -173,6 +177,7 @@ echo ${result} | grep -q "up"
 
 Delete ns:
 ```bash
+rm -r example
 kubectl delete ns ${NAMESPACE}
 ```
 
