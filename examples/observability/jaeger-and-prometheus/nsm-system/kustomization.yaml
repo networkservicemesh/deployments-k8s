@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- ../../memory
+  - ../../../memory
 
 patchesStrategicMerge:
-- patch-nsmgr.yaml
-- patch-forwarder.yaml
+  - patch-nsmgr.yaml
+  - patch-forwarder.yaml

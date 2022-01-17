@@ -8,6 +8,6 @@ resources:
   - namespace.yaml
 
 bases:
-- ../../apps/jaeger
-- ../../apps/prometheus
-- ../../apps/opentelemetry
+  - ../../../apps/jaeger
+  - ../../../apps/prometheus
+  - ../../../apps/opentelemetry
