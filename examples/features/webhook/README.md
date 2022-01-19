@@ -12,7 +12,7 @@ Make sure that you have completed steps from [features](../)
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4aa4dda7cd365f563bf970b4d1016ba4a61d2c4a/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/a55797fa8053c0a06c94b8ba6c2a6912616b8b32/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -91,7 +91,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=4aa4dda7cd365f563bf970b4d1016ba4a61d2c4a
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=a55797fa8053c0a06c94b8ba6c2a6912616b8b32
 
 resources:
 - postgres-cl.yaml
