@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c76fb153d5c482468b7cbaf3d4f59713093b62d8/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b9817b1b2ec5aa2bdc4ec799cc36919c3839a915/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c76fb153d5c482468b7cbaf3d4f59713093b62d8
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c76fb153d5c482468b7cbaf3d4f59713093b62d8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b9817b1b2ec5aa2bdc4ec799cc36919c3839a915
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b9817b1b2ec5aa2bdc4ec799cc36919c3839a915
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -126,7 +126,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=c76fb153d5c482468b7cbaf3d4f59713093b62d8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=b9817b1b2ec5aa2bdc4ec799cc36919c3839a915
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
@@ -170,7 +170,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c76fb153d5c482468b7cbaf3d4f59713093b62d8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b9817b1b2ec5aa2bdc4ec799cc36919c3839a915
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -227,7 +227,7 @@ kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=c76fb153d5c482468b7cbaf3d4f59713093b62d8 -n nsm-system
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=b9817b1b2ec5aa2bdc4ec799cc36919c3839a915 -n nsm-system
 ```
 
 Delete ns:
