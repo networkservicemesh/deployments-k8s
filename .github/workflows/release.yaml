@@ -71,7 +71,6 @@ jobs:
     name: Update ${{ matrix.repository }}
     needs: create-release
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'l-----------release/') }}
     steps:
       - name: Get tag
         run: |
