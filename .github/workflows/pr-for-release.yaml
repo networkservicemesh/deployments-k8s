@@ -3,8 +3,8 @@ name: Pull Request on release/* Branch Push
 on:
   push:
     branches:
-      - "my-release/**"
-      - "!my-release/*"
+      - "release/**"
+      - "!release/*"
 jobs:
   auto-pull-request:
     name: Pull Request on release/* Branch Push
@@ -13,7 +13,7 @@ jobs:
       - name: Get tag
         run: |
           branch=${{ github.event.ref }}
-          echo '::set-output name=tag::'${branch#refs/heads/my-release/*/*/}
+          echo '::set-output name=tag::'${branch#refs/heads/release/*/*/}
         id: get-tag-step
 
       - uses: actions/checkout@v2
@@ -28,6 +28,6 @@ jobs:
       - name: pull-request-action
         uses: vsoch/pull-request-action@1.0.12
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_PREFIX: "my-release/"
-          PULL_REQUEST_BRANCH: "my-release/${{ steps.get-tag-step.outputs.tag }}"
+          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+          BRANCH_PREFIX: "release/"
+          PULL_REQUEST_BRANCH: "release/${{ steps.get-tag-step.outputs.tag }}"

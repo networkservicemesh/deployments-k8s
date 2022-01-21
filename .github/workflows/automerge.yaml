@@ -5,17 +5,17 @@ on:
     types:
       - completed
     workflows:
-      - "ci"
+      - 'ci'
 jobs:
   automerge:
     name: Automerge
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' }}
     steps:
       - name: Merge PR
         uses: ridedott/merge-me-action@master
         with:
-          GITHUB_LOGIN: "github-actions"
+          GITHUB_LOGIN: nsmbot
           ENABLED_FOR_MANUAL_CHANGES: true
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAXIMUM_RETRIES: 25
