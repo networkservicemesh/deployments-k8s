@@ -3,8 +3,8 @@ name: Pull Request on release/* Branch Push
 on:
   push:
     branches:
-      - "release/**"
-      - "!release/*"
+      - "release/**"  # We should only react to branches like "release/networkservicemesh/*/v*.*.*"
+      - "!release/*"  # and ignore branches like "release/v*.*.*". "**" - any character, "*" - any character except "/"
 jobs:
   auto-pull-request:
     name: Pull Request on release/* Branch Push
