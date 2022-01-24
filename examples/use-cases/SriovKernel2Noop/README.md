@@ -10,7 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c53a7de78cf018e9c5b2f07bddd18e3ebd4a853b/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/57485e519d589badd32c375681594783e812a10d/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -24,9 +24,9 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c53a7de78cf018e9c5b2f07bddd18e3ebd4a853b
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c53a7de78cf018e9c5b2f07bddd18e3ebd4a853b
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel-ponger?ref=c53a7de78cf018e9c5b2f07bddd18e3ebd4a853b
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=57485e519d589badd32c375681594783e812a10d
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=57485e519d589badd32c375681594783e812a10d
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel-ponger?ref=57485e519d589badd32c375681594783e812a10d
 
 
 patchesStrategicMerge:
