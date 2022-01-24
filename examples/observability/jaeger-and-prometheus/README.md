@@ -31,7 +31,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7a8b6847b09bb53df0f1fa2917e78cfe7b8df2b9/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/adc4b76e93916b53257f0183d0d2dae9bf2fc498/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -57,7 +57,7 @@ namespace: ${NAMESPACE}
 resources: 
 - client.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=7a8b6847b09bb53df0f1fa2917e78cfe7b8df2b9
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=adc4b76e93916b53257f0183d0d2dae9bf2fc498
 
 patchesStrategicMerge:
 - patch-nse.yaml
