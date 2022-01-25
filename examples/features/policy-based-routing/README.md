@@ -136,17 +136,20 @@ kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 Check policy based routing:
 ```bash
 result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.3.1 from 172.16.2.201 ipproto tcp dport 6666)
+echo ${result}
 echo ${result} | grep -E -q "172.16.3.1 from 172.16.2.201 via 172.16.2.200 dev nsm-1 table 1"
 ```
 
 ```bash
 result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.4.1 ipproto udp dport 6666)
+echo ${result}
 echo ${result} | grep -E -q "172.16.4.1 dev nsm-1 table 2 src 172.16.1.101"
 ```
 
 ```bash
 result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip -6 route get 2004::5 from 2004::3 ipproto udp dport 5555)
-echo ${result} | grep -E -q "2004::5 from 2004::3 via 2004::6 dev nsm-1 table 3 src 2004::3"
+echo ${result}
+echo ${result} | grep -E -q "via 2004::6 dev nsm-1 table 3 src 2004::3"
 ```
 
 ## Cleanup
