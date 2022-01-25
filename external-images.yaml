@@ -16,3 +16,4 @@ images:
   - jaegertracing/all-in-one:latest
   - otel/opentelemetry-collector:latest
   - prom/prometheus:latest
+  - networkstatic/iperf3:latest

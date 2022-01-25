@@ -5,11 +5,12 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- ../../../apps/forwarder-vpp
+  - ../../../apps/forwarder-ovs
 
 configMapGenerator:
   - name: device-selector
     files:
       - selector
+
 patchesStrategicMerge:
-  - patch-forwarder-vpp.yaml
+  - patch-forwarder-ovs.yaml

@@ -1,0 +1,6 @@
+---
+interfaces:
+  - name: eth1
+    matches:
+       - labelSelector:
+           - via: gw1
