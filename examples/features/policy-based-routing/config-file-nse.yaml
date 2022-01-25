@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: policies-config-file
+data:
+  config.yaml: |
+    - from: 172.16.2.201/24
+      proto: 6
+      port: 6666
+      routes:
+        - prefix: 172.16.3.0/24
+          nexthop: 172.16.2.200
+    - proto: 17
+      port: 6666
+    - from: 2004::3/120
+      proto: 17
+      port: 5555
+      routes:
+        - prefix: 2004::5/120
+          nexthop: 2004::6
