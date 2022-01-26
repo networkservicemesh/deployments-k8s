@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=94c445779749131a4c95ce80ddfdfcfbdecb809b
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=94c445779749131a4c95ce80ddfdfcfbdecb809b
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=4ca99770c6fe295e60b0cbe75a179a6086e446ad
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=4ca99770c6fe295e60b0cbe75a179a6086e446ad
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -132,7 +132,7 @@ kubectl delete ns nsm-system
 kubectl create ns nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=94c445779749131a4c95ce80ddfdfcfbdecb809b
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=4ca99770c6fe295e60b0cbe75a179a6086e446ad
 ```
 
 Ping from NSC to NSE:
