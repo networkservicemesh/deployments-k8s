@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1fbb40851c9330bbc4bb3cc6a78d8df1b54f8812/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fe9dc9e41538e8b38a4a400f32d3d667a55d7eab/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -26,11 +26,11 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1fbb40851c9330bbc4bb3cc6a78d8df1b54f8812/examples/features/exclude-prefixes-client/test-client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1fbb40851c9330bbc4bb3cc6a78d8df1b54f8812/examples/features/exclude-prefixes-client/nsm-service-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1fbb40851c9330bbc4bb3cc6a78d8df1b54f8812/examples/features/exclude-prefixes-client/nsm-service-2.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1fbb40851c9330bbc4bb3cc6a78d8df1b54f8812/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1fbb40851c9330bbc4bb3cc6a78d8df1b54f8812/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fe9dc9e41538e8b38a4a400f32d3d667a55d7eab/examples/features/exclude-prefixes-client/test-client.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fe9dc9e41538e8b38a4a400f32d3d667a55d7eab/examples/features/exclude-prefixes-client/nsm-service-1.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fe9dc9e41538e8b38a4a400f32d3d667a55d7eab/examples/features/exclude-prefixes-client/nsm-service-2.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fe9dc9e41538e8b38a4a400f32d3d667a55d7eab/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fe9dc9e41538e8b38a4a400f32d3d667a55d7eab/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
 EOF
 ```
 
