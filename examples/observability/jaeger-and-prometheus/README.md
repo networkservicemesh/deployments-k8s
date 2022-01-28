@@ -142,10 +142,10 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Select manager:
+Select forwarder:
 ```bash
-NSMGR=$(kubectl get pods -l app=nsmgr -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-NSMGR=${NSMGR:0:11}
+NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
+FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[0]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Expose ports to access Jaeger and Prometheus UI:
@@ -156,16 +156,21 @@ kubectl port-forward service/prometheus -n observability 9090:9090&
 
 Retrieve traces from Jaeger:
 ```bash
-result=$(curl -X GET localhost:16686/api/traces?service=${NSMGR}&lookback=5m&limit=1)
+result=$(curl -X GET localhost:16686/api/traces?service=${FORWARDER}&lookback=5m&limit=1)
 echo ${result}
-echo ${result} | grep -q "nsmgr"
+echo ${result} | grep -q "forwarder"
+```
+
+Replace '-' with '_' in forwarder pod name (Forwarder metric names contain only "_")
+```bash
+FORWARDER=${FORWARDER//-/_}
 ```
 
 Retrieve metrics from Prometheus:
 ```bash
-result=$(curl -X GET localhost:9090/api/v1/query?query=up)
+result=$(curl -X GET localhost:9090/api/v1/query?query="${FORWARDER}_server_tx_bytes_sum")
 echo ${result}
-echo ${result} | grep -q "up"
+echo ${result} | grep -q "forwarder"
 ```
 
 ## Cleanup
