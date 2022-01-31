@@ -125,7 +125,8 @@ echo ${result}
 
 Restart nsm-system:
 ```bash
-kubectl delete mutatingwebhookconfiguration --all
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system
 ```
 ```bash

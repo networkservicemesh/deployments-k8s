@@ -41,8 +41,10 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 ## Cleanup
 
-To free resources follow the next command:
+To free resources follow the next commands:
+
 ```bash
-kubectl delete mutatingwebhookconfiguration --all
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system
 ```

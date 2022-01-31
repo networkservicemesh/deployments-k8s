@@ -63,7 +63,8 @@ This setup can be used to check remote vlan mechanism. Contain basic setup for N
 1. To free resources follow the next command:
 
     ```bash
-    kubectl delete mutatingwebhookconfiguration --all
+    WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+    kubectl delete mutatingwebhookconfiguration ${WH}
     kubectl delete ns nsm-system
     ```
 
