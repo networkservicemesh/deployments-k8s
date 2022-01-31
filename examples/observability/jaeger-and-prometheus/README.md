@@ -188,6 +188,7 @@ kubectl delete ns nsm-system
 ```
 
 ```bash
+kubectl describe ns observability
 kubectl delete ns observability
 pkill -f "port-forward"
 ```
