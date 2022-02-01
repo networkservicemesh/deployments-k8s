@@ -118,6 +118,12 @@ echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
+Delete the previous NSE:
+```bash
+kubectl delete deployment nse-memif -n ${NAMESPACE}
+kubectl wait --for=delete --timeout=1m pod ${NSE} -n ${NAMESPACE}
+```
+
 Create a new NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
