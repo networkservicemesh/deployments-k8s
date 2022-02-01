@@ -50,7 +50,7 @@ jobs:
           retry_on: timeout
           command: |
             repoName=${GITHUB_REF#refs/heads/update/networkservicemesh/}
-            images=$(grep -roh 'apps' -e "ghcr.io/networkservicemesh/ci/${repoName}.*")
+            images=$(grep -roh 'apps' -e "ghcr.io/networkservicemesh/${repoName}.*")
             for image in $images; do
               docker pull $image
             done
