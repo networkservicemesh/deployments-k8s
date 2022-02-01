@@ -1,28 +1,30 @@
 ---
 name: Release
 on:
-  push:
-    branches:
-      - "release/*"
+  workflow_run:
+    types:
+      - completed
+    workflows:
+      - "ci"
 jobs:
   print-debug-info:
     name: Print debug info for Release workflow
     runs-on: ubuntu-latest
     steps:
       - uses: hmarr/debug-action@v2
-
   create-release:
     name: Create release
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: ${{github.event.ref}}
+          ref: refs/heads/${{github.event.workflow_run.head_branch}}
       - name: Get tag
         run: |
-          branch=${{github.event.ref}}
-          echo '::set-output name=tag::'${branch#refs/heads/release/}
+          branch=${{github.event.workflow_run.head_branch}}
+          echo '::set-output name=tag::'${branch#release/}
         id: get-tag-step
       - name: Push tag ${{ steps.get-tag-step.outputs.tag }}
         run: |
@@ -38,7 +40,6 @@ jobs:
           release_name: ${{ steps.get-tag-step.outputs.tag }}
           draft: false
           prerelease: false
-
   update-dependent-repositories:
     strategy:
       matrix:
@@ -47,6 +48,7 @@ jobs:
     name: Update ${{ matrix.repository }}
     needs: create-release
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
     steps:
       - name: Get tag
         run: |
