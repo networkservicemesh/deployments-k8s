@@ -11,31 +11,7 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
 
-  check-images:
-    name: Check images
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-
-      - name: Get tag
-        run: |
-          branch=${{ github.event.ref }}
-          echo '::set-output name=tag::'${branch#refs/heads/release/}
-        id: get-tag-step
-
-      - name: Check images
-        run: |
-          git fetch origin
-          git checkout origin/release/${{ steps.get-tag-step.outputs.tag }}
-
-          pattern="ghcr\.io\/networkservicemesh\/ci\/.*:[a-z0-9]\{7\}"
-          grep -roh 'apps' -e ${pattern} || exit 0;
-
-          exit 1;
-
   create-release:
-    needs: check-images
     name: Create release
     runs-on: ubuntu-latest
     steps:
