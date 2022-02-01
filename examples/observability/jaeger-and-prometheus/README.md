@@ -1,6 +1,8 @@
 # Jaeger and Prometheus Example
 
 This example demonstrates how to setup Open Telemetry Collector with Jaeger and Prometheus to gather telemetry data from NSM components.
+OpenTelemetry is a collection of tools, APIs, and SDKs. It is used to instrument, generate, and collect telemetry data for your application.
+https://opentelemetry.io/
 
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
@@ -88,7 +90,7 @@ spec:
 EOF
 ```
 
-Create NSE patch:
+Create NSE patch. Patch add "TELEMETRY" variable with value "true". It enables telemetry for NSE.
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
