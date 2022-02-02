@@ -19,3 +19,16 @@ jobs:
           ENABLED_FOR_MANUAL_CHANGES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAXIMUM_RETRIES: 25
+
+  delete-release-branch:
+    name: Delete Release Branch
+    runs-on: ubuntu-latest
+    needs: automerge
+    if: ${{ contains(github.event.workflow_run.head_branch, 'release/') }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Delete release branch
+        run: |
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+          git push origin --delete ${{ github.event.workflow_run.head_branch }}
