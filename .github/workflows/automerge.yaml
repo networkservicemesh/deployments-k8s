@@ -5,7 +5,7 @@ on:
     types:
       - completed
     workflows:
-      - 'ci'
+      - "ci"
 jobs:
   automerge:
     name: Automerge
@@ -27,6 +27,9 @@ jobs:
     if: ${{ contains(github.event.workflow_run.head_branch, 'release/') }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+
       - name: Delete release branch
         run: |
           git config --global user.email "nsmbot@networkservicmesh.io"
