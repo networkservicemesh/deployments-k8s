@@ -7,7 +7,6 @@ metadata:
 spec:
   payload: ETHERNET
   matches:
-    - routes:
-      metadata:
+    - metadata:
         labels:
           my_forwarder_capability: "true"
