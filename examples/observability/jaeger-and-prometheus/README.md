@@ -1,8 +1,7 @@
 # Jaeger and Prometheus Example
 
 This example demonstrates how to setup Open Telemetry Collector with Jaeger and Prometheus to gather telemetry data from NSM components.
-OpenTelemetry is a collection of tools, APIs, and SDKs. It is used to instrument, generate, and collect telemetry data for your application.
-https://opentelemetry.io/
+[OpenTelemetry](https://opentelemetry.io/) is a collection of tools, APIs, and SDKs. It is used to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.
 
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
@@ -190,7 +189,7 @@ kubectl delete ns nsm-system
 ```
 
 ```bash
-kubectl describe ns observability
+kubectl describe pods -n observability
 kubectl delete ns observability
 pkill -f "port-forward"
 ```
