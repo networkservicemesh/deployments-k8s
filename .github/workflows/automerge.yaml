@@ -12,6 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' }}
     steps:
+      - name: Find Pull Request
+        uses: juliangruber/find-pull-request-action@v1.5.0
+        id: find-pull-request
+        with:
+          branch: ${{ github.event.workflow_run.head_branch }}
+
+      - run: echo "Pull Request ${number} (${sha})"
+        env:
+          number: ${{ steps.find-pull-request.outputs.number }}
+          sha: ${{ steps.find-pull-request.outputs.head-sha }}
+
+      - name: Check PR exists
+        run: |
+          [[ -z $(echo ${{ steps.find-pull-request.outputs.number }}) ]] && exit 1 || exit 0
+
       - name: Merge PR
         uses: ridedott/merge-me-action@master
         with:
