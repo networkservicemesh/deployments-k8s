@@ -39,7 +39,8 @@ NAMESPACE=${NAMESPACE:10}
 
 Select node to deploy NSC and NSE:
 ```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+NODE0=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+NODE1=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[1])
 ```
 
 Create forlder for test:
@@ -86,7 +87,7 @@ spec:
     stdin: true
     tty: true
   nodeSelector:
-    kubernetes.io/hostname: ${NODE}
+    kubernetes.io/hostname: ${NODE0}
 EOF
 ```
 
@@ -109,7 +110,7 @@ spec:
             - name: TELEMETRY
               value: "true"
       nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+        kubernetes.io/hostname: ${NODE1}
 EOF
 ```
 
