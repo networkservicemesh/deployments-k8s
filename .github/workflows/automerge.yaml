@@ -18,17 +18,9 @@ jobs:
         with:
           branch: ${{ github.event.workflow_run.head_branch }}
 
-      - run: echo "Pull Request ${number} (${sha})"
-        env:
-          number: ${{ steps.find-pull-request.outputs.number }}
-          sha: ${{ steps.find-pull-request.outputs.head-sha }}
-
-      - name: Check PR exists
-        run: |
-          [[ -z $(echo ${{ steps.find-pull-request.outputs.number }}) ]] && exit 1 || exit 0
-
       - name: Merge PR
         uses: ridedott/merge-me-action@master
+        if: steps.find-pull-request.outputs.number
         with:
           GITHUB_LOGIN: nsmbot
           ENABLED_FOR_MANUAL_CHANGES: true
@@ -39,7 +31,7 @@ jobs:
     name: Delete Release Branch
     runs-on: ubuntu-latest
     needs: automerge
-    if: ${{ contains(github.event.workflow_run.head_branch, 'release/') }}
+    if: ${{ needs.automerge.outputs.pr-number && contains(github.event.workflow_run.head_branch, 'release/') }}
     steps:
       - uses: actions/checkout@v2
         with:
