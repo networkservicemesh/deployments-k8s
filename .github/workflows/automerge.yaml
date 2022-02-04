@@ -5,17 +5,40 @@ on:
     types:
       - completed
     workflows:
-      - 'ci'
+      - "ci"
 jobs:
   automerge:
     name: Automerge
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' }}
     steps:
+      - name: Find Pull Request
+        uses: juliangruber/find-pull-request-action@v1.5.0
+        id: find-pull-request
+        with:
+          branch: ${{ github.event.workflow_run.head_branch }}
+
       - name: Merge PR
         uses: ridedott/merge-me-action@master
+        if: steps.find-pull-request.outputs.number
         with:
           GITHUB_LOGIN: nsmbot
           ENABLED_FOR_MANUAL_CHANGES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAXIMUM_RETRIES: 25
+
+  delete-release-branch:
+    name: Delete Release Branch
+    runs-on: ubuntu-latest
+    needs: automerge
+    if: ${{ needs.automerge.outputs.pr-number && contains(github.event.workflow_run.head_branch, 'release/') }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+
+      - name: Delete release branch
+        run: |
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+          git push origin --delete ${{ github.event.workflow_run.head_branch }}
