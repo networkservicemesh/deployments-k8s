@@ -89,7 +89,7 @@ spec:
 EOF
 ```
 
-Create NSE patch. Patch add "TELEMETRY" variable with value "true". It enables telemetry for NSE. This exapmle also has patches for manager and forwarder.
+Create NSE patch. The patch adds `TELEMETRY` variable with value `true`. It enables telemetry for NSE. This example also has patches for manager and forwarder.
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
