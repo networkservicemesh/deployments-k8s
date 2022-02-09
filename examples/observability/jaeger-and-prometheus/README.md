@@ -39,8 +39,7 @@ NAMESPACE=${NAMESPACE:10}
 
 Select node to deploy NSC and NSE:
 ```bash
-NODE0=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-NODE1=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[1])
+NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
 Create forlder for test:
@@ -87,11 +86,11 @@ spec:
     stdin: true
     tty: true
   nodeSelector:
-    kubernetes.io/hostname: ${NODE0}
+    kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
-Create NSE patch. Patch add "TELEMETRY" variable with value "true". It enables telemetry for NSE.
+Create NSE patch. Patch add "TELEMETRY" variable with value "true". It enables telemetry for NSE. This exapmle also has patches for manager and forwarder.
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
@@ -110,7 +109,7 @@ spec:
             - name: TELEMETRY
               value: "true"
       nodeSelector:
-        kubernetes.io/hostname: ${NODE1}
+        kubernetes.io/hostname: ${NODE}
 EOF
 ```
 
@@ -164,10 +163,10 @@ echo ${result}
 echo ${result} | grep -q "forwarder"
 ```
 
-Replace '-' with '_' in forwarder pod name (Forwarder metric names contain only "_")
+Replace `-` with `_` in forwarder pod name (Forwarder metric names contain only `_`)
 ```bash
 FORWARDER=${FORWARDER//-/_}
-```
+``` 
 
 Retrieve metrics from Prometheus:
 ```bash
