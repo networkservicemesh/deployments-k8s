@@ -67,7 +67,7 @@ spec:
           livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:f28a209
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:284aa33
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:
