@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:625a4a1
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:8f4f952
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
