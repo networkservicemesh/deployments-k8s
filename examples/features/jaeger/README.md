@@ -84,7 +84,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l name=jae
 
 Apply Jaeger pod:
 ```bash
-kubectl apply -k jaeger
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=e972708cbac0354f48f1c7d525d0d7c680672011
 ```
 
 Wait for Jaeger pod status ready:
@@ -94,7 +94,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=jaeg
 
 Apply OpenTelemetry pod:
 ```bash
-kubectl apply -k opentelemetry
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/opentelemetry?ref=e972708cbac0354f48f1c7d525d0d7c680672011
 ```
 
 Apply Spire deployments (required for NSM system)
@@ -117,7 +117,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources:
 ```bash
-kubectl apply -k nsm-system
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=e972708cbac0354f48f1c7d525d0d7c680672011
 ```
 
 Wait for admission-webhook-k8s:
@@ -134,21 +134,6 @@ You can see traces from the NSM manager and forwarder in Jaeger UI (`http://loca
 
 ## Clean up
 
-Delete Jaeger pod:
-```bash
-kubectl delete -k jaeger
-```
-
-Delete Jaeger Operator:
-```bash
-kubectl delete -n observability -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.31.0/jaeger-operator.yaml
-```
-
-Delete observability namespace:
-```bash
-kubectl delete ns observability
-```
-
 Free NSM resources:
 ```bash
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -156,8 +141,18 @@ kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system
 ```
 
+Delete Jaeger Operator:
+```bash
+kubectl delete -n observability -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.30.0/jaeger-operator.yaml
+```
+
+Delete observability namespace:
+```bash
+kubectl delete ns observability
+```
+
 Delete Spire:
 ```bash
 kubectl delete crd spiffeids.spiffeid.spiffe.io
 kubectl delete ns spire
-```Details
+```
