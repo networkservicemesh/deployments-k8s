@@ -1,0 +1,13 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-vpp
+spec:
+  template:
+    spec:
+      containers:
+        - name: forwarder-vpp
+          env:
+            - name: TELEMETRY
+              value: "true"
