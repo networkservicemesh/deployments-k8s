@@ -41,10 +41,35 @@ jobs:
               docker pull $image
             done
 
+  update-refs:
+     name: Update References to the latest tag
+     needs: check-images
+     runs-on: ubuntu-latest
+     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.ref}}
 
+      - name: Get tag
+        run: |
+          branch=${{github.event.ref}}
+          echo '::set-output name=tag::'${branch#refs/heads/release/}
+        id: get-tag-step
+
+      - name: Update references
+        run: |
+          sed -r -i 's/(ref=[a-z0-9]*)/ref='"${{ steps.get-tag-step.outputs.tag }}"'/g' `grep 'ref=' -rl *`
+          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9]*)/deployments-k8s\/'"${{ steps.get-tag-step.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+          git add -- .
+          git commit -s -m "Update references to the latest tag"
+          git push
+ 
   create-release:
-    needs: check-images
     name: Create release
+    needs: update-refs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
