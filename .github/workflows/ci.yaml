@@ -72,6 +72,7 @@ jobs:
 
   linkChecker:
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.ref, 'release/') }}
     container:
       image: lycheeverse/lychee:20211216183321587853
       env:
