@@ -53,7 +53,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: ${{github.event.ref}}
+          ref: ${{ github.event.ref }}
 
       - name: Update references
         run: |
@@ -63,7 +63,8 @@ jobs:
           git config --global user.name "NSMBot"
           git add -- .
           git commit -s -m "Update references to the latest tag"
-          git push
+          ref=${{ github.event.ref }}
+          git push origin ${ref#refs/heads/}
 
   create-release:
     name: Create release
@@ -100,14 +101,8 @@ jobs:
     needs: create-release
     runs-on: ubuntu-latest
     steps:
-      - name: Get tag
-        run: |
-          branch=${{github.event.ref}}
-          echo '::set-output name=tag::'${branch#refs/heads/release/}
-        id: get-tag-step
       - name: Setup envs
         run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
       - name: Checkout ${{ github.repository }}
