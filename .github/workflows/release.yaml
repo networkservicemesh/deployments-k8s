@@ -34,6 +34,14 @@ jobs:
 
           exit 1;
 
+      - name: Check that images are pullable
+        run: |
+            images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:v.*..*..*")
+            for image in $images; do
+              docker pull $image
+            done
+
+
   create-release:
     needs: check-images
     name: Create release
