@@ -16,10 +16,10 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 ## Run
 
-Create ns `select-forwarder`
+Create ns `ns-select-forwarder`
 
 ```bash
-kubectl create ns select-forwarder
+kubectl create ns ns-select-forwarder
 ```
 
 Apply example resources:
@@ -31,38 +31,38 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 Wait for applications ready:
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n select-forwarder
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-select-forwarder
 ```
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n select-forwarder
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-select-forwarder
 ```
 
 Find nsc, nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n select-forwarder -- ping -c 4 169.254.0.0
+kubectl exec ${NSC} -n ns-select-forwarder -- ping -c 4 169.254.0.0
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n select-forwarder -- ping -c 4 169.254.0.1
+kubectl exec ${NSE} -n ns-select-forwarder -- ping -c 4 169.254.0.1
 ```
 
 Verify that NSMgr selected the correct forwarder:
 ```bash
-kubectl logs ${NSC} -c cmd-nsc -n select-forwarder | grep "my-forwarder-vpp"
+kubectl logs ${NSC} -c cmd-nsc -n ns-select-forwarder | grep "my-forwarder-vpp"
 ```
 
 ## Cleanup
 
 ```bash
-kubectl delete ns select-forwarder
+kubectl delete ns ns-select-forwarder
 ```
