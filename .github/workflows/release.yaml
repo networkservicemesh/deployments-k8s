@@ -82,8 +82,8 @@ jobs:
     steps:
       - name: Get tag
         run: |
-          branch=${{github.event.workflow_run.head_branch}}
-          echo '::set-output name=tag::'${branch#release/}
+          branch=${{github.event.ref}}
+          echo '::set-output name=tag::'${branch#refs/heads/release/}
         id: get-tag-step
       - name: Setup envs
         run: |
@@ -96,7 +96,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
           repository: ${{ github.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-          ref: ${{github.event.workflow_run.head_branch}}
+          ref: release/${{ steps.get-tag-step.outputs.tag }}
       - name: Install gotestmd
         run: "go get github.com/networkservicemesh/gotestmd"
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -135,5 +135,5 @@ jobs:
           git config --global user.name "NSMBot"
           echo "Update to ${{ github.repository }}@${{ steps.get-tag-step.outputs.tag }}" >> /tmp/commit-message
           git commit -s -F /tmp/commit-message
-          git checkout -b ${{ github.event.workflow_run.head_branch }}
-          git push -f origin ${{ github.event.workflow_run.head_branch }}
+          git checkout -b release/${{ steps.get-tag-step.outputs.tag }}
+          git push -f origin release/${{ steps.get-tag-step.outputs.tag }}
