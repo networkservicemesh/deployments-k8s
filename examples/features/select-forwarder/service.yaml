@@ -3,7 +3,7 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: my-networkservice
-  namespace: select-forwarder
+  namespace: ns-select-forwarder
 spec:
   payload: ETHERNET
   matches:
