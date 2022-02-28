@@ -1,0 +1,7 @@
+---
+interfaces:
+  - name: eth1
+    bridge: br0
+    matches:
+       - labelSelector:
+           - via: gw1

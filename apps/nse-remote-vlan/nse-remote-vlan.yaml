@@ -21,7 +21,6 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5003
-              hostPort: 5003
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
@@ -29,14 +28,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: NSM_CONNECT_TO
-              value: "registry:5002"
-            - name: NSM_SERVICES
-              value: "finance-bridge { vlan: 100; via: gw1}"
-            - name: NSM_CIDR_PREFIX
-              value: "172.10.0.0/24"
-            - name: NSM_IPV6_PREFIX
-              value: "100:200::/64"
             - name: NSM_POINT2POINT
               value: "False"
             - name: NSM_REGISTER_SERVICE

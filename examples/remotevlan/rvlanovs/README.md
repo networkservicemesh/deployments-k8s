@@ -1,6 +1,6 @@
-# NSM Remote Vlan VPP Forwarder
+# NSM Remote Vlan OVS Forwarder
 
-Contains setup for `forwarder-vpp` and a config map that creates the device selector file in forwarder pod for remote vlan mechanism.
+Contains setup for `forwarder-ovs` and device configuration file for remote vlan mechanism.
 
 ## Requires
 
@@ -23,7 +23,7 @@ kubectl apply -k .
 Wait forwarder to start:
 
 ```bash
-kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forwarder-vpp
+kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forwarder-ovs
 ```
 
 ## Cleanup

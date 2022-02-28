@@ -5,7 +5,10 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- ../../apps/nsmgr
-- ../../apps/registry-k8s
-- ../../apps/nse-remote-vlan
-- ../../apps/admission-webhook-k8s
+  - ../../apps/nsmgr
+  - ../../apps/registry-k8s
+  - ../../apps/nse-remote-vlan
+  - ../../apps/admission-webhook-k8s
+
+patchesStrategicMerge:
+  - patch-nse.yaml
