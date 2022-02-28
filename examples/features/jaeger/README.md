@@ -1,18 +1,49 @@
 # Enable Jaeger Tracing for NSM Components
 
-## Prerequisites
+## OpenTelemetry Collector
+NSM supports tracing via the [OpenTelemetry](https://opentelemetry.io/) Collector. Each NSM component is a "tracer" (OpenTelemetry
+Span producer) and integrates with the `opentelemetry-go` library to export traces to OpenTelemery Collector.
 
-NSM supports tracing via the [Jaeger](https://www.jaegertracing.io/docs/1.26/architecture/)
-OpenTracing export mechanism.  Each NSM component is a "tracer" (OpenTracing
-Span producer) and integrates with the `jaeger-client-go` library to export
-traces to Jaeger agents.  Therefore, NSM's tracing support requires access to
-a Jaeger installation's agent service.
+By default, tracing is disabled in all NSM components. You can enable tracing for a specific NSM component by adding the environment variable `TELEMETRY`
+with the value `true`. It can be done with a patch for this NSM component. For example, the following code is the patch for NSM forwarder:
+```yaml
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-vpp
+spec:
+  template:
+    spec:
+      containers:
+        - name: forwarder-vpp
+          env:
+            - name: TELEMETRY
+              value: "true"
+```
+
+You can configure OpenTelemetry Collector to send traces to Jaeger. To do it you should specify Jaeger service in OpenTelemetry Config:
+```yaml
+ jaeger:
+    endpoint: "simplest-collector.observability.svc.cluster.local:14250"
+    insecure: true
+```
+
+And use `jaeger` as a trace exporter:
+```yaml
+traces:
+    receivers: [otlp]
+    processors: [batch]
+    exporters: [jaeger]
+```
+
+## Jaeger
 
 Jaeger installation is not in the scope of NSM, however, the Jaeger community
 has documented an all-in-one installation that is useful as a quick start for
 Kubernetes and NSM examples.
 
-[Jaeger All-in-one Installation](https://www.jaegertracing.io/docs/1.26/operator/#quick-start---deploying-the-allinone-image)
+[Jaeger All-in-one Installation](https://www.jaegertracing.io/docs/1.30/operator/#quick-start---deploying-the-allinone-image)
 
 The following examples assume the Jaeger operator CRD was created with the
 name `simplest` as in the all-in-one document shows:
@@ -28,123 +59,100 @@ EOF
 
 **NOTE:**  Exposing the resulting `simplest-query` Kubernetes service's
 `http-query` port (e.g. via port-forwarding) gives access to the Jaeger UI--
-e.g. the following forwards `http://localhost:30686` to the Jaeger UI:
+e.g. the following forwards `http://localhost:16686` to the Jaeger UI:
 
 ```bash
-kubectl port-forward svc/simplest-query -n observability 30686:16686
+kubectl port-forward svc/simplest-query -n observability 16686:16686
 ```
 
-## Jaeger Settings for NSM Components
+## How to use
 
-NSM makes use of the [jaeger-client-go](https://github.com/jaegertracing/jaeger-client-go/tree/v2.22.1) library which defines the following env variables for configuring the tracer component:  https://github.com/jaegertracing/jaeger-client-go/blob/master/README.md#environment-variables
-
-For the Jaeger all-in-one installation named `simplest`, the NSM
-components' `jaeger-client-go` tracers need to export traces via the
-Kubernetes service named `simplest-agent` in the `observability` namespace.
-Therefore, each NSM container integrating the `jaeger-client-go` needs the
-`JAEGER_AGENT_HOST` environment variable set to `simplest-agent.observability`.
-
-A kustomization can make use of [jaeger-patch.yaml](jaeger-patch.yaml) as a
-json6902 patch for the first container in a Kubernetes `Deployment` or
-`Daemonset`.  The following `kustomization.yaml` is equivalent to the
-[examples/basic](../../basic/README.md) with Jaeger tracing configured.
-
+Create namespace observability:
 ```bash
-cat ../../examples/basic/kustomization.yaml > kustomization.yaml << EOF
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: DaemonSet
-    name: forwarder-vpp
-  path: jaeger-patch.yaml
-- target:
-    group: apps
-    version: v1
-    kind: DaemonSet
-    name: nsmgr
-  path: jaeger-patch.yaml
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: registry-k8s
-  path: jaeger-patch.yaml
-EOF
+kubectl create ns observability
 ```
 
-Results in the following kustomization.yaml:
+Apply Jaeger Operator
 ```bash
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: nsm-system
-
-bases:
-- ../../apps/nsmgr
-- ../../apps/forwarder-vpp
-- ../../apps/registry-k8s
-- ../../apps/admission-webhook-k8s
-
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: DaemonSet
-    name: forwarder-vpp
-  path: jaeger-patch.yaml
-- target:
-    group: apps
-    version: v1
-    kind: DaemonSet
-    name: nsmgr
-  path: jaeger-patch.yaml
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: registry-k8s
-  path: jaeger-patch.yaml
+kubectl create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.30.0/jaeger-operator.yaml -n observability
 ```
 
-### Enable Jaeger for NSC and NSE examples
-
-It's possible to enable Jaeger for the example NSCs and NSEs via the same
-approach in their `kustomization` setup.
-
-**NOTE:** due to a limitation in the `kustomize` implementation the patch file
-must be in the same directory as the kustomization.yaml or a sub-directory.
-
-
-Create the patch in the kustomization directory:
+Wait for Jaeger Operator pod status ready:
 ```bash
-cat > jaeger-patch.yaml <<EOF
-- op: add
-  path: /spec/template/spec/containers/0/env/-
-  value:
-    name: JAEGER_AGENT_HOST
-    value: simplest-agent.observability
-EOF
+kubectl wait -n observability --timeout=1m --for=condition=ready pod -l name=jaeger-operator
 ```
 
-Append the NSC and NSE deployment patch target rules to the example
-`kustomization` (NOTE: the following is for the "Memif2Kernel" example):
-
+Apply Jaeger pod:
 ```bash
-cat ../../use-cases/Memif2Kernel/kustomization.yaml > kustomization.yaml-Memif2Kernel-jaeger << EOF
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: nsc-kernel
-  path: jaeger-patch.yaml
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: nse-memif
-  path: jaeger-patch.yaml
-EOF
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=e972708cbac0354f48f1c7d525d0d7c680672011
+```
+
+Wait for Jaeger pod status ready:
+```bash
+kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=jaeger
+```
+
+Apply OpenTelemetry pod:
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/opentelemetry?ref=e972708cbac0354f48f1c7d525d0d7c680672011
+```
+
+Apply Spire deployments (required for NSM system)
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=e972708cbac0354f48f1c7d525d0d7c680672011
+```
+
+Wait for Spire pods status ready:
+```bash
+kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
+```
+```bash
+kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
+```
+
+Create namespace nsm-system:
+```bash
+kubectl create ns nsm-system
+```
+
+Apply NSM resources:
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=e972708cbac0354f48f1c7d525d0d7c680672011
+```
+
+Wait for admission-webhook-k8s:
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+```
+
+Expose ports to access Jaeger UI:
+```bash
+kubectl port-forward service/simplest-query -n observability 16686:16686
+```
+You can see traces from the NSM manager and forwarder in Jaeger UI (`http://localhost:16686`) after their initialization.
+
+## Clean up
+
+Free NSM resources:
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete ns nsm-system
+```
+
+Delete Jaeger Operator:
+```bash
+kubectl delete -n observability -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.30.0/jaeger-operator.yaml
+```
+
+Delete observability namespace:
+```bash
+kubectl delete ns observability
+```
+
+Delete Spire:
+```bash
+kubectl delete crd spiffeids.spiffeid.spiffe.io
+kubectl delete ns spire
 ```
