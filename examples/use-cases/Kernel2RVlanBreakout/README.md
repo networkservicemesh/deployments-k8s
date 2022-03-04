@@ -112,7 +112,7 @@ Start iperf client on tester:
     do
       IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ${NAMESPACE} -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
       kubectl exec ${nsc} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDRESS} -1
-      docker exec rvm-tester iperf3 -i0 -t 125 -c ${IP_ADDRESS}
+      docker exec rvm-tester iperf3 -i0 -t 25 -c ${IP_ADDRESS}
       if test $? -ne 0
       then
         status=1

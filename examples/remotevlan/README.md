@@ -63,6 +63,8 @@ spec:
             value: "172.10.0.0/24"
           - name: NSM_IPV6_PREFIX
             value: "100:200::/64"
+          - name: NSM_MAX_TOKEN_LIFETIME
+            value: "60s"
 EOF
 ```
 
