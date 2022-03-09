@@ -34,6 +34,8 @@ namespace: ${NAMESPACE}
 resources:
 - nse-1.yaml
 - nse-2.yaml
+- config-file-nse-1.yaml
+- config-file-nse-2.yaml
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=17c1f2fd2682aad88724a6685cd25d0da6940af2
 
@@ -59,7 +61,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red, 
+              value: kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red
             - name: NSM_AWARENESS_GROUPS
               value: "[kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red]"
       nodeSelector:
@@ -85,6 +87,14 @@ spec:
               value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
               value: icmp-responder-1
+          volumeMounts:
+            - mountPath: /etc/policy-based-routing/config.yaml
+              subPath: config.yaml
+              name: policies-config-volume-1
+      volumes:
+        - name: policies-config-volume-1
+          configMap:
+            name: policies-config-file-1
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -108,6 +118,14 @@ spec:
               value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
               value: icmp-responder-2
+          volumeMounts:
+            - mountPath: /etc/policy-based-routing/config.yaml
+              subPath: config.yaml
+              name: policies-config-volume-2
+      volumes:
+        - name: policies-config-volume-2
+          configMap:
+            name: policies-config-file-2
       nodeSelector:
         kubernetes.io/hostname: ${NODE}
 EOF
@@ -130,21 +148,23 @@ Find nsc and nse pods by labels:
 ```bash
 NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
+
+Install `iproute2` on the client:
 ```bash
-NSE1=$(kubectl get pods -l app=nse-kernel-1 -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE2=$(kubectl get pods -l app=nse-kernel-2 -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl exec ${NSC} -n ${NAMESPACE} -- apk update
+kubectl exec ${NSC} -n ${NAMESPACE} -- apk add iproute2
 ```
 
-Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.1.100 from 172.16.1.101 ipproto tcp dport 6666)
+echo ${result}
+echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-1 table 1"
 ```
 
-Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.1.100 from 172.16.1.101 ipproto tcp dport 5555)
+echo ${result}
+echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-1 table 1"
 ```
 
 ## Cleanup
