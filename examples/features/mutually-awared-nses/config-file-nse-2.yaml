@@ -10,4 +10,3 @@ data:
       port: 5555
       routes:
         - prefix: 172.16.1.100/32
-  
