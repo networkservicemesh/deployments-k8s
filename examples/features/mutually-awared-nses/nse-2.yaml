@@ -4,15 +4,15 @@ kind: Deployment
 metadata:
   name: nse-kernel-2
   labels:
-    app: nse-kernel
+    app: nse-kernel-2
 spec:
   selector:
     matchLabels:
-      app: nse-kernel
+      app: nse-kernel-2
   template:
     metadata:
       labels:
-        app: nse-kernel
+        app: nse-kernel-2
         "spiffe.io/spiffe-id": "true"
     spec:
       containers:

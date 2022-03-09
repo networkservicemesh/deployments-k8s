@@ -138,10 +138,13 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ${NAMESPACE}
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ${NAMESPACE}
 ```
 
 Find nsc and nse pods by labels:
@@ -164,7 +167,7 @@ echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-1 table 1"
 ```bash
 result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.1.100 from 172.16.1.101 ipproto tcp dport 5555)
 echo ${result}
-echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-1 table 1"
+echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-2 table 2"
 ```
 
 ## Cleanup
