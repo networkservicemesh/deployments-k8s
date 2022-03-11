@@ -14,6 +14,8 @@ jobs:
   check-images:
     name: Check images
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.get-tag-step.outputs.tag }}
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
@@ -41,33 +43,52 @@ jobs:
               docker pull $image
             done
 
+  update-refs:
+     name: Update References to the latest tag
+     needs: check-images
+     runs-on: ubuntu-latest
+     outputs:
+      tag: ${{ needs.check-images.outputs.tag }}
+     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.ref }}
+
+      - name: Update references
+        run: |
+          sed -r -i 's/(ref=[a-z0-9]*)/ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep 'ref=' -rl *`
+          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+          git add -- .
+          git commit -s -m "Update references to the latest tag"
+          ref=${{ github.event.ref }}
+          git push origin ${ref#refs/heads/}
 
   create-release:
-    needs: check-images
     name: Create release
+    needs: update-refs
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ needs.update-refs.outputs.tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           ref: ${{github.event.ref}}
-      - name: Get tag
-        run: |
-          branch=${{github.event.ref}}
-          echo '::set-output name=tag::'${branch#refs/heads/release/}
-        id: get-tag-step
-      - name: Push tag ${{ steps.get-tag-step.outputs.tag }}
+      - name: Push tag ${{ needs.update-refs.outputs.tag }}
         run: |
           git status
-          git tag ${{ steps.get-tag-step.outputs.tag }}
-          git push origin ${{ steps.get-tag-step.outputs.tag }} -f
-      - name: Create release ${{ steps.get-tag-step.outputs.tag }}
+          git tag ${{ needs.update-refs.outputs.tag }}
+          git push origin ${{ needs.update-refs.outputs.tag }} -f
+      - name: Create release ${{ needs.update-refs.outputs.tag }}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
         with:
-          tag_name: refs/tags/${{ steps.get-tag-step.outputs.tag }}
-          release_name: ${{ steps.get-tag-step.outputs.tag }}
+          tag_name: refs/tags/${{ needs.update-refs.outputs.tag }}
+          release_name: ${{ needs.update-refs.outputs.tag }}
           draft: false
           prerelease: false
 
@@ -80,11 +101,6 @@ jobs:
     needs: create-release
     runs-on: ubuntu-latest
     steps:
-      - name: Get tag
-        run: |
-          branch=${{github.event.ref}}
-          echo '::set-output name=tag::'${branch#refs/heads/release/}
-        id: get-tag-step
       - name: Setup envs
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -96,7 +112,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
           repository: ${{ github.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-          ref: release/${{ steps.get-tag-step.outputs.tag }}
+          ref: release/${{ needs.create-release.outputs.tag }}
       - name: Install gotestmd
         run: "go get github.com/networkservicemesh/gotestmd"
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -124,7 +140,7 @@ jobs:
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          sed -r -i 's/sha = "[a-z0-9]*"/sha = "tags\/${{ steps.get-tag-step.outputs.tag }}"/g' extensions/base/suite.go
+          sed -r -i 's/sha = "[a-z0-9]*"/sha = "tags\/${{ needs.create-release.outputs.tag }}"/g' extensions/base/suite.go
           git add -- .
           echo Starting to update repositotry ${{ matrix.repository }}
           if ! [ -n "$(git diff --cached --exit-code)" ]; then
@@ -133,7 +149,7 @@ jobs:
           fi
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
-          echo "Update to ${{ github.repository }}@${{ steps.get-tag-step.outputs.tag }}" >> /tmp/commit-message
+          echo "Update to ${{ github.repository }}@${{ needs.create-release.outputs.tag }}" >> /tmp/commit-message
           git commit -s -F /tmp/commit-message
-          git checkout -b release/${{ steps.get-tag-step.outputs.tag }}
-          git push -f origin release/${{ steps.get-tag-step.outputs.tag }}
+          git checkout -b release/${{ needs.create-release.outputs.tag }}
+          git push -f origin release/${{ needs.create-release.outputs.tag }}
