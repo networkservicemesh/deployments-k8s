@@ -10,7 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b13d4477ecfc6ff03695981b312d935fafbe53d4/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c72bf4504fe28dd0421acd84480c62c479f26b69/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -24,8 +24,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=b13d4477ecfc6ff03695981b312d935fafbe53d4
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=b13d4477ecfc6ff03695981b312d935fafbe53d4
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=c72bf4504fe28dd0421acd84480c62c479f26b69
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=c72bf4504fe28dd0421acd84480c62c479f26b69
 EOF
 ```
 
