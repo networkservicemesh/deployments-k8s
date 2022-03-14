@@ -16,7 +16,7 @@ hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9a01793a6723b6292156f19349c5de0101442cc9/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b7a20de7597538a8e8889a544673ae5eb37cbef9/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -35,8 +35,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9a01793a6723b6292156f19349c5de0101442cc9
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=9a01793a6723b6292156f19349c5de0101442cc9
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b7a20de7597538a8e8889a544673ae5eb37cbef9
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=b7a20de7597538a8e8889a544673ae5eb37cbef9
 
 patchesStrategicMerge:
 - patch-nsc.yaml
