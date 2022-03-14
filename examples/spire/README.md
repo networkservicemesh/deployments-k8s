@@ -4,7 +4,7 @@
 
 To apply spire deployments following the next command:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=b727985ed97edf87167eafb7b7fbfef08f39dcbe
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=c983d2f38725fad075413f00bffc46e6f08c266d
 ```
 
 Wait for PODs status ready:
