@@ -31,7 +31,7 @@ kubectl create ns nsm-system
 2. Apply NSM resources for calico tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/calico/?ref=c2fc2b1002b5d2a9bac5d9046d6ab25942d849e5
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/calico/?ref=743ebe26ef3984b4c52deddab985a826ab06d792
 ```
 
 3. Wait for admission-webhook-k8s:
