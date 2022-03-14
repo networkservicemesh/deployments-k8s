@@ -5,7 +5,7 @@ This example demonstrates how to setup Open Telemetry Collector with Jaeger and 
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus?ref=e28a9b2de4494ee487f1caae4f0aad2d759e4b26
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus?ref=5a334711633e4f27654c2badc158ead3082f045b
 ```
 
 Wait for OpenTelemetry Collector POD status ready:
@@ -20,7 +20,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/nsm-system?ref=e28a9b2de4494ee487f1caae4f0aad2d759e4b26
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/nsm-system?ref=5a334711633e4f27654c2badc158ead3082f045b
 ```
 
 Wait for admission-webhook-k8s:
@@ -31,7 +31,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e28a9b2de4494ee487f1caae4f0aad2d759e4b26/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5a334711633e4f27654c2badc158ead3082f045b/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -57,7 +57,7 @@ namespace: ${NAMESPACE}
 resources: 
 - client.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=e28a9b2de4494ee487f1caae4f0aad2d759e4b26
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5a334711633e4f27654c2badc158ead3082f045b
 
 patchesStrategicMerge:
 - patch-nse.yaml
