@@ -61,6 +61,11 @@ spec:
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
+            failureThreshold: 200
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 2
           livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
