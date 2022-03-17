@@ -2,24 +2,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-kernel-2
+  name: nse-kernel-1
   labels:
-    app: nse-kernel-2
+    app: nse-kernel-1
 spec:
   selector:
     matchLabels:
-      app: nse-kernel-2
+      app: nse-kernel-1
   template:
     metadata:
       labels:
-        app: nse-kernel-2
+        app: nse-kernel-1
         "spiffe.io/spiffe-id": "true"
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:7543651
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:29ebf1d
           imagePullPolicy: IfNotPresent
           env:
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: icmp-responder-1
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_NAME
@@ -37,6 +41,9 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
+            - name: policies-config-volume-1
+              mountPath: /etc/policy-based-routing/config.yaml
+              subPath: config.yaml
           resources:
             requests:
               cpu: 100m
@@ -44,6 +51,16 @@ spec:
             limits:
               memory: 80Mi
               cpu: 200m
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nsc-kernel
       volumes:
         - name: spire-agent-socket
           hostPath:
@@ -52,4 +69,7 @@ spec:
         - name: nsm-socket
           hostPath:
             path: /var/lib/networkservicemesh
-            type: DirectoryOrCreate
+            type: DirectoryOrCreate        
+        - name: policies-config-volume-1
+          configMap:
+            name: policies-config-file-1
