@@ -1,6 +1,7 @@
 # Jaeger and Prometheus Example
 
 This example demonstrates how to setup Open Telemetry Collector with Jaeger and Prometheus to gather telemetry data from NSM components.
+[OpenTelemetry](https://opentelemetry.io/) is a collection of tools, APIs, and SDKs. It is used to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.
 
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
@@ -88,7 +89,7 @@ spec:
 EOF
 ```
 
-Create NSE patch:
+Create NSE patch. The patch adds `TELEMETRY` variable with value `true`. It enables telemetry for NSE. This example also has patches for manager and forwarder.
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
@@ -161,10 +162,10 @@ echo ${result}
 echo ${result} | grep -q "forwarder"
 ```
 
-Replace '-' with '_' in forwarder pod name (Forwarder metric names contain only "_")
+Replace `-` with `_` in forwarder pod name (Forwarder metric names contain only `_`)
 ```bash
 FORWARDER=${FORWARDER//-/_}
-```
+``` 
 
 Retrieve metrics from Prometheus:
 ```bash
@@ -188,7 +189,7 @@ kubectl delete ns nsm-system
 ```
 
 ```bash
-kubectl describe ns observability
+kubectl describe pods -n observability
 kubectl delete ns observability
 pkill -f "port-forward"
 ```
