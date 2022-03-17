@@ -43,7 +43,7 @@ patchesStrategicMerge:
 EOF
 ```
 
-Create Client:
+Create Client that contains `iproute2`:
 ```bash
 cat > client.yaml <<EOF
 ---
@@ -58,7 +58,7 @@ metadata:
 spec:
   containers:
   - name: alpine
-    image: alpine:3.15.0
+    image: artgl/alpine_iproute2:3.15
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
@@ -115,12 +115,6 @@ NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
-Install `iproute2` on the client:
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk update
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk add iproute2
 ```
 
 Ping from NSC to NSE:
