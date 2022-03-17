@@ -15,6 +15,7 @@ spec:
         app: my-forwarder-vpp
         "spiffe.io/spiffe-id": "true"
     spec:
+      hostPID: true
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
@@ -54,6 +55,8 @@ spec:
               mountPath: /host/sys/fs/cgroup
             - name: vfio
               mountPath: /host/dev/vfio
+            - name: vpp
+              mountPath: /var/run/vpp-ext
           resources:
             requests:
               cpu: 150m
@@ -86,4 +89,8 @@ spec:
         - name: vfio
           hostPath:
             path: /dev/vfio
+            type: DirectoryOrCreate
+        - name: vpp
+          hostPath:
+            path: /var/run/vpp
             type: DirectoryOrCreate
