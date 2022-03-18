@@ -60,7 +60,7 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - nsc-kernel          
+                      - nsc-kernel
       volumes:
         - name: spire-agent-socket
           hostPath:

@@ -69,7 +69,7 @@ spec:
         - name: nsm-socket
           hostPath:
             path: /var/lib/networkservicemesh
-            type: DirectoryOrCreate        
+            type: DirectoryOrCreate
         - name: policies-config-volume-1
           configMap:
             name: policies-config-file-1
