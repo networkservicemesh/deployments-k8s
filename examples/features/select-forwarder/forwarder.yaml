@@ -56,7 +56,7 @@ spec:
             - name: vfio
               mountPath: /host/dev/vfio
             - name: vpp
-              mountPath: /var/run/vpp-ext
+              mountPath: /var/run/vpp
           resources:
             requests:
               cpu: 150m
