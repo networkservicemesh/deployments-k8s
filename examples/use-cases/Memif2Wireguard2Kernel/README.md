@@ -15,7 +15,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3604f1c21c4e3b35f7dae3970779e52911221760/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/477b32c23ef812b05cc48b2da174445ae1b94d0c/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -34,8 +34,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=3604f1c21c4e3b35f7dae3970779e52911221760
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=3604f1c21c4e3b35f7dae3970779e52911221760
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=477b32c23ef812b05cc48b2da174445ae1b94d0c
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=477b32c23ef812b05cc48b2da174445ae1b94d0c
 
 patchesStrategicMerge:
 - patch-nsc.yaml
