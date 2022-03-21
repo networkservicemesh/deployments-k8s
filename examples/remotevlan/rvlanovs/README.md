@@ -17,7 +17,7 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Deploy the forwarder:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanovs?ref=db834e0b0a7a5bce2df5cf103a58f2b4a0320eec
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanovs?ref=13cca0e6093325f1a3771eb5276986289d23fd32
 ```
 
 Wait forwarder to start:
