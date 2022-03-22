@@ -1,6 +1,6 @@
 # vL3 single cluster example
 
-🛠️ This example shows how could be configured vL3 network via NSM!
+This example shows how could be configured vL3 network via NSM.
 
 
 Diagram: 
@@ -8,7 +8,7 @@ Diagram:
 ![NSM vL3 Diagram](./diagram.png "NSM Authorize Scheme")
 
 
-**NOTE: Forwarder and NSMmgr are missed in the diagram for the simplicity!**
+**NOTE: Forwarder and NSMmgr are missed in the diagram for the simplicity**
 
 ## Requires
 
@@ -34,7 +34,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 ```bash
 nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
-[[! -z $nscs ]]
+[[ ! -z $nscs ]]
 ```
 
 4. Ping each client by each client:
@@ -54,7 +54,7 @@ done
 
 5. Ping each vl3-nse by each client. 
 
-Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be able by each client.
+Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
 
 ```bash
 for nsc in $nscs 
@@ -65,7 +65,6 @@ do
 done
 ```
 
-*Example completed! Сongratulations! 🎂️*
 
 
 ## Cleanup
