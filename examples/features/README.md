@@ -15,9 +15,6 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - [Kernel2Wireguard2Memif IPv6 example](ipv6/Kernel2Wireguard2Memif_ipv6)
 - [Memif2Wireguard2Kernel IPv6 example](ipv6/Memif2Wireguard2Kernel_ipv6)
 - [Memif2Wireguard2Memif IPv6 example](ipv6/Memif2Wireguard2Memif_ipv6)
-- Heal
-- Refresh
-- Timeout
 - [Admission webhook](./webhook)
 - [DNS](./dns)
 - [Topology aware scale from zero](./scale-from-zero)
@@ -26,3 +23,4 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - [Exclude prefixes client](./exclude-prefixes-client)
 - [Select forwarder by capability](./select-forwarder)
 - [Mutually aware NSEs](./mutually-aware-nses)
+- [vL3](./vl3)
