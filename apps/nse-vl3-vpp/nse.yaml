@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: docker pull ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:a41358f
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:a41358f
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
