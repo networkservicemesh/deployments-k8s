@@ -84,8 +84,7 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODE}
+  nodeName: ${NODE}
 EOF
 ```
 
@@ -107,8 +106,7 @@ spec:
               value: 172.16.1.100/31
             - name: TELEMETRY
               value: "true"
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 

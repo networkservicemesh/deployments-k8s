@@ -52,8 +52,7 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 
@@ -73,8 +72,7 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 

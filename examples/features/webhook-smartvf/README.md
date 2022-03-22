@@ -27,7 +27,7 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create postgres client deployment, set `nodeSelector` to the first node and use the interface pool for SmartVF in `sriovToken` annotation label:
+4. Create postgres client deployment, set `nodeName` to the first node and use the interface pool for SmartVF in `sriovToken` annotation label:
 ```bash
 cat > postgres-cl.yaml <<EOF
 ---
@@ -49,12 +49,11 @@ spec:
     env:
       - name: POSTGRES_HOST_AUTH_METHOD
         value: trust
-  nodeSelector:
-    kubernetes.io/hostname: ${NODES[0]}
+  nodeName: ${NODES[0]}
 EOF
 ```
 
-5. Add to nse-kernel the postgres container, set `nodeSelector` it to the second node and use the interface pool for SmartVF in `nse` container :
+5. Add to nse-kernel the postgres container, set `nodeName` it to the second node and use the interface pool for SmartVF in `nse` container :
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -91,8 +90,7 @@ spec:
             limits:
               # Add your own SmartVF interface pool
               worker.domain/100G: 1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
 EOF
 ```
 

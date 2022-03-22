@@ -60,8 +60,7 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODES[0]}
+  nodeName: ${NODES[0]}
 EOF
 ```
 
@@ -81,8 +80,7 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
 EOF
 ```
 

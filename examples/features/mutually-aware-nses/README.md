@@ -63,8 +63,7 @@ spec:
               value: kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red
             - name: NSM_AWARENESS_GROUPS
               value: "[kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red]"
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 
