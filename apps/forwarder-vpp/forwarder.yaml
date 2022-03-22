@@ -61,7 +61,7 @@ spec:
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
-            failureThreshold: 200
+            failureThreshold: 120
             initialDelaySeconds: 1
             periodSeconds: 1
             successThreshold: 1
@@ -69,6 +69,15 @@ spec:
           livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
+            failureThreshold: 25
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          startupProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
+            failureThreshold: 25
+            periodSeconds: 5
       volumes:
         - name: spire-agent-socket
           hostPath:
