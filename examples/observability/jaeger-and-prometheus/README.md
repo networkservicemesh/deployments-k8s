@@ -1,11 +1,12 @@
 # Jaeger and Prometheus Example
 
 This example demonstrates how to setup Open Telemetry Collector with Jaeger and Prometheus to gather telemetry data from NSM components.
+[OpenTelemetry](https://opentelemetry.io/) is a collection of tools, APIs, and SDKs. It is used to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.
 
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus?ref=c0c4f7b74ff31a07a15b4074120fbb8ab7b279b2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus?ref=41cd9995434986adcb18e4202be3c552d21485a8
 ```
 
 Wait for OpenTelemetry Collector POD status ready:
@@ -20,7 +21,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/nsm-system?ref=c0c4f7b74ff31a07a15b4074120fbb8ab7b279b2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/nsm-system?ref=41cd9995434986adcb18e4202be3c552d21485a8
 ```
 
 Wait for admission-webhook-k8s:
@@ -31,7 +32,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c0c4f7b74ff31a07a15b4074120fbb8ab7b279b2/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/41cd9995434986adcb18e4202be3c552d21485a8/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -57,7 +58,7 @@ namespace: ${NAMESPACE}
 resources: 
 - client.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c0c4f7b74ff31a07a15b4074120fbb8ab7b279b2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -88,7 +89,7 @@ spec:
 EOF
 ```
 
-Create NSE patch:
+Create NSE patch. The patch adds `TELEMETRY` variable with value `true`. It enables telemetry for NSE. This example also has patches for manager and forwarder.
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
@@ -161,10 +162,10 @@ echo ${result}
 echo ${result} | grep -q "forwarder"
 ```
 
-Replace '-' with '_' in forwarder pod name (Forwarder metric names contain only "_")
+Replace `-` with `_` in forwarder pod name (Forwarder metric names contain only `_`)
 ```bash
 FORWARDER=${FORWARDER//-/_}
-```
+``` 
 
 Retrieve metrics from Prometheus:
 ```bash
@@ -188,7 +189,7 @@ kubectl delete ns nsm-system
 ```
 
 ```bash
-kubectl describe ns observability
+kubectl describe pods -n observability
 kubectl delete ns observability
 pkill -f "port-forward"
 ```

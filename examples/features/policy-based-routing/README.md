@@ -14,7 +14,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c0c4f7b74ff31a07a15b4074120fbb8ab7b279b2/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/41cd9995434986adcb18e4202be3c552d21485a8/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -36,14 +36,14 @@ resources:
 - client.yaml
 - config-file-nse.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c0c4f7b74ff31a07a15b4074120fbb8ab7b279b2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
 
 patchesStrategicMerge:
 - patch-nse.yaml
 EOF
 ```
 
-Create Client:
+Create Client that contains `iproute2`:
 ```bash
 cat > client.yaml <<EOF
 ---
@@ -58,7 +58,7 @@ metadata:
 spec:
   containers:
   - name: alpine
-    image: alpine:3.15.0
+    image: artgl/alpine_iproute2:3.15
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
@@ -115,12 +115,6 @@ NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
-Install `iproute2` on the client:
-```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk update
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk add iproute2
 ```
 
 Ping from NSC to NSE:
