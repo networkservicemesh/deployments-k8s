@@ -50,15 +50,15 @@ cat > client.yaml <<EOF
 apiVersion: v1
 kind: Pod
 metadata:
-  name: alpine
+  name: nettools
   labels:
-    app: alpine
+    app: nettools
   annotations:
     networkservicemesh.io: kernel://icmp-responder/nsm-1
 spec:
   containers:
-  - name: alpine
-    image: artgl/alpine_iproute2:3.15
+  - name: nettools
+    image: travelping/nettools:1.10.1
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
@@ -101,7 +101,7 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ${NAMESPACE}
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
@@ -109,7 +109,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMES
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nettools -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
