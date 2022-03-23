@@ -62,8 +62,7 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODE}
+  nodeName: ${NODE}
 EOF
 ```
 
@@ -91,8 +90,7 @@ spec:
         - name: policies-config-volume
           configMap:
             name: policies-config-file
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 

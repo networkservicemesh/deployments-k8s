@@ -64,8 +64,7 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODE}
+  nodeName: ${NODE}
 EOF
 ```
 
@@ -95,8 +94,7 @@ spec:
         - name: nginx
           image: networkservicemesh/nginx
           imagePullPolicy: IfNotPresent
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 

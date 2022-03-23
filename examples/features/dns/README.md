@@ -20,7 +20,7 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-3. Create dnsutils deployment and set `nodeSelector` to the first node:
+3. Create dnsutils deployment and set `nodeName` to the first node:
 ```bash
 cat > dnsutils.yaml <<EOF
 ---
@@ -40,13 +40,12 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODES[0]}
+  nodeName: ${NODES[0]}
 EOF
 ```
 
 
-4. Add to nse-kernel the corends container and set `nodeSelector` it to the second node:
+4. Add to nse-kernel the corends container and set `nodeName` it to the second node:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -87,8 +86,7 @@ spec:
         - containerPort: 53
           name: dns-tcp
           protocol: TCP
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
       volumes:
         - name: config-volume
           configMap:

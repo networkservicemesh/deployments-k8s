@@ -56,8 +56,7 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-  nodeSelector:
-    kubernetes.io/hostname: ${NODE}
+  nodeName: ${NODE}
 EOF
 ```
 Create NSE patch:
@@ -76,8 +75,7 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 2001:db8::/116
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 
