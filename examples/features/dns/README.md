@@ -36,7 +36,7 @@ metadata:
 spec:
   containers:
   - name: dnsutils
-    image: gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+    image: k8s.gcr.io/e2e-test-images/jessie-dnsutils:1.3
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
