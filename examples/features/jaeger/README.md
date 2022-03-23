@@ -84,7 +84,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l name=jae
 
 Apply Jaeger pod:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=9e560dc1bbe0488f124d1e36212ab49d45fedc4d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=9f7ed2b734a06b5a54dd18804c8c8f02ab7fe9d9
 ```
 
 Wait for Jaeger pod status ready:
@@ -94,12 +94,12 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=jaeg
 
 Apply OpenTelemetry pod:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/opentelemetry?ref=9e560dc1bbe0488f124d1e36212ab49d45fedc4d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/opentelemetry?ref=9f7ed2b734a06b5a54dd18804c8c8f02ab7fe9d9
 ```
 
 Apply Spire deployments (required for NSM system)
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=9e560dc1bbe0488f124d1e36212ab49d45fedc4d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=9f7ed2b734a06b5a54dd18804c8c8f02ab7fe9d9
 ```
 
 Wait for Spire pods status ready:
@@ -117,7 +117,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=9e560dc1bbe0488f124d1e36212ab49d45fedc4d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=9f7ed2b734a06b5a54dd18804c8c8f02ab7fe9d9
 ```
 
 Wait for admission-webhook-k8s:
