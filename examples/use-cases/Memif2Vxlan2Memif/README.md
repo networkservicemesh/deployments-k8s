@@ -57,7 +57,6 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: memif://icmp-responder/nsm-1
-
       nodeName: ${NODES[0]}
 EOF
 
