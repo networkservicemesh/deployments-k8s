@@ -1,6 +1,6 @@
 ---
 interfaces:
-  - name: eth1
+  - name: ext_net1
     bridge: br0
     matches:
        - labelSelector:

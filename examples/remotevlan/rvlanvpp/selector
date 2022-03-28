@@ -1,6 +1,6 @@
 ---
 interfaces:
-  - name: eth1
+  - name: ext_net1
     matches:
        - labelSelector:
            - via: gw1

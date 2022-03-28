@@ -20,17 +20,19 @@ docker network connect bridge-2 kind-worker
 docker network connect bridge-2 kind-worker2
 ```
 
-Rename the newly generated interface to eth1 in both kind-workers:
+Rename the newly generated interface to ext_net1 in both kind-workers:
 
 ```bash
-ifw1=$(echo $(docker exec kind-worker ip link | tail -2 | head -1) | cut -f1 -d"@" | cut -f2 -d" ")
-docker exec kind-worker ip link set $ifw1 down
-docker exec kind-worker ip link set $ifw1 name eth1
-docker exec kind-worker ip link set eth1 up
-ifw2=$(echo $(docker exec kind-worker2 ip link | tail -2 | head -1) | cut -f1 -d"@" | cut -f2 -d" ")
-docker exec kind-worker2 ip link set $ifw2 down
-docker exec kind-worker2 ip link set $ifw2 name eth1
-docker exec kind-worker2 ip link set eth1 up
+MACS=($(docker inspect --format='{{range .Containers}}{{.MacAddress}}{{"\n"}}{{end}}' bridge-2))
+ifw1=$(docker exec kind-worker ip -o link | grep ${MACS[@]/#/-e } | cut -f1 -d"@" | cut -f2 -d" ")
+ifw2=$(docker exec kind-worker2 ip -o link | grep ${MACS[@]/#/-e } | cut -f1 -d"@" | cut -f2 -d" ")
+
+(docker exec kind-worker ip link set $ifw1 down &&
+docker exec kind-worker ip link set $ifw1 name ext_net1 &&
+docker exec kind-worker ip link set ext_net1 up &&
+docker exec kind-worker2 ip link set $ifw2 down &&
+docker exec kind-worker2 ip link set $ifw2 name ext_net1 &&
+docker exec kind-worker2 ip link set ext_net1 up)
 ```
 
 Create ns for deployments:
@@ -102,7 +104,7 @@ Delete secondary network and kind-worker node connections:
 docker network disconnect bridge-2 kind-worker
 docker network disconnect bridge-2 kind-worker2
 docker network rm bridge-2
-docker exec kind-worker ip link del eth1
-docker exec kind-worker2 ip link del eth1
+docker exec kind-worker ip link del ext_net1
+docker exec kind-worker2 ip link del ext_net1
 true
 ```
