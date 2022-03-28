@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/41cd9995434986adcb18e4202be3c552d21485a8/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/72400b337f4335396bb30165e8363ecbef026225/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=72400b337f4335396bb30165e8363ecbef026225
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=72400b337f4335396bb30165e8363ecbef026225
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -57,8 +57,7 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://icmp-responder/nsm-1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[0]}
+      nodeName: ${NODES[0]}
 EOF
 
 ```
@@ -78,8 +77,7 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
 EOF
 ```
 

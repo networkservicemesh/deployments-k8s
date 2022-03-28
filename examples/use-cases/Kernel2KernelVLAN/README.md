@@ -16,7 +16,7 @@ hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/41cd9995434986adcb18e4202be3c552d21485a8/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/72400b337f4335396bb30165e8363ecbef026225/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -35,8 +35,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=41cd9995434986adcb18e4202be3c552d21485a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=72400b337f4335396bb30165e8363ecbef026225
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=72400b337f4335396bb30165e8363ecbef026225
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -61,8 +61,7 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://vlan-vpp-responder/nsm-1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 
@@ -82,8 +81,7 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/30
-      nodeSelector:
-        kubernetes.io/hostname: ${NODE}
+      nodeName: ${NODE}
 EOF
 ```
 

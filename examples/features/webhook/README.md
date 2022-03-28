@@ -12,7 +12,7 @@ Make sure that you have completed steps from [features](../)
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/41cd9995434986adcb18e4202be3c552d21485a8/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/72400b337f4335396bb30165e8363ecbef026225/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -21,7 +21,7 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create postgres client deployment and set `nodeSelector` to the first node:
+4. Create postgres client deployment and set `nodeName` to the first node:
 ```bash
 cat > postgres-cl.yaml <<EOF
 ---
@@ -41,12 +41,11 @@ spec:
     env:
       - name: POSTGRES_HOST_AUTH_METHOD
         value: trust
-  nodeSelector:
-    kubernetes.io/hostname: ${NODES[0]}
+  nodeName: ${NODES[0]}
 EOF
 ```
 
-5. Add to nse-kernel the postgres container and set `nodeSelector` it to the second node:
+5. Add to nse-kernel the postgres container and set `nodeName` it to the second node:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -76,8 +75,7 @@ spec:
               value: my-postgres-service
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
 EOF
 ```
 
@@ -91,7 +89,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=72400b337f4335396bb30165e8363ecbef026225
 
 resources:
 - postgres-cl.yaml

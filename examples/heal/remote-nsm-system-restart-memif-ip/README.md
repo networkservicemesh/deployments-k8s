@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=41cd9995434986adcb18e4202be3c552d21485a8
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=41cd9995434986adcb18e4202be3c552d21485a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=72400b337f4335396bb30165e8363ecbef026225
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=72400b337f4335396bb30165e8363ecbef026225
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -58,8 +58,7 @@ spec:
             - name: NSM_NETWORK_SERVICES
               value: memif://icmp-responder-ip/nsm-1
 
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[0]}
+      nodeName: ${NODES[0]}
 EOF
 
 ```
@@ -83,8 +82,7 @@ spec:
               value: IP
             - name: NSM_SERVICE_NAMES
               value: icmp-responder-ip
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
 EOF
 ```
 
@@ -133,7 +131,7 @@ kubectl delete ns nsm-system
 kubectl create ns nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=41cd9995434986adcb18e4202be3c552d21485a8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=72400b337f4335396bb30165e8363ecbef026225
 ```
 
 Ping from NSC to NSE:

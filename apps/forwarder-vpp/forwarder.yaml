@@ -19,7 +19,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:32acaa1
+        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-vpp:8c825f7
           imagePullPolicy: IfNotPresent
           name: forwarder-vpp
           securityContext:
@@ -54,7 +54,7 @@ spec:
             - name: vfio
               mountPath: /host/dev/vfio
             - name: vpp
-              mountPath: /var/run/vpp
+              mountPath: /var/run/vpp/external
           resources:
             requests:
               cpu: 150m

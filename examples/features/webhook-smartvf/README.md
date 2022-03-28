@@ -18,7 +18,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/41cd9995434986adcb18e4202be3c552d21485a8/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/72400b337f4335396bb30165e8363ecbef026225/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -27,7 +27,7 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create postgres client deployment, set `nodeSelector` to the first node and use the interface pool for SmartVF in `sriovToken` annotation label:
+4. Create postgres client deployment, set `nodeName` to the first node and use the interface pool for SmartVF in `sriovToken` annotation label:
 ```bash
 cat > postgres-cl.yaml <<EOF
 ---
@@ -49,12 +49,11 @@ spec:
     env:
       - name: POSTGRES_HOST_AUTH_METHOD
         value: trust
-  nodeSelector:
-    kubernetes.io/hostname: ${NODES[0]}
+  nodeName: ${NODES[0]}
 EOF
 ```
 
-5. Add to nse-kernel the postgres container, set `nodeSelector` it to the second node and use the interface pool for SmartVF in `nse` container :
+5. Add to nse-kernel the postgres container, set `nodeName` it to the second node and use the interface pool for SmartVF in `nse` container :
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -91,8 +90,7 @@ spec:
             limits:
               # Add your own SmartVF interface pool
               worker.domain/100G: 1
-      nodeSelector:
-        kubernetes.io/hostname: ${NODES[1]}
+      nodeName: ${NODES[1]}
 EOF
 ```
 
@@ -106,7 +104,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=41cd9995434986adcb18e4202be3c552d21485a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=72400b337f4335396bb30165e8363ecbef026225
 
 resources:
 - postgres-cl.yaml
