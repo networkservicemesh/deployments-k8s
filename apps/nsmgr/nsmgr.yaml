@@ -64,9 +64,23 @@ spec:
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+            failureThreshold: 120
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 2
           livenessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+            failureThreshold: 25
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          startupProbe:
+            exec:
+              command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
+            failureThreshold: 25
+            periodSeconds: 5
         - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:d66eb13
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
