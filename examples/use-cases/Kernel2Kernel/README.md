@@ -5,6 +5,12 @@ This example shows that NSC and NSE on the one node can find each other.
 
 NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 
+
+Diagram:
+
+![NSM kernel2kernel Diagram](./diagram.png "NSM Kernel2Kernel Scheme")
+
+
 ## Requires
 
 Make sure that you have completed steps from [basic](../../basic) or [memory](../../memory) setup.
