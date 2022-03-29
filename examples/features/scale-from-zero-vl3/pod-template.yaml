@@ -5,10 +5,11 @@ metadata:
   name: nse-vl3-vpp
   labels:
     app: nse-vl3-vpp
+    "spiffe.io/spiffe-id": "true"
 spec:
   restartPolicy: Never
   containers:
-    - name: nse-vl3-vpp
+    - name: nse
       image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:a41358f
       imagePullPolicy: IfNotPresent
       env:
@@ -18,18 +19,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: NSM_CONNECT_TO
-          value: unix:///var/lib/networkservicemesh/nsm.io.sock
-        - name: NSM_CIDR_PREFIX
-          value: 169.254.0.0/16
-        - name: NSM_SERVICE_NAMES
-          value: autoscale-icmp-responder
-        - name: NSM_LABELS
-          value: app:nse-vl3-vpp
-        - name: NSM_IDLE_TIMEOUT
-          value: 15s
         - name: NSM_LOG_LEVEL
           value: TRACE
+        - name: NSM_SERVICE_NAMES
+          value: autoscale-icmp-responder
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
@@ -38,9 +31,11 @@ spec:
           mountPath: /var/lib/networkservicemesh
           readOnly: true
       resources:
+        requests:
+          cpu: 150m
         limits:
-          memory: 20Mi
-          cpu: 100m
+          memory: 400Mi
+          cpu: 500m
   volumes:
     - name: spire-agent-socket
       hostPath:
