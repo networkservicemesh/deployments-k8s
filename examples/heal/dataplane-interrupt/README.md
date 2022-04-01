@@ -1,6 +1,6 @@
-# Local NSE death
+# Dataplane Interruption
 
-This example shows that NSM keeps working after the local NSE death.
+This example shows that NSM not only checks that control plane is fine (NSMgr, Registry, etc), but also catches that dataplane is interrupted and performs healing when it's restored.
 
 NSC and NSE are using the `kernel` mechanism to connect with each other.
 
@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1e3e6693f062cb1bc212bbe020bb7d20acaf9373/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ae159c550236200a7f7a41d5295fc04b364c84bb/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -31,8 +31,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=1e3e6693f062cb1bc212bbe020bb7d20acaf9373
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=1e3e6693f062cb1bc212bbe020bb7d20acaf9373
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ae159c550236200a7f7a41d5295fc04b364c84bb
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ae159c550236200a7f7a41d5295fc04b364c84bb
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -112,64 +112,35 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 ```
 
-Stop NSE pod:
+Find forwarder pod:
 
 ```bash
-kubectl scale deployment nse-kernel -n ${NAMESPACE} --replicas=0
+FWDR=$(kubectl get pods -l app=forwarder-vpp -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+Stop its cross-connect interface:
+
+```bash
+kubectl exec ${FWDR} -n nsm-system -- vppctl set int state tap0 down
+```
+```bash
+kubectl exec ${FWDR} -n nsm-system -- vppctl set int state tap1 down
 ```
 
 Ping from NSC to NSE should not pass:
 
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100 | grep "100% packet loss"
-
 ```
 
-Create a new NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    metadata:
-      labels:
-        version: new
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.102/31
-      nodeName: ${NODE}
-EOF
-```
-
-Apply patch:
-```bash
-kubectl apply -k .
-```
-
-Restore NSE pod:
+Restore cross-connect interface:
 
 ```bash
-kubectl scale deployment nse-kernel -n ${NAMESPACE} --replicas=1
+kubectl exec ${FWDR} -n nsm-system -- vppctl set int state tap0 up
 ```
-
-Wait for new NSE to start:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -l version=new -n ${NAMESPACE}
+kubectl exec ${FWDR} -n nsm-system -- vppctl set int state tap1 up
 ```
-
-Find new NSE pod:
-```bash
-NEW_NSE=$(kubectl get pods -l app=nse-kernel -l version=new -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
-Ping should pass with newly configured addresses.
 
 Ping from NSC to new NSE:
 ```bash
@@ -178,7 +149,7 @@ kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
 
 Ping from new NSE to NSC:
 ```bash
-kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
+kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup

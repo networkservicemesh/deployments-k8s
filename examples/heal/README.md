@@ -22,7 +22,8 @@ One component:
  - [Remote NSE death ip](./remote-nse-death-ip)
  - [Registry + Local Endpoint](./registry-local-endpoint)
  - [Registry + Remote Forwarder](./registry-remote-forwarder)
- 
+ - [Dataplane interruption](./dataplane-interrupt)
+
  Two components:
  - [Local NSMgr + Local Endpoint memif](./local-nsmgr-local-nse-memif)
  - [Local NSMgr + Local Forwarder memif](./local-nsmgr-local-forwarder-memif)
