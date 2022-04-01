@@ -5,14 +5,14 @@ metadata:
   name: autoscale-icmp-responder
   namespace: nsm-system
 spec:
-  payload: ETHERNET
+  payload: IP
   matches:
     - source_selector:
       fallthrough: true
       routes:
         - destination_selector:
-            app: nse-icmp-responder
-            nodeName: "{{.nodeName}}"
+            app: nse-vl3-vpp
+            clusterName: cluster-1
     - source_selector:
       routes:
         - destination_selector:

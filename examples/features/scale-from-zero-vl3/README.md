@@ -23,14 +23,6 @@ thus saving cluster resources (see step 14).
 kubectl create ns ns-vl3
 ```
 
-2. Select nodes to deploy NSC and supplier:
-```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
-NODE1=${NODES[0]}
-NODE2=${NODES[1]}
-if [ "$NODE2" == "" ]; then NODE2=$NODE1; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
-```
-
 3. Create patch for NSCs:
 ```bash
 cat > patch-nsc.yaml <<EOF
@@ -116,7 +108,7 @@ EOF
 
 6. Register network service:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d3a0d485c43c998dfa365f8693911509afaff911/examples/features/scale-from-zero/autoscale-netsvc.yaml
+kubectl apply -f ./autoscale-netsvc.yaml
 ```
 
 7. Deploy NSC and supplier:
@@ -132,7 +124,7 @@ kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-supplie
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 ```
 ```bash
-kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
+kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp
 ```
 
 3. Find all nscs:
@@ -154,18 +146,6 @@ do
         echo $pinger pings $ipAddr
         kubectl exec $pinger -n ns-vl3 -- ping -c4 $ipAddr
     done
-done
-```
-
-5. Ping each vl3-nse by each client. 
-
-Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
-
-```bash
-for nsc in $nscs 
-do
-    echo $nsc pings nses
-    kubectl exec -n ns-vl3 $nsc -- ping 169.254.0.0 -c4
 done
 ```
 
