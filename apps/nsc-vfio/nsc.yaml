@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: pinger
-          # https://github.com/Bolodya1997/docker-dpdk
-          image: rrandom312/dpdk-pingpong:latest
+          # https://github.com/glazychev-art/docker-dpdk
+          image: artgl/dpdk-pingpong:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "-c", "sleep 60m"]
           volumeMounts:

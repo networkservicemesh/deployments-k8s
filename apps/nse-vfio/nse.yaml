@@ -18,8 +18,8 @@ spec:
       hostNetwork: true
       containers:
         - name: ponger
-          # https://github.com/Bolodya1997/docker-dpdk
-          image: rrandom312/dpdk-pingpong:latest
+          # https://github.com/glazychev-art/docker-dpdk
+          image: artgl/dpdk-pingpong:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "/root/scripts/pong.sh", "eno4", "31"]
           securityContext:
