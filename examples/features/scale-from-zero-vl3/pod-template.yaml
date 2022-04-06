@@ -22,11 +22,11 @@ spec:
         - name: NSM_LOG_LEVEL
           value: TRACE
         - name: NSM_SERVICE_NAMES
-          value: autoscale-icmp-responder
+          value: autoscale-icmp-responder,my-vl3-network
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_LABELS
-          value: app:nse-vl3-vpp,clusterName:cluster-1
+          value: app:nse-vl3-vpp
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets

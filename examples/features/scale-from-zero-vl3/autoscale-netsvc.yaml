@@ -12,7 +12,7 @@ spec:
       routes:
         - destination_selector:
             app: nse-vl3-vpp
-            clusterName: cluster-1
+            nodeName: "{{.nodeName}}"
     - source_selector:
       routes:
         - destination_selector:

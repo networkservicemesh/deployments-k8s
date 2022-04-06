@@ -109,6 +109,7 @@ EOF
 6. Register network service:
 ```bash
 kubectl apply -f ./autoscale-netsvc.yaml
+kubectl apply -f ./vl3-netsvc.yaml
 ```
 
 7. Deploy NSC and supplier:
@@ -158,4 +159,5 @@ kubectl delete ns ns-vl3
 Delete network service:
 ```bash
 kubectl delete -n nsm-system networkservices.networkservicemesh.io autoscale-icmp-responder
+kubectl delete -n nsm-system networkservices.networkservicemesh.io my-vl3-network
 ```
