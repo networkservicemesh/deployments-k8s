@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-  - https://github.com/networkservicemesh/deployments-k8s/apps/forwarder-vpp?ref=c79b617c6f78d1859813e50fb37ef6b77b60e439
+  - https://github.com/networkservicemesh/deployments-k8s/apps/forwarder-vpp?ref=6eda4c9d20733dc36111ec1dbe4137915ec1f7ee
 
 configMapGenerator:
   - name: device-selector
