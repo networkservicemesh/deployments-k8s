@@ -10,7 +10,7 @@ Make sure that you have completed steps from [ovs](../../ovs) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6b487f8059b9ff0b920cb6a81bb258dc9cc97418/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ea5acd16f9881d460c13f50ff750353633d020f9/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -24,8 +24,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=6b487f8059b9ff0b920cb6a81bb258dc9cc97418
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=6b487f8059b9ff0b920cb6a81bb258dc9cc97418
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ea5acd16f9881d460c13f50ff750353633d020f9
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ea5acd16f9881d460c13f50ff750353633d020f9
 
 
 patchesStrategicMerge:
