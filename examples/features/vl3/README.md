@@ -27,7 +27,7 @@ kubectl create ns ns-vl3
 2. Deploy nsc and vl3 nses (See at `kustomization.yaml`):
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3?ref=fc1216b5943d7bce53535aac9a68d7c5239da625
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3?ref=a08574b3817c2ca8f1c19faad34bf5e9a5903e30
 ```
 
 3. Find all nscs:
