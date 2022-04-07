@@ -7,6 +7,6 @@ data:
   config.yaml: |
     - from: 172.16.1.101/32
       proto: 6
-      port: 6666
+      dstport: 6666
       routes:
         - prefix: 172.16.1.100/32
