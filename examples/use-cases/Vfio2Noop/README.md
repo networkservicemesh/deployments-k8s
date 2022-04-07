@@ -64,20 +64,20 @@ function dpdk_ping() {
   ' 2>"${err_file}")"
 
   if [[ "$?" != 0 ]]; then
+    echo "${out}"
     cat "${err_file}" 1>&2
-    echo "${out}" 1>&2
     return 1
   fi
 
   if ! pong_packets="$(echo "${out}" | grep "rx .* pong packets" | sed -E 's/rx ([0-9]*) pong packets/\1/g')"; then
+    echo "${out}"
     cat "${err_file}" 1>&2
-    echo "${out}" 1>&2
     return 1
   fi
 
   if [[ "${pong_packets}" == 0 ]]; then
+    echo "${out}"
     cat "${err_file}" 1>&2
-    echo "${out}" 1>&2
     return 1
   fi
 
