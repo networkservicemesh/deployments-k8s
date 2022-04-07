@@ -1,20 +1,9 @@
 # Test automatic scale from zero
 
-This example shows that NSEs can be created on the fly on NSC requests.
+This example shows that vL3-NSEs can be created on the fly on NSC requests.
 This allows effective scaling for endpoints.
-The requested endpoint will be automatically spawned on the same node as NSC (see step 12),
+The requested endpoint will be automatically spawned on the same node as NSC,
 allowing the best performance for connectivity.
-
-Here we are using an endpoint that automatically shuts down
-when it has no active connection for specified time.
-We are using very short timeout for the purpose of the test: 15 seconds.
-
-We are only using one client in this test,
-so removing it (see step 13) will cause the NSE to shut down.
-
-Supplier watches for endpoints it created
-and clears endpoints that finished their work,
-thus saving cluster resources (see step 14).
 
 ## Run
 
@@ -23,7 +12,7 @@ thus saving cluster resources (see step 14).
 kubectl create ns ns-vl3
 ```
 
-3. Create patch for NSCs:
+2. Create patch for NSCs:
 ```bash
 cat > patch-nsc.yaml <<EOF
 ---
@@ -45,7 +34,7 @@ spec:
 EOF
 ```
 
-4. Create patch for supplier:
+3. Create patch for supplier:
 ```bash
 cat > patch-supplier.yaml <<EOF
 ---
@@ -81,7 +70,7 @@ spec:
 EOF
 ```
 
-5. Create customization file:
+4. Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -106,18 +95,18 @@ configMapGenerator:
 EOF
 ```
 
-6. Register network service:
+5. Register network service:
 ```bash
 kubectl apply -f ./autoscale-netsvc.yaml
 kubectl apply -f ./vl3-netsvc.yaml
 ```
 
-7. Deploy NSC and supplier:
+6. Deploy NSC and supplier:
 ```bash
 kubectl apply -k .
 ```
 
-8. Wait for applications ready:
+7. Wait for applications ready:
 ```bash
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
@@ -128,15 +117,13 @@ kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp
 ```
 
-3. Find all nscs:
-
+8. Find all nscs:
 ```bash
 nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
 [[ ! -z $nscs ]]
 ```
 
-4. Ping each client by each client:
-
+9. Ping each client by each client:
 ```bash
 for nsc in $nscs 
 do
@@ -147,6 +134,19 @@ do
         echo $pinger pings $ipAddr
         kubectl exec $pinger -n ns-vl3 -- ping -c4 $ipAddr
     done
+done
+```
+
+10. Ping each vl3-nse by each client. 
+
+Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
+
+```bash
+for nsc in $nscs 
+do
+    echo $nsc pings nses
+    kubectl exec -n ns-vl3 $nsc -- ping 169.254.0.0 -c4
+    kubectl exec -n ns-vl3 $nsc -- ping 169.254.1.0 -c4
 done
 ```
 
