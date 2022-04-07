@@ -4,7 +4,7 @@ This document contain links for vL3 examples of NSM.
 
 ## Requires
 
-To run any feature example follow steps for [Basic NSM setup](../basic)
+To run any vL3 example follow steps from [Basic NSM setup](../basic)
 
 ## Includes
 
