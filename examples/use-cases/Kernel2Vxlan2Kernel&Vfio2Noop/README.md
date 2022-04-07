@@ -6,7 +6,7 @@ This example shows that remote kernel over VXLAN connection and VFIO connection 
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d1f1a055432dfe8a85664f0336dddd584e8403e5/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f4af0a93171c53d933d23b56696744627253e9a5/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -25,10 +25,10 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=d1f1a055432dfe8a85664f0336dddd584e8403e5
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=d1f1a055432dfe8a85664f0336dddd584e8403e5
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=d1f1a055432dfe8a85664f0336dddd584e8403e5
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=d1f1a055432dfe8a85664f0336dddd584e8403e5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=f4af0a93171c53d933d23b56696744627253e9a5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=f4af0a93171c53d933d23b56696744627253e9a5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=f4af0a93171c53d933d23b56696744627253e9a5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=f4af0a93171c53d933d23b56696744627253e9a5
 
 patchesStrategicMerge:
 - patch-nsc.yaml
