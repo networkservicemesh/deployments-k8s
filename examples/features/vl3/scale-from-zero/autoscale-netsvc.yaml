@@ -1,0 +1,19 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: autoscale-icmp-responder
+  namespace: nsm-system
+spec:
+  payload: IP
+  matches:
+    - source_selector:
+      fallthrough: true
+      routes:
+        - destination_selector:
+            app: nse-vl3-vpp
+            nodeName: "{{.nodeName}}"
+    - source_selector:
+      routes:
+        - destination_selector:
+            app: icmp-responder-supplier
