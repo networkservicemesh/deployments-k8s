@@ -21,7 +21,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Create test namespace:
 ```bash
-NAMESPACE1=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c70c51f8c1808f7bf1e26ca6d30065eb303ac8a8/examples/interdomain/usecases/namespace.yaml)[0])
+NAMESPACE1=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1ee2eb230fd04b703b3956dc35844e6fa7d9d740/examples/interdomain/usecases/namespace.yaml)[0])
 NAMESPACE1=${NAMESPACE1:10}
 ```
 
@@ -35,7 +35,7 @@ kind: Kustomization
 namespace: ${NAMESPACE1}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c70c51f8c1808f7bf1e26ca6d30065eb303ac8a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=1ee2eb230fd04b703b3956dc35844e6fa7d9d740
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -82,7 +82,7 @@ export KUBECONFIG=$KUBECONFIG1
 
 Create test namespace:
 ```bash
-NAMESPACE2=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c70c51f8c1808f7bf1e26ca6d30065eb303ac8a8/examples/interdomain/usecases/namespace.yaml)[0])
+NAMESPACE2=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1ee2eb230fd04b703b3956dc35844e6fa7d9d740/examples/interdomain/usecases/namespace.yaml)[0])
 NAMESPACE2=${NAMESPACE2:10}
 ```
 
@@ -96,7 +96,7 @@ kind: Kustomization
 namespace: ${NAMESPACE2}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c70c51f8c1808f7bf1e26ca6d30065eb303ac8a8
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=1ee2eb230fd04b703b3956dc35844e6fa7d9d740
 
 patchesStrategicMerge:
 - patch-nsc.yaml
