@@ -5,9 +5,10 @@ kind: Kustomization
 namespace: ns-vl3
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=d3a0d485c43c998dfa365f8693911509afaff911
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=d3a0d485c43c998dfa365f8693911509afaff911
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=d3a0d485c43c998dfa365f8693911509afaff911
+- ../../../../apps/nsc-kernel
+- ../../../../apps/nse-vl3-vpp
+- ../../../../apps/vl3-ipam
+- ../../../../apps/nse-supplier-k8s
 
 patchesStrategicMerge:
 - nsc-patch.yaml

@@ -10,9 +10,6 @@ Diagram:
 
 **NOTE: Forwarder and NSMmgr are missed in the diagram for the simplicity**
 
-## Requires
-
-Make sure that you have completed steps from [basic](../../basic) setup.
 
 ## Run
 
