@@ -12,18 +12,18 @@ allowing the best performance for connectivity.
 kubectl create ns ns-vl3
 ```
 
-5. Register network service:
+2. Register network service:
 ```bash
 kubectl apply -f ./autoscale-netsvc.yaml
 kubectl apply -f ./vl3-netsvc.yaml
 ```
 
-6. Deploy NSC and supplier:
+3. Deploy NSC and supplier:
 ```bash
 kubectl apply -k .
 ```
 
-7. Wait for applications ready:
+4. Wait for applications ready:
 ```bash
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
@@ -34,13 +34,13 @@ kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp
 ```
 
-8. Find all nscs:
+5. Find all nscs:
 ```bash
 nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
 [[ ! -z $nscs ]]
 ```
 
-9. Ping each client by each client:
+6. Ping each client by each client:
 ```bash
 for nsc in $nscs 
 do
@@ -54,7 +54,7 @@ do
 done
 ```
 
-10. Ping each vl3-nse by each client. 
+7. Ping each vl3-nse by each client. 
 
 Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
 
@@ -65,16 +65,6 @@ do
     kubectl exec -n ns-vl3 $nsc -- ping 169.254.0.0 -c4
     kubectl exec -n ns-vl3 $nsc -- ping 169.254.1.0 -c4
 done
-```
-
-11. Remove NSC:
-```bash
-kubectl scale -n ns-vl3 deployment nsc-kernel --replicas=0
-```
-
-12. Wait for the NSE pod to be deleted:
-```bash
-kubectl wait -n ns-vl3 --for=delete --timeout=1m pod -l app=nse-vl3-vpp
 ```
 
 ## Cleanup
