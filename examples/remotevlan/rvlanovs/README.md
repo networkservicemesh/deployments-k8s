@@ -9,15 +9,13 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 ## Includes
 
 - [Kernel2RVlanInternal](../../use-cases/Kernel2RVlanInternal)
-- [Kernel2RVlanBreakout](../../use-cases/Kernel2RVlanBreakout)
-- [Kernel2RVlanMultiNS](../../use-cases/Kernel2RVlanMultiNS)
 
 ## Run
 
 Deploy the forwarder:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanovs?ref=0216ecc4d0a9a7dede2c810499fd7d96717fe75c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanovs?ref=d5b46f176febb92f750b7421b5dcbc508b13e648
 ```
 
 Wait forwarder to start:
@@ -31,5 +29,13 @@ kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forward
 Delete the forwarder:
 
 ```bash
-kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanovs?ref=0216ecc4d0a9a7dede2c810499fd7d96717fe75c
+kubectl describe po -n nsm-system -l app=forwarder-ovs
+```
+
+```bash
+kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{": "}{.status.allocatable}{"\n"}{end}' --selector='!node-role.kubernetes.io/master'
+```
+
+```bash
+kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanovs?ref=d5b46f176febb92f750b7421b5dcbc508b13e648
 ```
