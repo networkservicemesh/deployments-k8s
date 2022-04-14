@@ -8,6 +8,7 @@ This setup can be used to check remote vlan mechanism with both OVS and VPP forw
 
 ## Includes
 
+- [Remote VLAN mechanism using forwarder-ovs](./rvlanovs)
 - [Remote VLAN mechanism using forwarder-vpp](./rvlanvpp)
 
 ## Run
