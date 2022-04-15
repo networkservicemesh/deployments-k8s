@@ -1,0 +1,10 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-vpp
+spec:
+  template:
+    metadata:
+      annotations:
+        spiffe.io/federatesWith: docker.nsm
