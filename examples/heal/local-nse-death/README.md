@@ -122,7 +122,6 @@ Ping from NSC to NSE should not pass:
 
 ```bash
 kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100 | grep "100% packet loss"
-
 ```
 
 Create a new NSE patch:
