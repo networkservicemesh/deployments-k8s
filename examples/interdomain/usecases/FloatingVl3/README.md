@@ -74,6 +74,7 @@ kubectl apply -k ./cluster2
 
 
 **2. Get assigned IP addresses**
+
 2.1. Get assigned IP address from vl3-nse for the client from the *cluster2*
 
 ```bash
@@ -97,6 +98,7 @@ ipAddr1=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\
 ```
 
 **3. Check connectivity**
+
 3.1. Ping remote client:
 ```bash
 kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 $ipAddr2
