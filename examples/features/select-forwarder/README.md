@@ -25,7 +25,7 @@ kubectl create ns ns-select-forwarder
 Apply example resources:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=0fd8d67331fc291a8165db296f3bf5750083a8e6
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=90b052e50642ae44bccac75946f9ca4612b06914
 ```
 
 Wait for applications ready:
