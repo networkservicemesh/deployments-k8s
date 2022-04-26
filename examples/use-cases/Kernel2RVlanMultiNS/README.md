@@ -87,9 +87,7 @@ spec:
           - name: NSM_SERVICES
             value: "private-bridge.${FIRST_NAMESPACE} { vlan: 200; via: gw1 }"
           - name: NSM_CIDR_PREFIX
-            value: "172.10.1.0/24"
-          - name: NSM_IPV6_PREFIX
-            value: "100:201::/64"
+            value: 172.10.1.0/24,100:201::/64
 EOF
 ```
 
@@ -219,9 +217,7 @@ spec:
           - name: NSM_SERVICES
             value: "blue-bridge.${SECOND_NAMESPACE} { vlan: 300; via: gw1 }, green-bridge.${SECOND_NAMESPACE} { vlan: 400; via: gw1 }"
           - name: NSM_CIDR_PREFIX
-            value: "172.10.2.0/24"
-          - name: NSM_IPV6_PREFIX
-            value: "100:202::/64"
+            value: 172.10.2.0/24,100:202::/64
 EOF
 ```
 
@@ -240,7 +236,7 @@ resources:
 - third-client.yaml
 
 bases:
-- ../../../../apps/nse-remote-vlan
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=7d08174431e049a31fdaf574e03f12ea965c4f5b
 
 nameSuffix: -bg
 
