@@ -60,7 +60,7 @@ spec:
               cpu: 150m
             limits:
               memory: 500Mi
-              cpu: 500m
+              cpu: 525m
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]
