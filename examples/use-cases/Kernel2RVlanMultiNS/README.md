@@ -13,9 +13,9 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Create test namespace:
 
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a3fa034c60370c12559f6fce289e88d3bd7514b/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5eadea13ca7ca94d4c9391dec04b631557b464af/examples/use-cases/namespace.yaml)[0])
 FIRST_NAMESPACE=${NAMESPACE:10}
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a3fa034c60370c12559f6fce289e88d3bd7514b/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5eadea13ca7ca94d4c9391dec04b631557b464af/examples/use-cases/namespace.yaml)[0])
 SECOND_NAMESPACE=${NAMESPACE:10}
 ```
 
