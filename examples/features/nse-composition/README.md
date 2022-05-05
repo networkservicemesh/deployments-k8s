@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cbafe12ee00a2304d931c9620dd4e64557d2bd8c/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/460a0c7eb2ddeca26e1872cad8bed519695f905c/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -30,15 +30,15 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cbafe12ee00a2304d931c9620dd4e64557d2bd8c/examples/features/nse-composition/config-file.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cbafe12ee00a2304d931c9620dd4e64557d2bd8c/examples/features/nse-composition/passthrough-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cbafe12ee00a2304d931c9620dd4e64557d2bd8c/examples/features/nse-composition/passthrough-2.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cbafe12ee00a2304d931c9620dd4e64557d2bd8c/examples/features/nse-composition/passthrough-3.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cbafe12ee00a2304d931c9620dd4e64557d2bd8c/examples/features/nse-composition/nse-composition-ns.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/460a0c7eb2ddeca26e1872cad8bed519695f905c/examples/features/nse-composition/config-file.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/460a0c7eb2ddeca26e1872cad8bed519695f905c/examples/features/nse-composition/passthrough-1.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/460a0c7eb2ddeca26e1872cad8bed519695f905c/examples/features/nse-composition/passthrough-2.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/460a0c7eb2ddeca26e1872cad8bed519695f905c/examples/features/nse-composition/passthrough-3.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/460a0c7eb2ddeca26e1872cad8bed519695f905c/examples/features/nse-composition/nse-composition-ns.yaml
 - client.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=cbafe12ee00a2304d931c9620dd4e64557d2bd8c
-- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=cbafe12ee00a2304d931c9620dd4e64557d2bd8c
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=460a0c7eb2ddeca26e1872cad8bed519695f905c
+- https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition/nse-firewall?ref=460a0c7eb2ddeca26e1872cad8bed519695f905c
 
 patchesStrategicMerge:
 - patch-nse.yaml
