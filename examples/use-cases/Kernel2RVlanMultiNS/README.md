@@ -85,9 +85,9 @@ spec:
           - name: NSM_CONNECT_TO
             value: "registry.nsm-system:5002"
           - name: NSM_SERVICES
-            value: "private-bridge.${FIRST_NAMESPACE} { vlan: 200; via: gw1 }"
+            value: "private-bridge.${FIRST_NAMESPACE} { vlan: 0; via: gw1 }"
           - name: NSM_CIDR_PREFIX
-            value: 172.10.1.0/24,100:201::/64
+            value: 172.10.1.0/24
 EOF
 ```
 
@@ -217,7 +217,7 @@ spec:
           - name: NSM_SERVICES
             value: "blue-bridge.${SECOND_NAMESPACE} { vlan: 300; via: gw1 }, green-bridge.${SECOND_NAMESPACE} { vlan: 400; via: gw1 }"
           - name: NSM_CIDR_PREFIX
-            value: 172.10.2.0/24,100:202::/64
+            value: 172.10.2.0/24
 EOF
 ```
 
@@ -344,12 +344,11 @@ Setup a docker container for traffic test:
 docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester rvm-tester tail -f /dev/null
 docker exec rvm-tester ip link set eth0 down
 docker exec rvm-tester ip link add link eth0 name eth0.100 type vlan id 100
-docker exec rvm-tester ip link add link eth0 name eth0.200 type vlan id 200
 docker exec rvm-tester ip link add link eth0 name eth0.300 type vlan id 300
 docker exec rvm-tester ip link add link eth0 name eth0.400 type vlan id 400
 docker exec rvm-tester ip link set eth0 up
 docker exec rvm-tester ip addr add 172.10.0.254/24 dev eth0.100
-docker exec rvm-tester ip addr add 172.10.1.254/24 dev eth0.200
+docker exec rvm-tester ip addr add 172.10.1.254/24 dev eth0
 docker exec rvm-tester ip addr add 172.10.2.254/24 dev eth0.300
 docker exec rvm-tester ip addr add 172.10.2.253/24 dev eth0.400
 docker exec rvm-tester ethtool -K eth0 tx off
@@ -385,7 +384,7 @@ do
         status=2
     fi
   done
-  docker exec rvm-tester ping -c 1 ${IP_ADDR[$nsc]} -I eth0.200
+  docker exec rvm-tester ping -c 1 ${IP_ADDR[$nsc]} -I eth0
   if test $? -ne 0
     then
       status=1
@@ -425,7 +424,7 @@ Check vlan (300 and 400) from tester container:
 status=0
 for nsc in "${NSCS_BLUE[@]}"
 do
-  for vlan_if_name in eth0.100 eth0.200 eth0.400
+  for vlan_if_name in eth0.100 eth0 eth0.400
   do
     docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR_BLUE[$nsc]} -I ${vlan_if_name}
     if test $? -eq 0
@@ -441,7 +440,7 @@ do
 done
 for nsc in "${NSCS_GREEN[@]}"
 do
-  for vlan_if_name in eth0.100 eth0.200 eth0.300
+  for vlan_if_name in eth0.100 eth0 eth0.300
   do
     docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR_GREEN[$nsc]} -I ${vlan_if_name}
     if test $? -eq 0
@@ -483,7 +482,7 @@ Check first vlan from tester container:
 status=0
 for nsc in "${NSCS[@]}"
 do
-  for vlan_if_name in eth0.200 eth0.300 eth0.400
+  for vlan_if_name in eth0 eth0.300 eth0.400
   do
     docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR[$nsc]} -I ${vlan_if_name}
     if test $? -eq 0
