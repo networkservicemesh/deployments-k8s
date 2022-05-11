@@ -36,7 +36,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=0699ca5e5e2136baa7927f1657651fecc05978e4
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=c1f59ba6d925bc1664380fb6ffebbbd3b8da3321
 ```
 
 ## Cleanup
