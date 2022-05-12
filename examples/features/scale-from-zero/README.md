@@ -20,7 +20,7 @@ thus saving cluster resources (see step 14).
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b54f3c29514baeb7a91cbf6402f9de84c083d771/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/00d49332c782cc649f8bdb5da5c9f4b49ffedea2/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -100,8 +100,8 @@ kind: Kustomization
 namespace: $NAMESPACE
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=b54f3c29514baeb7a91cbf6402f9de84c083d771
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b54f3c29514baeb7a91cbf6402f9de84c083d771
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=00d49332c782cc649f8bdb5da5c9f4b49ffedea2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=00d49332c782cc649f8bdb5da5c9f4b49ffedea2
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -110,13 +110,13 @@ patchesStrategicMerge:
 configMapGenerator:
   - name: supplier-pod-template-configmap
     files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b54f3c29514baeb7a91cbf6402f9de84c083d771/examples/features/scale-from-zero/pod-template.yaml
+      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/00d49332c782cc649f8bdb5da5c9f4b49ffedea2/examples/features/scale-from-zero/pod-template.yaml
 EOF
 ```
 
 6. Register network service:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b54f3c29514baeb7a91cbf6402f9de84c083d771/examples/features/scale-from-zero/autoscale-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/00d49332c782cc649f8bdb5da5c9f4b49ffedea2/examples/features/scale-from-zero/autoscale-netsvc.yaml
 ```
 
 7. Deploy NSC and supplier:
