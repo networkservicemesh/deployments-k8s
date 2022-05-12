@@ -11,7 +11,7 @@ Make sure that you have completed steps from [features](../)
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/de9b528e3358834be2a65e0fc21c93384b92f268/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c8955dd6d3a4fec1bb149a22b6cfdd76c46597d0/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -107,11 +107,11 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=de9b528e3358834be2a65e0fc21c93384b92f268
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c8955dd6d3a4fec1bb149a22b6cfdd76c46597d0
 
 resources:
 - dnsutils.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/de9b528e3358834be2a65e0fc21c93384b92f268/examples/features/dns/coredns-config-map.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c8955dd6d3a4fec1bb149a22b6cfdd76c46597d0/examples/features/dns/coredns-config-map.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
