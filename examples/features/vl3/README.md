@@ -10,5 +10,3 @@ To run any vL3 example follow steps from [Features setup](../)
 
 - [basic](./basic)
 - [scale-from-zero](./scale-from-zero)
-- [heal-nse-death](./heal-nse-death)
-- [heal-nscs-death](./heal-nscs-death)
