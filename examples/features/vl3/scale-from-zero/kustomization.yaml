@@ -6,7 +6,6 @@ namespace: ns-vl3
 
 bases:
 - ../../../../apps/nsc-kernel
-- ../../../../apps/nse-vl3-vpp
 - ../../../../apps/vl3-ipam
 - ../../../../apps/nse-supplier-k8s
 
