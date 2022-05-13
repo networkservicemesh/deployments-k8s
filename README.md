@@ -9,6 +9,7 @@ This repository provides kubernetes yaml deployments and markdown examples for N
     * [Basic examples](./examples/basic) 
     * [Interdomain and floating interdomain examples](./examples/interdomain)
     * [Features examples](./examples/features)
+        * [NSM+Istio example](./examples/nsm+istio)
         * [OPA example](./examples/features/opa)
         * [IPv6 examples](./examples/features/ipv6)
         * [DNS Example](./examples/features/dns)
