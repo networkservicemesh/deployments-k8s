@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Pod
 metadata:
-  name: nse-vl3-vpp
+  name: nse-vl3-{{ index .Labels "nodeName" }}
   labels:
     app: nse-vl3-vpp
     "spiffe.io/spiffe-id": "true"
