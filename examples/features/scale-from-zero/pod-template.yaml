@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Pod
 metadata:
-  name: nse-icmp-responder
+  name: nse-icmp-responder-{{ index .Labels "nodeName" }}
   labels:
     app: nse-icmp-responder
     "spiffe.io/spiffe-id": "true"
