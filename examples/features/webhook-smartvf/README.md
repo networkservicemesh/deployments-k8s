@@ -18,7 +18,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1d140b57ed542dfc2f9e991480c617caf3bd91bc/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/52986bfe228a59b59ff63f052e931faf9e14fed0/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -104,7 +104,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=1d140b57ed542dfc2f9e991480c617caf3bd91bc
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=52986bfe228a59b59ff63f052e931faf9e14fed0
 
 resources:
 - postgres-cl.yaml
