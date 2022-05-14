@@ -10,7 +10,7 @@ bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=v1.3.1
 - https://github.com/networkservicemesh/deployments-k8s/apps/registry-proxy-dns?ref=v1.3.1
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr-proxy?ref=v1.3.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/admission-webhook-k8s?ref=4e2903bc15e68f4519f76c617219877bde4696c2
+- https://github.com/networkservicemesh/deployments-k8s/apps/admission-webhook-k8s?ref=ea7a08fd4df3afb3e12daa29b1edf4bb966137d7
 
 patchesStrategicMerge:
 - patch-nsmgr-proxy.yaml
