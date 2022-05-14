@@ -258,7 +258,7 @@ kubectl port-forward deploy/productpage-v1  9080:9080
 ## Cleanup
 
 
-```
+```bash
 WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration ${WH}
 
