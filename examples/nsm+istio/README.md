@@ -209,7 +209,7 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f networkservice.yaml
 Start alpine networkservicemesh client:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f alpine/alpine.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f productpage/productpage.yaml
 ```
 
 Start alpine networkservicemesh endpoint (auto-scale):
@@ -227,10 +227,50 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/ist
 
 Verify connectivity:
 ```bash
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- apk add curl
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- curl -s productpage.default:9080/productpage | grep -o "<title>.*</title>"
 ```
 
 Port forward and check browser by `127.0.0.1:9080`
 ```bash
+kubectl --kubeconfig=$KUBECONFIG1 port-forward deploy/productpage-v1  9080:9080
+```
+
+
+Delete ratings on cluster2
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 delete deploy ratings-v1
+```
+
+Start ratings on cluster1
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 apply -f ratings/ratings.yaml
+```
+
+
+
+Port forward and check browser by `127.0.0.1:9080`
+```bash
 kubectl port-forward deploy/productpage-v1  9080:9080
+```
+
+
+## Cleanup
+
+
+```
+WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration ${WH}
+
+WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 delete mutatingwebhookconfiguration ${WH}
+
+kubectl --kubeconfig=$KUBECONFIG1 delete -k ./nsm/cluster1
+kubectl --kubeconfig=$KUBECONFIG2 delete -k ./nsm/cluster2
+
+kubectl --kubeconfig=$KUBECONFIG2 delete crd spiffeids.spiffeid.spiffe.io
+kubectl --kubeconfig=$KUBECONFIG2 delete ns spire
+
+kubectl --kubeconfig=$KUBECONFIG1 delete crd spiffeids.spiffeid.spiffe.io
+kubectl --kubeconfig=$KUBECONFIG1 delete ns spire
 ```

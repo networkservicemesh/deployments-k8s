@@ -2,7 +2,7 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: autoscale-istio-proxy-responder
+  name: autoscale-istio-proxy
   namespace: nsm-system
 spec:
   payload: IP
@@ -11,8 +11,8 @@ spec:
       fallthrough: true
       routes:
         - destination_selector:
-            app: nse-istio-proxy-responder
+            podName: "{{ .podName }}"
     - source_selector:
       routes:
         - destination_selector:
-            app: istio-proxy-responder-supplier
+            any: "true"

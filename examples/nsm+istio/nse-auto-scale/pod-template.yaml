@@ -4,7 +4,7 @@ kind: Pod
 metadata:
   name: "mirror-{{ (index .Path.PathSegments 0).Name }}"
   labels:
-    app: nse-istio-proxy-responder
+    app: {{ index .Labels "app" }}
     "spiffe.io/spiffe-id": "true"
     sidecar.istio.io/inject: "true"
 spec:
@@ -25,9 +25,9 @@ spec:
         - name: NSM_CIDR_PREFIX
           value: 172.16.1.2/31
         - name: NSM_SERVICE_NAMES
-          value: autoscale-istio-proxy-responder
+          value: autoscale-istio-proxy
         - name: NSM_LABELS
-          value: app:nse-istio-proxy-responder
+          value: app:{{ index .Labels "app" }},podName:{{ (index .Path.PathSegments 0).Name }}
         - name: NSM_IDLE_TIMEOUT
           value: 240s
         - name: NSM_LOG_LEVEL
