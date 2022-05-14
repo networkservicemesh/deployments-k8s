@@ -18,7 +18,7 @@ spec:
         app: productpage
         version: v1
       annotations:
-        networkservicemesh.io: kernel://autoscale-istio-proxy-responder@my.cluster2/nsm-1
+        networkservicemesh.io: kernel://autoscale-istio-proxy@my.cluster2/nsm-1?app=productpage
     spec:
       containers:
       - name: productpage

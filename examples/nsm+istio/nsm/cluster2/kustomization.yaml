@@ -6,7 +6,7 @@ namespace: nsm-system
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.3.1
-- https://github.com/networkservicemesh/deployments-k8s/apps/forwarder-vpp?ref=a5fb2e8a4bed9a036787582a1f6a03ff47ea52c2
+- https://github.com/networkservicemesh/deployments-k8s/apps/forwarder-vpp?ref=c6ff020ac663242bd381756f0b70e32aa2f1c0b5
 - https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=v1.3.1
 - https://github.com/networkservicemesh/deployments-k8s/apps/registry-proxy-dns?ref=v1.3.1
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr-proxy?ref=v1.3.1
