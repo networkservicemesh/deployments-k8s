@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Pod
 metadata:
-  name: "mirror-{{ (index .Path.PathSegments 0).Name }}"
+  name: proxy-{{ index .Labels "podName" }}
   labels:
     app: {{ index .Labels "app" }}
     "spiffe.io/spiffe-id": "true"
@@ -11,7 +11,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-istio-proxy:6d5eb55
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-istio-proxy:60c6f90
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
@@ -20,6 +20,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: POD_NAME
+          value: {{ index .Labels "podName" }}
         - name: NSM_CONNECT_TO
           value: unix:///var/lib/networkservicemesh/nsm.io.sock
         - name: NSM_CIDR_PREFIX
@@ -27,7 +29,7 @@ spec:
         - name: NSM_SERVICE_NAMES
           value: autoscale-istio-proxy
         - name: NSM_LABELS
-          value: app:{{ index .Labels "app" }},podName:{{ (index .Path.PathSegments 0).Name }}
+          value: app:{{ index .Labels "app" }}
         - name: NSM_IDLE_TIMEOUT
           value: 240s
         - name: NSM_LOG_LEVEL
