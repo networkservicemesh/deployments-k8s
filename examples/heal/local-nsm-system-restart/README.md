@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic).
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e224b50116c1ddf00985e527582eb3f6314a236e/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c359f88729f5c12db73ce6a31560174457d4e4fb/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -31,8 +31,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=e224b50116c1ddf00985e527582eb3f6314a236e
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=e224b50116c1ddf00985e527582eb3f6314a236e
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c359f88729f5c12db73ce6a31560174457d4e4fb
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c359f88729f5c12db73ce6a31560174457d4e4fb
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -121,7 +121,7 @@ kubectl delete ns nsm-system
 kubectl create ns nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=e224b50116c1ddf00985e527582eb3f6314a236e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=c359f88729f5c12db73ce6a31560174457d4e4fb
 ```
 
 Ping from NSC to NSE:
