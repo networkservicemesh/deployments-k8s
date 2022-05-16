@@ -8,7 +8,7 @@ It shows how to establish communications between these services that have been p
 
 This is achieved by running a docker container on the monolith server:
 
-![NSM  k8s_monolith](./k8s_monolith.svg "NSM k8s + monolith")
+![NSM  k8s_monolith](./k8s_monolith.png "NSM k8s + monolith")
 
 ## Requires
 
