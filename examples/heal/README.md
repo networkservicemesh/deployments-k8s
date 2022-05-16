@@ -35,3 +35,7 @@ One component:
  NSM-system:
  - [NSM system restart - local](./local-nsm-system-restart)
  - [NSM system restart - remote memif ip](./remote-nsm-system-restart-memif-ip)
+
+ vl3:
+ - [vl3 NSE death](./vl3-nse-death)
+ - [vl3 NSCs death](./vl3-nscs-death)
