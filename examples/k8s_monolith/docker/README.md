@@ -25,11 +25,11 @@ EOF
 
 Run docker-nse:
 ```bash
-docker compose -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b7fdf927d238bb27c3d72770ab81377f34fd1339/apps/nse-simple-vl3-docker/docker-compose.yaml -f docker-compose.override.yaml up -d
+docker compose -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c458b6c8cbb233b5b60c5b216c435fd7d7188838/apps/nse-simple-vl3-docker/docker-compose.yaml -f docker-compose.override.yaml up -d
 ```
 
 ## Cleanup
 
 ```bash
-docker compose -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b7fdf927d238bb27c3d72770ab81377f34fd1339/apps/nse-simple-vl3-docker/docker-compose.yaml -f docker-compose.override.yaml down
+docker compose -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c458b6c8cbb233b5b60c5b216c435fd7d7188838/apps/nse-simple-vl3-docker/docker-compose.yaml -f docker-compose.override.yaml down
 ```
