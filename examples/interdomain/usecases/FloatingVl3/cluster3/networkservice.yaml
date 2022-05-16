@@ -1,0 +1,7 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: my-interdomain-vl3-network
+spec:
+  payload: IP
