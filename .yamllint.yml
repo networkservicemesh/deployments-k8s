@@ -10,5 +10,6 @@ rules:
   # 80 chars should be enough, but don't fail if a line is longer
   line-length: disable
   indentation: disable
+  braces: disable
 
 ignore: scripts/aws/aws-k8s-cni.yaml
