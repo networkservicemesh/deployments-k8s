@@ -242,6 +242,7 @@ kubectl --context=$CONTEXT1 exec deploy/productpage-v1 -c cmd-nsc -- curl -s pro
 
 Port forward and check connectivity from NSM+Istio  by yourself!
 ```bash
+gcloud container clusters get-credentials "cluster-nsm"
 kubectl --context=$CONTEXT1 port-forward deploy/productpage-v1  9080:9080
 ```
 
