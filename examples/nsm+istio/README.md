@@ -251,8 +251,8 @@ You should correctly see the page without errors.
 
 Also, you should see different backend handlers for your requests:
 If `reviews-v1` handles your query then you will not see reviews.
-If `reviews-v2` handles your query then you will see black starts.
-If `reviews-v3` handles your query then you will see red starts.
+If `reviews-v2` handles your query then you will see black stars.
+If `reviews-v3` handles your query then you will see red stars.
 Otherwise you will see an error message.
 
 
