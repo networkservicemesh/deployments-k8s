@@ -38,15 +38,6 @@ Create a cluster
 gcloud container clusters create "cluster-nsm" --machine-type="n1-standard-2" --num-nodes="2"
 ```
 
-Replace `kube-dns` to `coredns` backend for GKE cluster
-```bash
-git clone https://github.com/coredns/deployment.git; \
-./deployment/kubernetes/deploy.sh | kubectl apply -f -; \
-kubectl scale --replicas=0 deployment/kube-dns-autoscaler --namespace=kube-system; \
-kubectl scale --replicas=0 deployment/kube-dns --namespace=kube-system; \
-rm -rf deployment; 
-```
-
 ### Prepare contexts
 
 ```bash
@@ -58,6 +49,15 @@ export CONTEXT2=***
 
 
 ## DNS
+
+Replace `kube-dns` to `coredns` backend for GKE cluster
+```bash
+git clone https://github.com/coredns/deployment.git; \
+./deployment/kubernetes/deploy.sh | kubectl --context $CONTEXT1 apply -f -; \
+kubectl --context $CONTEXT1 scale --replicas=0 deployment/kube-dns-autoscaler --namespace=kube-system; \
+kubectl --context $CONTEXT1 scale --replicas=0 deployment/kube-dns --namespace=kube-system; \
+rm -rf deployment; 
+```
 
 Expose dns service for first cluster
 ```bash
