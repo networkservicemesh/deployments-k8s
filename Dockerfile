@@ -21,6 +21,7 @@ COPY . /deployment-k8s
 # docker run -it --env-file ./clusters.env -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY} $(docker build -q . --target shell )
 FROM gcloud as shell
 WORKDIR "/deployment-k8s/examples/nsm+istio"
+RUN apt-get update && apt-get -y install jq
 CMD bash -c 'echo "${GCLOUD_SERVICE_KEY}"| gcloud auth activate-service-account --key-file=-'; \
     gcloud --quiet config set project ${GOOGLE_PROJECT_ID} && \
     gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE} && \
