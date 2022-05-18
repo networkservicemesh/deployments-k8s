@@ -53,9 +53,3 @@ CMD bash -c 'echo "${GCLOUD_SERVICE_KEY}"| gcloud auth activate-service-account 
     gcloud container clusters get-credentials "cluster-nsm" && \
     gcloud container clusters delete "cluster-nsm" && \
     eksctl delete cluster --name "cluster-istio"
-
-
-
-
-
-
