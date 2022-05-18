@@ -48,11 +48,7 @@ done
 ```
 
 ```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}')[0])
-```
-
-```bash
-NSE=$(kubectl get pods -l app=nse-vl3-vpp --field-selector spec.nodeName==${NODE} -n ns-vl3 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=($(kubectl get pods -l app=nse-vl3-vpp -n ns-vl3 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')[0])
 ```
 
 ```bash
@@ -60,7 +56,7 @@ kubectl delete pod -n ns-vl3 ${NSE}
 ```
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp --field-selector spec.nodeName==${NODE} -n ns-vl3
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp -n ns-vl3
 ```
 
 ```bash
