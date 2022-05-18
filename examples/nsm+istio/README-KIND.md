@@ -22,12 +22,11 @@ export KUBECONFIG2=/tmp/config2
 
 #### Kind Load balancer
 
-Make sure that CIDR is fine for your kind clusters
+Make sure that CIDR is fine for your kind clusters: check docker kind network via `docker inspect network kind`
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl --kubeconfig=$KUBECONFIG1 create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
 cat > metallb-config.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -40,15 +39,14 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 172.18.1.128/25
+      - 172.18.111.128/25
 EOF
 kubectl --kubeconfig=$KUBECONFIG1 apply -f metallb-config.yaml
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 
 
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl --kubeconfig=$KUBECONFIG2 create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
 cat > metallb-config.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -61,11 +59,10 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 172.18.2.128/25
+      - 172.18.222.128/25
 EOF
 kubectl --kubeconfig=$KUBECONFIG2 apply -f metallb-config.yaml
 kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
-
 ```
 
 
@@ -262,8 +259,8 @@ You should correctly see the page without errors.
 
 Also, you should see different backend handlers for your requests:
 If `reviews-v1` handles your query then you will not see reviews.
-If `reviews-v2` handles your query then you will see black starts.
-If `reviews-v3` handles your query then you will see red starts.
+If `reviews-v2` handles your query then you will see black stars.
+If `reviews-v3` handles your query then you will see red stars.
 Otherwise you will see an error message.
 
 
@@ -319,7 +316,9 @@ kubectl --kubeconfig=$KUBECONFIG1 delete -f productpage/productpage.yaml
 
 
 kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete ns istio-system
+kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection-
+kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
 
-
-kubectl --kubeconfig=$KUBECONFIG2 delete -n istio-system
+kind delete clusters cluster-1 cluster-2
 ```
