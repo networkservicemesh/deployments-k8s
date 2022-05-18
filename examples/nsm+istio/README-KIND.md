@@ -310,7 +310,16 @@ kubectl --kubeconfig=$KUBECONFIG2 delete ns spire
 kubectl --kubeconfig=$KUBECONFIG1 delete crd spiffeids.spiffeid.spiffe.io
 kubectl --kubeconfig=$KUBECONFIG1 delete ns spire
 
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
 
-gcloud container clusters delete "cluster-nsm" 
-eksctl delete cluster --name "cluster-istio"
+kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale 
+
+
+kubectl --kubeconfig=$KUBECONFIG1 delete -f productpage/productpage.yaml
+
+
+kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
+
+
+kubectl --kubeconfig=$KUBECONFIG2 delete -n istio-system
 ```
