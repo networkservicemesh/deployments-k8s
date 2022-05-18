@@ -17,7 +17,7 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Deploy the forwarder:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanvpp?ref=bd1b7b4ad64acd09d1f2fb3fe566b716c3091216
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanvpp?ref=0e9fd48f9b43199e0432d9d2c808e576ed0e5141
 ```
 
 Wait forwarder to start:
@@ -31,5 +31,5 @@ kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forward
 Delete the forwarder:
 
 ```bash
-kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanvpp?ref=bd1b7b4ad64acd09d1f2fb3fe566b716c3091216
+kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan/rvlanvpp?ref=0e9fd48f9b43199e0432d9d2c808e576ed0e5141
 ```
