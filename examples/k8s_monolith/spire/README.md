@@ -27,9 +27,9 @@ To enable the SPIRE Servers to fetch the trust bundles from each other they need
 Get and store bundles of the k8s cluster and the docker container:
 ```bash
 bundlek8s=$(kubectl exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)
-bundledock=$(docker exec cmd-nse-simple-vl3-docker bin/spire-server bundle show -format spiffe)
+bundledock=$(docker exec nse-simple-vl3-docker bin/spire-server bundle show -format spiffe)
 echo $bundledock | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://docker.nsm/cmd-nse-simple-vl3-docker"
-echo $bundlek8s | docker exec -i cmd-nse-simple-vl3-docker bin/spire-server bundle set -format spiffe -id "spiffe://k8s.nsm"
+echo $bundlek8s | docker exec -i nse-simple-vl3-docker bin/spire-server bundle set -format spiffe -id "spiffe://k8s.nsm"
 ```
 
 ## Cleanup
