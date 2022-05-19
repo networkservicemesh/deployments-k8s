@@ -7,8 +7,6 @@ if [[ -z "$AZURE_CLUSTER_NAME"  ]]; then
     exit 1
 fi
 
-az login --service-principal --username "$AZURE_APP_ID" --password "$AZURE_PASSWORD" --tenant "$AZURE_TENANT"
-
 echo -n "Creating AKS cluster '$AZURE_CLUSTER_NAME'..."
 az aks create \
     --resource-group "$AZURE_RESOURCE_GROUP" \

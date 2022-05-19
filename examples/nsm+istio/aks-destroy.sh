@@ -6,9 +6,6 @@ if [[ -z $AZURE_CLUSTER_NAME  ]]; then
     exit 1
 fi
 
-az login --service-principal --username "$AZURE_APP_ID" --password "$AZURE_PASSWORD" --tenant "$AZURE_TENANT"
-
-
 echo -n "Destroying AKS cluster $AZURE_CLUSTER_NAME..."
 
 if ! (az aks show --resource-group "$AZURE_RESOURCE_GROUP" --name "$AZURE_CLUSTER_NAME" > /dev/null 2>&1); then

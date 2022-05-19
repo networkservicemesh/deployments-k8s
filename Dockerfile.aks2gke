@@ -46,10 +46,4 @@ CMD bash -c 'echo "${GCLOUD_SERVICE_KEY}"| gcloud auth activate-service-account 
     gcloud container clusters get-credentials "cluster-istio" && \
     gcloud container clusters delete "cluster-istio" && \
     az login --service-principal --username "$AZURE_APP_ID" --password "$AZURE_PASSWORD" --tenant "$AZURE_TENANT" && \
-    /deployment-k8s/examples/nsm+istio/bash aks-destory.sh "cluster-nsm"
-
-
-
-
-
-
+    /deployment-k8s/examples/nsm+istio/aks-destroy.sh "cluster-nsm"
