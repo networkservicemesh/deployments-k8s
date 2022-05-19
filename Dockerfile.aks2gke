@@ -24,8 +24,8 @@ CMD bash -c 'echo "${GCLOUD_SERVICE_KEY}"| gcloud auth activate-service-account 
     az aks get-credentials --resource-group "nsm-ci" --name "cluster-nsm" && \
     gcloud container clusters get-credentials "cluster-istio"  && \
     export CONTEXT1=$(kubectl config get-contexts --output=name | grep cluster-nsm) && \
-    export CONTEXT2=$(kubectl config get-contexts --output=name | grep cluster-istio) \
-    /bin/bash
+    export CONTEXT2=$(kubectl config get-contexts --output=name | grep cluster-istio) && \
+    bash
 
 # docker run -it --env-file ./clusters.env -e AZURE_RESOURCE_GROUP=${AZURE_RESOURCE_GROUP} -e AZURE_APP_ID=${AZURE_APP_ID} -e AZURE_TENANT=${AZURE_TENANT} -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY} $(docker build -q . --target createclusters )
 FROM gcloud as createclusters
