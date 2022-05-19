@@ -28,7 +28,7 @@ echo Selected externalIP: $ipk8s
 
 2. Get an externalIP of the docker container:
 ```bash
-ipdock=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' cmd-nse-simple-vl3-docker)
+ipdock=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nse-simple-vl3-docker)
 echo Selected dockerIP: $ipdock
 [[ ! -z $ipdock ]]
 ```
@@ -87,13 +87,13 @@ kubectl rollout restart -n kube-system deployment/coredns
 
 Save the initial `resolv.conf` in a separate file:
 ```bash
-docker exec -d -i cmd-nse-simple-vl3-docker cp /etc/resolv.conf /etc/resolv_init.conf
+docker exec -d -i nse-simple-vl3-docker cp /etc/resolv.conf /etc/resolv_init.conf
 ```
 
 Add an entry to `resolv.conf` with a coredns address.
 Use a custom address to reduce the chance of it being used (default is 127.0.0.1)
 ```bash
-docker exec -d -i cmd-nse-simple-vl3-docker sh -c "echo 'nameserver 127.0.1.1' > /etc/resolv.conf"
+docker exec -d -i nse-simple-vl3-docker sh -c "echo 'nameserver 127.0.1.1' > /etc/resolv.conf"
 ```
 
 Create coredns config file:
@@ -137,17 +137,17 @@ EOF
 ```
 
 ```bash
-docker cp coredns-config cmd-nse-simple-vl3-docker:/
+docker cp coredns-config nse-simple-vl3-docker:/
 ```
 
 ```bash
-docker cp dnsentries.db cmd-nse-simple-vl3-docker:/
+docker cp dnsentries.db nse-simple-vl3-docker:/
 ```
 
 Run coredns with this config:
 
 ```bash
-docker exec -d cmd-nse-simple-vl3-docker coredns -conf coredns-config
+docker exec -d nse-simple-vl3-docker coredns -conf coredns-config
 ```
 
 ## Cleanup

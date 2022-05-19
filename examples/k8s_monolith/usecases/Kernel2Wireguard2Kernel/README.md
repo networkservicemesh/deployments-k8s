@@ -97,7 +97,7 @@ for nsc in $nscs
 do
     ipAddr=$(kubectl exec -n ${NAMESPACE} $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
-    docker exec cmd-nse-simple-vl3-docker ping -c4 $ipAddr
+    docker exec nse-simple-vl3-docker ping -c4 $ipAddr
 done
 ```
 
