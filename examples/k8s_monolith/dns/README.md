@@ -137,11 +137,11 @@ EOF
 ```
 
 ```bash
-docker cp coredns-config cmd-nse-simple-vl3-docker:/
+docker cp coredns-config cmd-nse-simple-vl3-docker:3ee9c60
 ```
 
 ```bash
-docker cp dnsentries.db cmd-nse-simple-vl3-docker:/
+docker cp dnsentries.db cmd-nse-simple-vl3-docker:3ee9c60
 ```
 
 Run coredns with this config:
