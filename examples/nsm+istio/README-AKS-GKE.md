@@ -10,13 +10,6 @@ Create a GKE cluster:
 gcloud container clusters create "cluster-nsm" --machine-type="n1-standard-2" --num-nodes="2"
 ```
 
-Change DNS backend to `Coredns` for GKE:
-```bash
-./deployment/kubernetes/deploy.sh | kubectl --context $CONTEXT1 apply -f -; \
-kubectl --context $CONTEXT1 scale --replicas=0 deployment/kube-dns-autoscaler --namespace=kube-system; \
-kubectl --context $CONTEXT1 scale --replicas=0 deployment/kube-dns --namespace=kube-system; \
-rm -rf deployment; 
-```
 
 Create an AKS cluster:
 ```bash
@@ -216,7 +209,6 @@ kubectl --context=$CONTEXT1 exec deploy/productpage-v1 -c cmd-nsc -- curl -s pro
 
 Port forward and check connectivity from NSM+Istio  by yourself!
 ```bash
-gcloud container clusters get-credentials "cluster-nsm"
 kubectl --context=$CONTEXT1 port-forward deploy/productpage-v1  9080:9080
 ```
 
