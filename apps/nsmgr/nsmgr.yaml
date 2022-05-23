@@ -81,7 +81,7 @@ spec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
             failureThreshold: 25
             periodSeconds: 5
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:2bd8562
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:4414716
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:
