@@ -10,7 +10,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:151b6cc
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:b3e8ebb
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
