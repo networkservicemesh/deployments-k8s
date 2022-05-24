@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-kernel
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /config
+      - name: nse
+        env:
+          - name: NSM_SERVICE_NAMES
+            value: my-postgres-service
+          - name: NSM_CIDR_PREFIX
+            value: 172.16.1.100/31
+      volumes:
+      - name: nginx-config
+        configMap:
+            name: config
+      nodeName: kind-worker2

@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nettools
+  labels:
+    app: nettools
+  annotations:
+    networkservicemesh.io: kernel://my-nginx-service/nsm-1
+spec:
+  containers:
+  - name: nettools
+    image: travelping/nettools:1.10.1
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+  nodeName: 

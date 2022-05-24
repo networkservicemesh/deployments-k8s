@@ -21,31 +21,30 @@ NAMESPACE=${NAMESPACE:10}
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create postgres client deployment and set `nodeName` to the first node:
+4. Create client deployment and set `nodeName` to the first node:
 ```bash
-cat > postgres-cl.yaml <<EOF
+cat > client.yaml <<EOF
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: postgres-cl
-  annotations:
-    networkservicemesh.io: kernel://my-postgres-service/nsm-1
+  name: nettools
   labels:
-    app: postgres-cl
+    app: nettools
+  annotations:
+    networkservicemesh.io: kernel://my-nginx-service/nsm-1
 spec:
   containers:
-  - name: postgres-cl
-    image: postgres
+  - name: nettools
+    image: travelping/nettools:1.10.1
     imagePullPolicy: IfNotPresent
-    env:
-      - name: POSTGRES_HOST_AUTH_METHOD
-        value: trust
-  nodeName: ${NODES[0]}
+    stdin: true
+    tty: true
+  nodeName: ${NODE}
 EOF
 ```
 
-5. Add to nse-kernel the postgres container and set `nodeName` it to the second node:
+5. Add to nse-kernel the nginx container and set `nodeName` it to the second node:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -57,24 +56,16 @@ spec:
   template:
     spec:
       containers:
-        - name: postgres
-          image: postgres
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 5432
-          env:
-            - name: POSTGRES_DB
-              value: test
-            - name: POSTGRES_USER
-              value: admin
-            - name: POSTGRES_PASSWORD
-              value: admin
-        - name: nse
-          env:
-            - name: NSM_SERVICE_NAMES
-              value: my-postgres-service
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+      - name: nse
+        env:
+          - name: NSM_SERVICE_NAMES
+            value: my-nginx-service
+          - name: NSM_CIDR_PREFIX
+            value: 172.16.1.100/31
       nodeName: ${NODES[1]}
 EOF
 ```
@@ -92,14 +83,14 @@ bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=395d9a32b23766cd8308d7194c9206e841615772
 
 resources:
-- postgres-cl.yaml
+- client.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
 EOF
 ```
 
-7. Deploy postgres-nsc and postgres-nse
+7. Deploy client and nginx-nse
 ```bash
 kubectl apply -k .
 ```
@@ -109,20 +100,20 @@ kubectl apply -k .
 kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ${NAMESPACE}
 ```
 
 9. Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=postgres-cl -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nettools -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-10. Try to connect from postgres-nsc to database from postgresql service:
+10. Try to connect from client to nginx service:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c postgres-cl -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
+kubectl exec ${NSC} -n ${NAMESPACE} -- curl 172.16.1.100:80 | grep -o "<title>Welcome to nginx!</title>"
 ```
 
 ## Cleanup
