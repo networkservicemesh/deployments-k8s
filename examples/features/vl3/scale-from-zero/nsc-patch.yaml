@@ -14,3 +14,13 @@ spec:
               value: kernel://autoscale-icmp-responder/nsm-1
             - name: NSM_REQUEST_TIMEOUT
               value: 30s
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - nsc-kernel
