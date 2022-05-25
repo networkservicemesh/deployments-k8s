@@ -92,7 +92,7 @@ spec:
             - name: NSM_LABELS
               value: "app:gateway"
         - name: nginx
-          image: networkservicemesh/nginx
+          image: nginx
           imagePullPolicy: IfNotPresent
       nodeName: ${NODE}
 EOF
