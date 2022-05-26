@@ -135,10 +135,12 @@ NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}
 NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
+Apply new configuration to nginx
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -c nginx --  cp /config/nginx.conf /etc/nginx/nginx.conf
 ```
 
+Reload nginx
 ```bash
 kubectl exec ${NSE} -n ${NAMESPACE} -c nginx --  nginx -s reload
 ```
