@@ -38,6 +38,7 @@ data:
 
     pf_link="$1"
     vf_num="$2"
+    server_mac="$3"
 
     device="/sys/class/net/${pf_link}/device/virtfn${vf_num}"
 
@@ -60,4 +61,4 @@ data:
       -- \
       -n 50 \
       -s \
-      -S 0a:55:44:33:22:11
+      -S ${server_mac}

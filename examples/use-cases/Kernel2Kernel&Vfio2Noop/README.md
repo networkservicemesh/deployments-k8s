@@ -15,6 +15,22 @@ Select node to deploy NSC and NSE:
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
+Generate MAC addresses for the VFIO client and server:
+```bash
+function mac_create(){
+    echo -n 00
+    dd bs=1 count=5 if=/dev/random 2>/dev/null | hexdump -v -e '/1 ":%02x"'
+}
+```
+```bash
+CLIENT_MAC=$(mac_create)
+echo Client MAC: ${CLIENT_MAC}
+```
+```bash
+SERVER_MAC=$(mac_create)
+echo Server MAC: ${SERVER_MAC}
+```
+
 Create customization file:
 ```bash
 cat > kustomization.yaml <<EOF
@@ -33,6 +49,7 @@ bases:
 patchesStrategicMerge:
 - patch-nsc.yaml
 - patch-nse.yaml
+- patch-nse-vfio.yaml
 EOF
 ```
 
@@ -76,6 +93,27 @@ spec:
 EOF
 ```
 
+Create NSE-vfio patch:
+```bash
+cat > patch-nse-vfio.yaml <<EOF
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-vfio
+spec:
+  template:
+    spec:
+      containers:
+        - name: sidecar
+          env:
+            - name: NSM_SERVICES
+              value: "pingpong@worker.domain: { addr: ${SERVER_MAC} }"
+        - name: ponger
+          command: ["/bin/bash", "/root/scripts/pong.sh", "eno4", "31", ${SERVER_MAC}]
+EOF
+```
+
 Deploy NSCs and NSEs:
 ```bash
 kubectl apply -k .
@@ -112,15 +150,18 @@ function dpdk_ping() {
   err_file="$(mktemp)"
   trap 'rm -f "${err_file}"' RETURN
 
-  out="$(kubectl -n ${NAMESPACE} exec ${NSC_VFIO} --container pinger -- /bin/bash -c '\
-    /root/dpdk-pingpong/build/app/pingpong                                            \
-      --no-huge                                                                       \
-      --                                                                              \
-      -n 500                                                                          \
-      -c                                                                              \
-      -C 0a:11:22:33:44:55                                                            \
-      -S 0a:55:44:33:22:11                                                            \
-  ' 2>"${err_file}")"
+  client_mac="$1"
+  server_mac="$2"
+
+  command="/root/dpdk-pingpong/build/app/pingpong \
+      --no-huge                                   \
+      --                                          \
+      -n 500                                      \
+      -c                                          \
+      -C ${client_mac}                            \
+      -S ${server_mac}
+      "
+  out="$(kubectl -n ${NAMESPACE} exec ${NSC_VFIO} --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
 
   if [[ "$?" != 0 ]]; then
     echo "${out}"
@@ -157,7 +198,7 @@ kubectl exec ${NSE_KERNEL} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 
 Ping from VFIO NSC to VFIO NSE:
 ```bash
-dpdk_ping
+dpdk_ping ${CLIENT_MAC} ${SERVER_MAC}
 ```
 
 ## Cleanup
