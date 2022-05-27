@@ -62,7 +62,7 @@ kubectl exec deploy/productpage-v2 -c cmd-nsc -- curl -s productpage.default:908
 
 Port forward and check connectivity from NSM+Istio by yourself!
 ```bash
-kubectl port-forward deploy/productpage-v1 9080:9080
+kubectl port-forward deploy/productpage-v2 9080:9080
 ```
 
 **Note:**
@@ -83,7 +83,7 @@ kubectl delete deploy ratings-v1
 
 Port forward and check that you see errors:
 ```bash
-kubectl port-forward deploy/productpage-v1  9080:9080
+kubectl port-forward deploy/productpage-v2  9080:9080
 ```
 
 Now lets start ratings with nsm:
