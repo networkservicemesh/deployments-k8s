@@ -23,5 +23,5 @@ done
 
 grep 'ref=4372ad7e30163c524d16662381c13aa0036a72a5' -rl examples/* | while IFS= read -r file; do
   root="$(get_root "$file")"
-  sedi -E "s/(https:\/\/)?github.com\/networkservicemesh\/deployments-k8s\/(.*)\?ref=5a21f91bb1db60ae3d6fc9f1428dd69b61c47197/${root}\2/g" "${file}"
+  sedi -E "s/(https:\/\/)?github.com\/networkservicemesh\/deployments-k8s\/(.*)\?ref=f2fa327a11e23983c4e5f668798809235dd71239/${root}\2/g" "${file}"
 done
