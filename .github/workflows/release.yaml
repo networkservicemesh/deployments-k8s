@@ -57,8 +57,8 @@ jobs:
 
       - name: Update references
         run: |
-          sed -r -i 's/(ref=[a-z0-9]*)/ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep 'ref=' -rl *`
-          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
+          sed -r -i 's/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
+          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
           git add -- .
