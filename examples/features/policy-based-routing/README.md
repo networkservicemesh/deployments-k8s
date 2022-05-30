@@ -14,7 +14,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c82a30e1def4c846b98196bb98fa8a75c1a281b3/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f74f5589f1ee4acc1bb4a893c4cab66a7184748f/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -36,7 +36,7 @@ resources:
 - client.yaml
 - config-file-nse.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c82a30e1def4c846b98196bb98fa8a75c1a281b3
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=f74f5589f1ee4acc1bb4a893c4cab66a7184748f
 
 patchesStrategicMerge:
 - patch-nse.yaml
