@@ -29,7 +29,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/cluster-configuration?ref=dc952941ab58b3091516c52ea207f5c27c8d9404
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/cluster-configuration?ref=ba6decef51a96c8425571e16f3cd28145c2f2dbe
 ```
 
 Wait for registry service exposing:
