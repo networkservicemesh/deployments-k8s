@@ -149,8 +149,8 @@ FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName
 
 Expose ports to access Jaeger and Prometheus UI:
 ```bash
-kubectl port-forward service/jaeger -n observability 16686:16686&
-kubectl port-forward service/prometheus -n observability 9090:9090&
+kubectl port-forward service/jaeger -n observability 16686:16686 2>&1 > /dev/null &
+kubectl port-forward service/prometheus -n observability 9090:9090 2>&1 > /dev/null &
 ```
 
 Retrieve traces from Jaeger:
