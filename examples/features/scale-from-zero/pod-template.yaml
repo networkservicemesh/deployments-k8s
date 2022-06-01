@@ -2,7 +2,8 @@
 apiVersion: apps/v1
 kind: Pod
 metadata:
-  name: nse-icmp-responder-{{ index .Labels "nodeName" }}
+  # Limit the length of the name. Spire doesn't work with the length > 63
+  name: nse-icmp-responder-{{ printf "%.39s"  (index .Labels "nodeName")}}pod
   labels:
     app: nse-icmp-responder
     "spiffe.io/spiffe-id": "true"
