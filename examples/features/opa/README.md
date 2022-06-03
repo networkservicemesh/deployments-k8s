@@ -19,7 +19,7 @@ Expected that Endpoint(in this case NSMgr) will fail the Request from the client
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c2c81bc3bf776b64d121ab77ef16cbbb45d52aee/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/cdc770192078edbddd174e4cc9b7b0f482e54773/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -38,8 +38,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c2c81bc3bf776b64d121ab77ef16cbbb45d52aee
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c2c81bc3bf776b64d121ab77ef16cbbb45d52aee
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=cdc770192078edbddd174e4cc9b7b0f482e54773
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=cdc770192078edbddd174e4cc9b7b0f482e54773
 
 patchesStrategicMerge:
 - patch-nsc.yaml
