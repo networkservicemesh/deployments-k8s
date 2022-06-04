@@ -41,7 +41,7 @@ gcloud container clusters create "cluster-nsm" --machine-type="n1-standard-2" --
 ### Prepare contexts
 
 ```bash
-kubect config get-contexts
+kubectl config get-contexts
 
 export CONTEXT1=***
 export CONTEXT2=***
