@@ -46,7 +46,7 @@ patchesStrategicMerge:
 configMapGenerator:
   - name: nginx-config
     files:
-      - ./nginx.conf
+      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8d2c08bc176cc71b6939d570e0a25cc366bafba1/examples/features/nse-composition/nginx.conf
 EOF
 ```
 
