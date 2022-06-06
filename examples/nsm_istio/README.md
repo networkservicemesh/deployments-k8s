@@ -47,9 +47,13 @@ kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection=enable
 kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
 ```
 
-Verify connectivity:
+Get curl for nsc:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- apk add curl
+```
+
+Verify connectivity:
+```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- curl -s productpage.default:9080/productpage | grep -o "<title>Simple Bookstore App</title>"
 ```
 **Expected output** is `<title>Simple Bookstore App</title>`
