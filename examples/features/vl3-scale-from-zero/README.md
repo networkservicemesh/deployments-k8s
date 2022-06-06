@@ -12,18 +12,12 @@ allowing the best performance for connectivity.
 kubectl create ns ns-vl3
 ```
 
-2. Register network service:
+2. Deploy NSC and supplier:
 ```bash
-kubectl apply -f ./autoscale-netsvc.yaml
-kubectl apply -f ./vl3-netsvc.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-scale-from-zero?ref=8d2c08bc176cc71b6939d570e0a25cc366bafba1
 ```
 
-3. Deploy NSC and supplier:
-```bash
-kubectl apply -k .
-```
-
-4. Wait for applications ready:
+3. Wait for applications ready:
 ```bash
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
@@ -34,13 +28,13 @@ kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp
 ```
 
-5. Find all nscs:
+4. Find all nscs:
 ```bash
 nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
 [[ ! -z $nscs ]]
 ```
 
-6. Ping each client by each client:
+5. Ping each client by each client:
 ```bash
 for nsc in $nscs 
 do
@@ -54,8 +48,7 @@ do
 done
 ```
 
-7. Ping each vl3-nse by each client. 
-
+6. Ping each vl3-nse by each client. 
 Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
 
 ```bash
@@ -72,9 +65,4 @@ done
 Delete namespace:
 ```bash
 kubectl delete ns ns-vl3
-```
-Delete network service:
-```bash
-kubectl delete -n nsm-system networkservices.networkservicemesh.io autoscale-icmp-responder
-kubectl delete -n nsm-system networkservices.networkservicemesh.io my-vl3-network
 ```
