@@ -1,6 +1,18 @@
 # deployment-k8s
 
-This repository provides kubernetes yaml deployments and markdown examples for NSM.
+![GithubActions Build Status](https://github.com/networkservicemesh/cloudtest/workflows/ci/badge.svg)
+[![Weekly minutes](https://img.shields.io/badge/Weekly%20Meeting%20Minutes-Tue%208am%20PT-blue.svg?style=plastic")](https://docs.google.com/document/d/1C9NKjo0PWNWypROEO9-Y6haw5h9Xmurvl14SXpciz2Y/edit#heading=h.rc9df0a6n3ng)
+[![Mailing list](https://img.shields.io/badge/Mailing%20List-networkservicemesh-blue.svg?style=plastic")](https://groups.google.com/forum/#!forum/networkservicemesh)
+[![GitHub license](https://img.shields.io/badge/license-Apache%20license%202.0-blue.svg)](https://github.com/networkservicemesh/cloudtest/blob/master/LICENSE)
+[![Slack Channel](https://img.shields.io/badge/Slack:-%23nsm%20on%20CNCF%20Slack-blue.svg?style=plastic&logo=slack)](https://cloud-native.slack.com/messages/CHQNNUPN1/files/FHU5KB3PW/#nsm)
+[![Slack Invite](https://img.shields.io/badge/Slack-CNCF%20Slack%20Invite-blue.svg?style=plastic&logo=slack)](https://slack.cncf.io/)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2725/badge)](https://bestpractices.coreinfrastructure.org/projects/2725)
+
+<p align="center">
+  <a href="https://www.networkservicemesh.io/"><img src="https://github.com/cncf/artwork/blob/master/projects/networkservicemesh/horizontal/color/networkservicemesh-horizontal-color.png?raw=true" width="70%" height="70%"></a>
+</p>
+
+**deployments-k8s** repository provides native kubernetes yaml deployments and markdown examples for Network Service Mesh.
 
 ## Contents
 
@@ -8,16 +20,31 @@ This repository provides kubernetes yaml deployments and markdown examples for N
 * Examples
     * [Basic examples](./examples/basic) 
     * [Interdomain and floating interdomain examples](./examples/interdomain)
+        *[NSM and Istio interdomain example](./examples/nsm_istio/)
+        *[NSM and Monolith interdomain example](./examples/k8s_monolith/)
+        *[NSM and floating interdomain vl3 example](./examples/interdomain/usecases/FloatingVl3/)
+        *[And other usecases](./examples/interdomain/usecases/)
+    * [Open telemetry examples](./examples/observability/)
     * [Features examples](./examples/features)
         * [OPA example](./examples/features/opa)
         * [IPv6 examples](./examples/features/ipv6)
+        * [Dual stack example](./examples/features/dual-stack)
+        * [Jaeger example](./examples/features/jaeger)
         * [DNS Example](./examples/features/dns)
         * [Admisson webhook Example](./examples/features/webhook)
+        * [Policy based routing Example](./examples/features/policy-based-routing/)
+        * [NSM Webhook Example](./examples/features/webhook)
+        * [Mutually aware nses Example](./examples/features/mutually-aware-nses/)
+        * [vl3 + Topology aware scale from zero Example](./examples/features/vl3-scale-from-zero/)     
+        * [Select forwarder Example](./examples/features/select-forwarder/) 
+        * [Exclude prefixes Example](./examples/features/exclude-prefixes/)       
+        * [vl3 Example](./examples/features/vl3-basic/)
         * [Topology aware scale from zero](./examples/features/scale-from-zero)
+        * [And other features](./examples/features)
     * [SRIOV examples](./examples/sriov)
     * [OVS examples](./examples/ovs)
-    * [Memory examples](./examples/memory)
-    * [Heal examples](./examples/heal)
+    * [Memory registry backend examples](./examples/memory)
+    * [Heal and resilience examples](./examples/heal)
 
 ## Requirements
 Minimum required ```kubectl``` client version is ```v1.21.0```

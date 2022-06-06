@@ -23,6 +23,8 @@ echo $bundle1 | kubectl --kubeconfig=$KUBECONFIG2 exec -i spire-server-0 -n spir
 ## Cleanup
 
 ```bash
+kubectl --kubeconfig=$KUBECONFIG1 delete crd spiffeids.spiffeid.spiffe.io
+kubectl --kubeconfig=$KUBECONFIG2 delete crd spiffeids.spiffeid.spiffe.io
 kubectl --kubeconfig=$KUBECONFIG1 delete -k ./cluster1
 kubectl --kubeconfig=$KUBECONFIG2 delete -k ./cluster2
 ```
