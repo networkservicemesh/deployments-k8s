@@ -11,7 +11,7 @@ metadata:
 spec:
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/cmd-nse-vl3-vpp:6fc636e
+      image: ghcr.io/networkservicemesh/cmd-nse-vl3-vpp:9374c75
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
