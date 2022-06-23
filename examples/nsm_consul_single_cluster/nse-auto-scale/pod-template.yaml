@@ -1,0 +1,76 @@
+---
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: proxy-{{ index .Labels "podName" }}
+  labels:
+    app: proxy-{{ index .Labels "podName" }}
+    "spiffe.io/spiffe-id": "true"
+  annotations:
+    'consul.hashicorp.com/connect-inject': 'true'
+    'consul.hashicorp.com/connect-service-upstreams': 'static-server:8080'
+spec:
+  restartPolicy: Never
+  containers:
+    - name: nse
+      image: ghcr.io/networkservicemesh/cmd-nse-icmp-responder:v1.4.0-rc.1
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
+      env:
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: unix:///run/spire/sockets/agent.sock
+        - name: NSM_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAME
+          value: {{ index .Labels "podName" }}
+        - name: NSM_CONNECT_TO
+          value: unix:///var/lib/networkservicemesh/nsm.io.sock
+        - name: NSM_CIDR_PREFIX
+          value: 172.16.1.2/31
+        - name: NSM_SERVICE_NAMES
+          value: autoscale-consul-proxy
+        - name: NSM_LABELS
+          value: app:{{ index .Labels "app" }}
+        - name: NSM_IDLE_TIMEOUT
+          value: 240s
+        - name: NSM_LOG_LEVEL
+          value: TRACE
+        - name: NSM_RULES_CONFIG
+          value: iptables-map
+      volumeMounts:
+        - name: spire-agent-socket
+          mountPath: /run/spire/sockets
+          readOnly: true
+        - name: nsm-socket
+          mountPath: /var/lib/networkservicemesh
+          readOnly: true
+        - name: iptables-config-map
+          mountPath: /iptables-map
+      resources:
+        limits:
+          memory: 40Mi
+          cpu: 150m
+    - name: proxy-alpine-nsc
+      image: hashicorp/http-echo:latest
+      args:
+        - -text="hello world from nse"
+        - -listen=:9090
+      ports:
+        - containerPort: 9090
+          name: http
+  serviceAccountName: proxy-alpine-nsc
+  volumes:
+    - name: spire-agent-socket
+      hostPath:
+        path: /run/spire/sockets
+        type: Directory
+    - name: nsm-socket
+      hostPath:
+        path: /var/lib/networkservicemesh
+        type: DirectoryOrCreate
+    - name: iptables-config-map
+      configMap:
+        name: iptables-map

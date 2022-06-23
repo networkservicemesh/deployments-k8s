@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: proxy-alpine-nsc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-alpine-nsc
+spec:
+  selector:
+    app: proxy-alpine-nsc
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
