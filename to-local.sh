@@ -22,7 +22,7 @@ grep 'raw.githubusercontent.com' -rl examples/* | while IFS= read -r file; do
   sedi -E "s/(https:\/\/)?raw.githubusercontent.com\/networkservicemesh\/deployments-k8s\/[a-z0-9.]*\/(.*)/${root}\/\2/g" "${file}"
 done
 
-grep '?ref=2e0760215a2b140a3ace11bd31af9a70904fce0f' -rl examples/* | while IFS= read -r file; do
+grep '?ref=5ff887af2f649673be76087493de5c5d3b3e94ea' -rl examples/* | while IFS= read -r file; do
   root="$(get_root "$file")"
-  sedi -E "s/(https:\/\/)?github.com\/networkservicemesh\/deployments-k8s\/(.*)\?ref=2e0760215a2b140a3ace11bd31af9a70904fce0f/${root}\/\2/g" "${file}"
+  sedi -E "s/(https:\/\/)?github.com\/networkservicemesh\/deployments-k8s\/(.*)\?ref=5ff887af2f649673be76087493de5c5d3b3e94ea/${root}\/\2/g" "${file}"
 done
