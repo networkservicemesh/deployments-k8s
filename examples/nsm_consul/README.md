@@ -1,8 +1,6 @@
 # NSM + Consul interdomain example over kind clusters
 
-This example show how can be used nsm over 
-
-![NSM  interdomain Scheme](./NSM+Istio_Datapath.svg "NSM Basic floating interdomain Scheme")
+This example show how Consul can be used over nsm 
 
 
 ## Requires
