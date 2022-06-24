@@ -1,3 +1,4 @@
+---
 global:
   name: consul
   datacenter: dc1

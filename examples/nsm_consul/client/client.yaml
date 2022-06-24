@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-nsc
+  labels:
+    app: alpine-nsc 
+  annotations:
+    networkservicemesh.io: kernel://autoscale-consul-proxy@my.cluster2/nsm-1?app=alpine-nsc
+spec:
+  containers:
+  - name: alpine-nsc
+    image: alpine:3.15.0
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true

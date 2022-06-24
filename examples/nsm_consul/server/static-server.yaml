@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -43,12 +44,5 @@ spec:
           ports:
             - containerPort: 8080
               name: http
-        - name: alpine
-          securityContext:
-            privileged: true
-          image: alpine:3.15.0
-          imagePullPolicy: IfNotPresent
-          stdin: true
-          tty: true
       # If ACLs are enabled, the serviceAccountName must match the Consul service name.
       serviceAccountName: static-server
