@@ -4,7 +4,7 @@ kind: Pod
 metadata:
   name: alpine-nsc
   labels:
-    app: alpine-nsc 
+    app: alpine-nsc
   annotations:
     networkservicemesh.io: kernel://autoscale-consul-proxy@my.cluster2/nsm-1?app=alpine-nsc
 spec:
