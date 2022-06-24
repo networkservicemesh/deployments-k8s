@@ -12,6 +12,9 @@ configMapGenerator:
   - name: supplier-pod-template-configmap
     files:
       - pod-template.yaml
+  - name: iptables-map
+    files:
+      - iptables-map
 
 generatorOptions:
   disableNameSuffixHash: true

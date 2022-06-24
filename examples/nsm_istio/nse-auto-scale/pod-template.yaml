@@ -11,7 +11,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-istio-proxy:c26db55
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:32fbf26
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
@@ -34,6 +34,8 @@ spec:
           value: 240s
         - name: NSM_LOG_LEVEL
           value: TRACE
+        - name: NSM_RULES_CONFIG
+          value: iptables-map
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
@@ -41,6 +43,8 @@ spec:
         - name: nsm-socket
           mountPath: /var/lib/networkservicemesh
           readOnly: true
+        - name: iptables-config-map
+          mountPath: /iptables-map
       resources:
         limits:
           memory: 40Mi
@@ -54,3 +58,6 @@ spec:
       hostPath:
         path: /var/lib/networkservicemesh
         type: DirectoryOrCreate
+    - name: iptables-config-map
+      configMap:
+        name: iptables-map
