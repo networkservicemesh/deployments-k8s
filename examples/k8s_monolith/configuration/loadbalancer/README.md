@@ -10,7 +10,7 @@ There are three supported ways to install MetalLB: using plain Kubernetes manife
 
 Apply metallb for the cluster:
 ```bash
-if [[ ! -z CLUSTER_CIDR ]]; then
+if [[ ! -z $CLUSTER_CIDR ]]; then
   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
   kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml

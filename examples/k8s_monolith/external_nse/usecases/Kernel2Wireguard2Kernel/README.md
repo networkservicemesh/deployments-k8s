@@ -5,13 +5,13 @@ NSC and docker-NSE are using the `kernel` local mechanism.
 
 ## Requires
 
-Make sure that you have completed steps from [k8s_monolith](../../)
+Make sure that you have completed steps from [external NSE](../../)
 
 ## Run
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/82b60d98081c7aaed6c54a35c060610a24820321/examples/k8s_monolith/usecases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d2fb9ea52963949ba70d8dc373ab76d99f54b633/examples/k8s_monolith/external_nse/usecases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
