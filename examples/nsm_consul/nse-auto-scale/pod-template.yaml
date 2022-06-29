@@ -4,15 +4,19 @@ kind: Pod
 metadata:
   name: proxy-{{ index .Labels "podName" }}
   labels:
-    app: {{ index .Labels "app" }}
+    app: proxy-{{ index .Labels "podName" }}
     "spiffe.io/spiffe-id": "true"
-    sidecar.istio.io/inject: "true"
+  annotations:
+    'consul.hashicorp.com/connect-inject': 'true'
+    'consul.hashicorp.com/connect-service-upstreams': 'static-server:8080'
 spec:
   restartPolicy: Never
   containers:
     - name: nse
       image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:32fbf26
       imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
           value: unix:///run/spire/sockets/agent.sock
@@ -27,15 +31,15 @@ spec:
         - name: NSM_CIDR_PREFIX
           value: 172.16.1.2/31
         - name: NSM_SERVICE_NAMES
-          value: autoscale-istio-proxy
+          value: autoscale-consul-proxy
         - name: NSM_LABELS
           value: app:{{ index .Labels "app" }}
         - name: NSM_IDLE_TIMEOUT
           value: 240s
         - name: NSM_LOG_LEVEL
           value: TRACE
-        - name: NSM_RULES_CONFIG_PATH
-          value: iptables-map.yaml/iptables-map.yaml.yaml
+        - name: NSM_RULES_CONFIG
+          value: iptables-map.yaml
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
@@ -49,6 +53,15 @@ spec:
         limits:
           memory: 40Mi
           cpu: 150m
+    - name: proxy-alpine-nsc
+      image: hashicorp/http-echo:latest
+      args:
+        - -text="hello world from nse"
+        - -listen=:9090
+      ports:
+        - containerPort: 9090
+          name: http
+  serviceAccountName: proxy-alpine-nsc
   volumes:
     - name: spire-agent-socket
       hostPath:
