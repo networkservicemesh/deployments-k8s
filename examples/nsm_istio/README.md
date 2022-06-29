@@ -7,10 +7,10 @@ This example show how can be used nsm over
 
 ## Requires
 
-- [Load balancer](./loadbalancer)
-- [Interdomain DNS](./dns)
-- [Interdomain spire](./spire)
-- [Interdomain nsm](./nsm)
+- [Load balancer](../basic_interdomain/loadbalancer)
+- [Interdomain DNS](../basic_interdomain/dns)
+- [Interdomain spire](../basic_interdomain/spire)
+- [Interdomain nsm](../basic_interdomain/nsm)
 
 
 ## Run

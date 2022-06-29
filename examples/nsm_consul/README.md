@@ -5,10 +5,10 @@ This example show how Consul can be used over nsm
 
 ## Requires
 
-- [Load balancer](../nsm_istio/loadbalancer)
-- [Interdomain DNS](../nsm_istio/dns)
-- [Interdomain spire](../nsm_istio/spire)
-- [Interdomain nsm](../nsm_istio/nsm)
+- [Load balancer](../basic_interdomain/loadbalancer)
+- [Interdomain DNS](../basic_interdomain/dns)
+- [Interdomain spire](../basic_interdomain/spire)
+- [Interdomain nsm](../basic_interdomain/nsm)
 
 
 ## Run
@@ -67,9 +67,7 @@ You should see "hello world" answer.
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete deployment static-server
 kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/nse-auto-scale?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a 
-kubectl --kubeconfig=$KUBECONFIG1 delete -f client/client.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/client/client.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/networkservice.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
 consul-k8s uninstall --kubeconfig=$KUBECONFIG2 -auto-approve=true -wipe-data=true
-kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
-kind delete clusters cluster-1 cluster-2
 ```
