@@ -38,7 +38,7 @@ spec:
           value: 240s
         - name: NSM_LOG_LEVEL
           value: TRACE
-        - name: NSM_RULES_CONFIG
+        - name: NSM_RULES_CONFIG_PATH
           value: iptables-map.yaml
       volumeMounts:
         - name: spire-agent-socket
@@ -48,7 +48,7 @@ spec:
           mountPath: /var/lib/networkservicemesh
           readOnly: true
         - name: iptables-config-map
-          mountPath: /iptables-map.yaml
+          mountPath: /iptables-map
       resources:
         limits:
           memory: 40Mi
@@ -73,4 +73,4 @@ spec:
         type: DirectoryOrCreate
     - name: iptables-config-map
       configMap:
-        name: iptables-map.yaml
+        name: iptables-map

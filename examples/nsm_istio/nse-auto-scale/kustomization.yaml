@@ -14,7 +14,7 @@ configMapGenerator:
       - pod-template.yaml
   - name: iptables-map
     files:
-      - iptables-map.yaml.yaml
+      - iptables-map.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
