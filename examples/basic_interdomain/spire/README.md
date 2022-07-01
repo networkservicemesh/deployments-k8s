@@ -6,8 +6,8 @@ This example shows how to simply configure two spire servers from different clus
 
 Install spire
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic_interdomain/spire/cluster1?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic_interdomain/spire/cluster2?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2
 ```
 
 Wait for spire ready

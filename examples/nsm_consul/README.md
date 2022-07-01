@@ -21,36 +21,36 @@ brew install hashicorp/tap/consul-k8s
 
 Install Consul for the second cluster:
 ```bash
-consul-k8s install -config-file=https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/helm-consul-values.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a -set global.image=hashicorp/consul:1.12.0 --kubeconfig=$KUBECONFIG2
+consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 --kubeconfig=$KUBECONFIG2
 ```
 
 ### Verify NSM+CONSUL
 
 Install networkservice for the second cluster::
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/networkservice.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a 
+kubectl --kubeconfig=$KUBECONFIG2 apply -f networkservice.yaml 
 ```
 
 Start `alpine` networkservicemesh client for the first cluster:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/client/client.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a 
+kubectl --kubeconfig=$KUBECONFIG1 apply -f client/client.yaml 
 ```
 
 Create kubernetes service for the networkservicemesh endpoint:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/service.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a 
+kubectl --kubeconfig=$KUBECONFIG2 apply -f service.yaml 
 ```
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
 
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/nse-auto-scale?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
+kubectl --kubeconfig=$KUBECONFIG2 apply -k nse-auto-scale
 ```
 
 Install `static-server` Consul workload on the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/server/static-server.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a  
+kubectl --kubeconfig=$KUBECONFIG2 apply -f server/static-server.yaml
 ```
 
 Verify connection from networkservicemesh client to consul server:
@@ -66,8 +66,8 @@ You should see "hello world" answer.
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete deployment static-server
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/nse-auto-scale?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a 
-kubectl --kubeconfig=$KUBECONFIG1 delete -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/client/client.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://github.com/networkservicemesh/deployments-k8s/examples/nsm_consul/networkservice.yaml?ref=9b2e8e76fbc7505da8e87ea24bf90ac39f4b6c1a
+kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale
+kubectl --kubeconfig=$KUBECONFIG1 delete -f client/client.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
 consul-k8s uninstall --kubeconfig=$KUBECONFIG2 -auto-approve=true -wipe-data=true
 ```
