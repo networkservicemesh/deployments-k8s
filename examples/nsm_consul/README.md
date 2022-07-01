@@ -24,8 +24,6 @@ Install Consul for the second cluster:
 consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 --kubeconfig=$KUBECONFIG2
 ```
 
-### Verify NSM+CONSUL
-
 Install networkservice for the second cluster::
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -f networkservice.yaml 
@@ -66,8 +64,16 @@ kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- curl 172.16.1.2:8080 | 
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete deployment static-server
+```
+```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale
+```
+```bash
 kubectl --kubeconfig=$KUBECONFIG1 delete -f client/client.yaml
+```
+```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
+```
+```bash
 consul-k8s uninstall --kubeconfig=$KUBECONFIG2 -auto-approve=true -wipe-data=true
 ```
