@@ -39,7 +39,7 @@ spec:
         - name: NSM_LOG_LEVEL
           value: TRACE
         - name: NSM_RULES_CONFIG_PATH
-          value: iptables-map.yaml
+          value: iptables-map/iptables-map.yaml
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets

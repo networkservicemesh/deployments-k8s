@@ -44,7 +44,6 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f service.yaml
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
-
 kubectl --kubeconfig=$KUBECONFIG2 apply -k nse-auto-scale
 ```
 
@@ -56,10 +55,11 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f server/static-server.yaml
 Verify connection from networkservicemesh client to consul server:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- apk add curl
-kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- curl 172.16.1.2:8080
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- curl 172.16.1.2:8080 | grep -o "hello world"
 ```
 
-You should see "hello world" answer.
 
 ## Cleanup
 
