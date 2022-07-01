@@ -4,10 +4,10 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 
 ## Requires
 
-- [Load balancer](/examples/basic_interdomain/loadbalancer)
-- [Interdomain DNS](/examples/basic_interdomain/dns)
-- [Interdomain spire](/examples/basic_interdomain/spire)
-- [Interdomain nsm](/examples/basic_interdomain/nsm)
+- [Load balancer](./loadbalancer)
+- [Interdomain DNS](./dns)
+- [Interdomain spire](./spire)
+- [Interdomain nsm](./nsm)
 
 
 ## Includes
