@@ -50,6 +50,33 @@ Install `static-server` Consul workload on the second cluster:
 kubectl --kubeconfig=$KUBECONFIG2 apply -f server/static-server.yaml
 ```
 
+Wait for proxy-alpine-nsc to be ready:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=3m pod proxy-alpine-nsc
+kubectl --kubeconfig=$KUBECONFIG2 describe pods proxy-alpine-nsc
+kubectl --kubeconfig=$KUBECONFIG2 exec -it proxy-alpine-nsc -- bash -c ls
+```
+
+Wait for static-server to be ready:
+```bash
+stsrv=$(kubectl get pods -l app=static-server --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=3m pod $stsrv
+kubectl --kubeconfig=$KUBECONFIG2 describe pods $stsrv
+```
+
+Wait for nse-supplier to be ready:
+```bash
+supplier=$(kubectl get pods -l app=nse-supplier-k8s --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=3m pod $supplier
+kubectl --kubeconfig=$KUBECONFIG2 describe pods $supplier
+```
+
+Wait for nse-supplier to be ready:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 describe pods alpine-nsc
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=10m pod alpine-nsc
+```
+
 Verify connection from networkservicemesh client to consul server:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- apk add curl
