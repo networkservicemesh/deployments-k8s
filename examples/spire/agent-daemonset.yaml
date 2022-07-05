@@ -28,6 +28,13 @@ spec:
           image: gcr.io/spiffe-io/wait-for-it
           imagePullPolicy: IfNotPresent
           args: ["-t", "30", "spire-server:8081"]
+        - name: init-bundle
+          # Additional init container with the same wait-for-it image to
+          # provide workaround for https://github.com/spiffe/spire/issues/3032
+          # It checks if the bundle is in place and ready to be parsed or not.
+          image: gcr.io/spiffe-io/wait-for-it
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', "t=0; until [ -f /run/spire/bundle/bundle.crt 2>&1 ] || [ $t -eq 5 ]; do t=`expr $t + 1`; sleep 1; done"]
       containers:
         - name: spire-agent
           image: gcr.io/spiffe-io/spire-agent:1.2.3
