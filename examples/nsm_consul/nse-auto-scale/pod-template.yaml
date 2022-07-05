@@ -5,10 +5,11 @@ metadata:
   name: proxy-{{ index .Labels "podName" }}
   labels:
     app: proxy-{{ index .Labels "podName" }}
+    pod_type: proxy
     "spiffe.io/spiffe-id": "true"
   annotations:
     'consul.hashicorp.com/connect-inject': 'true'
-    'consul.hashicorp.com/connect-service-upstreams': 'static-server:8080'
+    'consul.hashicorp.com/connect-service-upstreams': 'counting:9001'
 spec:
   restartPolicy: Never
   containers:
@@ -53,15 +54,7 @@ spec:
         limits:
           memory: 40Mi
           cpu: 150m
-    - name: proxy-alpine-nsc
-      image: hashicorp/http-echo:latest
-      args:
-        - -text="hello world from nse"
-        - -listen=:9090
-      ports:
-        - containerPort: 9090
-          name: http
-  serviceAccountName: proxy-alpine-nsc
+  serviceAccountName: proxy-service
   volumes:
     - name: spire-agent-socket
       hostPath:

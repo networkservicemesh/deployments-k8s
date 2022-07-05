@@ -29,10 +29,10 @@ Install networkservice for the second cluster::
 kubectl --kubeconfig=$KUBECONFIG2 apply -f networkservice.yaml 
 ```
 
-Start `alpine` networkservicemesh client for the first cluster:
+Start `dashboard` networkservicemesh client for the first cluster:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f client/client.yaml 
+kubectl --kubeconfig=$KUBECONFIG1 apply -f client/dashboard.yaml 
 ```
 
 Create kubernetes service for the networkservicemesh endpoint:
@@ -45,18 +45,40 @@ Start `auto-scale` networkservicemesh endpoint:
 kubectl --kubeconfig=$KUBECONFIG2 apply -k nse-auto-scale
 ```
 
-Install `static-server` Consul workload on the second cluster:
+Install `counting` Consul workload on the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f server/static-server.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f server/counting.yaml
 ```
 
-Verify connection from networkservicemesh client to consul server:
+Verify connection from networkservicemesh client to the consul counting service:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- apk add curl
+kubectl --kubeconfig=$KUBECONFIG1 exec -it dashboard -- apk add curl
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec -it alpine-nsc -- curl 172.16.1.2:8080 | grep -o "hello world"
+kubectl --kubeconfig=$KUBECONFIG1 exec -it dashboard -- curl counting:9001 
 ```
+
+Port forward and check connectivity from NSM+Consul by yourself!
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 port-forward dashboard 9002:9002
+```
+Now we're simulating that someting went wrong and counting from the consul cluster is down.
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 delete deploy counting
+```
+Port forward and check that you see errors:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 port-forward dashboard 9002:9002
+```
+Now lets start counting on cluster1:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 apply -f server/counting_nsm.yaml
+```
+Port forward and check that you don't have errors:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 port-forward dashboard 9002:9002
+```
+Congratulations! You have made a interdomain connection between via NSM + Consul!
 
 
 ## Cleanup
