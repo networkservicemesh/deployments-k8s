@@ -22,4 +22,4 @@ configMapGenerator:
     - k8s-workload-registrar.conf
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=821714565782ed3c8d1481b91184eddc5efc826e
+- https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=cbc5639a12a35af201780d1b09499e6c1d2f5081
