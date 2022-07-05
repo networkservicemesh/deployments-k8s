@@ -47,6 +47,13 @@ spec:
           readinessProbe:
             exec:
               command: ["/opt/spire/bin/spire-server", "healthcheck", "--shallow"]
+          # This is a workaround for https://github.com/spiffe/spire/issues/2872 
+          # that prevents k8s-workload-registrar container restarts until 
+          # https://github.com/spiffe/spire/pull/2921 will come with SPIRE 1.3.0.
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sleep", "2"]
         - name: k8s-workload-registrar
           image: gcr.io/spiffe-io/k8s-workload-registrar:1.2.3
           args:
