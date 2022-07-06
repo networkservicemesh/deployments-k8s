@@ -85,13 +85,13 @@ Congratulations! You have made a interdomain connection between via NSM + Consul
 
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete deployment static-server
+kubectl --kubeconfig=$KUBECONFIG2 delete deployment counting
 ```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -f client/client.yaml
+kubectl --kubeconfig=$KUBECONFIG1 delete -f client/dashboard.yaml
 ```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
