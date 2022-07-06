@@ -11,7 +11,7 @@ Make sure that you have completed steps from [k8s_monolith](../../)
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/67284c3d99bc2e22b3212b89ddf7151ece941810/examples/k8s_monolith/usecases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4228db0718cc9e1538d39e78d26b5a36ece397c5/examples/k8s_monolith/usecases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -25,7 +25,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=67284c3d99bc2e22b3212b89ddf7151ece941810
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=4228db0718cc9e1538d39e78d26b5a36ece397c5
 
 patchesStrategicMerge:
 - patch-nsc.yaml
