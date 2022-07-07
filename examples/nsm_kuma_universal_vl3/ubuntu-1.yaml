@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-1
+  namespace: default
+  annotations:
+    networkservicemesh.io: kernel://my-vl3-network/nsm-1
+  labels:
+    name: redis
+spec:
+  containers:
+  - image: ubuntu
+    ports:
+    - containerPort: 9901
+    - containerPort: 15001
+    command:
+      - /bin/sh
+      - "-c"
+      - "sleep 600m"
+    imagePullPolicy: IfNotPresent
+    name: ubuntu
+    env:
+    - name: KUMA_CP_ADDRESS
+      value: ${KUMA_CP_ADDRESS}
+  restartPolicy: OnFailure
