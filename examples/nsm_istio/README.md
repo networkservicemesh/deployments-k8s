@@ -46,6 +46,10 @@ kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection=enable
 
 kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
 ```
+Wait for the deploy/productpage-v1 client to be ready:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=deploy/productpage-v1
+```
 
 Get curl for nsc:
 ```bash

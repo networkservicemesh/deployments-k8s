@@ -50,6 +50,11 @@ Install `counting` Consul workload on the second cluster:
 kubectl --kubeconfig=$KUBECONFIG2 apply -f server/counting.yaml
 ```
 
+Wait for the dashboard client to be ready
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=dashboard
+```
+
 Verify connection from networkservicemesh client to the consul counting service:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec -it dashboard -- apk add curl
