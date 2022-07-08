@@ -57,6 +57,7 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l
 
 Verify connection from networkservicemesh client to the consul counting service:
 ```bash
+kubectl --kubeconfig=$KUBECONFIG1 exec -it pod/dashboard-nsc -c cmd-nsc -- apk update
 kubectl --kubeconfig=$KUBECONFIG1 exec -it pod/dashboard-nsc -c cmd-nsc -- apk add curl
 ```
 ```bash
