@@ -84,7 +84,7 @@ Congratulations! You have made a interdomain connection between via NSM + Consul
 
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete deployment counting
+kubectl --kubeconfig=$KUBECONFIG1 delete deployment counting
 ```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale
