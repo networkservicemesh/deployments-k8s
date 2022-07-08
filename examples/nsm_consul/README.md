@@ -96,5 +96,8 @@ kubectl --kubeconfig=$KUBECONFIG1 delete -f client/dashboard.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
 ```
 ```bash
+kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
+```
+```bash
 consul-k8s uninstall --kubeconfig=$KUBECONFIG2 -auto-approve=true -wipe-data=true
 ```
