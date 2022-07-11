@@ -8,6 +8,14 @@ There are three supported ways to install MetalLB: using plain Kubernetes manife
 
 ## Run
 
+Install monitoring API:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
 Apply metallb for the first cluster:
 ```bash
 if [[ ! -z $CLUSTER1_CIDR ]]; then

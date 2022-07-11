@@ -49,9 +49,6 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/ist
 
 Check resources for the first cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```
-```bash
 kubectl top pods -A
 ```
 ```bash
@@ -59,9 +56,6 @@ kubectl top nodes -A
 ```
 
 Check resources for the second cluster:
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```
 ```bash
 kubectl top pods -A
 ```
