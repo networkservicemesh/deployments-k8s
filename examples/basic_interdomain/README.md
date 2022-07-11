@@ -1,6 +1,8 @@
 # Basic examples
 
-Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8s`. This setup can be used to check mechanisms combination or some kind of NSM [features](../features).
+This setup is basic for interdomain examples on two clusters. This setup can be used to check next examples: 
+[Consul](../nsm_consul)
+[Istio](../nsm_istio)
 
 ## Requires
 

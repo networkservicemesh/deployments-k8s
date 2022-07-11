@@ -49,18 +49,18 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/ist
 
 Check resources for the first cluster:
 ```bash
-kubectl top pods -A
+kubectl --kubeconfig=$KUBECONFIG1 top pods -A
 ```
 ```bash
-kubectl top nodes -A
+kubectl --kubeconfig=$KUBECONFIG1 top nodes -A
 ```
 
 Check resources for the second cluster:
 ```bash
-kubectl top pods -A
+kubectl --kubeconfig=$KUBECONFIG2 top pods -A
 ```
 ```bash
-kubectl top nodes -A
+kubectl --kubeconfig=$KUBECONFIG2 top nodes -A
 ```
 
 Wait for the deploy/productpage-v1 client to be ready:
