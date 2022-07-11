@@ -48,7 +48,7 @@ spec:
       resources:
         limits:
           memory: 40Mi
-          cpu: 150m
+          cpu: 50m
   volumes:
     - name: spire-agent-socket
       hostPath:
