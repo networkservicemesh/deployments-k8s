@@ -84,6 +84,13 @@ You have made a interdomain connection between two clusters via NSM + Istio!
 
 ## Cleanup
 
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 get pods -A
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 logs deploy/productpage-v1 -c cmd-nsc-init
+```
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
