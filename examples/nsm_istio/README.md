@@ -89,6 +89,10 @@ kubectl --kubeconfig=$KUBECONFIG1 get pods -A
 ```
 
 ```bash
+kubectl --kubeconfig=$KUBECONFIG2 get pods -A
+```
+
+```bash
 kubectl --kubeconfig=$KUBECONFIG1 logs deploy/productpage-v1 -c cmd-nsc-init
 ```
 
