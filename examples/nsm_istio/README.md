@@ -52,7 +52,7 @@ Check resources for the first cluster:
 kubectl --kubeconfig=$KUBECONFIG1 top pods -A
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 top nodes -A
+kubectl --kubeconfig=$KUBECONFIG1 top nodes
 ```
 
 Check resources for the second cluster:
@@ -60,7 +60,7 @@ Check resources for the second cluster:
 kubectl --kubeconfig=$KUBECONFIG2 top pods -A
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 top nodes -A
+kubectl --kubeconfig=$KUBECONFIG2 top nodes
 ```
 
 Wait for the deploy/productpage-v1 client to be ready:
