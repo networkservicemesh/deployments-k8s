@@ -65,7 +65,7 @@ kubectl --kubeconfig=$KUBECONFIG2 top nodes
 
 Wait for the deploy/productpage-v1 client to be ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=productpage
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=productpage
 ```
 
 Get curl for nsc:

@@ -1,2 +1,0 @@
----
-- -I PREROUTING 1 -p tcp -i {{ .NsmInterfaceName }} -j DNAT --to-destination 127.0.0.1
