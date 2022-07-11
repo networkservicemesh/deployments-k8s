@@ -97,6 +97,11 @@ kubectl --kubeconfig=$KUBECONFIG1 logs deploy/productpage-v1 -c cmd-nsc-init
 ```
 
 ```bash
+NSE=$(kubectl get pods -l app=productpage,spiffe.io/spiffe-id=true --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 logs $NSE -c nse
+```
+
+```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale 
 kubectl --kubeconfig=$KUBECONFIG1 delete -f productpage/productpage.yaml
