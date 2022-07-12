@@ -20,7 +20,7 @@
 * Examples
     * [Basic examples](./examples/basic) 
     * [Interdomain and floating interdomain examples](./examples/interdomain)
-        * [NSM and Istio interdomain example](./examples/nsm_istio/)
+        * [NSM and Istio interdomain example](./examples/basic_interdomain/nsm_istio_booking/)
         * [NSM and Monolith interdomain example](./examples/k8s_monolith/)
         * [NSM and floating interdomain vl3 example](./examples/interdomain/usecases/FloatingVl3/)
         * [And other usecases](./examples/interdomain/usecases/)
