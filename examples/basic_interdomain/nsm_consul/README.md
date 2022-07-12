@@ -5,10 +5,10 @@ This example shows how Consul can be used over NSM.
 
 ## Requires
 
-- [Load balancer](../basic_interdomain/loadbalancer)
-- [Interdomain DNS](../basic_interdomain/dns)
-- [Interdomain spire](../basic_interdomain/spire)
-- [Interdomain nsm](../basic_interdomain/nsm)
+- [Load balancer](../loadbalancer)
+- [Interdomain DNS](../dns)
+- [Interdomain spire](../spire)
+- [Interdomain nsm](../nsm)
 
 
 ## Run

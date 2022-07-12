@@ -7,10 +7,10 @@ This example show how can be used nsm over
 
 ## Requires
 
-- [Load balancer](../basic_interdomain/loadbalancer)
-- [Interdomain DNS](../basic_interdomain/dns)
-- [Interdomain spire](../basic_interdomain/spire)
-- [Interdomain nsm](../basic_interdomain/nsm)
+- [Load balancer](../loadbalancer)
+- [Interdomain DNS](../dns)
+- [Interdomain spire](../spire)
+- [Interdomain nsm](../nsm)
 
 
 ## Run
@@ -67,32 +67,6 @@ Congratulations!
 You have made a interdomain connection between two clusters via NSM + Istio!
 
 ## Cleanup
-
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 get pods -A
-```
-
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 get pods -A
-```
-
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 logs deploy/productpage-v1 -c cmd-nsc-init
-```
-
-```bash
-NSE=$(kubectl get pods -l app=productpage,spiffe.io/spiffe-id=true --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 logs $NSE -c nse
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 logs -l app=nse-supplier-k8s
-```
-
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 describe pods
-```
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
