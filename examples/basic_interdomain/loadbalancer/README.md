@@ -8,14 +8,6 @@ There are three supported ways to install MetalLB: using plain Kubernetes manife
 
 ## Run
 
-Install monitoring API:
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f components.yaml
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f components.yaml
-```
-
 Apply metallb for the first cluster:
 ```bash
 if [[ ! -z $CLUSTER1_CIDR ]]; then

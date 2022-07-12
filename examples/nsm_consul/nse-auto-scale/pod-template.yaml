@@ -4,15 +4,20 @@ kind: Pod
 metadata:
   name: proxy-{{ index .Labels "podName" }}
   labels:
-    app: {{ index .Labels "app" }}
+    app: proxy-{{ index .Labels "podName" }}
+    pod_type: proxy
     "spiffe.io/spiffe-id": "true"
-    sidecar.istio.io/inject: "true"
+  annotations:
+    'consul.hashicorp.com/connect-inject': 'true'
+    'consul.hashicorp.com/connect-service-upstreams': 'counting:9001'
 spec:
   restartPolicy: Never
   containers:
     - name: nse
       image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:08328f3
       imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
           value: unix:///run/spire/sockets/agent.sock
@@ -27,7 +32,7 @@ spec:
         - name: NSM_CIDR_PREFIX
           value: 172.16.1.2/31
         - name: NSM_SERVICE_NAMES
-          value: autoscale-istio-proxy
+          value: autoscale-consul-proxy
         - name: NSM_LABELS
           value: app:{{ index .Labels "app" }}
         - name: NSM_IDLE_TIMEOUT
@@ -49,6 +54,7 @@ spec:
         limits:
           memory: 40Mi
           cpu: 150m
+  serviceAccountName: proxy-service
   volumes:
     - name: spire-agent-socket
       hostPath:

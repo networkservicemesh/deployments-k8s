@@ -44,7 +44,7 @@ Install istio booking example
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection=enabled
 
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f productpage/productpage_ci.yaml
 ```
 
 Wait for the deploy/productpage-v1 client to be ready:
@@ -59,14 +59,40 @@ kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- apk a
 
 Verify connectivity:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- curl -s productpage.default:9080/productpage | grep -o "<title>Simple Bookstore App</title>"
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/productpage-v1 -c cmd-nsc -- curl -s productpage.default:9080/productpage
 ```
-**Expected output** is `<title>Simple Bookstore App</title>`
+**Expected output** is "hello world from istio"
 
 Congratulations! 
 You have made a interdomain connection between two clusters via NSM + Istio!
 
 ## Cleanup
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 get pods -A
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 get pods -A
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 logs deploy/productpage-v1 -c cmd-nsc-init
+```
+
+```bash
+NSE=$(kubectl get pods -l app=productpage,spiffe.io/spiffe-id=true --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 logs $NSE -c nse
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 logs -l app=nse-supplier-k8s
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 describe pods
+```
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
