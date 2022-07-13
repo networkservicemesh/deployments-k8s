@@ -28,19 +28,28 @@ jobs:
     name: refcheck
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Convert to local and back and check refs
         run: |
           ./to-local.sh
           ./to-ref.sh
 
-          newfiles=$(git diff --name-only --diff-filter=A --merge-base origin/main HEAD)
+          added_files=$(git diff --name-only --diff-filter=A --merge-base origin/main HEAD)
 
           prefix="':!"
           postfix="'"
           exclude=""
-          for file in ${newfiles}; do
+          for file in ${added_files}; do
             exclude="${exclude} ${prefix}${file}${postfix}"
           done
 
