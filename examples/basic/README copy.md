@@ -9,5 +9,5 @@
 2. Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=10de4deab5638eb2d3763f725c49cefec6c2694c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=57b41547ab36c3a0a9f02be69017f65413b35258
 ```
