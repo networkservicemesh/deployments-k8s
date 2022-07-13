@@ -34,7 +34,7 @@ jobs:
         run: |
           ./to-local.sh
           ./to-ref.sh
-          git diff --name-only --exit-code
+          git diff --name-only --exit-code --diff-filter=a
   image-check:
     name: Check that image is pullable
     runs-on: ubuntu-latest
