@@ -14,6 +14,5 @@ This setup is basic for interdomain examples on two clusters. This setup can be 
 
 ## Includes
 
-- [NSM Istio booking](./nsm_istio_booking)
 - [Kernel to Kernel Connection](./nsm_consul)
 - [NSM Istio CI](./nsm_istio)
