@@ -35,7 +35,7 @@ jobs:
           ./to-local.sh
           ./to-ref.sh
 
-          newfiles=$(git diff --name-only --diff-filter=A --merge-base main/main HEAD)
+          newfiles=$(git diff --name-only --diff-filter=A --merge-base origin/main HEAD)
 
           prefix="':!"
           postfix="'"
@@ -44,7 +44,7 @@ jobs:
             exclude="${exclude} ${prefix}${file}${postfix}"
           done
 
-          eval "git diff --exit-code --name-only ${exclude}"
+          eval "git diff --exit-code --name-only -- . ${exclude}"
   image-check:
     name: Check that image is pullable
     runs-on: ubuntu-latest
