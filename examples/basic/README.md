@@ -34,7 +34,7 @@ kubectl create ns nsm-system
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=54be5919503470fa8b3370bcc5e7f17dbc7df6b2
 ```
 
-3. Wait for admission-webhook-k8s:
+3. Wait for admission-webhook-k8
 
 ```bash
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')

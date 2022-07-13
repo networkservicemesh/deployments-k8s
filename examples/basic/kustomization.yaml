@@ -7,5 +7,4 @@ namespace: nsm-system
 bases:
 - ../../apps/nsmgr
 - ../../apps/forwarder-vpp
-- ../../apps/registry-k8s
 - ../../apps/admission-webhook-k8s

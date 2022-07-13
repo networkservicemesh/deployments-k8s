@@ -11,5 +11,5 @@ done
 
 echo $exclude
 
-eval "git diff --exit-code --name-only -- . ${exclude}"
+eval "git diff --exit-code --name-only ${exclude}"
 echo $?
