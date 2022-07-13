@@ -1,4 +1,5 @@
-newfiles=$(git diff --name-only HEAD $(git merge-base HEAD main/main))
+# Get files that were added in the current branch
+newfiles=$(git diff --name-only --diff-filter=A --merge-base main/main HEAD)
 echo $newfiles
 
 prefix="':!"
@@ -10,3 +11,5 @@ done
 
 echo $exclude
 
+eval "git diff --exit-code --name-only -- . ${exclude}"
+echo $?
