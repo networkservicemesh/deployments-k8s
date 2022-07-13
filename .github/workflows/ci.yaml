@@ -33,7 +33,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Check out code into the Go module directory
+      - name: Checkout PR branch
         uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
