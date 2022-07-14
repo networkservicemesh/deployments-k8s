@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+      annotations:
+        networkservicemesh.io: kernel://my-vl3-network/myiface
+    spec:
+      containers:
+      - name: alpine
+        image: alpine:3.15.0
+        imagePullPolicy: IfNotPresent
+        stdin: true
+        tty: true
