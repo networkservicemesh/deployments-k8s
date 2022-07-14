@@ -13,9 +13,9 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Create test namespace:
 
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0ea3807c7fe3a82d103666200d5d5b65b3213a3e/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f7392413bb2ff84ec7003b3fbfddc682d6cacab7/examples/use-cases/namespace.yaml)[0])
 FIRST_NAMESPACE=${NAMESPACE:10}
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0ea3807c7fe3a82d103666200d5d5b65b3213a3e/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f7392413bb2ff84ec7003b3fbfddc682d6cacab7/examples/use-cases/namespace.yaml)[0])
 SECOND_NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -236,7 +236,7 @@ resources:
 - third-client.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=0ea3807c7fe3a82d103666200d5d5b65b3213a3e
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=f7392413bb2ff84ec7003b3fbfddc682d6cacab7
 
 nameSuffix: -bg
 
