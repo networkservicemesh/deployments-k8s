@@ -35,7 +35,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 2. Find all nscs:
 
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-dns-vl3) 
+nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-dns-vl3) 
 [[ ! -z $nscs ]]
 ```
 
