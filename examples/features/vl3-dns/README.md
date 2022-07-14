@@ -29,7 +29,7 @@ The template could be changed via env variable of [cmd-nse-vl3-vpp](../../../app
 1. Deploy nsc and vl3 nses (See at `kustomization.yaml`):
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns?ref=f9ed7e28c8107c4b74c3fd1eca6241ddbe69f558
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns?ref=5d1ca159c2118ec1feae5f995add33ae42694b96
 ```
 
 2. Find all nscs:
