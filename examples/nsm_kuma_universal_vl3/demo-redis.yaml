@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -29,7 +30,7 @@ spec:
             - name: tcp
               containerPort: 6379
           lifecycle:
-            preStop: # delay shutdown to support graceful mesh leave
+            preStop:
               exec:
                 command: ["/bin/sleep", "30"]
             postStart:
