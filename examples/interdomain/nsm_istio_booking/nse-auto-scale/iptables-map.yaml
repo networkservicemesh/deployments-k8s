@@ -1,0 +1,10 @@
+---
+- -N NSM_PREROUTE
+- -A NSM_PREROUTE -j ISTIO_REDIRECT
+- -I PREROUTING 1 -p tcp -i {{ .NsmInterfaceName }} -j NSM_PREROUTE
+- -N NSM_OUTPUT
+- -A NSM_OUTPUT -j DNAT --to-destination {{ index .NsmSrcIPs 0 }}
+- -A OUTPUT -p tcp -s 127.0.0.6 -j NSM_OUTPUT
+- -N NSM_POSTROUTING
+- -A NSM_POSTROUTING -j SNAT --to-source {{ index .NsmDstIPs 0 }}
+- -A POSTROUTING -p tcp -o {{ .NsmInterfaceName }} -j NSM_POSTROUTING
