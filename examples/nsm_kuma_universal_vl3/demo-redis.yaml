@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuma-demo
+  labels:
+    kuma.io/sidecar-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: kuma-demo
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        networkservicemesh.io: kernel://my-vl3-network/nsm-1
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: "redis"
+          ports:
+            - name: tcp
+              containerPort: 6379
+          lifecycle:
+            preStop: # delay shutdown to support graceful mesh leave
+              exec:
+                command: ["/bin/sleep", "30"]
+            postStart:
+              exec:
+                command: ["/usr/local/bin/redis-cli", "set", "zone", "local"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: kuma-demo
+spec:
+  selector:
+    app: redis
+  ports:
+  - protocol: TCP
+    port: 6379
