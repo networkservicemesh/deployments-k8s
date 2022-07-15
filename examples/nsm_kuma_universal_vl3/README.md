@@ -47,4 +47,4 @@ kubectl --kubeconfig=$KUBECONFIG2 -n default wait --for=condition=ready --timeou
 kubectl --kubeconfig=$KUBECONFIG2 port-forward svc/demo-app -n kuma-demo 5000:5000
 ```
 
-Go to [locahost:5000](http://localhost:5000) to get the counter page.
+Go to locahost:5000 to get the counter page and test the application.
