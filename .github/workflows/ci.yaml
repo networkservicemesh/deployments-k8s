@@ -44,12 +44,12 @@ jobs:
           ./to-local.sh
           ./to-ref.sh
 
-          added_files=$(git diff --name-only --diff-filter=A --merge-base origin/main HEAD)
+          added_and_modified_files=$(git diff --name-only --diff-filter=AM --merge-base origin/main HEAD)
 
           prefix="':!"
           postfix="'"
           exclude=""
-          for file in ${added_files}; do
+          for file in ${added_and_modified_files}; do
             exclude="${exclude} ${prefix}${file}${postfix}"
           done
 
