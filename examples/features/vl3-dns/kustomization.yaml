@@ -5,12 +5,12 @@ kind: Kustomization
 namespace: ns-dns-vl3
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=9e4427020442e95cf94b73c7f590dd9a640d7371
-- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=9e4427020442e95cf94b73c7f590dd9a640d7371
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=4654fab0ef8db2fbaf72eb48d96cde6df07e2752
+- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=4654fab0ef8db2fbaf72eb48d96cde6df07e2752
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9e4427020442e95cf94b73c7f590dd9a640d7371/examples/features/vl3-dns/nsc.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9e4427020442e95cf94b73c7f590dd9a640d7371/examples/features/vl3-dns/namespace.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4654fab0ef8db2fbaf72eb48d96cde6df07e2752/examples/features/vl3-dns/nsc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4654fab0ef8db2fbaf72eb48d96cde6df07e2752/examples/features/vl3-dns/namespace.yaml
 
 patchesStrategicMerge:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9e4427020442e95cf94b73c7f590dd9a640d7371/examples/features/vl3-dns/nse-patch.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4654fab0ef8db2fbaf72eb48d96cde6df07e2752/examples/features/vl3-dns/nse-patch.yaml
