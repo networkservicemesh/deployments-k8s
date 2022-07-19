@@ -45,12 +45,18 @@ jobs:
           ./to-ref.sh
 
           added_files=$(git diff --name-only --diff-filter=A --merge-base origin/main HEAD)
+          modified_files=$(git diff --name-only --diff-filter=RM --merge-base origin/main HEAD)
 
           prefix="':!"
           postfix="'"
           exclude=""
-          for file in ${added_files}; do
-            exclude="${exclude} ${prefix}${file}${postfix}"
+          for aFile in ${added_files}; do
+            exclude="${exclude} ${prefix}${aFile}${postfix}"
+            for mFile in ${modified_files}; do
+              if grep -q "$aFile" "$mFile"; then
+                exclude="${exclude} ${prefix}${mFile}${postfix}"
+              fi
+            done
           done
 
           eval "git diff --exit-code --name-only -- . ${exclude}"
