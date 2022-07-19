@@ -14,7 +14,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:4adb98c
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:e9ea677
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true
