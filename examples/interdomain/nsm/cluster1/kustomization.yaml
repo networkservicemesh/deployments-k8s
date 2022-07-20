@@ -5,12 +5,12 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=8d0b4154088dbdaf276ba5ca1fa3e107e50c872e
-- https://github.com/networkservicemesh/deployments-k8s/apps/forwarder-vpp?ref=8d0b4154088dbdaf276ba5ca1fa3e107e50c872e
-- https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=8d0b4154088dbdaf276ba5ca1fa3e107e50c872e
-- https://github.com/networkservicemesh/deployments-k8s/apps/registry-proxy-dns?ref=8d0b4154088dbdaf276ba5ca1fa3e107e50c872e
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr-proxy?ref=8d0b4154088dbdaf276ba5ca1fa3e107e50c872e
-- https://github.com/networkservicemesh/deployments-k8s/apps/admission-webhook-k8s?ref=8d0b4154088dbdaf276ba5ca1fa3e107e50c872e
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=0fb04d134db5b9d6c13cb1c658a620ef97342931
+- https://github.com/networkservicemesh/deployments-k8s/apps/forwarder-vpp?ref=0fb04d134db5b9d6c13cb1c658a620ef97342931
+- https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=0fb04d134db5b9d6c13cb1c658a620ef97342931
+- https://github.com/networkservicemesh/deployments-k8s/apps/registry-proxy-dns?ref=0fb04d134db5b9d6c13cb1c658a620ef97342931
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr-proxy?ref=0fb04d134db5b9d6c13cb1c658a620ef97342931
+- https://github.com/networkservicemesh/deployments-k8s/apps/admission-webhook-k8s?ref=0fb04d134db5b9d6c13cb1c658a620ef97342931
 
 resources:
   - namespace.yaml
