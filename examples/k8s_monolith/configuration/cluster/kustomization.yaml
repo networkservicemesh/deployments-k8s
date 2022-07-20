@@ -5,10 +5,12 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- ../../../apps/nsmgr
-- ../../../apps/forwarder-vpp
-- ../../../apps/registry-memory
+- ../../../../apps/nsmgr
+- ../../../../apps/forwarder-vpp
+- ../../../../apps/registry-memory
+- ../../../../apps/nsmgr-proxy
 
 patchesStrategicMerge:
 - patch-forwarder.yaml
 - patch-registry-memory.yaml
+- patch-nsmgr-proxy.yaml

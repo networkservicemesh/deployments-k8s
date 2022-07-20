@@ -8,7 +8,7 @@ services:
     environment:
       NSM_NAME: docker-vl3-server@k8s.nsm
       NSM_SERVICE_NAMES: docker-vl3@k8s.nsm
-      NSM_CONNECT_TO: tcp://k8s.nsm:5002
+      NSM_CONNECT_TO: tcp://k8s.nsm
       NSM_FEDERATES_WITH: k8s.nsm
       NSM_TRUST_DOMAIN: docker.nsm
       NSM_LOG_LEVEL: TRACE

@@ -19,7 +19,7 @@ services:
 EOF
 ```
 
-Download docker-compose base file:
+Download docker compose base file:
 ```bash
 curl https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/82b60d98081c7aaed6c54a35c060610a24820321/apps/nse-simple-vl3-docker/docker-compose.yaml -o docker-compose.yaml
 ```
