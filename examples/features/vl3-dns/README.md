@@ -32,14 +32,19 @@ The template could be changed via env variable of [cmd-nse-vl3-vpp](../../../app
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns?ref=b3a044bae28bc40791e84c92bee85869dcbdcbf6
 ```
 
-2. Find all nscs:
+2. Deploy network service:
+```bash
+kubectl apply -f https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns/vl3-netsvc.yaml?ref=a0958ce14e46273bce5e9f5fd74289ea8be80560
+```
+
+3. Find all nscs:
 
 ```bash
 nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-dns-vl3) 
 [[ ! -z $nscs ]]
 ```
 
-3. Ping each client by each client via DNS:
+4. Ping each client by each client via DNS:
 
 ```bash
 for nsc in $nscs 
