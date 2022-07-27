@@ -12,7 +12,7 @@ Make sure that you have completed steps from [features](../)
 
 1. Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1135e678aa75cd53105ac5f6be6409e1d0d62da5/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4005f448fd71c449c9d03b60d3e0d4efa372111a/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -80,7 +80,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=1135e678aa75cd53105ac5f6be6409e1d0d62da5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=4005f448fd71c449c9d03b60d3e0d4efa372111a
 
 resources:
 - client.yaml
