@@ -11,7 +11,7 @@ Make sure that you have completed steps from [external NSC](../../)
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2b08f484ee34c6e4d44c892a0305946a45147e05/examples/k8s_monolith/external_nsc/usecases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/db46e2094916c124d848b8ac925bb0f79a7e8032/examples/k8s_monolith/external_nsc/usecases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -25,7 +25,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=2b08f484ee34c6e4d44c892a0305946a45147e05
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=db46e2094916c124d848b8ac925bb0f79a7e8032
 
 patchesStrategicMerge:
 - patch-nse.yaml
