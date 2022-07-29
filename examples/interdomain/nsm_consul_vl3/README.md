@@ -114,7 +114,7 @@ sudo consul validate /etc/consul.d/
 /usr/bin/consul agent -config-dir=/etc/consul.d/
 ```
 
-Open new terminal tab and run the Counting service, install required packages and Consul agent
+Open new terminal tab and execute new session to the Counting service pod, install required packages and Consul agent
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec -it counting -c ubuntu -- bash
 apt update
@@ -220,7 +220,7 @@ envoy --version
 consul connect envoy -sidecar-for counting-1 -admin-bind localhost:19001 > counting-proxy.log &
 ```
 
-Open new terminal tab and run the Dashboard service, install required packages and Consul agent
+Open new terminal tab and execute new session to the Dashboard service pod, install required packages and Consul agent
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 exec -it dashboard -c ubuntu -- bash
 apt update
@@ -339,25 +339,3 @@ Port-forward the dashboard pod
 kubectl --kubeconfig=$KUBECONFIG2 port-forward dashboard 9002:9002
 ```
 In your browser open localhost:9002 and verify the application works!
-
-## Cleanup
-
-
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete deployment counting
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -f client/dashboard.yaml
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
-```
-```bash
-consul-k8s uninstall --kubeconfig=$KUBECONFIG2 -auto-approve=true -wipe-data=true
-```
