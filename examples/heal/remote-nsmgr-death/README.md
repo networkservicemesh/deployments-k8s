@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c472104ad256c1704b804bc4ec729fff1db8aa39/examples/heal/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/v1.5.0-rc.2/examples/heal/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -32,8 +32,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c472104ad256c1704b804bc4ec729fff1db8aa39
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c472104ad256c1704b804bc4ec729fff1db8aa39
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=v1.5.0-rc.2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.5.0-rc.2
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -124,7 +124,7 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=c472104ad256c1704b804bc4ec729fff1db8aa39
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.5.0-rc.2
 
 patchesStrategicMerge:
 - patch-nsmgr.yaml
@@ -167,7 +167,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=c472104ad256c1704b804bc4ec729fff1db8aa39
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=v1.5.0-rc.2
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -223,7 +223,7 @@ kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=c472104ad256c1704b804bc4ec729fff1db8aa39 -n nsm-system
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=v1.5.0-rc.2 -n nsm-system
 ```
 
 Delete ns:
