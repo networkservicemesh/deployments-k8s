@@ -10,7 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/00f5813aaaed354ab140e3f354ac8873f4d06e5c/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8e4f2fad6034d75a4cbd9f9d75adb7fdb9cae1e3/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -61,8 +61,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=00f5813aaaed354ab140e3f354ac8873f4d06e5c
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=00f5813aaaed354ab140e3f354ac8873f4d06e5c
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=8e4f2fad6034d75a4cbd9f9d75adb7fdb9cae1e3
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=8e4f2fad6034d75a4cbd9f9d75adb7fdb9cae1e3
 
 patchesStrategicMerge:
 - patch-nse-vfio.yaml
