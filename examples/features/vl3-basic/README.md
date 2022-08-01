@@ -33,7 +33,16 @@ nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .i
 [[ ! -z $nscs ]]
 ```
 
-4. Ping each client by each client:
+4. Wait for clients to be ready:
+
+```bash
+for nsc in $nscs
+do
+  kubectl wait --for=condition=ready --timeout=2m pod $nsc -n ns-vl3
+done
+```
+
+5. Ping each client by each client:
 
 ```bash
 for nsc in $nscs 
@@ -48,7 +57,7 @@ do
 done
 ```
 
-5. Ping each vl3-nse by each client.
+6. Ping each vl3-nse by each client.
 
 Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
 
@@ -62,9 +71,7 @@ done
 ```
 
 
-
 ## Cleanup
-
 
 To cleanup the example just follow the next command:
 

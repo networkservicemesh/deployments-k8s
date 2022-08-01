@@ -39,7 +39,16 @@ nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items
 [[ ! -z $nscs ]]
 ```
 
-3. Ping each client by each client via DNS:
+3. Wait for clients to be ready:
+
+```bash
+for nsc in $nscs
+do
+  kubectl wait --for=condition=ready --timeout=2m pod $nsc -n ns-dns-vl3
+done
+```
+
+4. Ping each client by each client via DNS:
 
 ```bash
 for nsc in $nscs 
