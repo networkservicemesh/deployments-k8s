@@ -9,7 +9,7 @@ Forwarders are using the `wireguard` mechanism to connect with each other.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/869c369554c0387b9a8d7fa5e002354edf90f1ac/examples/features/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/00f5813aaaed354ab140e3f354ac8873f4d06e5c/examples/features/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -30,7 +30,7 @@ namespace: ${NAMESPACE}
 resources: 
 - client.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=869c369554c0387b9a8d7fa5e002354edf90f1ac
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=00f5813aaaed354ab140e3f354ac8873f4d06e5c
 
 patchesStrategicMerge:
 - patch-nse.yaml
