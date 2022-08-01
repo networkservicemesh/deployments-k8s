@@ -20,11 +20,10 @@ Diagram:
 kubectl create ns ns-vl3
 ```
 
-
-2. Deploy nsc and vl3 nses (See at `kustomization.yaml`):
+2. Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=1230ee64381186cef818d5c18496dae0ef2c4d5d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
 ```
 
 3. Find all nscs:
@@ -49,7 +48,7 @@ do
 done
 ```
 
-5. Ping each vl3-nse by each client. 
+5. Ping each vl3-nse by each client.
 
 Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
 

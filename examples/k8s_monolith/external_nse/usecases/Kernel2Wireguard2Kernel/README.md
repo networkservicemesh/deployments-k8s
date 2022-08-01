@@ -5,13 +5,13 @@ NSC and docker-NSE are using the `kernel` local mechanism.
 
 ## Requires
 
-Make sure that you have completed steps from [k8s_monolith](../../)
+Make sure that you have completed steps from [external NSE](../../)
 
 ## Run
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1230ee64381186cef818d5c18496dae0ef2c4d5d/examples/k8s_monolith/usecases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6cb851e2075646d8476d01f4f881a9a27b80f507/examples/k8s_monolith/external_nse/usecases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -25,7 +25,7 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=1230ee64381186cef818d5c18496dae0ef2c4d5d
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
 
 patchesStrategicMerge:
 - patch-nsc.yaml

@@ -8,7 +8,7 @@ Docker container uses binary spire server.
 1. Setup spire on the k8s cluster
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/spire?ref=1230ee64381186cef818d5c18496dae0ef2c4d5d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/spire?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
 ```
 
 Wait for PODs status ready:
@@ -27,9 +27,9 @@ To enable the SPIRE Servers to fetch the trust bundles from each other they need
 Get and store bundles of the k8s cluster and the docker container:
 ```bash
 bundlek8s=$(kubectl exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)
-bundledock=$(docker exec nse-simple-vl3-docker bin/spire-server bundle show -format spiffe)
-echo $bundledock | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://docker.nsm/cmd-nse-simple-vl3-docker"
-echo $bundlek8s | docker exec -i nse-simple-vl3-docker bin/spire-server bundle set -format spiffe -id "spiffe://k8s.nsm"
+bundledock=$(docker exec nsc-simple-docker bin/spire-server bundle show -format spiffe)
+echo $bundledock | kubectl exec -i spire-server-0 -n spire -- bin/spire-server bundle set -format spiffe -id "spiffe://docker.nsm/cmd-nsc-simple-docker"
+echo $bundlek8s | docker exec -i nsc-simple-docker bin/spire-server bundle set -format spiffe -id "spiffe://k8s.nsm"
 ```
 
 ## Cleanup
