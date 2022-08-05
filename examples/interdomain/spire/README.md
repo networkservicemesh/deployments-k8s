@@ -16,53 +16,20 @@ Check `KUBECONFIG2` env:
 [[ ! -z $KUBECONFIG2 ]]
 ```
 
-Check `KUBECONFIG3` env:
-```bash
-[[ ! -z $KUBECONFIG3 ]]
-```
-
-
 2. Setup spire
 
-
-**Apply spire resources for the first cluster:**
-```bash
-export KUBECONFIG=$KUBECONFIG1
-```
+**Apply spire resources for the clusters:**
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster1?ref=a5ff341a0e59a618a1d023f2b635cbd4e3ccea7e
-```
-
-Wait for PODs status ready:
-```bash
-kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
-```
-```bash
-kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
-```
-
-**Apply spire resources for the second cluster:**
-```bash
-export KUBECONFIG=$KUBECONFIG2
-```
-
-```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster2?ref=a5ff341a0e59a618a1d023f2b635cbd4e3ccea7e
-```
-
-Wait for PODs status ready:
-```bash
-kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
-kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster1?ref=a5ff341a0e59a618a1d023f2b635cbd4e3ccea7e
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster2?ref=a5ff341a0e59a618a1d023f2b635cbd4e3ccea7e
 ```
 
 Wait for spire ready
 ```bash
+kubectl --kubeconfig=$KUBECONFIG1 wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 kubectl --kubeconfig=$KUBECONFIG1 wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
+kubectl --kubeconfig=$KUBECONFIG2 wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 kubectl --kubeconfig=$KUBECONFIG2 wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
 ```
 

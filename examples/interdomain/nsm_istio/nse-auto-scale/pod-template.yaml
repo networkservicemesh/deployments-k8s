@@ -4,7 +4,6 @@ kind: Pod
 metadata:
   name: proxy-{{ index .Labels "podName" }}
   labels:
-    app: {{ index .Labels "app" }}
     "spiffe.io/spiffe-id": "true"
     sidecar.istio.io/inject: "true"
 spec:

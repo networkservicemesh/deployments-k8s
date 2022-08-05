@@ -2,47 +2,44 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: productpage
+  name: greeting
   labels:
-    app: productpage
-    service: productpage
+    app: greeting
+    service: greeting
 spec:
   ports:
   - port: 9080
     name: http
   selector:
-    app: productpage
+    app: greeting
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: bookinfo-productpage
+  name: greeting-sa
   labels:
-    account: productpage
+    account: greeting
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: productpage-v1
+  name: greeting
   labels:
-    app: productpage
-    version: v1
+    app: greeting
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: productpage
-      version: v1
+      app: greeting
   template:
     metadata:
       labels:
-        app: productpage
-        version: v1
+        app: greeting
     spec:
-      serviceAccountName: bookinfo-productpage
+      serviceAccountName: greeting-sa
       containers:
-      - name: productpage
-        image: hashicorp/http-echo:latest
+      - name: server
+        image: hashicorp/http-echo:alpine
         args:
           - -text="hello world from istio"
           - -listen=:9080
