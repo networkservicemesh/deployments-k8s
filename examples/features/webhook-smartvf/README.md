@@ -10,24 +10,23 @@ Make sure that you have completed steps from [ovs](../../ovs) setup
 
 ## Run
 
+Create test namespace:
+```bash
+kubectl create ns ns-webhook
+```
+
 Note: Admission webhook is required and should be started at this moment.
 ```bash
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
-1. Create test namespace:
-```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
-```
-
-3. Get all available nodes to deploy:
+Get all available nodes to deploy:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-4. Create postgres client deployment, set `nodeName` to the first node and use the interface pool for SmartVF in `sriovToken` annotation label:
+Create postgres client deployment, set `nodeName` to the first node and use the interface pool for SmartVF in `sriovToken` annotation label:
 ```bash
 cat > postgres-cl.yaml <<EOF
 ---
@@ -37,7 +36,7 @@ metadata:
   name: postgres-cl
   annotations:
     # Add in the sriovToken label your own SmartVF interface pool
-    networkservicemesh.io: kernel://my-postgres-service/nsm-1?sriovToken=worker.domain/100G
+    networkservicemesh.io: kernel://webhook-smartvf/nsm-1?sriovToken=worker.domain/100G
   labels:
     app: postgres-cl
     "spiffe.io/spiffe-id": "true"
@@ -53,7 +52,7 @@ spec:
 EOF
 ```
 
-5. Add to nse-kernel the postgres container, set `nodeName` it to the second node and use the interface pool for SmartVF in `nse` container :
+Add to nse-kernel the postgres container, set `nodeName` it to the second node and use the interface pool for SmartVF in `nse` container:
 ```bash
 cat > patch-nse.yaml <<EOF
 ---
@@ -83,7 +82,9 @@ spec:
               # Add your own serviceDomain
               value: serviceDomain:worker.domain
             - name: NSM_SERVICE_NAMES
-              value: my-postgres-service
+              value: "webhook-smartvf"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
           resources:
@@ -94,55 +95,56 @@ spec:
 EOF
 ```
 
-6. Create kustomization file:
+Create kustomization file:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-webhook-smartvf
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 
 resources:
 - postgres-cl.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/webhook-smartvf/netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
 EOF
 ```
 
-7. Deploy postgres-nsc and postgres-nse
+Deploy postgres-nsc and postgres-nse
 ```bash
 kubectl apply -k .
 ```
 
-8. Wait for applications ready:
+Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ns-webhook-smartvf
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ${NAMESPACE}
-```
-
-9. Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=postgres-cl -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ns-webhook-smartvf
 ```
 
-10. Try to connect from postgres-nsc to database from postgresql service:
+Find NSC and NSE pods by labels:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c postgres-cl -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
+NSC=$(kubectl get pods -l app=postgres-cl -n ns-webhook-smartvf --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+```bash
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-webhook-smartvf --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+```
+
+Try to connect from postgres-nsc to database from postgresql service:
+```bash
+kubectl exec ${NSC} -n ns-webhook-smartvf -c postgres-cl -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-webhook-smartvf
 ```

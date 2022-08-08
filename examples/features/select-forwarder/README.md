@@ -3,10 +3,10 @@
 The example demonstrates how can be declareded forwarder selection in [network service](https://networkservicemesh.io/docs/concepts/architecture/#network-service).
 
 Important points: 
- - [client](./client.yaml) requests `my-networkservice` service.
+ - [client](./client.yaml) requests `select-forwarder` service.
  - [forwarder](./forwarder.yaml) registers itself with label `my_forwarder_capability: true`
- - [network service](./service.yaml) declaretes network service `my-networkservice` that contains match for label `my_forwarder_capability: true`
- - [network service-endpoint](./nse-patch.yaml) registers as an [endpoint](https://networkservicemesh.io/docs/concepts/architecture/#network-service-endpoint) for service `my-networkservice`
+ - [network service](./service.yaml) declaretes network service `select-forwarder` that contains match for label `my_forwarder_capability: true`
+ - [network service-endpoint](./nse-patch.yaml) registers as an [endpoint](https://networkservicemesh.io/docs/concepts/architecture/#network-service-endpoint) for service `select-forwarder`
 
 See at example resources in [kustomization.yaml](./kustomization.yaml)
 
@@ -16,8 +16,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 ## Run
 
-Create ns `ns-select-forwarder`
-
+Create test namespace:
 ```bash
 kubectl create ns ns-select-forwarder
 ```
@@ -25,7 +24,7 @@ kubectl create ns ns-select-forwarder
 Apply example resources:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

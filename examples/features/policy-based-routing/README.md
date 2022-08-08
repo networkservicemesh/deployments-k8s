@@ -14,8 +14,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-policy-based-routing
 ```
 
 Select node to deploy NSC and NSE:
@@ -30,13 +29,15 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-policy-based-routing
 
 resources:
 - client.yaml
 - config-file-nse.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/policy-based-routing/netsvc.yaml
+
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 
 patchesStrategicMerge:
 - patch-nse.yaml
@@ -54,7 +55,7 @@ metadata:
   labels:
     app: nettools
   annotations:
-    networkservicemesh.io: kernel://icmp-responder/nsm-1
+    networkservicemesh.io: kernel://policy-based-routing/nsm-1
 spec:
   containers:
   - name: nettools
@@ -80,6 +81,10 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSM_SERVICE_NAMES
+              value: "policy-based-routing"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
           volumeMounts:
@@ -101,57 +106,57 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ns-policy-based-routing
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-policy-based-routing
 ```
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nettools -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nettools -n ns-policy-based-routing --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-policy-based-routing --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-policy-based-routing -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-policy-based-routing -- ping -c 4 172.16.1.101
 ```
 
 Check policy based routing:
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.3.1 from 172.16.2.201 ipproto tcp dport 6666)
+result=$(kubectl exec ${NSC} -n ns-policy-based-routing -- ip r get 172.16.3.1 from 172.16.2.201 ipproto tcp dport 6666)
 echo ${result}
 echo ${result} | grep -E -q "172.16.3.1 from 172.16.2.201 via 172.16.2.200 dev nsm-1 table 1"
 ```
 
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.3.1 from 172.16.2.201 ipproto tcp sport 5555)
+result=$(kubectl exec ${NSC} -n ns-policy-based-routing -- ip r get 172.16.3.1 from 172.16.2.201 ipproto tcp sport 5555)
 echo ${result}
 echo ${result} | grep -E -q "172.16.3.1 from 172.16.2.201 dev nsm-1 table 2"
 ```
 
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.4.1 ipproto udp dport 6666)
+result=$(kubectl exec ${NSC} -n ns-policy-based-routing -- ip r get 172.16.4.1 ipproto udp dport 6666)
 echo ${result}
 echo ${result} | grep -E -q "172.16.4.1 dev nsm-1 table 3 src 172.16.1.101"
 ```
 
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.4.1 ipproto udp dport 6668)
+result=$(kubectl exec ${NSC} -n ns-policy-based-routing -- ip r get 172.16.4.1 ipproto udp dport 6668)
 echo ${result}
 echo ${result} | grep -E -q "172.16.4.1 dev nsm-1 table 4 src 172.16.1.101"
 ```
 
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip -6 route get 2004::5 from 2004::3 ipproto udp dport 5555)
+result=$(kubectl exec ${NSC} -n ns-policy-based-routing -- ip -6 route get 2004::5 from 2004::3 ipproto udp dport 5555)
 echo ${result}
 echo ${result} | grep -E -q "via 2004::6 dev nsm-1 table 5 src 2004::3"
 ```
@@ -160,5 +165,5 @@ echo ${result} | grep -E -q "via 2004::6 dev nsm-1 table 5 src 2004::3"
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-policy-based-routing
 ```

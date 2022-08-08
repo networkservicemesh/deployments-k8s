@@ -23,7 +23,7 @@ spec:
         - name: NSM_LOG_LEVEL
           value: TRACE
         - name: NSM_SERVICE_NAMES
-          value: autoscale-icmp-responder,my-vl3-network
+          value: autoscale-icmp-responder,vl3-scale-from-zero
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_IDLE_TIMEOUT

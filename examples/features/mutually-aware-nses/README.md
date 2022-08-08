@@ -14,8 +14,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-mutually-aware-nses
 ```
 
 Select node to deploy NSC and NSE:
@@ -30,15 +29,17 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-mutually-aware-nses
 
 resources:
 - nse-1.yaml
 - nse-2.yaml
+- netsvc-1.yaml
+- netsvc-2.yaml
 - config-file-nse-1.yaml
 - config-file-nse-2.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -60,9 +61,9 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red
+              value: kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red
             - name: NSM_AWARENESS_GROUPS
-              value: "[kernel://icmp-responder-1/nsm-1?color=red,kernel://icmp-responder-2/nsm-2?color=red]"
+              value: "[kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red]"
       nodeName: ${NODE}
 EOF
 ```
@@ -74,35 +75,35 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-mutually-aware-nses
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ns-mutually-aware-nses
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ns-mutually-aware-nses
 ```
 
 Find NSC pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ns-mutually-aware-nses --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Install `iproute2` on the client:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk update
-kubectl exec ${NSC} -n ${NAMESPACE} -- apk add iproute2
+kubectl exec ${NSC} -n ns-mutually-aware-nses -- apk update
+kubectl exec ${NSC} -n ns-mutually-aware-nses -- apk add iproute2
 ```
 
 Check routes:
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.1.100 from 172.16.1.101 ipproto tcp dport 6666)
+result=$(kubectl exec ${NSC} -n ns-mutually-aware-nses -- ip r get 172.16.1.100 from 172.16.1.101 ipproto tcp dport 6666)
 echo ${result}
 echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-1"
 ```
 
 ```bash
-result=$(kubectl exec ${NSC} -n ${NAMESPACE} -- ip r get 172.16.1.100 from 172.16.1.101 ipproto udp dport 5555)
+result=$(kubectl exec ${NSC} -n ns-mutually-aware-nses -- ip r get 172.16.1.100 from 172.16.1.101 ipproto udp dport 5555)
 echo ${result}
 echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-2"
 ```
@@ -111,5 +112,5 @@ echo ${result} | grep -E -q "172.16.1.100 from 172.16.1.101 dev nsm-2"
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-mutually-aware-nses
 ```
