@@ -10,8 +10,7 @@
 
 ### Start vl3
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 create ns ns-vl3
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ./vl3-basic
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./vl3-dns
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-vl3 wait --for=condition=ready --timeout=2m pod -l app=vl3-ipam
 ```
 
@@ -21,7 +20,7 @@ Install kumactl by following [Kuma docs](https://kuma.io/docs/1.7.x/installation
 
 ### Create control-plane configuration
 ```bash
-kumactl install control-plane > ./control-plane
+kumactl install control-plane > ./control-plane/control-plane.yaml
 ```
 
 ### Start the control-plane on the first cluster

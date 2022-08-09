@@ -3,11 +3,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kuma-control-plane
+  namespace: kuma-system
 spec:
   template:
     metadata:
       annotations:
-        networkservicemesh.io: kernel://my-vl3-network/nsm-1
+        networkservicemesh.io: kernel://my-vl3-network/nsm-1?dnsName=control-plane-kuma
     spec:
       containers:
         - name: control-plane
@@ -16,7 +17,7 @@ spec:
               value: "false"
             - name: KUMA_DP_SERVER_AUTH_TYPE
               value: "none"
+            - name: KUMA_API_SERVER_HTTPS_ENABLED
+              value: "false"
             - name: KUMA_API_SERVER_HTTP_INTERFACE
-              value: "169.254.0.1"
-            - name: KUMA_API_SERVER_HTTPS_INTERFACE
-              value: "169.254.0.1"
+              value: "control-plane-kuma.my-vl3-network"

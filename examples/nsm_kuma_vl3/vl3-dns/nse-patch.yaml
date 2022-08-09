@@ -14,3 +14,7 @@ spec:
           env:
             - name: NSM_SERVICE_NAMES
               value: "my-vl3-network"
+            - name: NSM_REGISTER_SERVICE
+              value: "true"
+            - name: NSM_DNS_TEMPLATES
+              value: "{{ index .Labels \"dnsName\" }}.{{ .NetworkService }}."

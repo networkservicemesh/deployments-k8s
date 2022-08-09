@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       annotations:
-        networkservicemesh.io: kernel://my-vl3-network/nsm-1
+        networkservicemesh.io: kernel://my-vl3-network/nsm-1?dnsName=redis
       labels:
         app: redis
     spec:

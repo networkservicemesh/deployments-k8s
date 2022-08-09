@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       annotations:
-        networkservicemesh.io: kernel://my-vl3-network@my.cluster1/nsm-1
+        networkservicemesh.io: kernel://my-vl3-network@my.cluster1/nsm-1?dnsName=front-page
       labels:
         app: demo-app
     spec:
@@ -28,7 +28,7 @@ spec:
           image: "kumahq/kuma-demo"
           env:
             - name: REDIS_HOST
-              value: "169.254.0.2"
+              value: "redis.my-vl3-network"
             - name: REDIS_PORT
               value: "6379"
             - name: APP_VERSION
