@@ -6,9 +6,7 @@ namespace: nsm-system
 
 resources:
   - networkservice.yaml
-
-bases:
-- ../../../../../apps/vl3-ipam
+  - ../../../../../apps/vl3-ipam
 
 patchesStrategicMerge:
 - patch-vl3-ipam.yaml

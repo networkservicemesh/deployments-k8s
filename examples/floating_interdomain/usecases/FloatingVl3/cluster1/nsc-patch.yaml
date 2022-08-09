@@ -12,4 +12,4 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://my-interdomain-vl3-network/nsm-1
+              value: kernel://my-interdomain-vl3-network@my.cluster3/nsm-1
