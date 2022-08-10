@@ -1,9 +1,17 @@
 # NSM + Istio interdomain example over kind clusters
 
-This example show how can be used nsm over 
+This example deploys [Istio booking example](https://istio.io/latest/docs/examples/bookinfo/) with NSM.
 
 ![NSM  interdomain Scheme](./NSM+Istio_Datapath.svg "NSM Basic floating interdomain Scheme")
 
+This diagram shows that we have 2 clusters with NSM and also Istio deployed on the Cluster-2.
+As workloads there will be **productpages** on the first and second clusters. Each of the **productpages** requests the services it needs (review and details) according to Istio's example.
+
+Both of these workloads are available to clients - for example, if we make a curl request to the _productpage service_, we can either get to Cluster-1 **_or_** Cluster-2.
+
+This is achieved by adding `istio-proxy-nse` as an endpoint for the productpage Service and additional rules for iptables.
+
+The required steps are listed below.
 
 ## Requires
 
@@ -26,18 +34,18 @@ istioctl --kubeconfig=$KUBECONFIG2 proxy-status
 
 Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3d1dcfe1de90681213c7f0006f25279bb4699966/examples/interdomain/nsm_istio_booking/networkservice.yaml
 ```
 
 Start `productpage` networkservicemesh client for the first cluster:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f productpage/productpage.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3d1dcfe1de90681213c7f0006f25279bb4699966/examples/interdomain/nsm_istio_booking/productpage/productpage.yaml
 ```
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k nse-auto-scale 
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio_booking/nse-auto-scale?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
 ```
 
 Install istio booking example
@@ -70,9 +78,9 @@ You have made a interdomain connection between two clusters via NSM + Istio!
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -k nse-auto-scale 
-kubectl --kubeconfig=$KUBECONFIG1 delete -f productpage/productpage.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -f networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio_booking/nse-auto-scale?ref=3d1dcfe1de90681213c7f0006f25279bb4699966 
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3d1dcfe1de90681213c7f0006f25279bb4699966/examples/interdomain/nsm_istio_booking/productpage/productpage.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3d1dcfe1de90681213c7f0006f25279bb4699966/examples/interdomain/nsm_istio_booking/networkservice.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete ns istio-system
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection-
 kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
