@@ -19,7 +19,8 @@ data:
     exporters:
       jaeger:
         endpoint: "simplest-collector.observability.svc.cluster.local:14250"
-        insecure: true
+        tls:
+          insecure: true
       logging:
     service:
       extensions: [health_check]
@@ -81,7 +82,7 @@ spec:
         - command:
             - "/otelcol"
             - "--config=/conf/otel-collector-config.yaml"
-          image: otel/opentelemetry-collector:0.35.0
+          image: otel/opentelemetry-collector:0.56.0
           name: otel-collector
           ports:
             - containerPort: 14250  # Default endpoint for Jaeger gRPC receiver.

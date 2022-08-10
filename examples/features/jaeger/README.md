@@ -65,7 +65,11 @@ e.g. the following forwards `http://localhost:16686` to the Jaeger UI:
 kubectl port-forward svc/simplest-query -n observability 16686:16686
 ```
 
-## How to use
+## Requires
+
+- [spire](../../spire)
+
+## Run
 
 Create namespace observability:
 ```bash
@@ -82,7 +86,7 @@ Wait for Jaeger Operator pod status ready:
 kubectl wait -n observability --timeout=1m --for=condition=ready pod -l name=jaeger-operator
 ```
 
-Apply Jaeger pod:
+Apply Jaeger and OpenTelemetry Collector:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
 ```
@@ -92,27 +96,10 @@ Wait for Jaeger pod status ready:
 kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=jaeger
 ```
 
-Apply OpenTelemetry pod:
-```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/opentelemetry?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
-```
 
-Apply Spire deployments (required for NSM system)
+Wait for Opentelemetry pods status ready:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
-```
-
-Wait for Spire pods status ready:
-```bash
-kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
-```
-```bash
-kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
-```
-
-Create namespace nsm-system:
-```bash
-kubectl create ns nsm-system
+kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=opentelemetry
 ```
 
 Apply NSM resources:
@@ -149,10 +136,4 @@ kubectl delete -n observability -f https://github.com/jaegertracing/jaeger-opera
 Delete observability namespace:
 ```bash
 kubectl delete ns observability
-```
-
-Delete Spire:
-```bash
-kubectl delete crd spiffeids.spiffeid.spiffe.io
-kubectl delete ns spire
 ```
