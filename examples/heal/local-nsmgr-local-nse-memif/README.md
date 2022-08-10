@@ -12,8 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/heal/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-local-nsmgr-local-nse-memif
 ```
 
 Get nodes exclude control-plane:
@@ -28,11 +27,14 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-local-nsmgr-local-nse-memif
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+
+resources:
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/local-nsmgr-local-nse-memif/netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -55,7 +57,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: memif://icmp-responder/nsm-1
+              value: memif://local-nsmgr-local-nse-memif/nsm-1
 
       nodeName: ${NODE}
 EOF
@@ -77,6 +79,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: "local-nsmgr-local-nse-memif"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODE}
 EOF
 ```
@@ -88,38 +94,38 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ns-local-nsmgr-local-nse-memif
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ns-local-nsmgr-local-nse-memif
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-memif -n ns-local-nsmgr-local-nse-memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-memif -n ns-local-nsmgr-local-nse-memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4)
+result=$(kubectl exec "${NSC}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.100 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec "${NSE}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Delete the previous NSE:
 ```bash
-kubectl delete deployment nse-memif -n ${NAMESPACE}
-kubectl wait --for=delete --timeout=1m pod ${NSE} -n ${NAMESPACE}
+kubectl delete deployment nse-memif -n ns-local-nsmgr-local-nse-memif
+kubectl wait --for=delete --timeout=1m pod ${NSE} -n ns-local-nsmgr-local-nse-memif
 ```
 
 Create a new NSE patch:
@@ -141,6 +147,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.102/31
+            - name: NSM_SERVICE_NAMES
+              value: "local-nsmgr-local-nse-memif"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODE}
 EOF
 ```
@@ -163,24 +173,24 @@ Waiting for new ones:
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODE} -n nsm-system
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -l version=new -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -l version=new -n ns-local-nsmgr-local-nse-memif
 ```
 
 Find new NSE pod:
 ```bash
-NEW_NSE=$(kubectl get pods -l app=nse-memif -l version=new -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NEW_NSE=$(kubectl get pods -l app=nse-memif -l version=new -n ns-local-nsmgr-local-nse-memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.102 repeat 4)
+result=$(kubectl exec "${NSC}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.102 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NEW_NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.103 repeat 4)
+result=$(kubectl exec "${NEW_NSE}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.103 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
@@ -189,5 +199,5 @@ echo ${result}
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-local-nsmgr-local-nse-memif
 ```

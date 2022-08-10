@@ -12,8 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/heal/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-dataplane-interrupt
 ```
 
 Get nodes exclude control-plane:
@@ -28,11 +27,14 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-dataplane-interrupt
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+
+resources:
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/dataplane-interrupt/netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -55,7 +57,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
+              value: kernel://dataplane-interrupt/nsm-1
         - name: alpine
           securityContext:
             capabilities:
@@ -84,6 +86,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: "dataplane-interrupt"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"          
       nodeName: ${NODE}
 EOF
 ```
@@ -95,34 +101,34 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-dataplane-interrupt
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-dataplane-interrupt
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ns-dataplane-interrupt --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-dataplane-interrupt --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c nsc -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101
 ```
 
 Run a pinger process in the background. The pinger will run until it encounters missing packets.
 ```bash
 PINGER_PATH=/tmp/done-${RANDOM}
-kubectl exec ${NSC} -n ${NAMESPACE} -c nsc -- sh -c '
+kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- sh -c '
   PINGER_PATH=$1; rm -f "$PINGER_PATH"
   seq=0
   ping -i 0.2 172.16.1.100 | while :; do
@@ -134,32 +140,32 @@ kubectl exec ${NSC} -n ${NAMESPACE} -c nsc -- sh -c '
   done
 ' - "$PINGER_PATH" &
 sleep 5
-kubectl exec ${NSC} -n ${NAMESPACE} -c nsc -- test ! -f /tmp/done || { echo pinger is done; false; }
+kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- test ! -f /tmp/done || { echo pinger is done; false; }
 ```
 
 Simulate data plane interruption by shutting down the kernel interface:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c alpine -- ip link set nsm-1 down
+kubectl exec ${NSC} -n ns-dataplane-interrupt -c alpine -- ip link set nsm-1 down
 ```
 
 Wait until the pinger process stops. This would be an indication that the data plane was temporarily interrupted.
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c nsc -- sh -c 'timeout 10 sh -c "while ! [ -f \"$1\" ];do sleep 1; done"' - "$PINGER_PATH"
+kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- sh -c 'timeout 10 sh -c "while ! [ -f \"$1\" ];do sleep 1; done"' - "$PINGER_PATH"
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -c nsc -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-dataplane-interrupt
 ```

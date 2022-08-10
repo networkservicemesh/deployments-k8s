@@ -13,8 +13,7 @@ Make sure that you have completed steps from [basic](../../basic).
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f ../../../examples/heal/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-remote-nsm-system-restart-memif-ip
 ```
 
 Get nodes exclude control-plane:
@@ -29,11 +28,14 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-remote-nsm-system-restart-memif-ip
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+
+resources:
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/remote-nsm-system-restart-memif-ip/netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -56,7 +58,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: memif://icmp-responder-ip/nsm-1
+              value: memif://remote-nsm-system-restart-memif-ip/nsm-1
 
       nodeName: ${NODES[0]}
 EOF
@@ -81,7 +83,9 @@ spec:
             - name: NSM_PAYLOAD
               value: IP
             - name: NSM_SERVICE_NAMES
-              value: icmp-responder-ip
+              value: "remote-nsm-system-restart-memif-ip"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODES[1]}
 EOF
 ```
@@ -93,30 +97,30 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ns-remote-nsm-system-restart-memif-ip
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ns-remote-nsm-system-restart-memif-ip
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-memif -n ns-remote-nsm-system-restart-memif-ip --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-memif -n ns-remote-nsm-system-restart-memif-ip --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4)
+result=$(kubectl exec "${NSC}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.100 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec "${NSE}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
@@ -136,14 +140,14 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.100 repeat 4)
+result=$(kubectl exec "${NSC}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.100 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec "${NSE}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
@@ -152,5 +156,5 @@ echo ${result}
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-remote-nsm-system-restart-memif-ip
 ```
