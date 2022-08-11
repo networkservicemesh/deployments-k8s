@@ -10,8 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-vfio2noop
 ```
 
 Generate MAC addresses for the VFIO client and server:
@@ -58,7 +57,10 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-vfio2noop
+
+resources: 
+- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2Noop?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
@@ -76,15 +78,15 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nsc-vfio
+kubectl -n ns-vfio2noop wait --for=condition=ready --timeout=1m pod -l app=nsc-vfio
 ```
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse-vfio
+kubectl -n ns-vfio2noop wait --for=condition=ready --timeout=1m pod -l app=nse-vfio
 ```
 
 Get NSC pod:
 ```bash
-NSC_VFIO=$(kubectl -n ${NAMESPACE} get pods -l app=nsc-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC_VFIO=$(kubectl -n ns-vfio2noop get pods -l app=nsc-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Check connectivity:
@@ -104,7 +106,7 @@ function dpdk_ping() {
       -C ${client_mac}                            \
       -S ${server_mac}
       "
-  out="$(kubectl -n ${NAMESPACE} exec ${NSC_VFIO} --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
+  out="$(kubectl -n ns-vfio2noop exec ${NSC_VFIO} --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
 
   if [[ "$?" != 0 ]]; then
     echo "${out}"
@@ -136,15 +138,15 @@ dpdk_ping ${CLIENT_MAC} ${SERVER_MAC}
 
 Stop ponger:
 ```bash
-NSE=$(kubectl -n ${NAMESPACE} get pods -l app=nse-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl -n ns-vfio2noop get pods -l app=nse-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-kubectl -n ${NAMESPACE} exec ${NSE} --container ponger -- /bin/bash -c '\
-  (sleep 10 && kill $(pgrep "pingpong")) 1>/dev/null 2>&1 &             \
+kubectl -n ns-vfio2noop exec ${NSE} --container ponger -- /bin/bash -c '\
+  sleep 10 && kill $(pgrep "pingpong") 1>/dev/null 2>&1 &               \
 '
 ```
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-vfio2noop
 ```

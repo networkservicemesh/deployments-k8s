@@ -16,8 +16,8 @@ hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-kernel2kernel-vlan
+>>>>>>> 46696acae (refactor all basic suite examples)
 ```
 
 Select node to deploy NSC and NSE:
@@ -32,7 +32,10 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-kernel2kernel-vlan
+
+resources: 
+- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2KernelVLAN?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
@@ -60,7 +63,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://vlan-vpp-responder/nsm-1
+              value: kernel://kernel2kernel-vlan/nsm-1
       nodeName: ${NODE}
 EOF
 ```
@@ -81,6 +84,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/30
+            - name: NSM_SERVICE_NAMES
+              value: "kernel2kernel-vlan"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODE}
 EOF
 ```
@@ -92,29 +99,29 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-kernel2kernel-vlan
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-kernel2kernel-vlan
 ```
 
 Choose one ns client pod and nse pod by labels:
 ```bash
-NSC=$((kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}') | cut -d' ' -f1)
-TARGET_IP=$(kubectl exec -ti ${NSC} -n ${NAMESPACE} -- ip route show | grep 172.16 | cut -d' ' -f1)
+NSC=$((kubectl get pods -l app=nsc-kernel -n ns-kernel2kernel-vlan --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}') | cut -d' ' -f1)
+TARGET_IP=$(kubectl exec -ti ${NSC} -n ns-kernel2kernel-vlan -- ip route show | grep 172.16 | cut -d' ' -f1)
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-kernel2kernel-vlan --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 ${TARGET_IP}
+kubectl exec ${NSC} -n ns-kernel2kernel-vlan -- ping -c 4 ${TARGET_IP}
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-kernel2kernel-vlan
 ```

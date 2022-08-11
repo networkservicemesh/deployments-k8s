@@ -19,8 +19,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-kernel2kernel
 ```
 
 Select node to deploy NSC and NSE:
@@ -35,10 +34,12 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-kernel2kernel
 
 resources: 
 - client.yaml
+- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Kernel?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
+
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
 
@@ -58,7 +59,7 @@ metadata:
   labels:
     app: alpine    
   annotations:
-    networkservicemesh.io: kernel://icmp-responder/nsm-1
+    networkservicemesh.io: kernel://kernel2kernel/nsm-1
 spec:
   containers:
   - name: alpine
@@ -86,6 +87,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: "kernel2kernel"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODE}
 EOF
 ```
@@ -97,33 +102,33 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-kernel2kernel
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-kernel2kernel
 ```
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-kernel2kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-kernel2kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-kernel2kernel -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-kernel2kernel -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-kernel2kernel
 ```

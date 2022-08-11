@@ -33,6 +33,8 @@ namespace: ${NAMESPACE}
 
 resources: 
 - client.yaml
+- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Vxlan2Kernel?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
+
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
 
@@ -52,7 +54,7 @@ metadata:
   labels:
     app: alpine    
   annotations:
-    networkservicemesh.io: kernel://icmp-responder/nsm-1
+    networkservicemesh.io: kernel://kernel2vxlan2kernel/nsm-1
 spec:
   containers:
   - name: alpine
@@ -80,6 +82,10 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: "kernel2vxlan2kernel"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODES[1]}
 EOF
 ```

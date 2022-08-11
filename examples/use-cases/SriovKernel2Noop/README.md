@@ -10,8 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-sriov-kernel2noop
 ```
 
 Create customization file:
@@ -21,7 +20,10 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-sriov-kernel2noop
+
+resources: 
+- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SriovKernel2Noop?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
@@ -50,7 +52,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1?sriovToken=worker.domain/10G
+              value: kernel://sriov-kernel2noop/nsm-1?sriovToken=worker.domain/10G
           resources:
             limits:
               worker.domain/10G: 1
@@ -75,6 +77,10 @@ spec:
               value: serviceDomain:worker.domain
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: "sriov-kernel2noop"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
           resources:
             limits:
               master.domain/10G: 1
@@ -88,28 +94,28 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 ```
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse-kernel
+kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=nse-kernel
 ```
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=ponger
+kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=ponger
 ```
 
 Get NSC pod:
 ```bash
-NSC=$(kubectl -n ${NAMESPACE} get pods -l app=nsc-kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl -n ns-sriov-kernel2noop get pods -l app=nsc-kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl -n ${NAMESPACE} exec ${NSC} -- ping -c 4 172.16.1.100
+kubectl -n ns-sriov-kernel2noop exec ${NSC} -- ping -c 4 172.16.1.100
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-sriov-kernel2noop
 ```
