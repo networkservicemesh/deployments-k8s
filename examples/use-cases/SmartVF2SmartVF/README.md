@@ -23,7 +23,7 @@ kind: Kustomization
 namespace: ns-smartvf2smartvf
 
 resources: 
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/use-cases/SmartVF2SmartVF/netsvc.yaml
 
 bases:
 <<<<<<< HEAD

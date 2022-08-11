@@ -38,7 +38,7 @@ namespace: ns-kernel2kernel
 
 resources: 
 - client.yaml
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/use-cases/Kernel2Kernel/netsvc.yaml
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
