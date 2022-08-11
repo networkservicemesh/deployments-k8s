@@ -33,7 +33,7 @@ kind: Kustomization
 namespace: ns-memif2wireguard2kernel
 
 resources: 
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/use-cases/Memif2Wireguard2Kernel/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/946696acae3156e3e72bdb42cdda5147725fd0a2/examples/use-cases/Memif2Wireguard2Kernel/netsvc.yaml
 
 bases:
 <<<<<<< HEAD

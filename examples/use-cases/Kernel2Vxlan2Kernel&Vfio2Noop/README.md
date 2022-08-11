@@ -40,7 +40,7 @@ kind: Kustomization
 namespace: ns-kernel2vxlan2kernel-vfio2noop
 
 resources: 
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/use-cases/Kernel2Vxlan2Kernel&Vfio2Noop/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/946696acae3156e3e72bdb42cdda5147725fd0a2/examples/use-cases/Kernel2Vxlan2Kernel&Vfio2Noop/netsvc.yaml
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2

@@ -23,7 +23,7 @@ kind: Kustomization
 namespace: ns-sriov-kernel2noop
 
 resources: 
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/use-cases/SriovKernel2Noop/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/946696acae3156e3e72bdb42cdda5147725fd0a2/examples/use-cases/SriovKernel2Noop/netsvc.yaml
 
 bases:
 <<<<<<< HEAD
