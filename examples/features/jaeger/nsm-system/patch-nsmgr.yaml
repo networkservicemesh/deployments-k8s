@@ -9,5 +9,5 @@ spec:
       containers:
         - name: nsmgr
           env:
-            - name: TELEMETRY
-              value: "true"
+            - name: NSM_LOG_LEVEL
+              value: TRACE

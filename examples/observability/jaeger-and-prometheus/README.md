@@ -88,7 +88,7 @@ spec:
 EOF
 ```
 
-Create NSE patch. The patch adds `TELEMETRY` variable with value `true`. It enables telemetry for NSE. This example also has patches for manager and forwarder.
+Create NSE patch. The patch adds `NSM_LOG_LEVEL` variable with value `TRACE`. It enables telemetry for NSE. This example also has patches for manager and forwarder.
 ```bash
 cat > example/patch-nse.yaml <<EOF
 ---
@@ -104,8 +104,8 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-            - name: TELEMETRY
-              value: "true"
+            - name: NSM_LOG_LEVEL
+              value: TRACE
       nodeName: ${NODE}
 EOF
 ```

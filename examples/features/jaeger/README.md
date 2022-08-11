@@ -4,8 +4,8 @@
 NSM supports tracing via the [OpenTelemetry](https://opentelemetry.io/) Collector. Each NSM component is a "tracer" (OpenTelemetry
 Span producer) and integrates with the `opentelemetry-go` library to export traces to OpenTelemery Collector.
 
-By default, tracing is disabled in all NSM components. You can enable tracing for a specific NSM component by adding the environment variable `TELEMETRY`
-with the value `true`. It can be done with a patch for this NSM component. For example, the following code is the patch for NSM forwarder:
+By default, tracing is disabled in all NSM components. You can enable tracing for a specific NSM component by adding the environment variable `NSM_LOG_LEVEL`
+with the value `TRACE`. It can be done with a patch for this NSM component. For example, the following code is the patch for NSM forwarder:
 ```yaml
 ---
 apiVersion: apps/v1
@@ -18,8 +18,8 @@ spec:
       containers:
         - name: forwarder-vpp
           env:
-            - name: TELEMETRY
-              value: "true"
+            - name: NSM_LOG_LEVEL
+              value: TRACE
 ```
 
 You can configure OpenTelemetry Collector to send traces to Jaeger. To do it you should specify Jaeger service in OpenTelemetry Config:
