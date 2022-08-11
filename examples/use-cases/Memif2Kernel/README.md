@@ -31,11 +31,16 @@ kind: Kustomization
 namespace: ns-memif2kernel
 
 resources: 
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Kernel?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
+- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+<<<<<<< HEAD
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
+=======
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
+>>>>>>> 865832b6f4 (set new refs for basic suite examples)
 
 patchesStrategicMerge:
 - patch-nsc.yaml
