@@ -11,8 +11,7 @@ Make sure that you have completed steps from [external NSE](../../)
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/k8s_monolith/external_nse/usecases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-kernel2wireguard2kernel-monolith-nse
 ```
 
 Create kustomization file:
@@ -22,7 +21,10 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-kernel2wireguard2kernel-monolith-nse
+
+resources:
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/k8s_monolith/external_nse/usecases/Kernel2Wireguard2Kernel/netsvc.yaml
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
@@ -48,7 +50,7 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://docker-vl3/nsm-1
+              value: kernel://kernel2wireguard2kernel-monolith-nse/nsm-1
 EOF
 ```
 
@@ -59,12 +61,12 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-kernel2wireguard2kernel-monolith-nse
 ```
 
 Find all NSCs:
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ${NAMESPACE})
+nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-kernel2wireguard2kernel-monolith-nse)
 [[ ! -z $nscs ]]
 ```
 
@@ -72,12 +74,12 @@ Ping each client by each client:
 ```bash
 for nsc in $nscs
 do
-    ipAddr=$(kubectl exec -n ${NAMESPACE} $nsc -- ifconfig nsm-1)
+    ipAddr=$(kubectl exec -n ns-kernel2wireguard2kernel-monolith-nse $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ${NAMESPACE} -- ping -c4 $ipAddr
+        kubectl exec $pinger -n ns-kernel2wireguard2kernel-monolith-nse -- ping -c4 $ipAddr
     done
 done
 ```
@@ -87,7 +89,7 @@ Ping docker-nse by each client:
 for nsc in $nscs
 do
     echo $nsc pings docker-nse
-    kubectl exec -n ${NAMESPACE} $nsc -- ping 169.254.0.1 -c4
+    kubectl exec -n ns-kernel2wireguard2kernel-monolith-nse $nsc -- ping 169.254.0.1 -c4
 done
 ```
 
@@ -95,7 +97,7 @@ Ping each client by docker-nse:
 ```bash
 for nsc in $nscs
 do
-    ipAddr=$(kubectl exec -n ${NAMESPACE} $nsc -- ifconfig nsm-1)
+    ipAddr=$(kubectl exec -n ns-kernel2wireguard2kernel-monolith-nse $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     docker exec nse-simple-vl3-docker ping -c4 $ipAddr
 done
@@ -106,5 +108,5 @@ done
 Delete ns:
 
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-kernel2wireguard2kernel-monolith-nse
 ```

@@ -17,7 +17,7 @@ services:
     networks:
       - kind
     environment:
-      NSM_NETWORK_SERVICES: kernel://icmp-responder-ip@k8s.nsm/nsm-1
+      NSM_NETWORK_SERVICES: kernel://kernel2wireguard2kernel-monolith-nsc@k8s.nsm/nsm-1
 EOF
 ```
 
