@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  generateName: ns1-
+  annotations:
+    networkservicemesh.io: kernel://icmp-responder/nsm-1
