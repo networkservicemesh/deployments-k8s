@@ -24,7 +24,7 @@ kind: Kustomization
 namespace: ns-kernel2wireguard2kernel-monolith-nsc
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/9dad8f1e41c2b3a8e456e64884f55cc9d96e791d/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel/netsvc.yaml
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
