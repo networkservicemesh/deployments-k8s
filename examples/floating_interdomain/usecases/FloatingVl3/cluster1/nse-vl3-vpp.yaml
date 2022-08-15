@@ -11,7 +11,7 @@ metadata:
 spec:
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/cmd-nse-vl3-vpp:8350861
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:e9e706e
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
@@ -22,8 +22,6 @@ spec:
           value: "false"
         - name: NSM_SERVICE_NAMES
           value: "my-interdomain-vl3-network@my.cluster3"
-        - name: NSM_PREFIXSERVERURL
-          value: "tcp://172.18.3.131:5006"
         - name: NSM_LOG_LEVEL
           value: TRACE
       volumeMounts:
