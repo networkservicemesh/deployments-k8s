@@ -46,19 +46,13 @@ Note: *By default we're using ipam prefix is `169.254.0.0/16` and client prefix 
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=d8a3d2c5481d66092b877043573c268afd5c3f85
 ```
 
-1.3. Get an IP address assigned to **vl3 ipam**.
-
-```bash
-vl3_ipam_ip=$(kubectl get services vl3-ipam -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-```
-
-1.4. Switch context to the *cluster1*.
+1.3. Switch context to the *cluster1*.
 
 ```bash
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-1.5. Prepare a patch with **vl3 ipam URL**:
+1.4. Prepare a patch with **vl3 ipam URL**:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -84,24 +78,24 @@ spec:
   containers:
     - name: nse
       env:
-        - name: NSM_PREFIXSERVERURL
-          value: "tcp://$vl3_ipam_ip:5006"
+        - name: NSM_PREFIX_SERVER_URL
+          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
 EOF
 ```
 
-1.6. Start **vl3 nse** and client in the *cluster1*.
+1.5. Start **vl3 nse** and client in the *cluster1*.
 
 ```bash
 kubectl apply -k .
 ```
 
-1.7. Switch context to the *cluster2*.
+1.6. Switch context to the *cluster2*.
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-1.8. Prepare a patch with **vl3 ipam URL**:
+1.7. Prepare a patch with **vl3 ipam URL**:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -127,12 +121,12 @@ spec:
   containers:
     - name: nse
       env:
-        - name: NSM_PREFIXSERVERURL
-          value: "tcp://$vl3_ipam_ip:5006"
+        - name: NSM_PREFIX_SERVER_URL
+          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
 EOF
 ```
 
-1.9. Start **vl3 nse** and client in the *cluster2*.
+1.8. Start **vl3 nse** and client in the *cluster2*.
 
 ```bash
 kubectl apply -k .
