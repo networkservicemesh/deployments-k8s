@@ -32,19 +32,13 @@ Note: *By default we're using ipam prefix is `169.254.0.0/16` and client prefix 
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3_autoscale/cluster3?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
 
-1.3. Get an IP address assigned to **vl3-ipam**.
-
-```bash
-vl3_ipam_ip=$(kubectl get services vl3-ipam -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
-```
-
-1.4. Switch context to the *cluster1*.
+1.3. Switch context to the *cluster1*.
 
 ```bash
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-1.5. First we need to prepare a pod-template for the supplier with a correct **vl3 ipam URL**. Let's use `kustomize` to create it:
+1.4. First we need to prepare a pod-template for the supplier with a correct **vl3 ipam URL**. Let's use `kustomize` to create it:
 
 ```bash
 cat > kustomization.yaml <<EOF
@@ -71,8 +65,8 @@ spec:
   containers:
     - name: nse
       env:
-        - name: NSM_PREFIXSERVERURL
-          value: "tcp://$vl3_ipam_ip:5006"
+        - name: NSM_PREFIX_SERVER_URL
+          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
 EOF
 ```
 
@@ -81,7 +75,7 @@ Save `pod-template.yaml`:
 kubectl kustomize -o 'pod-template.yaml'
 ```
 
-1.6. Create `kustomization` file with a configmap for supplier:
+1.5. Create `kustomization` file with a configmap for supplier:
 
 ```bash
 cat > kustomization.yaml <<EOF
@@ -101,19 +95,19 @@ configMapGenerator:
 EOF
 ```
 
-1.7. Start **nse-supplier-k8s** and client in the *cluster1*.
+1.6. Start **nse-supplier-k8s** and client in the *cluster1*.
 
 ```bash
 kubectl apply -k .
 ```
 
-1.8. Switch context to the *cluster2*.
+1.7. Switch context to the *cluster2*.
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-1.9. We need to prepare a pod-template for the supplier with a correct **vl3 ipam URL**. Let's use `kustomize` to create it:
+1.8. We need to prepare a pod-template for the supplier with a correct **vl3 ipam URL**. Let's use `kustomize` to create it:
 
 ```bash
 cat > kustomization.yaml <<EOF
@@ -140,8 +134,8 @@ spec:
   containers:
     - name: nse
       env:
-        - name: NSM_PREFIXSERVERURL
-          value: "tcp://$vl3_ipam_ip:5006"
+        - name: NSM_PREFIX_SERVER_URL
+          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
 EOF
 ```
 
@@ -150,7 +144,7 @@ Save `pod-template.yaml`:
 kubectl kustomize -o 'pod-template.yaml'
 ```
 
-1.10. Create `kustomization` file with a configmap for supplier:
+1.9. Create `kustomization` file with a configmap for supplier:
 ```bash
 cat > kustomization.yaml <<EOF
 ---
@@ -169,7 +163,7 @@ configMapGenerator:
 EOF
 ```
 
-1.11. Start **nse-supplier-k8s** and client in the *cluster2*.
+1.10. Start **nse-supplier-k8s** and client in the *cluster2*.
 
 ```bash
 kubectl apply -k .
