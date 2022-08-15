@@ -32,8 +32,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-jaeger-and-prometheus
 ```
 
 Select node to deploy NSC and NSE:
@@ -53,7 +52,7 @@ cat > example/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-jaeger-and-prometheus
 
 resources: 
 - client.yaml
@@ -76,7 +75,7 @@ metadata:
   labels:
     app: alpine    
   annotations:
-    networkservicemesh.io: kernel://icmp-responder/nsm-1
+    networkservicemesh.io: kernel://jaeger-and-prometheus/nsm-1
 spec:
   containers:
   - name: alpine
@@ -106,6 +105,10 @@ spec:
               value: 172.16.1.100/31
             - name: TELEMETRY
               value: "true"
+            - name: NSM_SERVICE_NAMES
+              value: "jaeger-and-prometheus"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
       nodeName: ${NODE}
 EOF
 ```
@@ -117,28 +120,28 @@ kubectl apply -k example
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-jaeger-and-prometheus
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-jaeger-and-prometheus
 ```
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-jaeger-and-prometheus --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-jaeger-and-prometheus --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-jaeger-and-prometheus -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-jaeger-and-prometheus -- ping -c 4 172.16.1.101
 ```
 
 Select forwarder:
@@ -177,7 +180,7 @@ echo ${result} | grep -q "forwarder"
 Delete ns:
 ```bash
 rm -r example
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-jaeger-and-prometheus
 ```
 
 ```bash
