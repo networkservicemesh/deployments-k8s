@@ -5,13 +5,13 @@ kind: Kustomization
 namespace: ns-vl3
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=d2148cb586401f4d480d9d37995ec6c8f2cd6d93
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=d2148cb586401f4d480d9d37995ec6c8f2cd6d93
-- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=d2148cb586401f4d480d9d37995ec6c8f2cd6d93
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=e1f1d822ecd558ca12b109ef558a4cd8a43ab674
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=e1f1d822ecd558ca12b109ef558a4cd8a43ab674
+- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=e1f1d822ecd558ca12b109ef558a4cd8a43ab674
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d2148cb586401f4d480d9d37995ec6c8f2cd6d93/examples/features/vl3-basic/vl3-netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e1f1d822ecd558ca12b109ef558a4cd8a43ab674/examples/features/vl3-basic/vl3-netsvc.yaml
 
 patchesStrategicMerge:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d2148cb586401f4d480d9d37995ec6c8f2cd6d93/examples/features/vl3-basic/nsc-patch.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d2148cb586401f4d480d9d37995ec6c8f2cd6d93/examples/features/vl3-basic/nse-patch.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e1f1d822ecd558ca12b109ef558a4cd8a43ab674/examples/features/vl3-basic/nsc-patch.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e1f1d822ecd558ca12b109ef558a4cd8a43ab674/examples/features/vl3-basic/nse-patch.yaml
