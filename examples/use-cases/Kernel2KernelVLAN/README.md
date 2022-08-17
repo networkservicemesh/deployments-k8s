@@ -17,34 +17,11 @@ hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 Create test namespace:
 ```bash
 kubectl create ns ns-kernel2kernel-vlan
->>>>>>> 46696acae (refactor all basic suite examples)
 ```
 
 Select node to deploy NSC and NSE:
 ```bash
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-kernel2kernel-vlan
-
-resources: 
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2KernelVLAN?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vlan-vpp?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
 ```
 
 Create NSC patch:
@@ -94,7 +71,7 @@ EOF
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2KernelVLAN?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

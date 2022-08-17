@@ -22,27 +22,6 @@ Get nodes exclude control-plane:
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
 ```
 
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-kernel2wireguard2memif
-
-resources: 
-- client.yaml
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Wireguard2Memif?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
 Create Client:
 ```bash
 cat > client.yaml <<EOF
@@ -94,7 +73,7 @@ EOF
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Wireguard2Memif?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

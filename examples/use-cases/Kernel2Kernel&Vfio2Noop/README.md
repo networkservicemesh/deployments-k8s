@@ -30,32 +30,6 @@ SERVER_MAC=$(mac_create)
 echo Server MAC: ${SERVER_MAC}
 ```
 
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-kernel2kernel-vfio2noop
-
-resources: 
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/946696acae3156e3e72bdb42cdda5147725fd0a2/examples/use-cases/Kernel2Kernel&Vfio2Noop/netsvc.yaml
-
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-- patch-nse-vfio.yaml
-EOF
-```
-
 Create kernel NSC patch:
 ```bash
 cat > patch-nsc.yaml <<EOF
@@ -123,7 +97,7 @@ EOF
 
 Deploy NSCs and NSEs:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Kernel&Vfio2Noop?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

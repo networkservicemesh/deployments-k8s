@@ -21,28 +21,6 @@ Select node to deploy NSC and NSE:
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-memif2kernel
-
-resources: 
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
-```
-
 Create NSC patch:
 ```bash
 cat > patch-nsc.yaml <<EOF
@@ -89,7 +67,7 @@ EOF
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:
