@@ -16,7 +16,6 @@ spec:
         name: control-plane
       annotations:
         networkservicemesh.io: kernel://my-vl3-network/nsm-1?dnsName=control-plane-kuma
-#        networkservicemesh.io: kernel://my-vl3-network/nsm-1
     spec:
       containers:
       - image: ubuntu
