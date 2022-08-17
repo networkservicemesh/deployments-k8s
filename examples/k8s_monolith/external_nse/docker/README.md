@@ -17,8 +17,8 @@ services:
     networks:
       - kind
     environment:
-      - NSM_SERVICE_NAMES: "kernel2wireguard2kernel-monolith-nse"
-      - NSM_REGISTER_SERVICE: "false"
+      NSM_SERVICE_NAMES: kernel2wireguard2kernel-monolith-nse
+      NSM_REGISTER_SERVICE: false
 EOF
 ```
 
