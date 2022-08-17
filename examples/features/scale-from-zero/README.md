@@ -89,30 +89,8 @@ spec:
 EOF
 ```
 
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
 
-namespace: ns-scale-from-zero
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-supplier.yaml
-
-configMapGenerator:
-  - name: supplier-pod-template-configmap
-    files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/scale-from-zero/pod-template.yaml
-EOF
-```
-
+TODO: move service registration to kustomization.yaml?
 Register network service:
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/scale-from-zero/autoscale-netsvc.yaml
@@ -120,7 +98,7 @@ kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployment
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

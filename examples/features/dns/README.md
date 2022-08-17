@@ -97,31 +97,9 @@ spec:
 EOF
 ```
 
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-dns
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-
-resources:
-- dnsutils.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/dns/coredns-config-map.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/dns/netsvc.yaml
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
 Deploy alpine and nse
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

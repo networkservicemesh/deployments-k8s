@@ -20,27 +20,6 @@ Select node to deploy NSC and NSE:
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-exclude-prefixes
-
-resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/exclude-prefixes/netsvc.yaml
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
-```
-
 Create NSC patch:
 ```bash
 cat > patch-nsc.yaml <<EOF
@@ -92,7 +71,7 @@ kubectl apply -f exclude-prefixes-config-map.yaml
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

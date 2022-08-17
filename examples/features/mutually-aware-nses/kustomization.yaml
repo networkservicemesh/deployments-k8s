@@ -1,0 +1,19 @@
+cat > kustomization.yaml <<EOF
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-mutually-aware-nses
+
+resources:
+- nse-1.yaml
+- nse-2.yaml
+- netsvc-1.yaml
+- netsvc-2.yaml
+- config-file-nse-1.yaml
+- config-file-nse-2.yaml
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+
+patchesStrategicMerge:
+- patch-nsc.yaml

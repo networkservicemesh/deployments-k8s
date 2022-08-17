@@ -95,30 +95,9 @@ spec:
 EOF
 ```
 
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-webhook-smartvf
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-
-resources:
-- postgres-cl.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/webhook-smartvf/netsvc.yaml
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
 Deploy postgres-nsc and postgres-nse
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook-smartvf?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

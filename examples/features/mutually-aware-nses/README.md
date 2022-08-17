@@ -22,30 +22,6 @@ Select node to deploy NSC and NSE:
 NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
 ```
 
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-mutually-aware-nses
-
-resources:
-- nse-1.yaml
-- nse-2.yaml
-- netsvc-1.yaml
-- netsvc-2.yaml
-- config-file-nse-1.yaml
-- config-file-nse-2.yaml
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-EOF
-```
-
 Create Client:
 ```bash
 cat > patch-nsc.yaml <<EOF
@@ -70,7 +46,8 @@ EOF
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/mutually-aware-nses?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+
 ```
 
 Wait for applications ready:
