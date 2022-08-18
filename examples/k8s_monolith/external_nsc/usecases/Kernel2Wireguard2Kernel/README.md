@@ -14,31 +14,6 @@ Create test namespace:
 kubectl create ns ns-kernel2wireguard2kernel-monolith-nsc
 ```
 
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_PAYLOAD
-              value: IP
-            - name: NSM_SERVICE_NAMES
-              value: "kernel2wireguard2kernel-monolith-nsc"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-EOF
-```
-
 Deploy NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
