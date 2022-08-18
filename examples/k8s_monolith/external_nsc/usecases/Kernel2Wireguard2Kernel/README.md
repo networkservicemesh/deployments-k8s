@@ -14,26 +14,6 @@ Create test namespace:
 kubectl create ns ns-kernel2wireguard2kernel-monolith-nsc
 ```
 
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-kernel2wireguard2kernel-monolith-nsc
-
-resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/742a090db9b44c6aabb64e7965b3f02990c94d0b/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel/netsvc.yaml
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
 Create NSE patch:
 ```bash
 cat > patch-nse.yaml <<EOF
@@ -61,7 +41,7 @@ EOF
 
 Deploy NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
 ```
 
 Wait for applications ready:

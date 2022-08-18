@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-kernel2wireguard2kernel-monolith-nse
+
+resources:
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/742a090db9b44c6aabb64e7965b3f02990c94d0b/examples/k8s_monolith/external_nse/usecases/Kernel2Wireguard2Kernel/netsvc.yaml
+
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
+
+patchesStrategicMerge:
+- patch-nsc.yaml
