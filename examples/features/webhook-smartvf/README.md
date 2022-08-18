@@ -97,7 +97,7 @@ EOF
 
 Deploy postgres-nsc and postgres-nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook-smartvf?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook-smartvf?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:

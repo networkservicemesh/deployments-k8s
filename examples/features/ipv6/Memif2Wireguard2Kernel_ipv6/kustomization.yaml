@@ -5,11 +5,11 @@ kind: Kustomization
 namespace: ns-memif2wireguard2kernel-ipv6
 
 resources: 
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/ipv6/Memif2Wireguard2Kernel_ipv6/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/562c4f9383ab2a2526008bd7ebace8acf8b18080/examples/features/ipv6/Memif2Wireguard2Kernel_ipv6/netsvc.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 
 patchesStrategicMerge:
 - patch-nsc.yaml

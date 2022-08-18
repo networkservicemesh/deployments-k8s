@@ -6,9 +6,9 @@ namespace: ns-kernel2wireguard2memif-ipv6
 
 resources: 
 - client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/ipv6/Kernel2Wireguard2Memif_ipv6/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/562c4f9383ab2a2526008bd7ebace8acf8b18080/examples/features/ipv6/Kernel2Wireguard2Memif_ipv6/netsvc.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 
 patchesStrategicMerge:
 - patch-nse.yaml

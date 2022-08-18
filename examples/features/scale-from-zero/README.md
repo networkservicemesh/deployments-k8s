@@ -93,12 +93,12 @@ EOF
 TODO: move service registration to kustomization.yaml?
 Register network service:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/eb53399861d97d0b47997c43b62e04f58cd9f94d/examples/features/scale-from-zero/autoscale-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/562c4f9383ab2a2526008bd7ebace8acf8b18080/examples/features/scale-from-zero/autoscale-netsvc.yaml
 ```
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:

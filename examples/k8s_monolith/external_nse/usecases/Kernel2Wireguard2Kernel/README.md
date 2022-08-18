@@ -36,7 +36,7 @@ EOF
 
 Deploy NSC:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nse/usecases/Kernel2Wireguard2Kernel?ref=eb53399861d97d0b47997c43b62e04f58cd9f94d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nse/usecases/Kernel2Wireguard2Kernel?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:
