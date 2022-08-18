@@ -13,56 +13,6 @@ Create test namespace:
 kubectl create ns ns-smartvf2smartvf
 ```
 
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://smartvf2smartvf/nsm-1?sriovToken=worker.domain/100G
-          resources:
-            limits:
-              worker.domain/100G: 1
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_LABELS
-              value: serviceDomain:worker.domain
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_SERVICE_NAMES
-              value: "smartvf2smartvf"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-          resources:
-            limits:
-              worker.domain/100G: 1
-EOF
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080

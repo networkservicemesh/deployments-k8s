@@ -9,11 +9,6 @@ Create test namespace:
 kubectl create ns ns-kernel2kernel-vfio2noop
 ```
 
-Select node to deploy NSC and NSE:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
 Generate MAC addresses for the VFIO client and server:
 ```bash
 function mac_create(){
@@ -28,50 +23,6 @@ echo Client MAC: ${CLIENT_MAC}
 ```bash
 SERVER_MAC=$(mac_create)
 echo Server MAC: ${SERVER_MAC}
-```
-
-Create kernel NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://kernel2kernel-vfio2noop/nsm-1
-      nodeName: ${NODE}
-EOF
-```
-
-Create kernel NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_SERVICE_NAMES
-              value: "kernel2kernel-vfio2noop"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODE}
-EOF
 ```
 
 Create NSE-vfio patch:
