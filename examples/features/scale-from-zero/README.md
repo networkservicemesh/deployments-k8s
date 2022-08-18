@@ -31,65 +31,6 @@ SUPPLIER_NODE=${NODES[1]}
 if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
 ```
 
-Create patch for NSC:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      nodeName: $NSC_NODE
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://scale-from-zero/nsm-1
-            - name: NSM_REQUEST_TIMEOUT
-              value: 30s
-EOF
-```
-
-Create patch for supplier:
-```bash
-cat > patch-supplier.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-supplier-k8s
-spec:
-  template:
-    spec:
-      nodeName: $SUPPLIER_NODE
-      containers:
-        - name: nse-supplier
-          env:
-            - name: NSM_SERVICE_NAME
-              value: scale-from-zero
-            - name: NSM_LABELS
-              value: app:icmp-responder-supplier
-            - name: NSM_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: NSM_POD_DESCRIPTION_FILE
-              value: /run/supplier/pod-template.yaml
-          volumeMounts:
-            - name: pod-file
-              mountPath: /run/supplier
-              readOnly: true
-      volumes:
-        - name: pod-file
-          configMap:
-            name: supplier-pod-template-configmap
-EOF
-```
-
-
 TODO: move service registration to kustomization.yaml?
 Register network service:
 ```bash

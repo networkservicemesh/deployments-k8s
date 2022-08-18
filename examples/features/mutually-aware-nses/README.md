@@ -17,33 +17,6 @@ Create test namespace:
 kubectl create ns ns-mutually-aware-nses
 ```
 
-Select node to deploy NSC and NSE:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
-Create Client:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red
-            - name: NSM_AWARENESS_GROUPS
-              value: "[kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red]"
-      nodeName: ${NODE}
-EOF
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/mutually-aware-nses?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080

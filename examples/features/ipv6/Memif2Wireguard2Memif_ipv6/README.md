@@ -12,57 +12,6 @@ Create test namespace:
 kubectl create ns ns-memif2wireguard2memif-ipv6
 ```
 
-Get nodes exclude control-plane:
-```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-memif
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: memif://memif2wireguard2memif-ipv6/nsm-1
-
-      nodeName: ${NODES[0]}
-EOF
-```
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-memif
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 2001:db8::/116
-            - name: NSM_PAYLOAD
-              value: IP
-            - name: NSM_SERVICE_NAMES
-              value: "memif2wireguard2memif-ipv6"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODES[1]}
-EOF
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Memif2Wireguard2Memif_ipv6?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080

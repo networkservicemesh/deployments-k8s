@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-cl
+  annotations:
+    # Add in the sriovToken label your own SmartVF interface pool
+    networkservicemesh.io: kernel://webhook-smartvf/nsm-1?sriovToken=worker.domain/100G
+  labels:
+    app: postgres-cl
+    "spiffe.io/spiffe-id": "true"
+spec:
+  containers:
+  - name: postgres-cl
+    image: postgres
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: POSTGRES_HOST_AUTH_METHOD
+        value: trust
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - nse-kernel
