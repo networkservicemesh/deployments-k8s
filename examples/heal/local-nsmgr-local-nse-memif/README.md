@@ -15,56 +15,6 @@ Create test namespace:
 kubectl create ns ns-local-nsmgr-local-nse-memif
 ```
 
-Get nodes exclude control-plane:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-memif
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: memif://local-nsmgr-local-nse-memif/nsm-1
-
-      nodeName: ${NODE}
-EOF
-
-```
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-memif
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_SERVICE_NAMES
-              value: "local-nsmgr-local-nse-memif"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODE}
-EOF
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080

@@ -37,8 +37,16 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://remote-nsmgr-remote-endpoint/nsm-1
-
-      nodeName: ${NODES[0]}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nse-kernel
 EOF
 
 ```

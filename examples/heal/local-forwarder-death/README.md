@@ -15,55 +15,6 @@ Create test namespace:
 kubectl create ns ns-local-forwarder-death
 ```
 
-Select node to deploy NSC and NSE:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://local-forwarder-death/nsm-1  
-      nodeName: ${NODE}
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_SERVICE_NAMES
-              value: "local-forwarder-death"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"  
-      nodeName: ${NODE}
-EOF
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
