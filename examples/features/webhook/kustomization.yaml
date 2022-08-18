@@ -5,11 +5,11 @@ kind: Kustomization
 namespace: ns-webhook
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=3a344104e4af53f30f0101cdcbbc9b2bc5433463
 
 resources:
 - client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/562c4f9383ab2a2526008bd7ebace8acf8b18080/examples/features/webhook/netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3a344104e4af53f30f0101cdcbbc9b2bc5433463/examples/features/webhook/netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml

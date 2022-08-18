@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: ns-scale-from-zero
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=3a344104e4af53f30f0101cdcbbc9b2bc5433463
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=3a344104e4af53f30f0101cdcbbc9b2bc5433463
 
 patchesStrategicMerge:
 - patch-nsc.yaml
@@ -15,4 +15,4 @@ patchesStrategicMerge:
 configMapGenerator:
   - name: supplier-pod-template-configmap
     files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/562c4f9383ab2a2526008bd7ebace8acf8b18080/examples/features/scale-from-zero/pod-template.yaml
+      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3a344104e4af53f30f0101cdcbbc9b2bc5433463/examples/features/scale-from-zero/pod-template.yaml

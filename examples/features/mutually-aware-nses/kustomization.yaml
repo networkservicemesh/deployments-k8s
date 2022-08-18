@@ -13,7 +13,7 @@ resources:
 - config-file-nse-1.yaml
 - config-file-nse-2.yaml
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=3a344104e4af53f30f0101cdcbbc9b2bc5433463
 
 patchesStrategicMerge:
 - patch-nsc.yaml
