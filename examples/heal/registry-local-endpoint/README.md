@@ -17,7 +17,7 @@ kubectl create ns ns-registry-local-endpoint
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-local-endpoint?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-local-endpoint/nse-first?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:
@@ -46,33 +46,6 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ns-registry-local-endpoint -- ping -c 4 172.16.1.101
 ```
 
-Create a new NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    metadata:
-      labels:
-        version: new
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.102/31
-            - name: NSM_SERVICE_NAMES
-              value: "registry-local-endpoint"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODE}
-EOF
-```
-
 Find Registry:
 ```bash
 REGISTRY=$(kubectl get pods -l app=registry -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -83,7 +56,7 @@ Restart Registry and NSE:
 kubectl delete pod ${REGISTRY} -n nsm-system
 ```
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-local-endpoint/nse-second?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Waiting for new ones:

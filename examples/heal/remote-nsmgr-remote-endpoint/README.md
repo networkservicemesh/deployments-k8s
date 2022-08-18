@@ -16,67 +16,9 @@ Create test namespace:
 kubectl create ns ns-remote-nsmgr-remote-endpoint
 ```
 
-Get nodes exclude control-plane:
-```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://remote-nsmgr-remote-endpoint/nsm-1
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - nse-kernel
-EOF
-
-```
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_SERVICE_NAMES
-              value: "remote-nsmgr-remote-endpoint"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODES[1]}
-EOF
-```
-
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint/nsmgr-before-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:
@@ -105,33 +47,6 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ns-remote-nsmgr-remote-endpoint -- ping -c 4 172.16.1.101
 ```
 
-Create a new NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    metadata:
-      labels:
-        version: new
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.102/31
-            - name: NSM_SERVICE_NAMES
-              value: "remote-nsmgr-remote-endpoint"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODES[1]}
-EOF
-```
-
 Find remote NSMgr pod:
 ```bash
 NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -142,7 +57,7 @@ Restart remote NSMgr and NSE:
 kubectl delete pod ${NSMGR} -n nsm-system
 ```
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint/nsmgr-after-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Waiting for new ones:

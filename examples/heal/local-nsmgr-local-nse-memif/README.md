@@ -17,7 +17,7 @@ kubectl create ns ns-local-nsmgr-local-nse-memif
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif/nse-before-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:
@@ -56,36 +56,14 @@ kubectl delete deployment nse-memif -n ns-local-nsmgr-local-nse-memif
 kubectl wait --for=delete --timeout=1m pod ${NSE} -n ns-local-nsmgr-local-nse-memif
 ```
 
-Create a new NSE patch:
+Find nsc node:
 ```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-memif
-spec:
-  template:
-    metadata:
-      labels:
-        version: new
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.102/31
-            - name: NSM_SERVICE_NAMES
-              value: "local-nsmgr-local-nse-memif"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODE}
-EOF
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-nsmgr-local-nse-memif --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
 ```
 
 Find local NSMgr pod:
 ```bash
-NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Restart local NSMgr and NSE:
@@ -93,12 +71,12 @@ Restart local NSMgr and NSE:
 kubectl delete pod ${NSMGR} -n nsm-system
 ```
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif/nse-after-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Waiting for new ones:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODE} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -l version=new -n ns-local-nsmgr-local-nse-memif

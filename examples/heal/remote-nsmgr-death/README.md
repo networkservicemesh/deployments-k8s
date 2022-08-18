@@ -18,7 +18,7 @@ kubectl create ns ns-remote-nsmgr-death
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/remote-nse?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:
@@ -48,110 +48,23 @@ kubectl exec ${NSE} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.101
 ```
 
 Kill remote NSMgr:
-
-Customization file:
 ```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: nsm-system
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/remote-nsmgr-death/netsvc.yaml
-
-patchesStrategicMerge:
-- patch-nsmgr.yaml
-EOF
-```
-
-NSMgr patch:
-```bash
-cat > patch-nsmgr.yaml <<EOF
----
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: nsmgr
-spec:
-  updateStrategy:
-    type: OnDelete
-  template:
-    spec:
-      containers:
-        - name: nsmgr
-      nodeName: ${NODES[0]}
-EOF
-```
-
-Apply changes:
-```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/nsmgr-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Start local NSE instead of the remote one:
-
-Customization file:
 ```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-remote-nsmgr-death
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/remote-nsmgr-death/netsvc.yaml
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
-NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.102/31
-            - name: NSM_SERVICE_NAMES
-              value: "remote-nsmgr-death"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
-      nodeName: ${NODES[0]}
-EOF
-```
-
-Apply changes:
-```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/local-nse?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for the new NSE to start:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel --field-selector spec.nodeName==${NODES[0]} -n ns-remote-nsmgr-death
+kubectl wait --for=condition=ready --timeout=1m pod -l nse-version=local -n ns-remote-nsmgr-death
 ```
 
 Find new NSE pod:
 ```bash
-NEW_NSE=$(kubectl get pods -l app=nse-kernel --field-selector spec.nodeName==${NODES[0]} -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NEW_NSE=$(kubectl get pods -l nse-version=local -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to new NSE:

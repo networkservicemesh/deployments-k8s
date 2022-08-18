@@ -17,7 +17,7 @@ kubectl create ns ns-registry-restart
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-before-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for applications ready:
@@ -59,55 +59,9 @@ kubectl delete pod ${REGISTRY} -n nsm-system
 kubectl wait --for=condition=ready --timeout=1m pod -l app=registry -n nsm-system
 ```
 
-Create customization file for a new NSC:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-registry-restart
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: nsc-kernel
-  path: patch-nsc.yaml
-EOF
-```
-
-Create patch for a new NSC:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-- op: replace
-  path: /metadata/name
-  value: nsc-kernel-new
-- op: replace
-  path: /metadata/labels/app
-  value: nsc-kernel-new
-- op: replace
-  path: /spec/selector/matchLabels/app
-  value: nsc-kernel-new
-- op: replace
-  path: /spec/template/metadata/labels/app
-  value: nsc-kernel-new
-- op: add
-  path: /spec/template/spec/containers/0/env/-
-  value:
-    name: NSM_NETWORK_SERVICES
-    value: kernel://registry-restart/nsm-1
-EOF
-```
-
 Apply:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-after-death?ref=562c4f9383ab2a2526008bd7ebace8acf8b18080
 ```
 
 Wait for a new NSC to start:
