@@ -14,4 +14,4 @@ spec:
             - name: NSM_REGISTER_SERVICE
               value: "false"
             - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31,2001:db8::/116}
+              value: 172.16.1.100/31,2001:db8::/116
