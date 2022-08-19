@@ -34,12 +34,12 @@ if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node f
 TODO: move service registration to kustomization.yaml?
 Register network service:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90638399350960f52bc2fb3895d7a654fe298ae1/examples/features/scale-from-zero/autoscale-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/scale-from-zero/autoscale-netsvc.yaml
 ```
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=90638399350960f52bc2fb3895d7a654fe298ae1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=505fec639b436f5e9093c6611b74636aaf4ed501
 ```
 
 Wait for applications ready:
