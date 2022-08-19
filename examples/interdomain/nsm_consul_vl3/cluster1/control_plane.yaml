@@ -14,7 +14,7 @@ spec:
       labels:
         name: control-plane
       annotations:
-        networkservicemesh.io: kernel://my-vl3-network/nsm-1
+        networkservicemesh.io: kernel://nsm-consul-vl3/nsm-1
     spec:
       containers:
       - image: ubuntu:18.04

@@ -13,4 +13,4 @@ spec:
         - name: nse
           env:
             - name: NSM_SERVICE_NAMES
-              value: "my-vl3-network"
+              value: "nsm-consul-vl3"

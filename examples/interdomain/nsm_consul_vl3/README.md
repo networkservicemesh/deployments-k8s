@@ -18,67 +18,95 @@ https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/producti
 https://learn.hashicorp.com/tutorials/consul/tls-encryption-secure
 https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/developer-mesh
 
-Start vl3
+Start vl3, install Consul control plane and counting service on the first cluster
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 create ns ns-vl3
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ./vl3-basic
+kubectl --kubeconfig=$KUBECONFIG1 create ns ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./examples/interdomain/nsm_consul_vl3/cluster1
+```
+Start vl3, install Consul control plane and counting service on the first cluster
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 create ns nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./examples/interdomain/nsm_consul_vl3/cluster2
 ```
 
-Install Consul control plane and two services on Ubuntu 
+Wait for pods to be ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f control_plane.yaml
-kubectl --kubeconfig=$KUBECONFIG1 apply -f counting.yaml
-kubectl --kubeconfig=$KUBECONFIG2 apply -f dashboard.yaml
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=nse-vl3-vpp -n ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=vl3-ipam -n ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod -l name=control-plane -n ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod counting -n ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=5m pod dashboard -n ns-nsm-consul-vl3
 ```
 
 Run a control plane, install required packages and Consul CP
 ```bash
 export CP=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l name=control-plane --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl --kubeconfig=$KUBECONFIG1 exec -it $CP -c ubuntu -- bash
+kubectl --kubeconfig=$KUBECONFIG1 exec -it ${CP} -c ubuntu -- bash
+```
+
+```bash
 apt update
 apt upgrade -y
-apt-get install curl gnupg sudo lsb-release iproute2 -y
+```
+
+```bash
+apt-get install curl gnupg sudo lsb-release net-tools iproute2 -y
+```
+
+```bash
 curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
       gpg --dearmor | \
       sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg
+```
+
+```bash
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
  sudo tee -a /etc/apt/sources.list.d/hashicorp.list
+```
+
+```bash
 sudo apt-get update
 sudo apt-get install consul=1.12.0-1
 ```
+
 (On the control plane pod) Generate the gossip encryption key. Save the output
 ```bash
-consul keygen
+ENCRYPTION_KEY=$(consul keygen)
 ```
 
 (On the control plane pod) Get CP vl3 IP
 ```bash
-ip -h address
-# look for the nsm-1 interface output
+CP_IP_VL3_ADDRESS=169.254.0.2
 ```
 
 (On the control plane pod) Initialize Consul CA
 ```bash
-consul tls ca create
+consul tls ca create /etc/consul.d/
 ```
-
-Copy the created CA files consul-agent-ca.pem and consul-agent-ca-key.pem to the root directories on the counting and dashboard pods.
 
 (On the control plane pod) Create the server certificates
 ```bash
-consul tls cert create -server -dc dc1
+consul tls cert create -server -dc dc1 /etc/consul.d/
 ```
 
 (On the control plane pod) Update control plane configuration. Use here the saved encryption key and CP vl3 IP address
 ```bash
 cat > /etc/consul.d/consul.hcl <<EOF
-encrypt = "$ENCRYPTION_KEY"
-verify_incoming = true
-verify_outgoing = true
-verify_server_hostname = true
-ca_file = "consul-agent-ca.pem"
-cert_file = "dc1-server-consul-0.pem"
-key_file = "dc1-server-consul-0-key.pem"
+data_dir = "/opt/consul"
+datacenter = "dc1"
+encrypt = "${ENCRYPTION_KEY}"
+tls {
+  defaults {
+    ca_file = "/etc/consul.d/consul-agent-ca.pem"
+    cert_file = "/etc/consul.d/dc1-server-consul-0.pem"
+    key_file = "/etc/consul.d/dc1-server-consul-0-key.pem"
+    verify_incoming = true
+    verify_outgoing = true
+  }
+  internal_rpc {
+    verify_server_hostname = true
+  }
+}
 auto_encrypt {
   allow_tls = true
 }
@@ -87,7 +115,14 @@ acl {
   default_policy = "allow"
   enable_token_persistence = true
 }
-bind_addr = "$CP_IP_VL3_ADDRESS"
+EOF
+```
+
+```bash
+cat > /etc/consul.d/server.hcl <<EOF
+server = true
+bootstrap_expect = 1
+bind_addr = "${CP_IP_VL3_ADDRESS}"
 connect {
   enabled = true
 }
@@ -95,15 +130,11 @@ connect {
 addresses {
   grpc = "127.0.0.1"
 }
-
 ports {
   grpc  = 8502
 }
-server = true
-bootstrap_expect = 1
 EOF
 ```
-
 (On the control plane pod) Validate the configuration 
 ```bash
 sudo consul validate /etc/consul.d/
@@ -129,20 +160,27 @@ sudo apt-get update
 sudo apt-get install consul=1.12.0-1
 ```
 
-(On the counting pod) Get the pod vl3 IP
+(On the counting pod) Set the counting  and control plane pods vl3 IP
 ```bash
-ip -h address
-# look for the nsm-1 interface output
+CP_IP_VL3_ADDRESS=169.254.0.2
+COUNTING_IP_VL3_ADDRESS=169.254.0.3
 ```
 
 (On the counting pod) Update control plane configuration. Use here the saved encryption key and the Counting service pod vl3 IP address
 ```bash
 cat > /etc/consul.d/consul.hcl <<EOF
-encrypt = "$ENCRYPTION_KEY"
-verify_incoming = false
-verify_outgoing = true
-verify_server_hostname = true
-ca_file = "consul-agent-ca.pem"
+data_dir = "/opt/consul"
+encrypt = "${ENCRYPTION_KEY}"
+tls {
+  defaults {
+    ca_file = "/etc/consul.d/consul-agent-ca.pem"
+    verify_incoming = false
+    verify_outgoing = true
+  }
+  internal_rpc {
+    verify_server_hostname = true
+  }
+}
 auto_encrypt {
   tls = true
 }
@@ -151,7 +189,7 @@ acl {
   default_policy = "allow"
   enable_token_persistence = true
 }
-bind_addr = "$COUNTING_IP_VL3_ADDRESS"
+bind_addr = "${COUNTING_IP_VL3_ADDRESS}"
 connect {
   enabled = true
 }
@@ -212,6 +250,10 @@ export FUNC_E_PLATFORM=linux/amd64
 func-e use 1.22.2
 sudo cp ~/.func-e/versions/1.22.2/bin/envoy /usr/bin/
 # Check envoy version
+```
+
+(On the counting pod) Verify Envoy has been installed 
+```bash
 envoy --version
 ```
 
@@ -225,30 +267,47 @@ Open new terminal tab and execute new session to the Dashboard service pod, inst
 kubectl --kubeconfig=$KUBECONFIG2 exec -it dashboard -c ubuntu -- bash
 apt update
 apt upgrade -y
+```
+
+```bash
 apt-get install curl gnupg sudo lsb-release iproute2 -y
+```
+
+```bash
 curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
       gpg --dearmor | \
       sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
  sudo tee -a /etc/apt/sources.list.d/hashicorp.list
+```
+
+```bash
 sudo apt-get update
 sudo apt-get install consul=1.12.0-1
 ```
 
-(On the dashboard pod) Get the pod vl3 IP
+(On the dashboard pod) Set the pod vl3 IP
 ```bash
-ip -h address
-# look for the nsm-1 interface output
+DASHBOARD_IP_VL3_ADDRESS=169.254.0.4
+CP_IP_VL3_ADDRESS=169.254.0.2
 ```
 
-(On the dashboard pod) Update control plane configuration. Use here the saved encryption key and the Dashboard service pod vl3 IP address
+(On the dashboard pod) Update dashboard configuration. Use here the saved encryption key and the Dashboard service pod vl3 IP address
 ```bash
 cat > /etc/consul.d/consul.hcl <<EOF
-encrypt = "$ENCRYPTION_KEY"
-verify_incoming = false
-verify_outgoing = true
-verify_server_hostname = true
-ca_file = "consul-agent-ca.pem"
+encrypt = "${ENCRYPTION_KEY}"
+data_dir = "/opt/consul"
+tls {
+  defaults {
+    ca_file = "/etc/consul.d/consul-agent-ca.pem"
+    verify_incoming = false
+    verify_outgoing = true
+  }
+  internal_rpc {
+    verify_server_hostname = true
+  }
+}
+datacenter = "dc1"
 auto_encrypt {
   tls = true
 }
@@ -257,7 +316,7 @@ acl {
   default_policy = "allow"
   enable_token_persistence = true
 }
-bind_addr = "$DASHBOARD_IP_VL3_ADDRESS"
+bind_addr = "${DASHBOARD_IP_VL3_ADDRESS}"
 connect {
   enabled = true
 }
@@ -339,3 +398,8 @@ Port-forward the dashboard pod
 kubectl --kubeconfig=$KUBECONFIG2 port-forward dashboard 9002:9002
 ```
 In your browser open localhost:9002 and verify the application works!
+```bash
+result=`curl --include --no-buffer --connect-timeout 20 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: 127.0.0.1:9002" -H "Origin: http://127.0.0.1:9002" -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" -H "Sec-WebSocket-Version: 13" http://127.0.0.1:9002/socket.io/?EIO=3&transport=websocket`
+echo ${result} | grep  -o 'Unreachable'
+```
+
