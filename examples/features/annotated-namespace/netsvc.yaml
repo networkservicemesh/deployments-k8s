@@ -2,6 +2,6 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: annotatednamespace
+  name: annotated-namespace
 spec:
   payload: ETHERNET
