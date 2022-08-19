@@ -58,7 +58,7 @@ kubectl wait --for=delete --timeout=1m pod ${NSE} -n ns-local-nsmgr-local-nse-me
 
 Find nsc node:
 ```bash
-NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-nsmgr-local-nse-memif --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-nsmgr-local-nse-memif --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find local NSMgr pod:

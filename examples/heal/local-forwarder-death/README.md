@@ -48,7 +48,7 @@ kubectl exec ${NSE} -n ns-local-forwarder-death -- ping -c 4 172.16.1.101
 
 Find nsc node:
 ```bash
-NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-death --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-death --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find local Forwarder:

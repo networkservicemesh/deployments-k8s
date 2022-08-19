@@ -53,7 +53,7 @@ echo ${result}
 
 Find nsc node:
 ```bash
-NSC_NODE=$(kubectl get pods -l app=nsc-memif -n ns-local-nsmgr-local-forwarder-memif --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSC_NODE=$(kubectl get pods -l app=nsc-memif -n ns-local-nsmgr-local-forwarder-memif --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find local NSMgr pod:

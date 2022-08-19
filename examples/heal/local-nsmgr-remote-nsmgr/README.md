@@ -49,8 +49,8 @@ kubectl exec ${NSE} -n ns-local-nsmgr-remote-nsmgr -- ping -c 4 172.16.1.101
 
 Find nsc and nse nodes:
 ```bash
-NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-nsmgr-remote-nsmgr --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
-NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-local-nsmgr-remote-nsmgr --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-nsmgr-remote-nsmgr --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-local-nsmgr-remote-nsmgr --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find local NSMgr pod:

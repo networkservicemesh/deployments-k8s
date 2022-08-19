@@ -49,8 +49,8 @@ kubectl exec ${NSE} -n ns-local-forwarder-remote-forwarder -- ping -c 4 172.16.1
 
 Find nsc and nse nodes:
 ```bash
-NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-remote-forwarder --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
-NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-local-forwarder-remote-forwarder --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-remote-forwarder --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-local-forwarder-remote-forwarder --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find local Forwarder:
