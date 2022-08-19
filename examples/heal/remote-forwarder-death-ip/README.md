@@ -47,9 +47,14 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ns-remote-forwarder-death-ip -- ping -c 4 172.16.1.101
 ```
 
+Find nse node:
+```bash
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-remote-forwarder-death-ip --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+```
+
 Find remote Forwarder:
 ```bash
-FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NSE_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Remove remote Forwarder and wait for a new one to start:
@@ -57,7 +62,7 @@ Remove remote Forwarder and wait for a new one to start:
 kubectl delete pod -n nsm-system ${FORWARDER}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NSE_NODE} -n nsm-system
 ```
 
 Ping from NSC to NSE:

@@ -47,14 +47,20 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ns-local-forwarder-remote-forwarder -- ping -c 4 172.16.1.101
 ```
 
+Find nsc and nse nodes:
+```bash
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-remote-forwarder --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-local-forwarder-remote-forwarder --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+```
+
 Find local Forwarder:
 ```bash
-FORWARDER1=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[0]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER1=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Find remote Forwarder:
 ```bash
-FORWARDER2=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER2=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NSE_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Restart local and remote Forwarders:
@@ -67,10 +73,10 @@ kubectl delete pod ${FORWARDER2} -n nsm-system
 
 Waiting for new ones:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[0]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[1]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NSE_NODE} -n nsm-system
 ```
 
 Ping from NSC to NSE:

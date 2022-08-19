@@ -47,9 +47,14 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ns-remote-nsmgr-restart -- ping -c 4 172.16.1.101
 ```
 
+Find nse node:
+```bash
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-remote-nsmgr-restart --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+```
+
 Find remote NSMgr pod:
 ```bash
-NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NSE_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Restart remote NSMgr and wait for it to start:
@@ -57,7 +62,7 @@ Restart remote NSMgr and wait for it to start:
 kubectl delete pod ${NSMGR} -n nsm-system
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NSE_NODE} -n nsm-system
 ```
 
 Ping from NSC to NSE:

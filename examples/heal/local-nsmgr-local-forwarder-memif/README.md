@@ -51,14 +51,19 @@ echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
+Find nsc node:
+```bash
+NSC_NODE=$(kubectl get pods -l app=nsc-memif -n ns-local-nsmgr-local-forwarder-memif --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+```
+
 Find local NSMgr pod:
 ```bash
-NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[0]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSMGR=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Find local Forwarder:
 ```bash
-FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[0]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Restart local NSMgr and Forwarder:
@@ -71,10 +76,10 @@ kubectl delete pod ${FORWARDER} -n nsm-system
 
 Waiting for new ones:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[0]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NODES[0]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
 ```
 
 Ping from NSC to NSE:

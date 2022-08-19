@@ -47,14 +47,20 @@ Ping from NSE to NSC:
 kubectl exec ${NSE} -n ns-local-nsmgr-remote-nsmgr -- ping -c 4 172.16.1.101
 ```
 
+Find nsc and nse nodes:
+```bash
+NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-nsmgr-remote-nsmgr --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-local-nsmgr-remote-nsmgr --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+```
+
 Find local NSMgr pod:
 ```bash
-NSMGR1=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[0]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSMGR1=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Find remote NSMgr pod:
 ```bash
-NSMGR2=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSMGR2=$(kubectl get pods -l app=nsmgr --field-selector spec.nodeName==${NSE_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Restart local and remote NSMgrs:
@@ -67,10 +73,10 @@ kubectl delete pod ${NSMGR2} -n nsm-system
 
 Waiting for new ones:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[0]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NODES[1]} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr --field-selector spec.nodeName==${NSE_NODE} -n nsm-system
 ```
 
 Ping from NSC to NSE:
