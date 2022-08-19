@@ -14,7 +14,7 @@ spec:
     imagePullPolicy: IfNotPresent
     stdin: true
     tty: true
-   affinity:
+  affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
