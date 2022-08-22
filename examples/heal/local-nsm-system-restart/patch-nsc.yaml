@@ -14,7 +14,7 @@ spec:
             - name: NSM_SERVICE_NAMES
               value: "local-nsm-system-restart"
             - name: NSM_REGISTER_SERVICE
-              value: "false"   
+              value: "false"
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
