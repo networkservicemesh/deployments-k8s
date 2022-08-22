@@ -14,4 +14,4 @@ spec:
             - name: NSM_SERVICE_NAMES
               value: "local-forwarder-death"
             - name: NSM_REGISTER_SERVICE
-              value: "false"  
+              value: "false"
