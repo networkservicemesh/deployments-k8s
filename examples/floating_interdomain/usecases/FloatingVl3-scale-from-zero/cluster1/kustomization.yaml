@@ -12,3 +12,8 @@ resources:
 patchesStrategicMerge:
   - nsc-patch.yaml
   - supplier-patch.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap
+    files:
+      - pod-template.yaml

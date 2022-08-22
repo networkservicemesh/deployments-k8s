@@ -1,27 +1,13 @@
-# NSM over interdomain vL3 network
+# NSM over interdomain vL3 scaled from zero network
 
 ## Description
 
-This example show how can be configured NSM over interdomain via vL3 network.
+This example shows how to configure autoscaled vL3-network for interdomain.
 
-```mermaid
-flowchart TB
-    nse-vl3-vpp1-.-vl3-ipam
-    nse-vl3-vpp2-.-vl3-ipam
-    nse-vl3-vpp1---nse-vl3-vpp2  
-    nsm1-.-registry
-    nsm2-.-registry
-    subgraph cluster1
-    nsc1---nsm1---nse-vl3-vpp1
-    end
-    subgraph cluster2
-    nsc2---nsm2---nse-vl3-vpp2
-    end
-    subgraph floating domain
-    vl3-ipam
-    registry
-    end
-```
+The diagram is presented below ([source](https://drive.google.com/file/d/1Fv0g6N-wqlA1VKoeNAoysb6W3JAn8OTe/view?usp=sharing)).
+
+![NSM kernel2kernel Diagram](./floating_vl3_autoscale.svg "NSM Kernel2Kernel Scheme")
+
 ## Requires
 
 Make sure that you have completed steps from [interdomain](../../)
@@ -43,7 +29,7 @@ Note: *By default we're using ipam prefix is `169.254.0.0/16` and client prefix 
 
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=dbf026c78b623f99dd8e70a975fa22a68c77b393
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster3?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
 
 1.3. Switch context to the *cluster1*.
@@ -52,24 +38,23 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-1.4. Start **vl3 nse** and client in the *cluster1*.
+1.6. Start **nse-supplier-k8s** and client in the *cluster1*.
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=76c014f23bf7027dbd520ee957aa6c0135184dc7
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster1?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
 
-1.5. Switch context to the *cluster2*.
+1.7. Switch context to the *cluster2*.
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-1.6. Start **vl3 nse** and client in the *cluster2*.
+1.10. Start **nse-supplier-k8s** and client in the *cluster2*.
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=76c014f23bf7027dbd520ee957aa6c0135184dc7
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster2?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
-
 
 **2. Get assigned IP addresses**
 
@@ -106,7 +91,6 @@ kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 169.254.0.0
 kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 169.254.1.0
 ```
 
-
 3.3. Switch to the *cluster2*
 ```bash
 export KUBECONFIG=$KUBECONFIG2
@@ -130,17 +114,17 @@ kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 169.254.1.0
 1. Cleanup floating domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=dbf026c78b623f99dd8e70a975fa22a68c77b393
+export KUBECONFIG=$KUBECONFIG3 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster3?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
 
 2. Cleanup cluster2 domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=dbf026c78b623f99dd8e70a975fa22a68c77b393
+export KUBECONFIG=$KUBECONFIG2 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster2?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
 
 3. Cleanup cluster1 domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=dbf026c78b623f99dd8e70a975fa22a68c77b393
+export KUBECONFIG=$KUBECONFIG1 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster1?ref=3175354ab685daf0b2fc5ed7b0b6673b266956d8
 ```
