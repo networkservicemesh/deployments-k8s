@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-memif2memif-ipv6
 
-resources: 
+resources:
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/ipv6/Memif2Memif_ipv6/netsvc.yaml
 
 bases:

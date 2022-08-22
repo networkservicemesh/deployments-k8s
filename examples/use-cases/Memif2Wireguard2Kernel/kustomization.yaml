@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-memif2wireguard2kernel
 
-resources: 
+resources:
 - https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Wireguard2Kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
 
 bases:
