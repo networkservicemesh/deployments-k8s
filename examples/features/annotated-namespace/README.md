@@ -23,7 +23,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-anno
 
 Annotate namespace with NSM annotation:
 ```bash
-kubectl annotate --overwrite ns ns-annotated-namespace networkservicemesh.io=kernel://annotated-namespace/nsm-1
+kubectl annotate ns ns-annotated-namespace networkservicemesh.io=kernel://annotated-namespace/nsm-1
 ```
 
 Apply client patch:
