@@ -11,7 +11,7 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://registry-remote-nsmgr/nsm-1
-     affinity:
+      affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: kubernetes.io/hostname
