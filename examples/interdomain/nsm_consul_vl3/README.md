@@ -23,83 +23,56 @@ Start vl3, install Consul control plane and counting service on the first cluste
 kubectl --kubeconfig=$KUBECONFIG1 create ns ns-nsm-consul-vl3
 kubectl --kubeconfig=$KUBECONFIG1 apply -k ./examples/interdomain/nsm_consul_vl3/cluster1
 ```
-Start vl3, install Consul control plane and counting service on the first cluster
+Install Consul dashboard service on the second cluster
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 create ns nsm-consul-vl3
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ./examples/interdomain/nsm_consul_vl3/cluster2
+kubectl --kubeconfig=$KUBECONFIG2 create ns ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./examples/interdomain/nsm_consul_vl3/cluster2
 ```
 
 Wait for pods to be ready:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=nse-vl3-vpp -n ns-nsm-consul-vl3
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=vl3-ipam -n ns-nsm-consul-vl3
-kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod -l name=control-plane -n ns-nsm-consul-vl3
-kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod counting -n ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l name=control-plane -n ns-nsm-consul-vl3
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod counting -n ns-nsm-consul-vl3
 kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=5m pod dashboard -n ns-nsm-consul-vl3
 ```
 
-Run a control plane, install required packages and Consul CP
 ```bash
-export CP=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l name=control-plane --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl --kubeconfig=$KUBECONFIG1 exec -it ${CP} -c ubuntu -- bash
+export CP=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -n ns-nsm-consul-vl3 -l name=control-plane --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
+(On the control plane pod) Generate the gossip encryption key:
 ```bash
-apt update
-apt upgrade -y
-```
-
-```bash
-apt-get install curl gnupg sudo lsb-release net-tools iproute2 -y
-```
-
-```bash
-curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
-      gpg --dearmor | \
-      sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg
-```
-
-```bash
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
- sudo tee -a /etc/apt/sources.list.d/hashicorp.list
-```
-
-```bash
-sudo apt-get update
-sudo apt-get install consul=1.12.0-1
-```
-
-(On the control plane pod) Generate the gossip encryption key. Save the output
-```bash
-ENCRYPTION_KEY=$(consul keygen)
+ENCRYPTION_KEY=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- consul keygen)
 ```
 
 (On the control plane pod) Get CP vl3 IP
 ```bash
-CP_IP_VL3_ADDRESS=169.254.0.2
+CP_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 6-)
 ```
 
 (On the control plane pod) Initialize Consul CA
 ```bash
-consul tls ca create /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- consul tls ca create
 ```
 
 (On the control plane pod) Create the server certificates
 ```bash
-consul tls cert create -server -dc dc1 /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- consul tls cert create -server -dc dc1
 ```
 
-(On the control plane pod) Update control plane configuration. Use here the saved encryption key and CP vl3 IP address
+Update control plane configuration. Use here the saved encryption key and CP vl3 IP address
 ```bash
-cat > /etc/consul.d/consul.hcl <<EOF
+cat > consul.hcl <<EOF
 data_dir = "/opt/consul"
 datacenter = "dc1"
 encrypt = "${ENCRYPTION_KEY}"
 tls {
   defaults {
-    ca_file = "/etc/consul.d/consul-agent-ca.pem"
-    cert_file = "/etc/consul.d/dc1-server-consul-0.pem"
-    key_file = "/etc/consul.d/dc1-server-consul-0-key.pem"
+    ca_file = "consul-agent-ca.pem"
+    cert_file = "dc1-server-consul-0.pem"
+    key_file = "dc1-server-consul-0-key.pem"
     verify_incoming = true
     verify_outgoing = true
   }
@@ -119,7 +92,7 @@ EOF
 ```
 
 ```bash
-cat > /etc/consul.d/server.hcl <<EOF
+cat > server.hcl <<EOF
 server = true
 bootstrap_expect = 1
 bind_addr = "${CP_IP_VL3_ADDRESS}"
@@ -135,40 +108,44 @@ ports {
 }
 EOF
 ```
+
+Copy configs into the Control plane Ubuntu container
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 cp consul.hcl ns-nsm-consul-vl3/${CP}:/etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 cp server.hcl ns-nsm-consul-vl3/${CP}:/etc/consul.d/
+```
+
 (On the control plane pod) Validate the configuration 
 ```bash
-sudo consul validate /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- sudo consul validate /etc/consul.d/
 ```
 
 (On the control plane pod) Start Consul CP
 ```bash
-/usr/bin/consul agent -config-dir=/etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- /bin/bash -c 'consul agent -config-dir=/etc/consul.d/  1>/dev/null 2>&1 &'
 ```
 
-Open new terminal tab and execute new session to the Counting service pod, install required packages and Consul agent
+Check that Consul Server has started:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec -it counting -c ubuntu -- bash
-apt update
-apt upgrade -y
-apt-get install curl gnupg sudo lsb-release iproute2 -y
-curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
-      gpg --dearmor | \
-      sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
- sudo tee -a /etc/apt/sources.list.d/hashicorp.list
-sudo apt-get update
-sudo apt-get install consul=1.12.0-1
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- consul members
 ```
 
 (On the counting pod) Set the counting  and control plane pods vl3 IP
 ```bash
-CP_IP_VL3_ADDRESS=169.254.0.2
-COUNTING_IP_VL3_ADDRESS=169.254.0.3
+COUNTING_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 6-)
+```
+Copy certificates from the Control plane into Counting Pod
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 cp  ns-nsm-consul-vl3/${CP}:consul-agent-ca.pem consul-agent-ca.pem
+kubectl --kubeconfig=$KUBECONFIG1 cp  ns-nsm-consul-vl3/${CP}:consul-agent-ca-key.pem consul-agent-ca-key.pem
+
+kubectl --kubeconfig=$KUBECONFIG1 cp consul-agent-ca.pem ns-nsm-consul-vl3/counting:/etc/consul.d
+kubectl --kubeconfig=$KUBECONFIG1 cp consul-agent-ca-key.pem ns-nsm-consul-vl3/counting:/etc/consul.d
 ```
 
-(On the counting pod) Update control plane configuration. Use here the saved encryption key and the Counting service pod vl3 IP address
+Update countign configuration. Use here the saved encryption key and the Counting service pod vl3 IP address
 ```bash
-cat > /etc/consul.d/consul.hcl <<EOF
+cat > consul-counting.hcl <<EOF
 data_dir = "/opt/consul"
 encrypt = "${ENCRYPTION_KEY}"
 tls {
@@ -201,22 +178,56 @@ ports {
 }
 EOF
 ```
+Copy configs into the Counting pod:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 cp consul-counting.hcl ns-nsm-consul-vl3/counting:/etc/consul.d/
+```
 
 (On the counting pod) Validate the configuration 
 ```bash
-sudo consul validate /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo consul validate /etc/consul.d/
+```
+
+Create script to run Consul as daemon:
+```bash
+cat > consul.service <<EOF
+[Unit]
+Description=Consul
+Documentation=https://www.consul.io/
+
+[Service]
+ExecStart=/usr/bin/consul agent -join ${CP_IP_VL3_ADDRESS} -config-dir=/etc/consul.d/ 
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+Copy script into Counting Pod:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 cp consul.service ns-nsm-consul-vl3/counting:/etc/systemd/system/consul.service
 ```
 
 (On the counting pod) Start Consul agent
 ```bash
-/usr/bin/consul agent -join $CP_IP_VL3_ADDRESS -config-dir=/etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl daemon-reload
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl start consul.service 
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl enable consul.service 
 ```
 
-Open new terminal tab and execute new session to the Counting service pod. Create the service definition
+Check that Consul Counting client has started:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec -it counting -c ubuntu -- bash
-mkdir service
-cd service
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec counting -c ubuntu -- consul members
+```
+
+Create the counting service definition
+```bash
 cat > counting.hcl <<EOF
 service {
   name = "counting"
@@ -238,63 +249,56 @@ service {
 EOF
 ```
 
+Copy into Counting Pod:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- mkdir service
+kubectl --kubeconfig=$KUBECONFIG1 cp counting.hcl ns-nsm-consul-vl3/counting:/service
+```
+
 (On the counting pod) Register the service with Consul
 ```bash
-consul services register counting.hcl
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- consul services register /service/counting.hcl 
 ```
+You should see `Registered service: counting'
 
-(On the counting pod) Install Envoy to use it as sidecar
+Create script to run envoy service in a background:
 ```bash
-curl -L https://func-e.io/install.sh | bash -s -- -b /usr/local/bin
-export FUNC_E_PLATFORM=linux/amd64
-func-e use 1.22.2
-sudo cp ~/.func-e/versions/1.22.2/bin/envoy /usr/bin/
-# Check envoy version
+cat > consul-envoy.service <<EOF
+[Unit]
+Description=Consul
+Documentation=https://www.consul.io/
+
+[Service]
+ExecStart=/usr/bin/consul connect envoy -sidecar-for counting-1 -admin-bind localhost:19001 
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
 ```
-
-(On the counting pod) Verify Envoy has been installed 
 ```bash
-envoy --version
+kubectl --kubeconfig=$KUBECONFIG1 cp consul-envoy.service ns-nsm-consul-vl3/counting:/etc/systemd/system/consul-envoy.service
 ```
-
-(On the counting pod) Run envoy sidecar for the registered service
 ```bash
-consul connect envoy -sidecar-for counting-1 -admin-bind localhost:19001 > counting-proxy.log &
-```
-
-Open new terminal tab and execute new session to the Dashboard service pod, install required packages and Consul agent
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 exec -it dashboard -c ubuntu -- bash
-apt update
-apt upgrade -y
-```
-
-```bash
-apt-get install curl gnupg sudo lsb-release iproute2 -y
-```
-
-```bash
-curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
-      gpg --dearmor | \
-      sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
- sudo tee -a /etc/apt/sources.list.d/hashicorp.list
-```
-
-```bash
-sudo apt-get update
-sudo apt-get install consul=1.12.0-1
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl daemon-reload 
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl start consul-envoy.service 
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl enable consul-envoy.service 
 ```
 
 (On the dashboard pod) Set the pod vl3 IP
 ```bash
-DASHBOARD_IP_VL3_ADDRESS=169.254.0.4
-CP_IP_VL3_ADDRESS=169.254.0.2
+DASHBOARD_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 6-)
 ```
 
+(On the dashboard pod) Copy certificates from the Control plane into Dashboard Pod
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 cp consul-agent-ca.pem ns-nsm-consul-vl3/dashboard:/etc/consul.d
+kubectl --kubeconfig=$KUBECONFIG2 cp consul-agent-ca-key.pem ns-nsm-consul-vl3/dashboard:/etc/consul.d
+```
 (On the dashboard pod) Update dashboard configuration. Use here the saved encryption key and the Dashboard service pod vl3 IP address
 ```bash
-cat > /etc/consul.d/consul.hcl <<EOF
+cat > consul-dashboard.hcl <<EOF
 encrypt = "${ENCRYPTION_KEY}"
 data_dir = "/opt/consul"
 tls {
@@ -329,21 +333,45 @@ ports {
 EOF
 ```
 
+Copy config into the Counting pod Ubuntu container
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 cp consul-dashboard.hcl ns-nsm-consul-vl3/dashboard:/etc/consul.d/
+```
+
 (On the dashboard pod) Validate the configuration 
 ```bash
-sudo consul validate /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo consul validate /etc/consul.d/
 ```
 
-(On the dashboard pod) Start Consul agent
+Create script to run Consul dashboard client in background: 
 ```bash
-/usr/bin/consul agent -join $CP_IP_VL3_ADDRESS -config-dir=/etc/consul.d/
+cat > consul.service <<EOF
+[Unit]
+Description=Consul
+Documentation=https://www.consul.io/
+
+[Service]
+ExecStart=/usr/bin/consul agent -join ${CP_IP_VL3_ADDRESS} -config-dir=/etc/consul.d/
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+Copy into the dashboard pod:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 cp consul.service ns-nsm-consul-vl3/dashboard:/etc/systemd/system/consul.service
+```
+Start service:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo systemctl daemon-reload 
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo systemctl start consul.service 
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo systemctl enable consul.service 
 ```
 
-Open new terminal tab and execute new session to the Dashboard service pod. Create the service definition
+Create the dashboard service definition:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 exec -it dashboard -c ubuntu -- bash
-mkdir service
-cd service
 cat > dashboard.hcl <<EOF
 service {
   name = "dashboard"
@@ -373,33 +401,63 @@ service {
 EOF
 ```
 
+Copy into Dashboard Pod:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- mkdir service
+kubectl --kubeconfig=$KUBECONFIG2 cp dashboard.hcl ns-nsm-consul-vl3/dashboard:/service
+```
+
 (On the dashboard pod) Register the service with Consul
 ```bash
-consul services register dashboard.hcl
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- consul services register /service/dashboard.hcl
+```
+You should see 'Registered service: dashboard'
+
+Create script to run envoy service and copy into the dashboard pod:
+```bash
+cat > consul-envoy.service <<EOF
+[Unit]
+Description=Consul
+Documentation=https://www.consul.io/
+
+[Service]
+ExecStart=/usr/bin/consul connect envoy -sidecar-for dashboard
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+EOF
 ```
 
-(On the dashboard pod) Install Envoy to use it as sidecar
 ```bash
-curl -L https://func-e.io/install.sh | bash -s -- -b /usr/local/bin
-export FUNC_E_PLATFORM=linux/amd64
-func-e use 1.22.2
-sudo cp ~/.func-e/versions/1.22.2/bin/envoy /usr/bin/
-# Check envoy version
-envoy --version
+kubectl --kubeconfig=$KUBECONFIG2 cp consul-envoy.service ns-nsm-consul-vl3/dashboard:/etc/systemd/system/consul-envoy.service
 ```
-
-(On the dashboard pod) Run envoy sidecar for the registered service
+Start service:
 ```bash
-consul connect envoy -sidecar-for dashboard > dashboard-proxy.log &
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo systemctl daemon-reload 
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo systemctl start consul-envoy.service 
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo systemctl enable consul-envoy.service 
 ```
 
 Port-forward the dashboard pod
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 port-forward dashboard 9002:9002
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 port-forward dashboard 9002:9002 &
 ```
+
 In your browser open localhost:9002 and verify the application works!
+Also you can run this to check that it works:
 ```bash
 result=`curl --include --no-buffer --connect-timeout 20 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: 127.0.0.1:9002" -H "Origin: http://127.0.0.1:9002" -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" -H "Sec-WebSocket-Version: 13" http://127.0.0.1:9002/socket.io/?EIO=3&transport=websocket`
 echo ${result} | grep  -o 'Unreachable'
 ```
+
+##Cleanup
+
+```bash
+pkill -f "port-forward"
+kubectl --kubeconfig=$KUBECONFIG1 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster1
+kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster2
+```
+
 

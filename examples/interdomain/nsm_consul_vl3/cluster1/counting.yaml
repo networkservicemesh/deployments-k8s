@@ -9,7 +9,7 @@ metadata:
     networkservicemesh.io: kernel://nsm-consul-vl3/nsm-1
 spec:
   containers:
-  - image: ubuntu:18.04
+  - image: ubuntu-counting:latest
     ports:
     - containerPort: 5681
     command:
