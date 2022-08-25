@@ -22,6 +22,8 @@ spec:
           value: "false"
         - name: NSM_SERVICE_NAMES
           value: "my-interdomain-vl3-network@my.cluster3"
+        - name: NSM_PREFIX_SERVER_URL
+          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
         - name: NSM_LOG_LEVEL
           value: TRACE
       volumeMounts:

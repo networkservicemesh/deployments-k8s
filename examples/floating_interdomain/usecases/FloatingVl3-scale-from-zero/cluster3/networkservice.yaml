@@ -1,0 +1,20 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: autoscale-interdomain-vl3-network
+spec:
+  payload: IP
+  matches:
+    - source_selector:
+      fallthrough: true
+      routes:
+        - destination_selector:
+            app: nse-vl3-vpp
+            nodeName: "{{.nodeName}}"
+            clusterName: "{{.clusterName}}"
+    - source_selector:
+      routes:
+        - destination_selector:
+            app: vl3-supplier
+            clusterName: "{{.clusterName}}"

@@ -2,28 +2,34 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nse-vl3-vpp-1
+  name: nse-vl3-vpp-2
   annotations:
-    spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
+    spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
   labels:
     app: nse-vl3-vpp
     "spiffe.io/spiffe-id": "true"
 spec:
+  nodeName: '{{index .Labels "nodeName"}}'
+  restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:b805fc9
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:e9e706e
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
           value: unix:///run/spire/sockets/agent.sock
         - name: NSM_NAME
-          value: "nse-vl3-vpp-1@my.cluster3"
+          value: "nse-vl3-vpp-2@my.cluster3"
+        - name: NSM_SERVICE_NAMES
+          value: "autoscale-interdomain-vl3-network@my.cluster3,my-vl3-network@my.cluster3"
         - name: NSM_REGISTER_SERVICE
           value: "false"
-        - name: NSM_SERVICE_NAMES
-          value: "my-interdomain-vl3-network@my.cluster3"
+        - name: NSM_LABELS
+          value: "app:nse-vl3-vpp,clusterName:cluster2"
         - name: NSM_PREFIX_SERVER_URL
           value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
+        - name: NSM_IDLE_TIMEOUT
+          value: 15s
         - name: NSM_LOG_LEVEL
           value: TRACE
       volumeMounts:
