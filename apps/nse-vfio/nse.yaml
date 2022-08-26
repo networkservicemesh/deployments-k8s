@@ -21,7 +21,7 @@ spec:
           # https://github.com/glazychev-art/docker-dpdk
           image: artgl/dpdk-pingpong:latest
           imagePullPolicy: IfNotPresent
-          command: ["/bin/bash", "/root/scripts/pong.sh", "eno4", "31", "0a:55:44:33:22:11"]
+          command: ["/bin/bash", "/root/scripts/pong.sh", "ens6f3", "31", "0a:55:44:33:22:11"]
           securityContext:
             privileged: true
           volumeMounts:
