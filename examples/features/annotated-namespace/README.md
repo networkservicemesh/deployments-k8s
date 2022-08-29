@@ -28,7 +28,7 @@ kubectl annotate ns ns-annotated-namespace networkservicemesh.io=kernel://annota
 
 Apply client patch:
 ```bash
-kubectl apply -f https://github.com/networkservicemesh/deployments-k8s/examples/features/annotated-namespace/client.yaml?ref=7038804b970afb9816e5ee1fb2e312be819808e6
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7038804b970afb9816e5ee1fb2e312be819808e6/examples/features/annotated-namespace/client.yaml
 ```
 
 Wait for client to be ready:
