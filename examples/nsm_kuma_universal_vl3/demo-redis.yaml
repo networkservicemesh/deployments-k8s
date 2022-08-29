@@ -10,41 +10,37 @@ metadata:
   namespace: kuma-demo
   name: dataplane-file
 data:
-  app-dataplane.yaml: |
+  redis-dataplane.yaml: |
     type: Dataplane
     mesh: default
-    name: demo-app
+    name: redis
     networking:
-      address: front-page.my-vl3-network
-      outbound:
+      address: redis.my-vl3-network
+      inbound:
         - port: 16379
+          servicePort: 6379
           tags:
             kuma.io/service: redis
-      inbound:
-        - port: 15000
-          servicePort: 5000
-          tags:
-            kuma.io/service: app
-            kuma.io/protocol: http
+            kuma.io/protocol: tcp
       admin:
         port: 9902
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app
+  name: redis
   namespace: kuma-demo
 spec:
   selector:
     matchLabels:
-      app: demo-app
+      app: redis
   replicas: 1
   template:
     metadata:
       annotations:
-        networkservicemesh.io: kernel://my-vl3-network@my.cluster1/nsm-1?dnsName=front-page
+        networkservicemesh.io: kernel://my-vl3-network/nsm-1?dnsName=redis
       labels:
-        app: demo-app
+        app: redis
     spec:
       volumes:
         - name: config
@@ -54,50 +50,51 @@ spec:
               - key: app-dataplane.yaml
                 path: app-dataplane.yaml
       containers:
-        - name: demo-app
-          image: "kumahq/kuma-demo"
-          env:
-            - name: REDIS_PORT
-              value: "16379"
+        - name: redis
+          image: "redis"
           ports:
-            - name: http
-              containerPort: 5000
+            - name: tcp
+              containerPort: 16379
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "30"]
+            postStart:
+              exec:
+                command: ["/usr/local/bin/redis-cli", "set", "zone", "local"]
         - args:
           - run
           - --cp-address=https://control-plane-kuma.my-vl3-network:5678/
-          - --dataplane-file=/etc/app-dataplane.yaml
+          - --dataplane-file=/etc/redis-dataplane.yaml
           - --log-level=info
           image: docker.io/kumahq/kuma-dp:1.7.0-amd64
           imagePullPolicy: IfNotPresent
           volumeMounts:
-            - mountPath: /etc/app-dataplane.yaml
-              name: config
-              subPath: app-dataplane.yaml
+              - mountPath: /etc/redis-dataplane.yaml
+                name: config
+                subPath: redis-dataplane.yaml
           name: kuma-sidecar
           resources:
-            limits:
-              cpu: "1"
-              memory: 512Mi
-            requests:
-              cpu: 50m
-              memory: 64Mi
+              limits:
+                cpu: "1"
+                memory: 512Mi
+              requests:
+                cpu: 50m
+                memory: 64Mi
           securityContext:
-            runAsGroup: 5678
-            runAsUser: 5678
+              runAsGroup: 5678
+              runAsUser: 5678
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      enableServiceLinks: true
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-app
+  name: redis
   namespace: kuma-demo
 spec:
   selector:
-    app: demo-app
+    app: redis
   ports:
   - protocol: TCP
-    appProtocol: http
-    port: 5000
+    port: 6379
