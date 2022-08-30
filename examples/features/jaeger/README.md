@@ -88,7 +88,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l name=jae
 
 Apply Jaeger and OpenTelemetry Collector:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=7038804b970afb9816e5ee1fb2e312be819808e6
 ```
 
 Wait for Jaeger pod status ready:
@@ -104,7 +104,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=open
 
 Apply NSM resources:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=7038804b970afb9816e5ee1fb2e312be819808e6
 ```
 
 Wait for admission-webhook-k8s:

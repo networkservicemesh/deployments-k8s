@@ -25,6 +25,8 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 - [Kernel to VXLAN to Kernel Connection via floating registry](./usecases/FloatingKernel2Vxlan2Kernel)
 - [Kernel to WIREGUARD to Kernel Connection](./usecases/Kernel2Wireguard2Kernel)
 - [Kernel to WIREGUARD to Kernel Connection via floating registry](./usecases/FloatingKernel2Wireguard2Kernel)
+- [Floating VL3](./usecases/FloatingVl3)
+- [Floating VL3_scale_from_zero](./usecases/FloatingVl3-scale-from-zero)
 
 ## Run
 
