@@ -30,19 +30,18 @@ kumactl install control-plane > ./control-plane/control-plane.yaml
 ### Start the control-plane on the first cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -k ./control-plane
-kubectl --kubeconfig=$KUBECONFIG1 -n default wait --for=condition=ready --timeout=3m pod -l app=kuma-control-plane
 ```
 
 ### Start redis database with the sidecar on the first cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -f demo-redis.yaml
-kubectl --kubeconfig=$KUBECONFIG1 -n default wait --for=condition=ready --timeout=3m pod -l app=redis
+kubectl --kubeconfig=$KUBECONFIG1 -n kuma-demo wait --for=condition=ready --timeout=3m pod -l app=redis
 ```
 
 ### Start counter page with the sidecar on the second cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -f demo-app.yaml
-kubectl --kubeconfig=$KUBECONFIG2 -n default wait --for=condition=ready --timeout=3m pod -l app=demo-app
+kubectl --kubeconfig=$KUBECONFIG2 -n kuma-demo wait --for=condition=ready --timeout=3m pod -l app=demo-app
 ```
 
 ### Forward ports to open counter page
