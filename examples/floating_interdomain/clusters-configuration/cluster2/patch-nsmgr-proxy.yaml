@@ -8,3 +8,13 @@ spec:
     metadata:
       annotations:
         spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+    spec:
+      containers:
+        - name: "nsmgr-proxy"
+          volumeMounts:
+            - mountPath: "/etc/clusterinfo.yaml"
+              name: "cluster-info"
+      volumes:
+        - name: "cluster-info"
+          configMap:
+            name: "cluster-info"
