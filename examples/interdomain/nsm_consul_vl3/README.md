@@ -18,6 +18,13 @@ https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/producti
 https://learn.hashicorp.com/tutorials/consul/tls-encryption-secure
 https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/developer-mesh
 
+Load custom images with preinstalled consul and envoy onto clusters:
+```bash
+docker build -t consul-client:latest ./examples/interdomain/nsm_consul_vl3/dockerfile/
+kind load docker-image consul-client:latest  --name cluster-1
+kind load docker-image consul-client:latest  --name cluster-2
+```
+
 Start vl3, install Consul control plane and counting service on the first cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 create ns ns-nsm-consul-vl3

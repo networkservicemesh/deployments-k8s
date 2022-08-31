@@ -6,4 +6,3 @@ namespace: ns-nsm-consul-vl3
 
 bases:
 - dashboard.yaml
-

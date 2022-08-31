@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,7 +18,7 @@ spec:
         networkservicemesh.io: kernel://nsm-consul-vl3/nsm-1
     spec:
       containers:
-      - image: ubuntu-with-consul:latest
+      - image: consul:latest
         ports:
         - containerPort: 5681
         command:

@@ -7,7 +7,6 @@ RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyrin
 RUN sudo apt-get update
 RUN sudo apt-get install consul=1.12.0-1
 RUN sudo apt-get -y install systemctl
-RUN sudo apt-get install openssh-client
 RUN curl -L https://func-e.io/install.sh | bash -s -- -b /usr/local/bin
 RUN export FUNC_E_PLATFORM=linux/amd64
 RUN func-e use 1.22.2
