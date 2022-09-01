@@ -49,7 +49,7 @@ ENCRYPTION_KEY=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${C
 
 (On the control plane pod) Get CP vl3 IP
 ```bash
-CP_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 6-)
+CP_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
 ```
 
 (On the control plane pod) Initialize Consul CA
@@ -111,18 +111,18 @@ EOF
 
 Copy configs into the Control plane Ubuntu container
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 cp consul.hcl ns-nsm-consul-vl3/${CP}:/etc/consul.d/
-kubectl --kubeconfig=$KUBECONFIG1 cp server.hcl ns-nsm-consul-vl3/${CP}:/etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 cp consul.hcl ns-nsm-consul-vl3/${CP}:/consul/config/
+kubectl --kubeconfig=$KUBECONFIG1 cp server.hcl ns-nsm-consul-vl3/${CP}:/consul/config/
 ```
 
 (On the control plane pod) Validate the configuration 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- sudo consul validate /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- consul validate /consul/config/
 ```
 
 (On the control plane pod) Start Consul CP
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- /bin/bash -c 'consul agent -config-dir=/etc/consul.d/  1>/dev/null 2>&1 &'
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- /bin/sh -c 'consul agent -config-dir=/consul/config/  1>/dev/null 2>&1 &'
 ```
 
 Check that Consul Server has started:
