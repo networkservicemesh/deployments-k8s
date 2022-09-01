@@ -134,7 +134,7 @@ Install Consul.
 Firstly, install some required packages onto the counting pod.
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec counting -c ubuntu -- /bin/bash -c  'apt update & apt upgrade -y'
-kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec counting -c ubuntu -- apt-get install curl gnupg sudo lsb-release net-tools iproute2 -y
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec counting -c ubuntu -- apt-get install curl gnupg sudo lsb-release net-tools iproute2 apt-utils systemctl -y
 ```
 
 Add the HashiCorp GPG key:
@@ -335,7 +335,7 @@ Install Consul on the Dashboard pod.
 Firstly, install some required packages onto the counting pod.
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec dashboard -c ubuntu -- /bin/bash -c  'apt update & apt upgrade -y'
-kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec dashboard -c ubuntu -- apt-get install curl gnupg sudo lsb-release net-tools iproute2 -y
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec dashboard -c ubuntu -- apt-get install curl gnupg sudo lsb-release net-tools iproute2 apt-utils systemctl -y
 ```
 
 Add the HashiCorp GPG key:
