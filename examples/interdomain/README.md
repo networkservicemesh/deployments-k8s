@@ -14,6 +14,6 @@ This setup is basic for interdomain examples on two clusters. This setup can be 
 
 ## Includes
 
-- [NSM + Consul](./nsm_consul)
-- [NSM + Consul](./nsm_consul_vl3)
+[//]: # (- [NSM + Consul]&#40;./nsm_consul&#41;)
+[//]: # (- [NSM + Consul]&#40;./nsm_consul_vl3&#41;)
 - [NSM + Istio](./nsm_istio)

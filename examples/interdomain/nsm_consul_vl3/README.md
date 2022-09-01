@@ -21,12 +21,12 @@ https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=co
 Start vl3, install Consul control plane and counting service on the first cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 create ns ns-nsm-consul-vl3
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ./examples/interdomain/nsm_consul_vl3/cluster1
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 ```
 Install Consul dashboard service on the second cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 create ns ns-nsm-consul-vl3
-kubectl --kubeconfig=$KUBECONFIG2 apply -k ./examples/interdomain/nsm_consul_vl3/cluster2
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2
 ```
 
 Wait for pods to be ready:
@@ -544,8 +544,8 @@ echo ${result} | grep  -o 'Unreachable'
 
 ```bash
 pkill -f "port-forward"
-kubectl --kubeconfig=$KUBECONFIG1 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster1
-kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster2
+kubectl --kubeconfig=$KUBECONFIG1 delete -n ns-nsm-consul-vl3 -k ./cluster1
+kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-consul-vl3 -k ./cluster2
 ```
 
 
