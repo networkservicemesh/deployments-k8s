@@ -17,7 +17,7 @@ spec:
       serviceAccount: admission-webhook-sa
       containers:
         - name: admission-webhook-k8s
-          image: ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:b5ac9b8
+          image: ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:f61ab27
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
@@ -40,9 +40,9 @@ spec:
             - name: NSM_ANNOTATION
               value: networkservicemesh.io
             - name: NSM_CONTAINER_IMAGES
-              value: ghcr.io/networkservicemesh/ci/cmd-nsc:eba7156
+              value: ghcr.io/networkservicemesh/ci/cmd-nsc:46abd71
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:838640b
+              value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:05ba0da
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
