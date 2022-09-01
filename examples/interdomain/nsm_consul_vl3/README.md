@@ -18,13 +18,6 @@ https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/producti
 https://learn.hashicorp.com/tutorials/consul/tls-encryption-secure
 https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/developer-mesh
 
-Load custom images with preinstalled consul and envoy onto clusters:
-```bash
-docker build -t consul-client:latest ./examples/interdomain/nsm_consul_vl3/dockerfile/
-kind load docker-image consul-client:latest  --name cluster-1
-kind load docker-image consul-client:latest  --name cluster-2
-```
-
 Start vl3, install Consul control plane and counting service on the first cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 create ns ns-nsm-consul-vl3
@@ -136,6 +129,50 @@ Check that Consul Server has started:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- consul members
 ```
+
+Install Consul.
+Firstly, install some required packages onto the counting pod.
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c  'apt update & apt upgrade -y'
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- apt-get install curl gnupg sudo lsb-release net-tools iproute2 -y
+```
+
+Add the HashiCorp GPG key:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c 'curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
+      gpg --dearmor | \
+      sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg '
+```
+Add the official HashiCorp Linux repository:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+ sudo tee -a /etc/apt/sources.list.d/hashicorp.list'
+```
+Update
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo apt-get update
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo apt-get install consul=1.12.0-1
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- consul version
+```
+
+(On the counting pod) Install Envoy to use it as sidecar
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c 'curl -L https://func-e.io/install.sh | bash -s -- -b /usr/local/bin'
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c 'export FUNC_E_PLATFORM=linux/amd64'
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c 'func-e use 1.22.2'
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- /bin/bash -c 'sudo cp ~/.func-e/versions/1.22.2/bin/envoy /usr/bin/'
+```
+(On the counting pod) Verify Envoy has been installed
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- envoy --version
+```
+
 
 (On the counting pod) Set the counting  and control plane pods vl3 IP
 ```bash
@@ -291,6 +328,50 @@ kubectl --kubeconfig=$KUBECONFIG1 cp consul-envoy.service ns-nsm-consul-vl3/coun
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl daemon-reload 
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl start consul-envoy.service 
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- sudo systemctl enable consul-envoy.service 
+```
+
+
+Install Consul on the Dashboard pod.
+Firstly, install some required packages onto the counting pod.
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c  'apt update & apt upgrade -y'
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- apt-get install curl gnupg sudo lsb-release net-tools iproute2 -y
+```
+
+Add the HashiCorp GPG key:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c 'curl --fail --silent --show-error --location https://apt.releases.hashicorp.com/gpg | \
+      gpg --dearmor | \
+      sudo dd of=/usr/share/keyrings/hashicorp-archive-keyring.gpg '
+```
+Add the official HashiCorp Linux repository:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+ sudo tee -a /etc/apt/sources.list.d/hashicorp.list'
+```
+Update
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo apt-get update
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- sudo apt-get install consul=1.12.0-1
+```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- consul version
+```
+
+(On the dashboard pod) Install Envoy to use it as sidecar
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c 'curl -L https://func-e.io/install.sh | bash -s -- -b /usr/local/bin'
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c 'export FUNC_E_PLATFORM=linux/amd64'
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c 'func-e use 1.22.2'
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- /bin/bash -c 'sudo cp ~/.func-e/versions/1.22.2/bin/envoy /usr/bin/'
+```
+(On the dashboard pod) Verify Envoy has been installed
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec -it dashboard -c ubuntu -- envoy --version
 ```
 
 (On the dashboard pod) Set the pod vl3 IP
@@ -453,7 +534,7 @@ kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 port-forward dashboard 90
 ```
 
 In your browser open localhost:9002 and verify the application works!
-Also you can run this to check that it works:
+Also, you can run this to check that it works:
 ```bash
 result=$(curl --include --no-buffer --connect-timeout 20 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: 127.0.0.1:9002" -H "Origin: http://127.0.0.1:9002" -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" -H "Sec-WebSocket-Version: 13" http://127.0.0.1:9002/socket.io/?EIO=3&transport=websocket)
 echo ${result} | grep  -o 'Unreachable'
