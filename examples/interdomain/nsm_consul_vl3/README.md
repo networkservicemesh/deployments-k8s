@@ -44,7 +44,7 @@ export CP=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -n ns-nsm-consul-vl3 -l n
 
 (On the control plane pod) Generate the gossip encryption key:
 ```bash
-ENCRYPTION_KEY=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- consul keygen)
+ENCRYPTION_KEY=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- /bin/sh -c 'consul keygen')
 ```
 
 (On the control plane pod) Get CP vl3 IP
