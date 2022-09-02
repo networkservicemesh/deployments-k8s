@@ -11,7 +11,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 ## Run
 
-Create test namespace and deploy NSE:
+Create test namespace and deploy NSE and emoji client:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/annotated-namespace?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
 ```

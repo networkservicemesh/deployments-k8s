@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-nsm-emojivoto
+
+resources:
+  - netsvc.yaml
+  - namespace.yaml
+
+bases:
+  - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
+
+patchesStrategicMerge:
+  - patch-nse.yaml
