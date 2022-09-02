@@ -18,7 +18,7 @@ spec:
         networkservicemesh.io: kernel://nsm-consul-vl3/nsm-1
     spec:
       containers:
-      - image: consul:latest
+      - image: consul:1.12.0
         ports:
         - containerPort: 5681
         command:
