@@ -47,8 +47,8 @@ spec:
           configMap:
             name: dataplane-file
             items:
-              - key: app-dataplane.yaml
-                path: app-dataplane.yaml
+              - key: redis-dataplane.yaml
+                path: redis-dataplane.yaml
       containers:
         - name: redis
           image: "redis"
