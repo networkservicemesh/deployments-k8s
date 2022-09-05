@@ -47,12 +47,9 @@ kubectl exec ${NSE} -n ns-local-nse-death -- ping -c 4 172.16.1.101
 ```
 
 Stop NSE pod:
-
 ```bash
 kubectl scale deployment nse-kernel -n ns-local-nse-death --replicas=0
 ```
-
-Ping from NSC to NSE should not pass:
 
 ```bash
 kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 | grep "100% packet loss"
