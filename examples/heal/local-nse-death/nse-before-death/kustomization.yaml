@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-local-nse-death
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death?ref=505fec639b436f5e9093c6611b74636aaf4ed501
+- https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death?ref=d31c2ed9172d75cb03b8eeaf2885ce6f6252c733
 
 patchesStrategicMerge:
 - patch-nse.yaml
