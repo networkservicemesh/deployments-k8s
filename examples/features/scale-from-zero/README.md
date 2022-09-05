@@ -70,6 +70,7 @@ kubectl exec $NSE -n ns-scale-from-zero -- ping -c 4 169.254.0.1
 Check that the NSE spawned on the same node as NSC:
 ```bash
 NSE_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
+NSC_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nsc-kernel)
 ```
 ```bash
 if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; false; fi
