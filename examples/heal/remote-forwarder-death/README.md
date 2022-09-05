@@ -49,7 +49,7 @@ kubectl exec ${NSE} -n ns-remote-forwarder-death -- ping -c 4 172.16.1.101
 
 Find nse node:
 ```bash
-NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-remote-forwarder-death --template "{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}")
+NSE_NODE=$(kubectl get pods -l app=nse-kernel -n ns-remote-forwarder-death --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find remote Forwarder:
