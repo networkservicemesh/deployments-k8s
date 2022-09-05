@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-memif2vxlan2kernel
 
 resources:
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Vxlan2Kernel?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
+- netsvc.yaml
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=946696acae3156e3e72bdb42cdda5147725fd0a2
