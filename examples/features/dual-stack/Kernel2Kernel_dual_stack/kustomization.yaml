@@ -4,11 +4,12 @@ kind: Kustomization
 
 namespace: ns-kernel2kernel-dual-stack
 
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=505fec639b436f5e9093c6611b74636aaf4ed501
+
 resources:
 - client.yaml
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/dual-stack/Kernel2Kernel_dual_stack/netsvc.yaml
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=505fec639b436f5e9093c6611b74636aaf4ed501
 
 patchesStrategicMerge:
 - patch-nse.yaml
