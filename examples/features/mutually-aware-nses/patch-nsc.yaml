@@ -10,6 +10,6 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red
+              value: "kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red"
             - name: NSM_AWARENESS_GROUPS
               value: "[kernel://mutually-aware-nses-1/nsm-1?color=red,kernel://mutually-aware-nses-2/nsm-2?color=red]"

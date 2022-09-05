@@ -4,6 +4,9 @@ kind: Kustomization
 
 namespace: ns-mutually-aware-nses
 
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=505fec639b436f5e9093c6611b74636aaf4ed501
+
 resources:
 - nse-1.yaml
 - nse-2.yaml
@@ -11,8 +14,6 @@ resources:
 - netsvc-2.yaml
 - config-file-nse-1.yaml
 - config-file-nse-2.yaml
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=505fec639b436f5e9093c6611b74636aaf4ed501
 
 patchesStrategicMerge:
 - patch-nsc.yaml
