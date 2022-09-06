@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-registry-local-endpoint
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-local-endpoint?ref=505fec639b436f5e9093c6611b74636aaf4ed501
+- https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-local-endpoint?ref=0b55acb87c23ff08bd495cc7999f240bef1e2ed5
 
 patchesStrategicMerge:
 - patch-nse.yaml

@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: ns-registry-local-endpoint
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=0b55acb87c23ff08bd495cc7999f240bef1e2ed5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=0b55acb87c23ff08bd495cc7999f240bef1e2ed5
 
 resources:
 - netsvc.yaml
