@@ -56,9 +56,15 @@ kubectl --kubeconfig=$KUBECONFIG2 -n kuma-demo wait --for=condition=ready --time
 7. Forward ports to open counter page
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 port-forward svc/demo-app -n kuma-demo 5000:5000 &
-curl -X POST localhost:5000/increment
 ```
-You should see this answer `{"counter":"1","zone":"local","err":null}`
+```bash
+response=$(curl -X POST localhost:5000/increment)
+```
+
+8. Check the response for no errors
+```bash
+echo $response | grep '"err":null'
+```
 
 You can also go to [locahost:5000](https://localhost:5000) to get the counter page and test the application yourself.
 
