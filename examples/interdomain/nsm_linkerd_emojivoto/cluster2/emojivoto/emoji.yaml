@@ -2,14 +2,12 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: voting
-  namespace: emojivoto
+  name: emoji
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: voting-svc
-  namespace: emojivoto
+  name: emoji-svc
 spec:
   ports:
     - name: grpc
@@ -19,29 +17,26 @@ spec:
       port: 8801
       targetPort: 8801
   selector:
-    app: voting-svc
+    app: emoji-svc
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: voting
+    app.kubernetes.io/name: emoji
     app.kubernetes.io/part-of: emojivoto
     app.kubernetes.io/version: v11
-  name: voting
-  namespace: emojivoto
-  annotations:
-    networkservicemesh.io: kernel://nsm-emojivoto/nsm-1
+  name: emoji
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: voting-svc
+      app: emoji-svc
       version: v11
   template:
     metadata:
       labels:
-        app: voting-svc
+        app: emoji-svc
         version: v11
     spec:
       containers:
@@ -50,8 +45,10 @@ spec:
               value: "8080"
             - name: PROM_PORT
               value: "8801"
-          image: docker.l5d.io/buoyantio/emojivoto-voting-svc:v11
-          name: voting-svc
+          image: docker.l5d.io/buoyantio/emojivoto-emoji-svc:v11
+          name: emoji-svc
+          securityContext:
+            privileged: true
           ports:
             - containerPort: 8080
               name: grpc
@@ -60,4 +57,4 @@ spec:
           resources:
             requests:
               cpu: 100m
-      serviceAccountName: voting
+      serviceAccountName: emoji

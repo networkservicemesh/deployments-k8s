@@ -7,9 +7,6 @@ metadata:
     app.kubernetes.io/part-of: emojivoto
     app.kubernetes.io/version: v11
   name: vote-bot
-  namespace: emojivoto
-  annotations:
-    networkservicemesh.io: kernel://nsm-emojivoto/nsm-1
 spec:
   replicas: 1
   selector:

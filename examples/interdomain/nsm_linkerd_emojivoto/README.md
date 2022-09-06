@@ -27,176 +27,83 @@ Verify Linkerd CLI is installed:
 linkerd version
 ```
 If not, export linkerd path to $PATH:
-
-
-Install Linkerd onto cluster:
 ```bash
+export PATH=$PATH:/home/amalysheva/.linkerd2/bin
+```
+
+Install Linkerd onto 2nd cluster:
+```bash
+export KUBECONFIG=$KUBECONFIG2
 linkerd check --pre
 linkerd install --crds | kubectl apply -f -
 linkerd install | kubectl apply -f -
 linkerd check
 ```
 
-
-1. Create test namespace:
+Create test namespace:
 ```bash
 kubectl create ns ns-nsm-linkerd
 ```
 
-2. Select nodes to deploy NSC and supplier:
+Install networkservice for the second cluster:
 ```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
-NSC_NODE=${NODES[0]}
-SUPPLIER_NODE=${NODES[1]}
-if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
+kubectl --kubeconfig=$KUBECONFIG2 apply -f ./cluster2/networkservice.yaml
 ```
 
-4. Create patch for supplier:
+Start `alpine` with networkservicemesh client on the first cluster:
 ```bash
-cat > patch-supplier.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-supplier-k8s
-spec:
-  template:
-    spec:
-      nodeName: $SUPPLIER_NODE
-      containers:
-        - name: nse-supplier
-          env:
-            - name: NSM_SERVICE_NAME
-              value: autoscale-icmp-responder
-            - name: NSM_LABELS
-              value: app:icmp-responder-supplier
-            - name: NSM_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: NSM_POD_DESCRIPTION_FILE
-              value: /run/supplier/pod-template.yaml
-          volumeMounts:
-            - name: pod-file
-              mountPath: /run/supplier
-              readOnly: true
-      volumes:
-        - name: pod-file
-          configMap:
-            name: supplier-pod-template-configmap
-EOF
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 ```
 
-5. Create customization file:
+Start `auto-scale` networkservicemesh endpoint:
 ```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-nsm-linkerd
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-supplier.yaml
-
-configMapGenerator:
-  - name: supplier-pod-template-configmap
-    files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/features/scale-from-zero/pod-template.yaml
-EOF
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/nse-auto-scale
 ```
 
-6. Register network service:
+Inject Linkerd into emojivoto services and install:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/features/scale-from-zero/autoscale-netsvc.yaml
+export KUBECONFIG=$KUBECONFIG2
+linkerd inject - ./cluster2/emojivoto | kubectl apply -f -
 ```
 
-7. Deploy NSC and supplier:
+Wait for the `alpine` client to be ready:
 ```bash
-kubectl apply -k .
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=alpine -n ns-nsm-linkerd
 ```
 
-8. Wait for applications ready:
+Wait for the wmojivoto pods to be ready:
 ```bash
-kubectl wait -n ns-nsm-linkerd --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
-kubectl wait -n ns-nsm-linkerd --for=condition=ready --timeout=1m pod -l app=nsc-kernel
-kubectl wait -n ns-nsm-linkerd --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=voting-svc -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=web-svc -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=emoji-svc -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=vote-bot -n ns-nsm-linkerd
 ```
 
-9. Find NSC and NSE pods by labels:
+Get curl for nsc:
 ```bash
-NSC=$(kubectl get pod -n ns-nsm-linkerd --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
-NSE=$(kubectl get pod -n ns-nsm-linkerd --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/alpine -n ns-nsm-linkerd -c cmd-nsc -- apk add curl
 ```
-
-Check connectivity:
+Verify connectivity:
 ```bash
-kubectl exec $NSC -n ns-nsm-linkerd -- ping -c 4 169.254.0.0
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/alpine -n ns-nsm-linkerd -c cmd-nsc -- curl -s voting-svc.emojivoto:8080
 ```
-```bash
-kubectl exec $NSE -n ns-nsm-linkerd -- ping -c 4 169.254.0.1
-```
-Remove NSC:
-```bash
-kubectl scale -n ns-nsm-linkerd deployment nsc-kernel --replicas=0
-```
-
-Wait for the NSE pod to be deleted:
-```bash
-kubectl wait -n ns-nsm-linkerd --for=delete --timeout=1m pod -l app=nse-icmp-responder
-```
-Scale NSC up:
-```bash
-kubectl scale -n ns-nsm-linkerd deployment nsc-kernel --replicas=1
-```
-
-Inject Linkerd into NSC:
-```bash
-kubectl get -n ns-nsm-linkerd deploy nsc-kernel -o yaml | linkerd inject - | kubectl apply -f -
-```
-```bash
-NSC=$(kubectl get pod -n ns-nsm-linkerd --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
-```
-
-10. Check connectivity:
-```bash
-kubectl exec $NSC -n ns-nsm-linkerd -c nsc -- ping -c 4 169.254.0.0
-```
-```bash
-kubectl exec $NSE -n ns-nsm-linkerd -- ping -c 4 169.254.0.1
-```
-Remove NSC:
-```bash
-kubectl scale -n ns-nsm-linkerd deployment nsc-kernel --replicas=0
-```
-
-Wait for the NSE pod to be deleted:
-```bash
-kubectl wait -n ns-nsm-linkerd --for=delete --timeout=1m pod -l app=nse-icmp-responder
-```
- 
-
-
 
 
 ## Cleanup
 
 Uninject linkerd proxy from deployments:
 ```bash
-kubectl get -n ns-nsm-linkerd deploy nsc-kernel -o yaml | linkerd uninject - | kubectl apply -f -
-```
-Delete namespace:
-```bash
-kubectl delete ns ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 get -n ns-nsm-linkerd deploy -o yaml | linkerd uninject - | kubectl apply -f -
 ```
 Delete network service:
 ```bash
-kubectl delete -n nsm-system networkservices.networkservicemesh.io autoscale-icmp-responder
+kubectl --kubeconfig=$KUBECONFIG2 delete -n nsm-system networkservices.networkservicemesh.io nsm-linkerd
+```
+
+Delete namespace:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 delete ns ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 delete ns ns-nsm-linkerd
 ```
 Remove Linkerd control plane from cluster:
 ```bash
