@@ -5,12 +5,7 @@ kind: Kustomization
 namespace: ns-remote-nse-death
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
-
-resources:
-- ../netsvc.yaml
+- https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death?ref=505fec639b436f5e9093c6611b74636aaf4ed501
 
 patchesStrategicMerge:
-- ../patch-nsc.yaml
 - patch-nse.yaml
