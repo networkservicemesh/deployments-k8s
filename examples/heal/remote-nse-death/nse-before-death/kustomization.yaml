@@ -6,6 +6,9 @@ namespace: ns-remote-nse-death
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
+
 
 patchesStrategicMerge:
 - patch-nse.yaml
+- patch-nsc.yaml
