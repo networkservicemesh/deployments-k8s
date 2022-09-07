@@ -21,6 +21,10 @@ spec:
           image: artgl/dpdk-pingpong:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "-c", "sleep 60m"]
+          securityContext:
+            capabilities:
+              add:
+                - SYS_RESOURCE
           volumeMounts:
             - name: vfio
               mountPath: /dev/vfio
@@ -41,6 +45,8 @@ spec:
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_NETWORK_SERVICES
               value: vfio://pingpong?sriovToken=worker.domain/10G
+            - name: NSM_LIVENESSCHECKENABLED
+              value: "false"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

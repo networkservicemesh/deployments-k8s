@@ -110,7 +110,7 @@ spec:
             - name: NSM_SERVICES
               value: "pingpong@worker.domain: { addr: ${SERVER_MAC} }"
         - name: ponger
-          command: ["/bin/bash", "/root/scripts/pong.sh", "eno4", "31", ${SERVER_MAC}]
+          command: ["/bin/bash", "/root/scripts/pong.sh", "ens6f3", "31", ${SERVER_MAC}]
 EOF
 ```
 
@@ -153,7 +153,7 @@ function dpdk_ping() {
   client_mac="$1"
   server_mac="$2"
 
-  command="/root/dpdk-pingpong/build/app/pingpong \
+  command="ulimit -l 65536 && /root/dpdk-pingpong/build/app/pingpong \
       --no-huge                                   \
       --                                          \
       -n 500                                      \
@@ -209,7 +209,7 @@ NSE_VFIO=$(kubectl get pods -l app=nse-vfio -n ${NAMESPACE} --template '{{range 
 ```
 ```bash
 kubectl -n ${NAMESPACE} exec ${NSE_VFIO} --container ponger -- /bin/bash -c '\
-  sleep 10 && kill $(pgrep "pingpong") 1>/dev/null 2>&1 &                    \
+  (sleep 10 && kill $(pgrep "pingpong")) 1>/dev/null 2>&1 &                  \
 '
 ```
 
