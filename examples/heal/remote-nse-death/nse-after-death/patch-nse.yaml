@@ -5,6 +5,9 @@ metadata:
   name: nse-kernel
 spec:
   template:
+    metadata:
+      labels:
+        version: new
     spec:
       containers:
         - name: nse

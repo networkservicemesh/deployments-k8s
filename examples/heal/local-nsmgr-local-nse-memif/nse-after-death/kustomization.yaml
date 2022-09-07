@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-local-nsmgr-local-nse-memif
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
+- https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif?ref=30146478dad03076db05fe3b23e6dcacf2425a52
 
 patchesStrategicMerge:
 - patch-nse.yaml
