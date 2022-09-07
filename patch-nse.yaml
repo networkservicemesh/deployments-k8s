@@ -14,7 +14,4 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.102/31
-            - name: NSM_SERVICE_NAMES
-              value: "remote-nse-death"
-            - name: NSM_REGISTER_SERVICE
-              value: "false"
+      nodeName: kind-worker2
