@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-info
+  labels:
+    app: cluster-info
+spec:
+  selector:
+    matchLabels:
+      app: cluster-info
+  template:
+    metadata:
+      labels:
+        app: cluster-info
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      serviceAccountName: cluster-info-sa
+      containers:
+        - image: ghcr.io/networkservicemesh/ci/cmd-cluster-info-k8s:v2
+          env:
+            - name: NSM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          imagePullPolicy: IfNotPresent
+          name: cluster-info
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+          resources:
+            requests:
+              cpu: 75m
+            limits:
+              memory: 40Mi
+              cpu: 100m
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory

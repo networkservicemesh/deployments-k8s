@@ -5,11 +5,16 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/cluster-info?ref=3d1dcfe1de90681213c7f0006f25279bb4699966
+- https://github.com/kubernetes-sigs/about-api/clusterproperty/config/crd?ref=f9b81063dfa88c032a47789c7cd3357ba0c17f7d
 - ../../../../apps/nsmgr
 - ../../../../apps/forwarder-vpp
 - ../../../../apps/registry-memory
 - ../../../../apps/registry-proxy-dns
 - ../../../../apps/nsmgr-proxy
+
+resources:
+  - "cluster-property.yaml"
 
 patchesStrategicMerge:
 - patch-nsmgr-proxy.yaml
