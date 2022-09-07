@@ -1,10 +1,14 @@
 ---
-- -N NSM_PREROUTE
-- -A NSM_PREROUTE -j PROXY_INIT_REDIRECT
-- -I PREROUTING 1 -p tcp -i {{ .NsmInterfaceName }} -j NSM_PREROUTE
-- -N NSM_OUTPUT
-- -A NSM_OUTPUT -j DNAT --to-destination {{ index .NsmSrcIPs 0 }}
-- -A OUTPUT -p tcp --sport 4143 -j NSM_OUTPUT
-- -N NSM_POSTROUTING
-- -A NSM_POSTROUTING -j SNAT --to-source {{ index .NsmDstIPs 0 }}
-- -A POSTROUTING -p tcp -o {{ .NsmInterfaceName }} -j NSM_POSTROUTING
+- -t nat -N NSM_PREROUTE
+- -t nat -A NSM_PREROUTE -j PROXY_INIT_REDIRECT
+- -t nat -I PREROUTING 1 -p tcp -i {{ .NsmInterfaceName }} -j NSM_PREROUTE
+- -t nat -N NSM_OUTPUT
+- -t nat -A NSM_OUTPUT -j DNAT --to-destination {{ index .NsmSrcIPs 0 }}
+- -t nat -A OUTPUT -p tcp -s 0.0.0.0 -j NSM_OUTPUT
+- -t nat -N NSM_POSTROUTING
+- -t nat -A NSM_POSTROUTING -j SNAT --to-source {{ index .NsmDstIPs 0 }}
+- -t nat -A POSTROUTING -p tcp -o {{ .NsmInterfaceName }} -j NSM_POSTROUTING
+
+
+---
+- -I PREROUTING 1 -p tcp -i {{ .NsmInterfaceName }} -j DNAT --to-destination 127.0.0.1

@@ -40,43 +40,42 @@ linkerd install | kubectl apply -f -
 linkerd check
 ```
 
-Create test namespace:
-```bash
-kubectl create ns ns-nsm-linkerd
-```
-
+Start `auto-scale` networkservicemesh endpoint:
 Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f ./cluster2/networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG2 create ns ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 apply -f ./cluster2/netsvc.yaml
 ```
+
 
 Start `alpine` with networkservicemesh client on the first cluster:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 ```
 
-Start `auto-scale` networkservicemesh endpoint:
+Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/nse-auto-scale
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/
 ```
 
 Inject Linkerd into emojivoto services and install:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-linkerd inject - ./cluster2/emojivoto | kubectl apply -f -
+kubectl get -n emojivoto deploy -o yaml | linkerd inject - | kubectl apply -f -
 ```
+
 
 Wait for the `alpine` client to be ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=alpine -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=web-svc -n ns-nsm-linkerd
 ```
 
-Wait for the wmojivoto pods to be ready:
+Wait for the emojivoto pods to be ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=voting-svc -n ns-nsm-linkerd
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=web-svc -n ns-nsm-linkerd
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=emoji-svc -n ns-nsm-linkerd
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=vote-bot -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=voting-svc -n emojivoto
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=web-svc -n emojivoto
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=emoji-svc -n emojivoto
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=vote-bot -n emojivoto
 ```
 
 Get curl for nsc:
@@ -87,13 +86,13 @@ Verify connectivity:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/alpine -n ns-nsm-linkerd -c cmd-nsc -- curl -s voting-svc.emojivoto:8080
 ```
-
+kubectl --kubeconfig=$KUBECONFIG1 -n emojivoto port-forward svc/web-svc 8080:80
 
 ## Cleanup
 
 Uninject linkerd proxy from deployments:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 get -n ns-nsm-linkerd deploy -o yaml | linkerd uninject - | kubectl apply -f -
+kubectl --kubeconfig=$KUBECONFIG2 get deploy -o yaml | linkerd uninject - | kubectl apply -f -
 ```
 Delete network service:
 ```bash

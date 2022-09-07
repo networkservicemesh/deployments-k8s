@@ -4,7 +4,6 @@ kind: Kustomization
 
 namespace: ns-nsm-linkerd
 
-resources:
-  - voting.yaml
-  - vote-bot.yaml
-  - emoji.yaml
+bases:
+  - ./nse-auto-scale
+  - ./emojivoto
