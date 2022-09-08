@@ -6,7 +6,7 @@ namespace: ns-remote-nsmgr-remote-endpoint
 
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
-- https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
+- https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint?ref=34265c6272b7b8658a82fe9c0fcb88c1757818b4
 
 patchesStrategicMerge:
 - patch-nse.yaml
