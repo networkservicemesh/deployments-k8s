@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/cluster-info?ref=7a66d40cded2ee2e9391ccfcf30bd4abe712c6b8
-- https://github.com/kubernetes-sigs/about-api/clusterproperty/config/crd?ref=7a66d40cded2ee2e9391ccfcf30bd4abe712c6b8
+- https://github.com/networkservicemesh/deployments-k8s/apps/cluster-info?ref=1183d299dd9818c5b158abb1687a762639630035
+- https://github.com/kubernetes-sigs/about-api/clusterproperty/config/crd?ref=1183d299dd9818c5b158abb1687a762639630035
 - ../../../../apps/nsmgr
 - ../../../../apps/forwarder-vpp
 - ../../../../apps/registry-memory
