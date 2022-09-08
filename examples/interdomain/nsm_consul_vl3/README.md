@@ -18,12 +18,6 @@ https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/producti
 https://learn.hashicorp.com/tutorials/consul/tls-encryption-secure
 https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/developer-mesh
 
-Load custom images with preinstalled consul and envoy onto clusters:
-```bash
-docker build -t consul-client:latest ./examples/interdomain/nsm_consul_vl3/dockerfile/
-kind load docker-image consul-client:latest  --name cluster-1
-kind load docker-image consul-client:latest  --name cluster-2
-```
 
 Start vl3, install Consul control plane and counting service on the first cluster
 ```bash
@@ -56,7 +50,7 @@ ENCRYPTION_KEY=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it
 
 (On the control plane pod) Get CP vl3 IP
 ```bash
-CP_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 6-)
+CP_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
 ```
 
 (On the control plane pod) Initialize Consul CA
@@ -118,18 +112,18 @@ EOF
 
 Copy configs into the Control plane Ubuntu container
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 cp consul.hcl ns-nsm-consul-vl3/${CP}:/etc/consul.d/
-kubectl --kubeconfig=$KUBECONFIG1 cp server.hcl ns-nsm-consul-vl3/${CP}:/etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 cp consul.hcl ns-nsm-consul-vl3/${CP}:/consul/config/
+kubectl --kubeconfig=$KUBECONFIG1 cp server.hcl ns-nsm-consul-vl3/${CP}:/consul/config/
 ```
 
 (On the control plane pod) Validate the configuration 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- sudo consul validate /etc/consul.d/
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it ${CP} -c ubuntu -- consul validate /consul/config/
 ```
 
 (On the control plane pod) Start Consul CP
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- /bin/bash -c 'consul agent -config-dir=/etc/consul.d/  1>/dev/null 2>&1 &'
+kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- /bin/sh -c 'consul agent -config-dir=/consul/config/  1>/dev/null 2>&1 &'
 ```
 
 Check that Consul Server has started:
@@ -466,5 +460,3 @@ pkill -f "port-forward"
 kubectl --kubeconfig=$KUBECONFIG1 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster1
 kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster2
 ```
-
-
