@@ -21,8 +21,8 @@ Check `KUBECONFIG2` env:
 **Apply spire resources for the clusters:**
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster1?ref=7c5beaddf4a9bc3e3bd7a4acf5cd1b9a36bcf6da
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster2?ref=7c5beaddf4a9bc3e3bd7a4acf5cd1b9a36bcf6da
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster1?ref=7dc59750fb3eb5ecfb00eff1b92177acdf4618f1
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/spire/cluster2?ref=7dc59750fb3eb5ecfb00eff1b92177acdf4618f1
 ```
 
 Wait for spire ready
