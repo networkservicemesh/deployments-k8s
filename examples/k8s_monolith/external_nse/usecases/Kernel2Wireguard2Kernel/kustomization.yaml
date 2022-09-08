@@ -8,7 +8,7 @@ resources:
 - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/742a090db9b44c6aabb64e7965b3f02990c94d0b/examples/k8s_monolith/external_nse/usecases/Kernel2Wireguard2Kernel/netsvc.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9570de2ce5e79a76bbe2db5f02f819ab869032d1
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=c7e79aecc9db188cb6b5a858356e01b5f5329fec
 
 patchesStrategicMerge:
 - patch-nsc.yaml
