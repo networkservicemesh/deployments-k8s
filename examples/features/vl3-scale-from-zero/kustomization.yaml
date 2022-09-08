@@ -5,13 +5,13 @@ kind: Kustomization
 namespace: ns-vl3
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fdb37a1f4dcf94ca2df6516930eed7d5d11aa012/examples/features/vl3-scale-from-zero/autoscale-netsvc.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fdb37a1f4dcf94ca2df6516930eed7d5d11aa012/examples/features/vl3-scale-from-zero/vl3-netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/947529af02f5b4fffdc701f36bb2248d51936c1a/examples/features/vl3-scale-from-zero/autoscale-netsvc.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/947529af02f5b4fffdc701f36bb2248d51936c1a/examples/features/vl3-scale-from-zero/vl3-netsvc.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=fdb37a1f4dcf94ca2df6516930eed7d5d11aa012
-- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=fdb37a1f4dcf94ca2df6516930eed7d5d11aa012
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=fdb37a1f4dcf94ca2df6516930eed7d5d11aa012
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=947529af02f5b4fffdc701f36bb2248d51936c1a
+- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=947529af02f5b4fffdc701f36bb2248d51936c1a
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=947529af02f5b4fffdc701f36bb2248d51936c1a
 
 patchesStrategicMerge:
 - nsc-patch.yaml
@@ -20,4 +20,4 @@ patchesStrategicMerge:
 configMapGenerator:
   - name: supplier-pod-template-configmap
     files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fdb37a1f4dcf94ca2df6516930eed7d5d11aa012/examples/features/vl3-scale-from-zero/pod-template.yaml
+      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/947529af02f5b4fffdc701f36bb2248d51936c1a/examples/features/vl3-scale-from-zero/pod-template.yaml
