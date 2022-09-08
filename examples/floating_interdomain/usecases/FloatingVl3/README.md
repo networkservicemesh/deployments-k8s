@@ -43,7 +43,7 @@ Note: *By default we're using ipam prefix is `169.254.0.0/16` and client prefix 
 
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=dd875e768190907804ee83ca1412eae997d67871
 ```
 
 1.3. Switch context to the *cluster1*.
@@ -52,84 +52,22 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-1.4. Prepare a patch with **vl3 ipam URL**:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
--  https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
-
-patchesStrategicMerge:
-- patch-vl3-nse.yaml
-EOF
-```
+1.4. Start **vl3 nse** and client in the *cluster1*.
 
 ```bash
-cat > patch-vl3-nse.yaml <<EOF
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nse-vl3-vpp-1
-spec:
-  containers:
-    - name: nse
-      env:
-        - name: NSM_PREFIX_SERVER_URL
-          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
-EOF
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=dd875e768190907804ee83ca1412eae997d67871
 ```
 
-1.5. Start **vl3 nse** and client in the *cluster1*.
-
-```bash
-kubectl apply -k .
-```
-
-1.6. Switch context to the *cluster2*.
+1.5. Switch context to the *cluster2*.
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-1.7. Prepare a patch with **vl3 ipam URL**:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-- https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
-
-patchesStrategicMerge:
-- patch-vl3-nse.yaml
-EOF
-```
+1.6. Start **vl3 nse** and client in the *cluster2*.
 
 ```bash
-cat > patch-vl3-nse.yaml <<EOF
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nse-vl3-vpp-2
-spec:
-  containers:
-    - name: nse
-      env:
-        - name: NSM_PREFIX_SERVER_URL
-          value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
-EOF
-```
-
-1.8. Start **vl3 nse** and client in the *cluster2*.
-
-```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=dd875e768190907804ee83ca1412eae997d67871
 ```
 
 
@@ -192,17 +130,17 @@ kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 169.254.1.0
 1. Cleanup floating domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
+export KUBECONFIG=$KUBECONFIG3 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster3?ref=dd875e768190907804ee83ca1412eae997d67871
 ```
 
 2. Cleanup cluster2 domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
+export KUBECONFIG=$KUBECONFIG2 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=dd875e768190907804ee83ca1412eae997d67871
 ```
 
 3. Cleanup cluster1 domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
+export KUBECONFIG=$KUBECONFIG1 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=dd875e768190907804ee83ca1412eae997d67871
 ```

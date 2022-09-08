@@ -1,0 +1,100 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuma-demo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kuma-demo
+  name: dataplane-file
+data:
+  redis-dataplane.yaml: |
+    type: Dataplane
+    mesh: default
+    name: redis
+    networking:
+      address: redis.my-vl3-network
+      inbound:
+        - port: 16379
+          servicePort: 6379
+          tags:
+            kuma.io/service: redis
+            kuma.io/protocol: tcp
+      admin:
+        port: 9902
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: kuma-demo
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        networkservicemesh.io: kernel://my-vl3-network/nsm-1?dnsName=redis
+      labels:
+        app: redis
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: dataplane-file
+            items:
+              - key: redis-dataplane.yaml
+                path: redis-dataplane.yaml
+      containers:
+        - name: redis
+          image: "redis"
+          ports:
+            - name: tcp
+              containerPort: 16379
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "30"]
+            postStart:
+              exec:
+                command: ["/usr/local/bin/redis-cli", "set", "zone", "local"]
+        - args:
+          - run
+          - --cp-address=https://control-plane-kuma.my-vl3-network:5678/
+          - --dataplane-file=/etc/redis-dataplane.yaml
+          - --log-level=info
+          image: docker.io/kumahq/kuma-dp:1.7.0-amd64
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+              - mountPath: /etc/redis-dataplane.yaml
+                name: config
+                subPath: redis-dataplane.yaml
+          name: kuma-sidecar
+          resources:
+              limits:
+                cpu: "1"
+                memory: 512Mi
+              requests:
+                cpu: 50m
+                memory: 64Mi
+          securityContext:
+              runAsGroup: 5678
+              runAsUser: 5678
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: kuma-demo
+spec:
+  selector:
+    app: redis
+  ports:
+  - protocol: TCP
+    port: 6379

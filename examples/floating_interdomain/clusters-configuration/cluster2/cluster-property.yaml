@@ -1,0 +1,7 @@
+---
+apiVersion: about.k8s.io/v1alpha1
+kind: ClusterProperty
+metadata:
+  name: id.k8s.io
+spec:
+  value: cluster2

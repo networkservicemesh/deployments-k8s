@@ -21,12 +21,16 @@ spec:
           image: artgl/dpdk-pingpong:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "-c", "sleep 60m"]
+          securityContext:
+            capabilities:
+              add:
+                - SYS_RESOURCE
           volumeMounts:
             - name: vfio
               mountPath: /dev/vfio
 
         - name: sidecar
-          image: ghcr.io/networkservicemesh/ci/cmd-nsc:eba7156
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc:11edc30
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -41,6 +45,8 @@ spec:
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_NETWORK_SERVICES
               value: vfio://pingpong?sriovToken=worker.domain/10G
+            - name: NSM_LIVENESSCHECKENABLED
+              value: "false"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

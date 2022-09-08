@@ -10,7 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/49b796b3fac61f2ca634386eb686b0ebcaee6abf/examples/use-cases/namespace.yaml)[0])
+NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dd875e768190907804ee83ca1412eae997d67871/examples/use-cases/namespace.yaml)[0])
 NAMESPACE=${NAMESPACE:10}
 ```
 
@@ -47,7 +47,7 @@ spec:
             - name: NSM_SERVICES
               value: "pingpong@worker.domain: { addr: ${SERVER_MAC} }"
         - name: ponger
-          command: ["/bin/bash", "/root/scripts/pong.sh", "eno4", "31", ${SERVER_MAC}]
+          command: ["/bin/bash", "/root/scripts/pong.sh", "ens6f3", "31", ${SERVER_MAC}]
 EOF
 ```
 
@@ -61,8 +61,8 @@ kind: Kustomization
 namespace: ${NAMESPACE}
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=49b796b3fac61f2ca634386eb686b0ebcaee6abf
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=dd875e768190907804ee83ca1412eae997d67871
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=dd875e768190907804ee83ca1412eae997d67871
 
 patchesStrategicMerge:
 - patch-nse-vfio.yaml
@@ -96,7 +96,7 @@ function dpdk_ping() {
   client_mac="$1"
   server_mac="$2"
 
-  command="/root/dpdk-pingpong/build/app/pingpong \
+  command="ulimit -l 65536 && /root/dpdk-pingpong/build/app/pingpong \
       --no-huge                                   \
       --                                          \
       -n 500                                      \
@@ -140,7 +140,7 @@ NSE=$(kubectl -n ${NAMESPACE} get pods -l app=nse-vfio --template '{{range .item
 ```
 ```bash
 kubectl -n ${NAMESPACE} exec ${NSE} --container ponger -- /bin/bash -c '\
-  sleep 10 && kill $(pgrep "pingpong") 1>/dev/null 2>&1 &               \
+  (sleep 10 && kill $(pgrep "pingpong")) 1>/dev/null 2>&1 &             \
 '
 ```
 
