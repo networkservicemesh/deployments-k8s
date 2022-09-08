@@ -1,0 +1,11 @@
+---
+networks:
+  kind:
+    external: true
+
+services:
+  nsc-simple-docker:
+    networks:
+      - kind
+    environment:
+      NSM_NETWORK_SERVICES: kernel://kernel2wireguard2kernel-monolith-nsc@k8s.nsm/nsm-1
