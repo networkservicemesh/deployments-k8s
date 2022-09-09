@@ -13,7 +13,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:1793099
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:7387a1b
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
@@ -25,7 +25,7 @@ spec:
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_LABELS
-          value: "app:nse-vl3-vpp,clusterName:cluster1"
+          value: "app:nse-vl3-vpp"
         - name: NSM_PREFIX_SERVER_URL
           value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
         - name: NSM_IDLE_TIMEOUT

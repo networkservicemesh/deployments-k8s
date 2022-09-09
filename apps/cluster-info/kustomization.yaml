@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- cluster-info.yaml
+- binding.yaml
+- sa.yaml
+- role.yaml
+- configmap.yaml

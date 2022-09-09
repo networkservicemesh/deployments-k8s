@@ -1,0 +1,13 @@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cluster-info-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: cluster-info-sa
+    namespace: "default"
+roleRef:
+  kind: ClusterRole
+  name: cluster-info-role
+  apiGroup: rbac.authorization.k8s.io
