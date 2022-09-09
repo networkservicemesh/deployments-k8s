@@ -40,20 +40,19 @@ linkerd install | kubectl apply -f -
 linkerd check
 ```
 
-Start `auto-scale` networkservicemesh endpoint:
+
 Install networkservice for the second cluster:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 create ns ns-nsm-linkerd
 kubectl --kubeconfig=$KUBECONFIG2 apply -f ./cluster2/netsvc.yaml
 ```
 
-
-Start `alpine` with networkservicemesh client on the first cluster:
+Start `web-svc` with networkservicemesh client on the first cluster:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 ```
 
-Install networkservice for the second cluster:
+Start `auto-scale` networkservicemesh endpoint:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/
 ```
@@ -61,7 +60,7 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/
 Inject Linkerd into emojivoto services and install:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-kubectl get -n emojivoto deploy -o yaml | linkerd inject - | kubectl apply -f -
+kubectl get -n ns-nsm-linkerd deploy emoji vote-bot voting -o yaml | linkerd inject - | kubectl apply -f -
 ```
 
 
