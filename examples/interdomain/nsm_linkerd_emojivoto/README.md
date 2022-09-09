@@ -63,40 +63,37 @@ export KUBECONFIG=$KUBECONFIG2
 kubectl get -n ns-nsm-linkerd deploy emoji vote-bot voting -o yaml | linkerd inject - | kubectl apply -f -
 ```
 
-
-Wait for the `alpine` client to be ready:
+Wait for the emojivoto pods to be ready on both clusters:
 ```bash
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=voting-svc -n ns-nsm-linkerd
 kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=web-svc -n ns-nsm-linkerd
-```
-
-Wait for the emojivoto pods to be ready:
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=voting-svc -n emojivoto
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=web-svc -n emojivoto
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=emoji-svc -n emojivoto
-kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=vote-bot -n emojivoto
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=emoji-svc -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=vote-bot -n ns-nsm-linkerd
 ```
 
 Get curl for nsc:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec deploy/alpine -n ns-nsm-linkerd -c cmd-nsc -- apk add curl
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/web -n ns-nsm-linkerd -c cmd-nsc -- apk add curl
 ```
 Verify connectivity:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec deploy/alpine -n ns-nsm-linkerd -c cmd-nsc -- curl -s voting-svc.emojivoto:8080
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/web -n ns-nsm-linkerd -c cmd-nsc -- curl -v emoji-svc.ns-nsm-linkerd:8080
 ```
-kubectl --kubeconfig=$KUBECONFIG1 -n emojivoto port-forward svc/web-svc 8080:80
-
+emoji-svc.ns-nsm-linkerd.cvc.cluster.local:8080
 ## Cleanup
 
 Uninject linkerd proxy from deployments:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 get deploy -o yaml | linkerd uninject - | kubectl apply -f -
+kubectl --kubeconfig=$KUBECONFIG2 get deploy -n ns-nsm-linkerd -o yaml | linkerd uninject - | kubectl apply -f -
 ```
 Delete network service:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -n nsm-system networkservices.networkservicemesh.io nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-linkerd networkservices.networkservicemesh.io nsm-linkerd
 ```
+
+export PATH="${PATH}:${HOME}/.krew/bin"
+
+kubectl krew install sniff
 
 Delete namespace:
 ```bash
