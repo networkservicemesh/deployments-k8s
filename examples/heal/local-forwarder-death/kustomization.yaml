@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: ns-local-forwarder-death
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
+- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
 
 resources:
 - netsvc.yaml

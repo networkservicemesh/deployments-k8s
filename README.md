@@ -9,7 +9,7 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2725/badge)](https://bestpractices.coreinfrastructure.org/projects/2725)
 
 <p align="center">
-  <a href="https://www.networkservicemesh.io/"><img src="https://github.com/cncf/artwork/blob/master/projects/networkservicemesh/horizontal/color/networkservicemesh-horizontal-color.png?raw=true" width="70%" height="70%"></a>
+  <a href=ba172266838eade1df97e2a8479fc73c3a9563c0
 </p>
 
 **deployments-k8s** repository provides native kubernetes yaml deployments and markdown examples for Network Service Mesh.

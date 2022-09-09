@@ -21,4 +21,4 @@ jobs:
         uses: actions/checkout@v2
       - name: Check external links using lychee
         run: |
-          lychee -v '**/*.md' --exclude-mail --exclude-path examples/interdomain/nsm_kuma_universal_vl3/README.md --exclude '.*?ref=.*'
+          lychee -v '**/*.md' --exclude-mail --exclude '.*?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
