@@ -21,10 +21,6 @@ spec:
           image: artgl/dpdk-pingpong:latest
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "-c", "sleep 60m"]
-          securityContext:
-            capabilities:
-              add:
-                - SYS_RESOURCE
           volumeMounts:
             - name: vfio
               mountPath: /dev/vfio

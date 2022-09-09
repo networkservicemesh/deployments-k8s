@@ -153,7 +153,7 @@ function dpdk_ping() {
   client_mac="$1"
   server_mac="$2"
 
-  command="ulimit -l 65536 && /root/dpdk-pingpong/build/app/pingpong \
+  command="/root/dpdk-pingpong/build/app/pingpong \
       --no-huge                                   \
       --                                          \
       -n 500                                      \
