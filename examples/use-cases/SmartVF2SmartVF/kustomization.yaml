@@ -4,13 +4,12 @@ kind: Kustomization
 
 namespace: ns-smartvf2smartvf
 
-resources:
-- https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
-
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
 
+resources:
+- netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nsc.yaml

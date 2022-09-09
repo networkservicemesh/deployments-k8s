@@ -8,7 +8,6 @@ bases:
 - https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death?ref=20ef20f0612fdb8466a73e40d35c2452c319986e
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
 
-
 patchesStrategicMerge:
 - patch-nse.yaml
 - patch-nsc.yaml

@@ -15,12 +15,6 @@ Create test namespace:
 kubectl create ns ns-exclude-prefixes
 ```
 
-TODO: move it to kustomization file ?
-Create config map with excluded prefixes
-```bash
-kubectl apply -f exclude-prefixes-config-map.yaml
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes?ref=505fec639b436f5e9093c6611b74636aaf4ed501

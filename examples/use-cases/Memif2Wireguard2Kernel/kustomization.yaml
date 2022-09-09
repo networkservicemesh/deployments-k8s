@@ -4,12 +4,12 @@ kind: Kustomization
 
 namespace: ns-memif2wireguard2kernel
 
-resources:
-- netsvc.yaml
-
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
+
+resources:
+- netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nsc.yaml

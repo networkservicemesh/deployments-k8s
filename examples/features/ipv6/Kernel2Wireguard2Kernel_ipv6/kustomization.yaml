@@ -6,7 +6,7 @@ namespace: ns-kernel2wireguard2kernel-ipv6
 
 resources:
 - client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/ipv6/Kernel2Wireguard2Kernel_ipv6/netsvc.yaml
+- netsvc.yaml
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=505fec639b436f5e9093c6611b74636aaf4ed501
 

@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: ns-exclude-prefixes-client
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/exclude-prefixes-client/test-client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/exclude-prefixes-client/nsm-service-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/exclude-prefixes-client/nsm-service-2.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
+- test-client.yaml
+- nsm-service-1.yaml
+- nsm-service-2.yaml
+- nse-kernel-1.yaml
+- nse-kernel-2.yaml

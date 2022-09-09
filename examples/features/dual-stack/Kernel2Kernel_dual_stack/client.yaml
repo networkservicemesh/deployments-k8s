@@ -15,7 +15,7 @@ spec:
     stdin: true
     tty: true
   affinity:
-    podAntiAffinity:
+    podAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
           labelSelector:

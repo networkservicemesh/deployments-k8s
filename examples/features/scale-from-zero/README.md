@@ -31,12 +31,6 @@ SUPPLIER_NODE=${NODES[1]}
 if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
 ```
 
-TODO: move service registration to kustomization.yaml?
-Register network service:
-```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/scale-from-zero/autoscale-netsvc.yaml
-```
-
 Deploy NSC and supplier:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=505fec639b436f5e9093c6611b74636aaf4ed501

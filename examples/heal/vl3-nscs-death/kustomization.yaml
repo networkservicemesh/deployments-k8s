@@ -10,7 +10,7 @@ bases:
 - ../../../apps/vl3-ipam
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/vl3-nscs-death/netsvc.yaml
+- netsvc.yaml
 
 patchesStrategicMerge:
 - nsc-patch.yaml

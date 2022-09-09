@@ -4,12 +4,12 @@ kind: Kustomization
 
 namespace: ns-kernel2kernel
 
-resources:
-- client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/946696acae3156e3e72bdb42cdda5147725fd0a2/examples/use-cases/Kernel2Kernel/netsvc.yaml
-
 bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
+
+resources:
+- client.yaml
+- netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml

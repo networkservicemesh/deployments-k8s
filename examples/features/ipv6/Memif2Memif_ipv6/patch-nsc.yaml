@@ -12,7 +12,7 @@ spec:
             - name: NSM_NETWORK_SERVICES
               value: memif://memif2memif-ipv6/nsm-1
       affinity:
-        podAntiAffinity:
+        podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: kubernetes.io/hostname
               labelSelector:

@@ -9,7 +9,7 @@ bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=9c3ff55e470fc7334195d804d6d83f6b2e6299cb
 
 resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/90929a4302a03a46d22e303c375c488f9336693e/examples/heal/remote-forwarder-death-ip/netsvc.yaml
+- netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nsc.yaml

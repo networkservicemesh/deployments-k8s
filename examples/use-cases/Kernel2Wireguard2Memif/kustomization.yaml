@@ -4,12 +4,12 @@ kind: Kustomization
 
 namespace: ns-kernel2wireguard2memif
 
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
+
 resources:
 - client.yaml
 - netsvc.yaml
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=8ec4030d9dcd2169b5cd1deafcf905a24c14ac46
 
 patchesStrategicMerge:
 - patch-nse.yaml

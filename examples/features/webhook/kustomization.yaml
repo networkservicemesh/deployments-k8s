@@ -9,7 +9,7 @@ bases:
 
 resources:
 - client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/505fec639b436f5e9093c6611b74636aaf4ed501/examples/features/webhook/netsvc.yaml
+- netsvc.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
