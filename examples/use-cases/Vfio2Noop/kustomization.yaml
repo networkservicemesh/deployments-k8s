@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: ns-vfio2noop
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-vfio?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vfio?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
+- ../../../apps/nsc-vfio
+- ../../../apps/nse-vfio
 
 resources:
 - netsvc.yaml

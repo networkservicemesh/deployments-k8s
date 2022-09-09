@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-kernel2wireguard2kernel-monolith-nse
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
+- ../../../../../apps/nsc-kernel
 
 resources:
 - netsvc.yaml
