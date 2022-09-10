@@ -2,11 +2,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ns-local-nsmgr-local-nse-memif
+namespace: ns-local-nse-death
 
 bases:
-- ../../../apps/nsc-memif
-- ../../../apps/nse-memif
+- ../../../../apps/nsc-kernel
+- ../../../../apps/nse-kernel
 
 resources:
 - netsvc.yaml

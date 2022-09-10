@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: nsm-system
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
 - ../../../../apps/nsmgr
 
 patchesStrategicMerge:

@@ -17,7 +17,7 @@ kubectl create ns ns-local-nse-death
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-before-death?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
+kubectl apply -k nse-before-death
 ```
 
 Wait for applications ready:
@@ -57,7 +57,7 @@ kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 | grep "100%
 
 Apply patch:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-after-death?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
+kubectl apply -k nse-after-death
 ```
 
 Restore NSE pod:

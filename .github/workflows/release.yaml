@@ -57,13 +57,13 @@ jobs:
 
       - name: Update references
         run: |
-          sed -r -i 's/(\?ref=ba172266838eade1df97e2a8479fc73c3a9563c0
+          sed -r -i 's/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
           sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
           git add -- .
           git commit -s -m "Update references to the latest tag"
-          ref=ba172266838eade1df97e2a8479fc73c3a9563c0
+          ref=${{ github.event.ref }}
           git push origin ${ref#refs/heads/}
 
   create-release:
