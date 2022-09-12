@@ -42,7 +42,7 @@ for nsc in $nscs
 do
     for pinger in $nscs
     do
-        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.my-vl3-network
+        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.vl3-dns
     done
 done
 ```
