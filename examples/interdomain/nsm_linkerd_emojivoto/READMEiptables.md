@@ -18,6 +18,13 @@ thus saving cluster resources (see step 14).
 
 ## Run
 
+Предподготовка:
+1. добавить priveleged security context для всех подов
+2. Добавить http server (как в istio): добавить большой текст, кт сервер будет возвращать по запросу
+3. выключить health check c cmd-nsc (webhook)
+Итерация 1:
+
+Nhfrnjh123!
 Install Linkerd CLI:
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh
@@ -61,10 +68,7 @@ Inject Linkerd into emojivoto services and install:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot -o yaml | linkerd inject - | kubectl apply -f -
-kubectl get -n ns-nsm-linkerd deploy greeting -o yaml | linkerd inject - | kubectl apply -f -
 ```
-kubectl get pods -n ns-nsm-linkerd
-kubectl --kubeconfig=$KUBECONFIG2 get pods -n ns-nsm-linkerd
 
 Wait for the emojivoto pods to be ready on both clusters:
 ```bash
@@ -73,24 +77,7 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l
 kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=emoji-svc -n ns-nsm-linkerd
 kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=vote-bot -n ns-nsm-linkerd
 ```
-```bash
-PROXY=proxy-web-6b86db9f49-shtps
-GREET=greeting-5fc9f6cb8f-7sbg6
-EMOJI=emoji-6b44c86496-xrxnx
-```
 
-```bash
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse --  apk add curl
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse --  apk add iptables
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse --  iptables -t nat -L
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse -- curl -v http://emoji-svc.ns-nsm-linkerd:8080
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse -- curl -v emoji-svc.ns-nsm-linkerd:8080
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse -- curl -s greeting.ns-nsm-linkerd:9080
-```
-
-```bash
-kubectl exec -n ns-nsm-linkerd $EMOJI -it -c emoji-svc -- curl -s greeting.ns-nsm-linkerd:9080
-```
 Get curl for nsc:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/web -n ns-nsm-linkerd -c cmd-nsc -- apk add curl
@@ -100,19 +87,10 @@ Verify connectivity:
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/web -n ns-nsm-linkerd -c cmd-nsc -- curl -v emoji-svc.ns-nsm-linkerd:8080
 ```
 emoji-svc.ns-nsm-linkerd.cvc.cluster.local:8080
-```bash
-kubectl sniff $EMOJI -n ns-nsm-linkerd -c emoji-svc -o emoji-exp1.pcap
-```
-export KUBECONFIG1=/tmp/config1
-export KUBECONFIG2=/tmp/config2
-export KUBECONFIG=$KUBECONFIG1
-export KUBECONFIG=$KUBECONFIG2
-
 ## Cleanup
 
 Uninject linkerd proxy from deployments:
 ```bash
-export PATH=$PATH:/home/amalysheva/.linkerd2/bin
 kubectl --kubeconfig=$KUBECONFIG2 get deploy -n ns-nsm-linkerd -o yaml | linkerd uninject - | kubectl apply -f -
 ```
 Delete network service:
@@ -124,9 +102,7 @@ kubectl delete -n ns-nsm-linkerd networkservices.networkservicemesh.io nsm-linke
 export PATH="${PATH}:${HOME}/.krew/bin"
 
 kubectl krew install sniff
-kubectl sniff $PROXY -n ns-nsm-linkerd -c nse -o proxy-web-exp1.pcap
-kubectl sniff $PROXY -n ns-nsm-linkerd -c nse -o proxy-web-exp1.pcap
-kubectl sniff $PROXY -n ns-nsm-linkerd -c nse -o proxy-exp3.pcap
+
 Delete namespace:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 delete ns ns-nsm-linkerd
@@ -136,4 +112,3 @@ Remove Linkerd control plane from cluster:
 ```bash
 linkerd uninstall | kubectl delete -f -
 ```
-
