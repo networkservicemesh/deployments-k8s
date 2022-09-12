@@ -13,6 +13,8 @@ spec:
     - name: nse
       image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:custom
       imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
           value: unix:///run/spire/sockets/agent.sock

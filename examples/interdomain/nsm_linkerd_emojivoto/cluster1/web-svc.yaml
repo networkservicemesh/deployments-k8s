@@ -42,6 +42,8 @@ spec:
       containers:
         - name: web-svc
           image: docker.l5d.io/buoyantio/emojivoto-web:v11
+          securityContext:
+            privileged: true
           env:
             - name: WEB_PORT
               value: "8080"

@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: greeting
+  labels:
+    app: greeting
+    service: greeting
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: greeting
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: greeting-sa
+  labels:
+    account: greeting
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeting
+  labels:
+    app: greeting
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: greeting
+  template:
+    metadata:
+      labels:
+        app: greeting
+    spec:
+      serviceAccountName: greeting-sa
+
+      containers:
+      - name: server
+        securityContext:
+          privileged: true
+        image: hashicorp/http-echo:alpine
+        args:
+          - -text="Alice in Wonderland
+            How do you get to Wonderland
+            Over the hill or under land
+            Or just behind a tree
+            
+            When clouds go rolling by
+            They roll away and leave the sky
+            Where is the land behind the eye
+            People cannot see
+            
+            Where can you see
+            Where do the stars go
+            Where is the crescent moon
+            They must be somewhere in the sunny afternoon
+            
+            Alice in Wonderland
+            Where is the path to Wonderland
+            Over the hill or here or there
+            I wonder where
+            "
+          - -listen=:9080
+        ports:
+          - containerPort: 9080
+            name: http
+---

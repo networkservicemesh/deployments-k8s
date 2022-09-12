@@ -27,6 +27,8 @@ spec:
               value: web-svc.emojivoto:80
           image: docker.l5d.io/buoyantio/emojivoto-web:v11
           name: vote-bot
+          securityContext:
+            privileged: true
           resources:
             requests:
               cpu: 10m

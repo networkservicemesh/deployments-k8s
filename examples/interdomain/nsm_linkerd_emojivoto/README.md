@@ -54,13 +54,13 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2
 ```
 
 Inject Linkerd into emojivoto services and install:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-kubectl get -n ns-nsm-linkerd deploy emoji vote-bot voting -o yaml | linkerd inject - | kubectl apply -f -
+kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot -o yaml | linkerd inject - | kubectl apply -f -
 ```
 
 Wait for the emojivoto pods to be ready on both clusters:
@@ -80,15 +80,19 @@ Verify connectivity:
 kubectl --kubeconfig=$KUBECONFIG1 exec deploy/web -n ns-nsm-linkerd -c cmd-nsc -- curl -v emoji-svc.ns-nsm-linkerd:8080
 ```
 emoji-svc.ns-nsm-linkerd.cvc.cluster.local:8080
+
+
 ## Cleanup
 
 Uninject linkerd proxy from deployments:
 ```bash
+export PATH=$PATH:/home/amalysheva/.linkerd2/bin
 kubectl --kubeconfig=$KUBECONFIG2 get deploy -n ns-nsm-linkerd -o yaml | linkerd uninject - | kubectl apply -f -
 ```
 Delete network service:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-linkerd networkservices.networkservicemesh.io nsm-linkerd
+export KUBECONFIG=$KUBECONFIG2
+kubectl delete -n ns-nsm-linkerd networkservices.networkservicemesh.io nsm-linkerd
 ```
 
 export PATH="${PATH}:${HOME}/.krew/bin"
