@@ -101,7 +101,6 @@ echo ${result} | grep -q "forwarder"
 
 Delete ns:
 ```bash
-rm -r example
 kubectl delete ns ns-jaeger-and-prometheus
 ```
 
