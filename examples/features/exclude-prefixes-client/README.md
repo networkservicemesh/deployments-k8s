@@ -12,78 +12,59 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
-```
-
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-resources:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/exclude-prefixes-client/test-client.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/exclude-prefixes-client/nsm-service-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/exclude-prefixes-client/nsm-service-2.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/exclude-prefixes-client/nse-kernel-1.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/exclude-prefixes-client/nse-kernel-2.yaml
-EOF
+kubectl create ns ns-exclude-prefixes-client
 ```
 
 Deploy NSC, services and NSEs:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes-client?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-exclude-prefixes-client
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ns-exclude-prefixes-client
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ns-exclude-prefixes-client
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-exclude-prefixes-client --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE1=$(kubectl get pods -l app=nse-kernel-1 -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE1=$(kubectl get pods -l app=nse-kernel-1 -n ns-exclude-prefixes-client --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE2=$(kubectl get pods -l app=nse-kernel-2 -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE2=$(kubectl get pods -l app=nse-kernel-2 -n ns-exclude-prefixes-client --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE1:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.96
+kubectl exec ${NSC} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.96
 ```
 
 Ping from NSC to NSE2:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.98
+kubectl exec ${NSC} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.98
 ```
 
 Ping from NSE1 to NSC:
 ```bash
-kubectl exec ${NSE1} -n ${NAMESPACE} -- ping -c 4 172.16.1.97
+kubectl exec ${NSE1} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.97
 ```
 
 Ping from NSE2 to NSC:
 ```bash
-kubectl exec ${NSE2} -n ${NAMESPACE} -- ping -c 4 172.16.1.99
+kubectl exec ${NSE2} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.99
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-exclude-prefixes-client
 ```

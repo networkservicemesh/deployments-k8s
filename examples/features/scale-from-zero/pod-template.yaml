@@ -26,7 +26,7 @@ spec:
         - name: NSM_CIDR_PREFIX
           value: 169.254.0.0/16
         - name: NSM_SERVICE_NAMES
-          value: autoscale-icmp-responder
+          value: scale-from-zero
         - name: NSM_LABELS
           value: app:nse-icmp-responder
         - name: NSM_IDLE_TIMEOUT

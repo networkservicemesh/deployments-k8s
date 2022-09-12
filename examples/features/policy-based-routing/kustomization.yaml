@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-policy-based-routing
+
+resources:
+- client.yaml
+- config-file-nse.yaml
+- netsvc.yaml
+
+bases:
+- ../../../apps/nse-kernel
+
+patchesStrategicMerge:
+- patch-nse.yaml

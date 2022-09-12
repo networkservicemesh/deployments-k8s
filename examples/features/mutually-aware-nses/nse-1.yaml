@@ -23,7 +23,9 @@ spec:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
-              value: icmp-responder-1
+              value: "mutually-aware-nses-1"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_NAME

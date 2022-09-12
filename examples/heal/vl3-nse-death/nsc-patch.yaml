@@ -13,4 +13,4 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://my-vl3-network/nsm-1
+              value: kernel://vl3-nse-death/nsm-1

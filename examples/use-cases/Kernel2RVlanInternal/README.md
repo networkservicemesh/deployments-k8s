@@ -13,8 +13,7 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Create test namespace:
 
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-kernel2rvlan-internal
 ```
 
 Create iperf server deployment:
@@ -66,7 +65,7 @@ cat > kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${NAMESPACE}
+namespace: ns-kernel2rvlan-internal
 
 resources:
 - first-iperf-s.yaml
@@ -83,13 +82,13 @@ kubectl apply -k .
 Wait for applications ready:
 
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=iperf1-s
+kubectl -n ns-kernel2rvlan-internal wait --for=condition=ready --timeout=1m pod -l app=iperf1-s
 ```
 
 Get the iperf-NSC pods:
 
 ```bash
-NSCS=($(kubectl get pods -l app=iperf1-s -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS=($(kubectl get pods -l app=iperf1-s -n ns-kernel2rvlan-internal --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
 Start an iperf server in one NSC and client in another:
@@ -97,33 +96,33 @@ Start an iperf server in one NSC and client in another:
 1. TCP with IPv4
 
     ```bash
-    IP_ADDR=$(kubectl exec ${NSCS[0]} -c cmd-nsc -n ${NAMESPACE} -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-    kubectl exec ${NSCS[0]} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDR} -1
-    kubectl exec ${NSCS[1]} -c iperf-server -n ${NAMESPACE} -- iperf3 -i0 -t 5 -c ${IP_ADDR}
+    IP_ADDR=$(kubectl exec ${NSCS[0]} -c cmd-nsc -n ns-kernel2rvlan-internal -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+    kubectl exec ${NSCS[0]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -sD -B ${IP_ADDR} -1
+    kubectl exec ${NSCS[1]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -i0 -t 5 -c ${IP_ADDR}
     ```
 
 2. UDP with IPv4:
 
     ```bash
-    IP_ADDR=$(kubectl exec ${NSCS[1]} -c cmd-nsc -n ${NAMESPACE} -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-    kubectl exec ${NSCS[1]} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDR} -1
-    kubectl exec ${NSCS[0]} -c iperf-server -n ${NAMESPACE} -- iperf3 -i0 -t 5 -u -c ${IP_ADDR}
+    IP_ADDR=$(kubectl exec ${NSCS[1]} -c cmd-nsc -n ns-kernel2rvlan-internal -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+    kubectl exec ${NSCS[1]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -sD -B ${IP_ADDR} -1
+    kubectl exec ${NSCS[0]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -i0 -t 5 -u -c ${IP_ADDR}
     ```
 
 3. TCP with IPv6:
 
     ```bash
-    IP_ADDR=$(kubectl exec ${NSCS[0]} -c cmd-nsc -n ${NAMESPACE} -- ip -6 a s nsm-1 scope global | grep -oP '(?<=inet6\s)([0-9a-f:]+:+)+[0-9a-f]+')
-    kubectl exec ${NSCS[0]} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDR} -1
-    kubectl exec ${NSCS[1]} -c iperf-server -n ${NAMESPACE} -- iperf3 -i0 -t 5 -6 -c ${IP_ADDR}
+    IP_ADDR=$(kubectl exec ${NSCS[0]} -c cmd-nsc -n ns-kernel2rvlan-internal -- ip -6 a s nsm-1 scope global | grep -oP '(?<=inet6\s)([0-9a-f:]+:+)+[0-9a-f]+')
+    kubectl exec ${NSCS[0]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -sD -B ${IP_ADDR} -1
+    kubectl exec ${NSCS[1]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -i0 -t 5 -6 -c ${IP_ADDR}
     ```
 
 4. UDP with IPv6:
 
     ```bash
-    IP_ADDR=$(kubectl exec ${NSCS[1]} -c cmd-nsc -n ${NAMESPACE} -- ip -6 a s nsm-1 scope global | grep -oP '(?<=inet6\s)([0-9a-f:]+:+)+[0-9a-f]+')
-    kubectl exec ${NSCS[1]} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDR} -1
-    kubectl exec ${NSCS[0]} -c iperf-server -n ${NAMESPACE} -- iperf3 -i0 -t 5 -6 -u -c ${IP_ADDR}
+    IP_ADDR=$(kubectl exec ${NSCS[1]} -c cmd-nsc -n ns-kernel2rvlan-internal -- ip -6 a s nsm-1 scope global | grep -oP '(?<=inet6\s)([0-9a-f:]+:+)+[0-9a-f]+')
+    kubectl exec ${NSCS[1]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -sD -B ${IP_ADDR} -1
+    kubectl exec ${NSCS[0]} -c iperf-server -n ns-kernel2rvlan-internal -- iperf3 -i0 -t 5 -6 -u -c ${IP_ADDR}
     ```
 
 ## Cleanup
@@ -131,5 +130,5 @@ Start an iperf server in one NSC and client in another:
 Delete the test namespace:
 
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-kernel2rvlan-internal
 ```

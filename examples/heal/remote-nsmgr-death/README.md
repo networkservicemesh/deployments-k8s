@@ -13,220 +13,78 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/heal/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
-```
-
-Get nodes exclude control-plane:
-```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
-```
-
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
-
-      nodeName: ${NODES[0]}
-EOF
-```
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-      nodeName: ${NODES[1]}
-EOF
+kubectl create ns ns-remote-nsmgr-death
 ```
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/remote-nse?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-remote-nsmgr-death
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-remote-nsmgr-death
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.101
 ```
 
 Kill remote NSMgr:
-
-Customization file:
 ```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: nsm-system
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-patchesStrategicMerge:
-- patch-nsmgr.yaml
-EOF
-```
-
-NSMgr patch:
-```bash
-cat > patch-nsmgr.yaml <<EOF
----
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: nsmgr
-spec:
-  updateStrategy:
-    type: OnDelete
-  template:
-    spec:
-      containers:
-        - name: nsmgr
-      nodeName: ${NODES[0]}
-EOF
-```
-
-Apply changes:
-```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/nsmgr-death?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
 ```
 
 Start local NSE instead of the remote one:
-
-Customization file:
 ```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
-NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.102/31
-      nodeName: ${NODES[0]}
-EOF
-```
-
-Apply changes:
-```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/local-nse?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
 ```
 
 Wait for the new NSE to start:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel --field-selector spec.nodeName==${NODES[0]} -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l nse-version=local -n ns-remote-nsmgr-death
 ```
 
 Find new NSE pod:
 ```bash
-NEW_NSE=$(kubectl get pods -l app=nse-kernel --field-selector spec.nodeName==${NODES[0]} -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NEW_NSE=$(kubectl get pods -l nse-version=local -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to new NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+kubectl exec ${NSC} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:
 ```bash
-kubectl exec ${NEW_NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
+kubectl exec ${NEW_NSE} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89 -n nsm-system
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025 -n nsm-system
 ```
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-remote-nsmgr-death
 ```

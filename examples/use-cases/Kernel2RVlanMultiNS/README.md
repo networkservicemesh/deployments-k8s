@@ -13,10 +13,8 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Create test namespace:
 
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-FIRST_NAMESPACE=${NAMESPACE:10}
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/use-cases/namespace.yaml)[0])
-SECOND_NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-kernel2vlan-multins-1
+kubectl create ns ns-kernel2vlan-multins-2
 ```
 
 Create example directories to separate deployments:
@@ -46,7 +44,7 @@ spec:
       labels:
         app: alpine-1
       annotations:
-        networkservicemesh.io: kernel://private-bridge.${FIRST_NAMESPACE}/nsm-1
+        networkservicemesh.io: kernel://private-bridge.ns-kernel2vlan-multins-1/nsm-1
     spec:
       affinity:
         podAntiAffinity:
@@ -85,7 +83,7 @@ spec:
           - name: NSM_CONNECT_TO
             value: "registry.nsm-system:5002"
           - name: NSM_SERVICES
-            value: "private-bridge.${FIRST_NAMESPACE} { vlan: 0; via: gw1 }"
+            value: "private-bridge.ns-kernel2vlan-multins-1 { vlan: 0; via: gw1 }"
           - name: NSM_CIDR_PREFIX
             value: 172.10.1.0/24
 EOF
@@ -99,7 +97,7 @@ cat > ns-1/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${FIRST_NAMESPACE}
+namespace: ns-kernel2vlan-multins-1
 
 resources:
 - first-client.yaml
@@ -139,7 +137,7 @@ spec:
       labels:
         app: alpine-2
       annotations:
-        networkservicemesh.io: kernel://blue-bridge.${SECOND_NAMESPACE}/nsm-1
+        networkservicemesh.io: kernel://blue-bridge.ns-kernel2vlan-multins-2/nsm-1
     spec:
       affinity:
         podAntiAffinity:
@@ -176,7 +174,7 @@ spec:
       labels:
         app: alpine-3
       annotations:
-        networkservicemesh.io: kernel://green-bridge.${SECOND_NAMESPACE}/nsm-1
+        networkservicemesh.io: kernel://green-bridge.ns-kernel2vlan-multins-2/nsm-1
     spec:
       affinity:
         podAntiAffinity:
@@ -215,7 +213,7 @@ spec:
           - name: NSM_CONNECT_TO
             value: "registry.nsm-system:5002"
           - name: NSM_SERVICES
-            value: "blue-bridge.${SECOND_NAMESPACE} { vlan: 300; via: gw1 }, green-bridge.${SECOND_NAMESPACE} { vlan: 400; via: gw1 }"
+            value: "blue-bridge.ns-kernel2vlan-multins-2 { vlan: 300; via: gw1 }, green-bridge.ns-kernel2vlan-multins-2 { vlan: 400; via: gw1 }"
           - name: NSM_CIDR_PREFIX
             value: 172.10.2.0/24
 EOF
@@ -229,14 +227,14 @@ cat > ns-2/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ${SECOND_NAMESPACE}
+namespace: ns-kernel2vlan-multins-2
 
 resources:
 - second-client.yaml
 - third-client.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
 
 nameSuffix: -bg
 
@@ -302,23 +300,23 @@ Deploy the last client
 Wait for applications ready:
 
 ```bash
-kubectl -n ${FIRST_NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse-remote-vlan
+kubectl -n ns-kernel2vlan-multins-1 wait --for=condition=ready --timeout=1m pod -l app=nse-remote-vlan
 ```
 
 ```bash
-kubectl -n ${FIRST_NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=alpine-1
+kubectl -n ns-kernel2vlan-multins-1 wait --for=condition=ready --timeout=1m pod -l app=alpine-1
 ```
 
 ```bash
-kubectl -n ${SECOND_NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=nse-remote-vlan
+kubectl -n ns-kernel2vlan-multins-2 wait --for=condition=ready --timeout=1m pod -l app=nse-remote-vlan
 ```
 
 ```bash
-kubectl -n ${SECOND_NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=alpine-2
+kubectl -n ns-kernel2vlan-multins-2 wait --for=condition=ready --timeout=1m pod -l app=alpine-2
 ```
 
 ```bash
-kubectl -n ${SECOND_NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=alpine-3
+kubectl -n ns-kernel2vlan-multins-2 wait --for=condition=ready --timeout=1m pod -l app=alpine-3
 ```
 
 ```bash
@@ -357,7 +355,7 @@ docker exec rvm-tester ethtool -K eth0 tx off
 Get the NSC pods from first k8s namespace:
 
 ```bash
-NSCS=($(kubectl get pods -l app=alpine-1 -n ${FIRST_NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS=($(kubectl get pods -l app=alpine-1 -n ns-kernel2vlan-multins-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
 Get the IP addresses for NSCs from first k8s namespace:
@@ -366,7 +364,7 @@ Get the IP addresses for NSCs from first k8s namespace:
 declare -A IP_ADDR
 for nsc in "${NSCS[@]}"
 do
-  IP_ADDR[$nsc]=$(kubectl exec ${nsc} -n ${FIRST_NAMESPACE} -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+  IP_ADDR[$nsc]=$(kubectl exec ${nsc} -n ns-kernel2vlan-multins-1 -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 done
 ```
 
@@ -399,8 +397,8 @@ fi
 Get the NSC pods from second k8s namespace:
 
 ```bash
-NSCS_BLUE=($(kubectl get pods -l app=alpine-2 -n ${SECOND_NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
-NSCS_GREEN=($(kubectl get pods -l app=alpine-3 -n ${SECOND_NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS_BLUE=($(kubectl get pods -l app=alpine-2 -n ns-kernel2vlan-multins-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS_GREEN=($(kubectl get pods -l app=alpine-3 -n ns-kernel2vlan-multins-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
 Get the IP addresses for NSCs from second k8s namespace:
@@ -409,12 +407,12 @@ Get the IP addresses for NSCs from second k8s namespace:
 declare -A IP_ADDR_BLUE
 for nsc in "${NSCS_BLUE[@]}"
 do
-  IP_ADDR_BLUE[$nsc]=$(kubectl exec ${nsc} -n ${SECOND_NAMESPACE} -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+  IP_ADDR_BLUE[$nsc]=$(kubectl exec ${nsc} -n ns-kernel2vlan-multins-2 -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 done
 declare -A IP_ADDR_GREEN
 for nsc in "${NSCS_GREEN[@]}"
 do
-  IP_ADDR_GREEN[$nsc]=$(kubectl exec ${nsc} -n ${SECOND_NAMESPACE} -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+  IP_ADDR_GREEN[$nsc]=$(kubectl exec ${nsc} -n ns-kernel2vlan-multins-2 -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 done
 ```
 
@@ -521,11 +519,11 @@ kubectl delete --namespace=nsm-system -f client.yaml
 Delete the test namespace:
 
 ```bash
-kubectl delete ns ${FIRST_NAMESPACE}
+kubectl delete ns ns-kernel2vlan-multins-1
 ```
 
 ```bash
-kubectl delete ns ${SECOND_NAMESPACE}
+kubectl delete ns ns-kernel2vlan-multins-2
 ```
 
 Delete the directories:

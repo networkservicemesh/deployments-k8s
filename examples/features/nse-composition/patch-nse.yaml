@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: "nse-composition"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
+            - name: NSM_LABELS
+              value: "app:gateway"
+        - name: nginx
+          image: nginx
+          ports:
+          - containerPort: 80
+          - containerPort: 8080
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+          imagePullPolicy: IfNotPresent
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config

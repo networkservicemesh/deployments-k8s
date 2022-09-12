@@ -15,7 +15,7 @@ spec:
       labels:
         app: alpine
       annotations:
-        networkservicemesh.io: kernel://my-vl3-network/myiface
+        networkservicemesh.io: kernel://vl3-dns/myiface
     spec:
       containers:
       - name: alpine

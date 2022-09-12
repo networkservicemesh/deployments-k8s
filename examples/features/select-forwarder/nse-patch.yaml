@@ -14,4 +14,4 @@ spec:
             - name: NSM_REGISTER_SERVICE
               value: "false"
             - name: NSM_SERVICE_NAMES
-              value: "my-networkservice"
+              value: "select-forwarder"

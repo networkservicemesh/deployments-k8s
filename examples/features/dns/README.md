@@ -9,152 +9,48 @@ Make sure that you have completed steps from [features](../)
 
 ## Run
 
-1. Create test namespace:
+Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-dns
 ```
 
-2. Get all available nodes to deploy:
+Deploy alpine and nse
 ```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}'))
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=0ac1af83b8560efa7d52ab7acb97bd7952429025
 ```
 
-3. Create dnsutils deployment and set `nodeName` to the first node:
+Wait for applications ready:
 ```bash
-cat > dnsutils.yaml <<EOF
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: dnsutils
-  annotations:
-    networkservicemesh.io: kernel://my-coredns-service/nsm-1
-  labels:
-    app: dnsutils
-    "spiffe.io/spiffe-id": "true"
-spec:
-  containers:
-  - name: dnsutils
-    image: k8s.gcr.io/e2e-test-images/jessie-dnsutils:1.3
-    imagePullPolicy: IfNotPresent
-    stdin: true
-    tty: true
-  nodeName: ${NODES[0]}
-EOF
-```
-
-
-4. Add to nse-kernel the corends container and set `nodeName` it to the second node:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-      - name: nse
-        env:
-          - name: NSM_SERVICE_NAMES
-            value: my-coredns-service
-          - name: NSM_CIDR_PREFIX
-            value: 172.16.1.100/31
-          - name: NSM_DNS_CONFIGS
-            value: "[{\"dns_server_ips\": [\"172.16.1.100\"], \"search_domains\": [\"my.coredns.service\"]}]"
-      - name: coredns
-        image: coredns/coredns:1.8.3
-        imagePullPolicy: IfNotPresent
-        resources:
-          limits:
-            memory: 170Mi
-          requests:
-            cpu: 100m
-            memory: 70Mi
-        args: [ "-conf", "/etc/coredns/Corefile" ]
-        volumeMounts:
-        - name: config-volume
-          mountPath: /etc/coredns
-          readOnly: true
-        ports:
-        - containerPort: 53
-          name: dns
-          protocol: UDP
-        - containerPort: 53
-          name: dns-tcp
-          protocol: TCP
-      nodeName: ${NODES[1]}
-      volumes:
-        - name: config-volume
-          configMap:
-            name: coredns
-            items:
-            - key: Corefile
-              path: Corefile
-EOF
-```
-
-5. Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=b3b9066d54b23eee85de6a5b1578c7b49065fb89
-
-resources:
-- dnsutils.yaml
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b3b9066d54b23eee85de6a5b1578c7b49065fb89/examples/features/dns/coredns-config-map.yaml
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
-6. Deploy alpine and nse
-```bash
-kubectl apply -k .
-```
-
-7. Wait for applications ready:
-```bash
-kubectl wait --for=condition=ready --timeout=5m pod dnsutils -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod dnsutils -n ns-dns
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ns-dns
 ```
 
-8. Find NSC and NSE pods by labels:
+Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=dnsutils -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=dnsutils -n ns-dns --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
-9. Ping from dnsutils to NSE by domain name:
-```bash
-kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- nslookup -norec -nodef my.coredns.service
-```
-```bash
-kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- ping -c 4 my.coredns.service
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-dns --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-10. Validate that default DNS server is working:
+Ping from dnsutils to NSE by domain name:
 ```bash
-kubectl exec ${NSC} -c dnsutils -n ${NAMESPACE} -- nslookup kubernetes.default
+kubectl exec ${NSC} -c dnsutils -n ns-dns -- nslookup -norec -nodef my.coredns.service
+```
+```bash
+kubectl exec ${NSC} -c dnsutils -n ns-dns -- ping -c 4 my.coredns.service
+```
+
+Validate that default DNS server is working:
+```bash
+kubectl exec ${NSC} -c dnsutils -n ns-dns -- nslookup kubernetes.default
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-dns
 ```

@@ -1,0 +1,13 @@
+---
+services:
+  nsc-simple-docker:
+    image: ghcr.io/networkservicemesh/ci/cmd-nsc-simple-docker:84a3956
+    privileged: true
+    container_name: nsc-simple-docker
+    restart: always
+    environment:
+      NSM_NAME: docker-nsc
+      NSM_CONNECT_TO: tcp://k8s.nsm
+      NSM_FEDERATES_WITH: k8s.nsm
+      NSM_TRUST_DOMAIN: docker.nsm
+      NSM_LOG_LEVEL: TRACE

@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: test
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: admin
+        - name: nse
+          env:
+            - name: NSM_LABELS
+              # Add your own serviceDomain
+              value: serviceDomain:worker.domain
+            - name: NSM_SERVICE_NAMES
+              value: "webhook-smartvf"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.100/31
+          resources:
+            limits:
+              # Add your own SmartVF interface pool
+              worker.domain/100G: 1

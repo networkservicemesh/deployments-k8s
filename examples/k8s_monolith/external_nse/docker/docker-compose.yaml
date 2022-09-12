@@ -1,0 +1,14 @@
+---
+services:
+  nse-simple-vl3-docker:
+    image: ghcr.io/networkservicemesh/ci/cmd-nse-simple-vl3-docker:794ac1e
+    privileged: true
+    container_name: nse-simple-vl3-docker
+    restart: always
+    environment:
+      NSM_NAME: docker-vl3-server@k8s.nsm
+      NSM_SERVICE_NAMES: docker-vl3@k8s.nsm
+      NSM_CONNECT_TO: tcp://k8s.nsm
+      NSM_FEDERATES_WITH: k8s.nsm
+      NSM_TRUST_DOMAIN: docker.nsm
+      NSM_LOG_LEVEL: TRACE

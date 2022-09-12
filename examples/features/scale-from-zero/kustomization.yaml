@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-scale-from-zero
+
+resources:
+- autoscale-netsvc.yaml
+
+bases:
+- ../../../apps/nse-supplier-k8s
+- ../../../apps/nsc-kernel
+
+patchesStrategicMerge:
+- patch-nsc.yaml
+- patch-supplier.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap
+    files:
+      - pod-template.yaml
