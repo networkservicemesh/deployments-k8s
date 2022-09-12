@@ -6,7 +6,6 @@ namespace: ns-exclude-prefixes
 
 resources:
 - netsvc.yaml
-- exclude-prefixes-config-map.yaml
 
 bases:
 - ../../../apps/nsc-kernel
