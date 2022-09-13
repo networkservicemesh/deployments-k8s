@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alpine
   annotations:
-    networkservicemesh.io: kernel://jaeger-and-prometheus/nsm-1
+    networkservicemesh.io: kernel://kernel2kernel/nsm-1
 spec:
   containers:
   - name: alpine

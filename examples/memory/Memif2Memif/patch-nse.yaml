@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-kernel
+  name: nse-memif
 spec:
   template:
     spec:
@@ -11,9 +11,7 @@ spec:
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-            - name: TELEMETRY
-              value: "true"
             - name: NSM_SERVICE_NAMES
-              value: "jaeger-and-prometheus"
+              value: "memif2memif"
             - name: NSM_REGISTER_SERVICE
-              value: "false"
+              value: "true"

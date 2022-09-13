@@ -1,6 +1,6 @@
 # Memory examples
 
-Memory example contains setup and tear down logic with default NSM infrastructure and memroy based registry backend.
+Memory example contains setup and tear down logic with default NSM infrastructure and memory based registry backend.
 
 ## Requires
 
@@ -8,9 +8,9 @@ Memory example contains setup and tear down logic with default NSM infrastructur
 
 ## Includes
 
-- [Memif to Memif Connection](../use-cases/Memif2Memif)
-- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
-- [Kernel to VXLAN to Kernel Connection](../use-cases/Kernel2Vxlan2Kernel)
+- [Memif to Memif Connection](./Memif2Memif)
+- [Kernel to Kernel Connection](./Kernel2Kernel)
+- [Kernel to VXLAN to Kernel Connection](./Kernel2Vxlan2Kernel)
 
 ## Run
 
