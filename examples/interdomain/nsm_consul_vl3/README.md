@@ -107,6 +107,9 @@ addresses {
 ports {
   grpc  = 8502
 }
+ui_config {
+  enabled = true
+}
 EOF
 ```
 
@@ -130,7 +133,9 @@ Check that Consul Server has started:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- consul members
 ```
+```bash
 
+```
 (On the counting pod) Set the counting  and control plane pods vl3 IP
 ```bash
 COUNTING_IP_VL3_ADDRESS=$(kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec -it counting -c ubuntu -- ifconfig nsm-1 | grep -Eo 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 6-)
@@ -453,12 +458,11 @@ result=$(curl --include --no-buffer --connect-timeout 20 -H "Connection: Upgrade
 echo ${result} | grep  -o 'Unreachable'
 ```
 
+
 ##Cleanup
 
 ```bash
 pkill -f "port-forward"
 kubectl --kubeconfig=$KUBECONFIG1 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster1
 kubectl --kubeconfig=$KUBECONFIG2 delete -n ns-nsm-consul-vl3 -k ./examples/interdomain/nsm_consul_vl3/cluster2
-kubectl --kubeconfig=$KUBECONFIG1 delete ns ns-nsm-consul-vl3
-kubectl --kubeconfig=$KUBECONFIG2 delete ns ns-nsm-consul-vl3
 ```

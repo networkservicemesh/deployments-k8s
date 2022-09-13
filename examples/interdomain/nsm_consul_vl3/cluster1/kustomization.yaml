@@ -4,11 +4,12 @@ kind: Kustomization
 
 namespace: ns-nsm-consul-vl3
 
-bases:
+resources:
 - ./nse-vl3-vpp
 - ./vl3-ipam
 - control_plane.yaml
 - counting.yaml
+- ui-service.yaml
 
 patchesStrategicMerge:
 - nse-patch.yaml

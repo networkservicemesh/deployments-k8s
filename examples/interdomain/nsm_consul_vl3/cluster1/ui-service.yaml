@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-ui
+spec:
+  type: ClusterIP
+  selector:
+    name: control-plane
+  ports:
+    - protocol: TCP
+      port: 8500
+      targetPort: 8500
