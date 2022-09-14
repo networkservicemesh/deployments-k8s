@@ -2,19 +2,19 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: web
+  name: web-local
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-svc
+  name: web-local-svc
 spec:
   ports:
     - name: http
       port: 80
       targetPort: 8080
   selector:
-    app: web-svc
+    app: web-local-svc
   type: ClusterIP
 ---
 apiVersion: apps/v1
@@ -24,20 +24,20 @@ metadata:
     app.kubernetes.io/name: web
     app.kubernetes.io/part-of: emojivoto
     app.kubernetes.io/version: v11
-  name: web
+  name: web-local
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-svc
+      app: web-local-svc
       version: v11
   template:
     metadata:
       labels:
-        app: web-svc
+        app: web-local-svc
         version: v11
       annotations:
-        networkservicemesh.io: kernel://nsm-linkerd/nsm-1?app=web-svc
+        networkservicemesh.io: kernel://nsm-linkerd/nsm-1?app=web-local-svc
     spec:
       containers:
         - name: web-svc
