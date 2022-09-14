@@ -25,6 +25,7 @@ thus saving cluster resources (see step 14).
 Итерация 1:
 
 Nhfrnjh123!
+
 Install Linkerd CLI:
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh

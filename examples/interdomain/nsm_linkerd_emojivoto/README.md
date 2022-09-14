@@ -60,9 +60,27 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2
 Inject Linkerd into emojivoto services and install:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot -o yaml | linkerd inject - | kubectl apply -f -
-kubectl get -n ns-nsm-linkerd deploy greeting -o yaml | linkerd inject - | kubectl apply -f -
+kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot greeting -o yaml | linkerd inject - | kubectl apply -f -
 ```
+
+```bash
+export KUBECONFIG=$KUBECONFIG2
+kubectl get -n ns-nsm-linkerd pod proxy-web-659544f5f7-nsdlk proxy-web-6b86db9f49-b8tpf -o yaml \
+  | linkerd inject --enable-debug-sidecar - \
+  | kubectl apply -f -
+```
+
+
+```bash
+export KUBECONFIG=$KUBECONFIG2
+kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot greeting -o yaml \
+  | linkerd inject --enable-debug-sidecar - \
+  | kubectl apply -f -
+```
+```bash
+kubectl logs -n ns-nsm-linkerd pod proxy-web-659544f5f7-nsdlk linkerd-debug -f
+```
+
 kubectl get pods -n ns-nsm-linkerd
 kubectl --kubeconfig=$KUBECONFIG2 get pods -n ns-nsm-linkerd
 

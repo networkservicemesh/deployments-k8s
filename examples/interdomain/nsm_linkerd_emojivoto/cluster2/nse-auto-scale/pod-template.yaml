@@ -7,6 +7,7 @@ metadata:
     "spiffe.io/spiffe-id": "true"
   annotations:
     linkerd.io/inject: enabled
+    config.linkerd.io/enable-debug-sidecar: "true"
 spec:
   restartPolicy: Never
   containers:
