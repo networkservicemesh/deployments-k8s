@@ -19,7 +19,7 @@ kubectl create ns ns-mutually-aware-nses
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/mutually-aware-nses?ref=653902d4cedb12761f019055bb0d9d28db9c5f7f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/mutually-aware-nses?ref=7ad82501202f5b584cab7b09c824b6c709a1c19f
 
 ```
 
