@@ -17,7 +17,7 @@ kubectl create ns ns-dataplane-interrupt
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/dataplane-interrupt?ref=5e366b7921dcf5d9601607fa6978ce7273c88c95
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/dataplane-interrupt?ref=76e193b324a16b7d28b0fe720990ba04a05196ba
 ```
 
 Wait for applications ready:
