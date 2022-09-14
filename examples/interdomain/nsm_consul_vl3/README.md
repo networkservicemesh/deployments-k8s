@@ -133,8 +133,10 @@ Check that Consul Server has started:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-nsm-consul-vl3 exec ${CP} -c ubuntu -- consul members
 ```
-```bash
 
+Port-forward Consul UI
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 port-forward $CP 8500:8500 &
 ```
 (On the counting pod) Set the counting  and control plane pods vl3 IP
 ```bash
