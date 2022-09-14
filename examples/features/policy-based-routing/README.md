@@ -19,7 +19,7 @@ kubectl create ns ns-policy-based-routing
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/policy-based-routing?ref=a1dc66b46f7280a8e7eb48477ffdefd1033d2f1e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/policy-based-routing?ref=b7f5d1451352f2f981075a6d8bb8f0ac1a22ec74
 ```
 
 Wait for applications ready:
