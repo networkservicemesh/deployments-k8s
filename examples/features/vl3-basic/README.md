@@ -13,28 +13,23 @@ Diagram:
 
 ## Run
 
-
-1. Create ns to deploy nse and nsc:
-
+Create ns to deploy nse and nsc:
 ```bash
 kubectl create ns ns-vl3
 ```
 
-2. Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
-
+Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=dd875e768190907804ee83ca1412eae997d67871
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
-3. Find all nscs:
-
+Find all nscs:
 ```bash
 nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
 [[ ! -z $nscs ]]
 ```
 
-4. Ping each client by each client:
-
+Ping each client by each client:
 ```bash
 for nsc in $nscs 
 do
@@ -48,10 +43,8 @@ do
 done
 ```
 
-5. Ping each vl3-nse by each client.
-
+Ping each vl3-nse by each client.
 Note: By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.
-
 ```bash
 for nsc in $nscs 
 do
@@ -61,13 +54,9 @@ do
 done
 ```
 
-
-
 ## Cleanup
 
-
 To cleanup the example just follow the next command:
-
 ```bash
 kubectl delete ns ns-vl3
 ```

@@ -12,103 +12,38 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dd875e768190907804ee83ca1412eae997d67871/examples/heal/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
-```
-
-Select node to deploy NSC and NSE:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=dd875e768190907804ee83ca1412eae997d67871
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=dd875e768190907804ee83ca1412eae997d67871
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
-      nodeName: ${NODE}
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/30
-      nodeName: ${NODE}
-EOF
+kubectl create ns ns-registry-restart
 ```
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-before-death?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-registry-restart
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-registry-restart
 ```
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-registry-restart -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-registry-restart -- ping -c 4 172.16.1.101
 ```
 
 Find Registry:
@@ -124,80 +59,34 @@ kubectl delete pod ${REGISTRY} -n nsm-system
 kubectl wait --for=condition=ready --timeout=1m pod -l app=registry -n nsm-system
 ```
 
-Create customization file for a new NSC:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=dd875e768190907804ee83ca1412eae997d67871
-
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: nsc-kernel
-  path: patch-nsc.yaml
-EOF
-```
-
-Create patch for a new NSC:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-- op: replace
-  path: /metadata/name
-  value: nsc-kernel-new
-- op: replace
-  path: /metadata/labels/app
-  value: nsc-kernel-new
-- op: replace
-  path: /spec/selector/matchLabels/app
-  value: nsc-kernel-new
-- op: replace
-  path: /spec/template/metadata/labels/app
-  value: nsc-kernel-new
-- op: add
-  path: /spec/template/spec/containers/0/env/-
-  value:
-    name: NSM_NETWORK_SERVICES
-    value: kernel://icmp-responder/nsm-1
-EOF
-```
-
 Apply:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-after-death?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
 Wait for a new NSC to start:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel-new -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel-new -n ns-registry-restart
 ```
 
 Find new NSC pod:
 ```bash
-NEW_NSC=$(kubectl get pods -l app=nsc-kernel-new -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NEW_NSC=$(kubectl get pods -l app=nsc-kernel-new -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from new NSC to NSE:
 ```bash
-kubectl exec ${NEW_NSC} -n ${NAMESPACE} -- ping -c 4 172.16.1.102
+kubectl exec ${NEW_NSC} -n ns-registry-restart -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to new NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.103
+kubectl exec ${NSE} -n ns-registry-restart -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-registry-restart
 ```

@@ -16,19 +16,19 @@ Diagram:
 1. Create ns to deploy nse and nsc:
 
 ```bash
-kubectl create ns ns-vl3
+kubectl create ns ns-vl3-nscs-death
 ```
 
 2. Deploy nsc and vl3 nses:
 
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nscs-death?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
 3. Find all nscs:
 
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
+nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death) 
 [[ ! -z $nscs ]]
 ```
 
@@ -37,46 +37,46 @@ nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .i
 ```bash
 for nsc in $nscs 
 do
-    ipAddr=$(kubectl exec -n ns-vl3 $nsc -- ifconfig nsm-1)
+    ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3 -- ping -c4 $ipAddr
+        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr
     done
 done
 ```
 
 ```bash
-kubectl scale -n ns-vl3 deployment nsc-kernel --replicas=0
+kubectl scale -n ns-vl3-nscs-death deployment nsc-kernel --replicas=0
 ```
 
 ```bash
-kubectl wait -n ns-vl3 --for=delete --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-vl3-nscs-death --for=delete --timeout=1m pod -l app=nsc-kernel
 ```
 
 ```bash
-kubectl scale -n ns-vl3 deployment nsc-kernel --replicas=2
+kubectl scale -n ns-vl3-nscs-death deployment nsc-kernel --replicas=2
 ```
 
 ```bash
-kubectl wait -n ns-vl3 --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 ```
 
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3) 
+nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death) 
 [[ ! -z $nscs ]]
 ```
 
 ```bash
 for nsc in $nscs 
 do
-    ipAddr=$(kubectl exec -n ns-vl3 $nsc -- ifconfig nsm-1)
+    ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3 -- ping -c4 $ipAddr
+        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr
     done
 done
 ```
@@ -87,5 +87,5 @@ done
 To cleanup the example just follow the next command:
 
 ```bash
-kubectl delete ns ns-vl3
+kubectl delete ns ns-vl3-nscs-death
 ```

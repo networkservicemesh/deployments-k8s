@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc-kernel
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://kernel2kernel-vlan/nsm-1
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nse-kernel

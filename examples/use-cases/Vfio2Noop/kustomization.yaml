@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-vfio2noop
+
+bases:
+- ../../../apps/nsc-vfio
+- ../../../apps/nse-vfio
+
+resources:
+- netsvc.yaml
+
+patchesStrategicMerge:
+- patch-nse-vfio.yaml

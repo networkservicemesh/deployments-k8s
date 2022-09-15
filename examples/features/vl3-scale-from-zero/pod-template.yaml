@@ -11,7 +11,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:7387a1b
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-vl3-vpp:3210a43
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
@@ -23,7 +23,7 @@ spec:
         - name: NSM_LOG_LEVEL
           value: TRACE
         - name: NSM_SERVICE_NAMES
-          value: autoscale-icmp-responder,my-vl3-network
+          value: autoscale-icmp-responder,vl3-scale-from-zero
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_IDLE_TIMEOUT

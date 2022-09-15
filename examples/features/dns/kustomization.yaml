@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-dns
+
+bases:
+- ../../../apps/nse-kernel
+
+resources:
+- dnsutils.yaml
+- coredns-config-map.yaml
+- netsvc.yaml
+
+patchesStrategicMerge:
+- patch-nse.yaml

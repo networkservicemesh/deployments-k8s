@@ -18,13 +18,12 @@ thus saving cluster resources (see step 14).
 
 ## Run
 
-1. Create test namespace:
+Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dd875e768190907804ee83ca1412eae997d67871/examples/features/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-scale-from-zero
 ```
 
-2. Select nodes to deploy NSC and supplier:
+Select nodes to deploy NSC and supplier:
 ```bash
 NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
 NSC_NODE=${NODES[0]}
@@ -32,148 +31,62 @@ SUPPLIER_NODE=${NODES[1]}
 if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
 ```
 
-3. Create patch for NSC:
+Deploy NSC and supplier:
 ```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      nodeName: $NSC_NODE
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://autoscale-icmp-responder/nsm-1
-            - name: NSM_REQUEST_TIMEOUT
-              value: 30s
-EOF
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
-4. Create patch for supplier:
+Wait for applications ready:
 ```bash
-cat > patch-supplier.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-supplier-k8s
-spec:
-  template:
-    spec:
-      nodeName: $SUPPLIER_NODE
-      containers:
-        - name: nse-supplier
-          env:
-            - name: NSM_SERVICE_NAME
-              value: autoscale-icmp-responder
-            - name: NSM_LABELS
-              value: app:icmp-responder-supplier
-            - name: NSM_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: NSM_POD_DESCRIPTION_FILE
-              value: /run/supplier/pod-template.yaml
-          volumeMounts:
-            - name: pod-file
-              mountPath: /run/supplier
-              readOnly: true
-      volumes:
-        - name: pod-file
-          configMap:
-            name: supplier-pod-template-configmap
-EOF
-```
-
-5. Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: $NAMESPACE
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=dd875e768190907804ee83ca1412eae997d67871
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=dd875e768190907804ee83ca1412eae997d67871
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-supplier.yaml
-
-configMapGenerator:
-  - name: supplier-pod-template-configmap
-    files:
-      - https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dd875e768190907804ee83ca1412eae997d67871/examples/features/scale-from-zero/pod-template.yaml
-EOF
-```
-
-6. Register network service:
-```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dd875e768190907804ee83ca1412eae997d67871/examples/features/scale-from-zero/autoscale-netsvc.yaml
-```
-
-7. Deploy NSC and supplier:
-```bash
-kubectl apply -k .
-```
-
-8. Wait for applications ready:
-```bash
-kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
+kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 ```
 ```bash
-kubectl wait -n $NAMESPACE --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
-```
-
-9. Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
-NSE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
+kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
 ```
 
-10. Check connectivity:
+Find NSC and NSE pods by labels:
 ```bash
-kubectl exec $NSC -n $NAMESPACE -- ping -c 4 169.254.0.0
-```
-```bash
-kubectl exec $NSE -n $NAMESPACE -- ping -c 4 169.254.0.1
+NSC=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
+NSE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
-11. Check that the NSE spawned on the same node as NSC:
+Check connectivity:
 ```bash
-NSE_NODE=$(kubectl get pod -n $NAMESPACE --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
+kubectl exec $NSC -n ns-scale-from-zero -- ping -c 4 169.254.0.0
+```
+```bash
+kubectl exec $NSE -n ns-scale-from-zero -- ping -c 4 169.254.0.1
+```
+
+Check that the NSE spawned on the same node as NSC:
+```bash
+NSE_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
+NSC_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nsc-kernel)
 ```
 ```bash
 if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; false; fi
 ```
 
-12. Remove NSC:
+Remove NSC:
 ```bash
-kubectl scale -n $NAMESPACE deployment nsc-kernel --replicas=0
+kubectl scale -n ns-scale-from-zero deployment nsc-kernel --replicas=0
 ```
 
-13. Wait for the NSE pod to be deleted:
+Wait for the NSE pod to be deleted:
 ```bash
-kubectl wait -n $NAMESPACE --for=delete --timeout=1m pod -l app=nse-icmp-responder
+kubectl wait -n ns-scale-from-zero --for=delete --timeout=1m pod -l app=nse-icmp-responder
 ```
 
 ## Cleanup
 
 Delete namespace:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-scale-from-zero
 ```
 Delete network service:
 ```bash
-kubectl delete -n nsm-system networkservices.networkservicemesh.io autoscale-icmp-responder
+kubectl delete -n nsm-system networkservices.networkservicemesh.io scale-from-zero
 ```

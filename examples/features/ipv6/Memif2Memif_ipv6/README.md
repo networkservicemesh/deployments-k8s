@@ -8,72 +8,7 @@ NSC and NSE are using the `memif` mechanism to connect to its local forwarder.
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dd875e768190907804ee83ca1412eae997d67871/examples/features/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
-```
-
-Select node to deploy NSC and NSE:
-```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
-```
-
-Create customization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-memif?ref=dd875e768190907804ee83ca1412eae997d67871
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-memif?ref=dd875e768190907804ee83ca1412eae997d67871
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-memif
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: memif://icmp-responder/nsm-1
-      nodeName: ${NODE}
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-memif
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 2001:db8::/116
-      nodeName: ${NODE}
-EOF
+kubectl create ns ns-memif2memif-ipv6
 ```
 
 Deploy NSC and NSE:
@@ -83,30 +18,30 @@ kubectl apply -k .
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ns-memif2memif-ipv6
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ns-memif2memif-ipv6
 ```
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-memif -n ns-memif2memif-ipv6 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-memif -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-memif -n ns-memif2memif-ipv6 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Check connectivity:
 ```bash
-result=$(kubectl exec "${NSC}" -n "${NAMESPACE}" -- vppctl ping ipv6 2001:db8:: repeat 4)
+result=$(kubectl exec "${NSC}" -n "ns-memif2memif-ipv6" -- vppctl ping ipv6 2001:db8:: repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Check connectivity:
 ```bash
-result=$(kubectl exec "${NSE}" -n "${NAMESPACE}" -- vppctl ping ipv6 2001:db8::1 repeat 4)
+result=$(kubectl exec "${NSE}" -n "ns-memif2memif-ipv6" -- vppctl ping ipv6 2001:db8::1 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
@@ -115,5 +50,5 @@ echo ${result}
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-memif2memif-ipv6
 ```
