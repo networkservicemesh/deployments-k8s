@@ -55,30 +55,17 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2
+kubectl --kubeconfig=$KUBECONFIG2 apply -n ns-nsm-linkerd -f ./cluster2/web-svc.yaml
 ```
 
 Inject Linkerd into emojivoto services and install:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot greeting -o yaml | linkerd inject - | kubectl apply -f -
+kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot greeting -o yaml | linkerd inject --enable-debug-sidecar - | kubectl apply -f -
 ```
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-kubectl get -n ns-nsm-linkerd pod proxy-web-659544f5f7-nsdlk proxy-web-6b86db9f49-b8tpf -o yaml \
-  | linkerd inject --enable-debug-sidecar - \
-  | kubectl apply -f -
-```
-
-
-```bash
-export KUBECONFIG=$KUBECONFIG2
-kubectl get -n ns-nsm-linkerd deploy voting emoji vote-bot greeting -o yaml \
-  | linkerd inject --enable-debug-sidecar - \
-  | kubectl apply -f -
-```
-```bash
-kubectl logs -n ns-nsm-linkerd pod proxy-web-659544f5f7-nsdlk linkerd-debug -f
 ```
 
 kubectl get pods -n ns-nsm-linkerd
@@ -97,14 +84,19 @@ GREET=greeting-5fc9f6cb8f-7sbg6
 EMOJI=emoji-6b44c86496-xrxnx
 ```
 
+
 ```bash
+export KUBECONFIG=$KUBECONFIG2
 kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse --  apk add curl
 kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse --  apk add iptables
 kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse --  iptables -t nat -L
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse -- curl -v http://emoji-svc.ns-nsm-linkerd:8080
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse -- curl -v emoji-svc.ns-nsm-linkerd:8080
-kubectl exec -n ns-nsm-linkerd $PROXY -it -c nse -- curl -s greeting.ns-nsm-linkerd:9080
 ```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 logs proxy-web-659544f5f7-ks22r linkerd-debug -n ns-nsm-linkerd  > proxy-web-linkerd-exp2.log
+kubectl --kubeconfig=$KUBECONFIG2 logs proxy-web-local-67bfcd4d9c-rv6fj linkerd-debug -n ns-nsm-linkerd  > proxy-web-local-linkerd-exp2.log
+```
+
 
 ```bash
 kubectl exec -n ns-nsm-linkerd $EMOJI -it -c emoji-svc -- curl -s greeting.ns-nsm-linkerd:9080

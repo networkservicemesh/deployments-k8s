@@ -24,7 +24,9 @@ thus saving cluster resources (see step 14).
 3. выключить health check c cmd-nsc (webhook)
 Итерация 1:
 
-Nhfrnjh123!
+kubectl exec -it  $PROXY -n ns-nsm-linkerd -c nse -- sh
+
+**Nhfrnjh123!**
 
 Install Linkerd CLI:
 ```bash
