@@ -11,63 +11,22 @@ Make sure that you have completed steps from [external NSC](../../)
 
 Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/k8s_monolith/external_nsc/usecases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
-```
-
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-            - name: NSM_PAYLOAD
-              value: IP
-            - name: NSM_SERVICE_NAMES
-              value: icmp-responder-ip
-EOF
+kubectl create ns ns-kernel2wireguard2kernel-monolith-nsc
 ```
 
 Deploy NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-kernel2wireguard2kernel-monolith-nsc
 ```
 
 Find NSE pod by label:
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-kernel2wireguard2kernel-monolith-nsc --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Ping from docker-NSC to NSE:
@@ -77,7 +36,7 @@ docker exec nsc-simple-docker ping -c4 172.16.1.100
 
 Ping from NSE to docker-NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-kernel2wireguard2kernel-monolith-nsc -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup
@@ -85,5 +44,5 @@ kubectl exec ${NSE} -n ${NAMESPACE} -- ping -c 4 172.16.1.101
 Delete ns:
 
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-kernel2wireguard2kernel-monolith-nsc
 ```

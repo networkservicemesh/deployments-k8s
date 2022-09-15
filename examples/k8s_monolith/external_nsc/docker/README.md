@@ -17,13 +17,13 @@ services:
     networks:
       - kind
     environment:
-      NSM_NETWORK_SERVICES: kernel://icmp-responder-ip@k8s.nsm/nsm-1
+      NSM_NETWORK_SERVICES: kernel://kernel2wireguard2kernel-monolith-nsc@k8s.nsm/nsm-1
 EOF
 ```
 
 Download docker-compose base file:
 ```bash
-curl https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/apps/nsc-simple-docker/docker-compose.yaml -o docker-compose.yaml
+curl https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/40eba2b9d535b7e3c0e3f7463af6227d863c5a32/apps/nsc-simple-docker/docker-compose.yaml -o docker-compose.yaml
 ```
 
 Run docker-nsc:

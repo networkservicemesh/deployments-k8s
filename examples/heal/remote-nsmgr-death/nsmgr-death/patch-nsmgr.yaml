@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nsmgr
+spec:
+  updateStrategy:
+    type: OnDelete
+  template:
+    spec:
+      containers:
+        - name: nsmgr
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nsc-kernel

@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://local-forwarder-death/nsm-1
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nse-kernel

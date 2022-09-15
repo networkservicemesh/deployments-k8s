@@ -8,7 +8,7 @@ resources:
   - namespace.yaml
 
 bases:
-  - https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=6cb851e2075646d8476d01f4f881a9a27b80f507
+  - ../../../basic
 
 patchesStrategicMerge:
   - patch-nsmgr.yaml

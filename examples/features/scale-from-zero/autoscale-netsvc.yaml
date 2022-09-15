@@ -2,7 +2,7 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: autoscale-icmp-responder
+  name: scale-from-zero
   namespace: nsm-system
 spec:
   payload: ETHERNET

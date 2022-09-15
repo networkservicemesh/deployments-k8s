@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-dns-vl3
+
+bases:
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
+- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
+
+resources:
+- namespace.yaml
+
+patchesStrategicMerge:
+- nse-patch.yaml

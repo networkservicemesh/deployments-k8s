@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://local-nsm-system-restart/nsm-1
+            - name: NSM_SERVICE_NAMES
+              value: "local-nsm-system-restart"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nse-kernel

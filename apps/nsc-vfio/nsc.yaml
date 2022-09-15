@@ -26,7 +26,7 @@ spec:
               mountPath: /dev/vfio
 
         - name: sidecar
-          image: ghcr.io/networkservicemesh/ci/cmd-nsc:46abd71
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc:bf1bffe
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -41,6 +41,8 @@ spec:
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_NETWORK_SERVICES
               value: vfio://pingpong?sriovToken=worker.domain/10G
+            - name: NSM_LIVENESSCHECKENABLED
+              value: "false"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

@@ -17,13 +17,15 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:c77cb2c
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:5695b58
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
-              value: icmp-responder-2
+              value: "mutually-aware-nses-2"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_NAME

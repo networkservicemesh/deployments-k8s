@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-memif
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_CIDR_PREFIX
+              value: 2001:db8::/116
+            - name: NSM_SERVICE_NAMES
+              value: "memif2memif-ipv6"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"

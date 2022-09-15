@@ -2,4 +2,4 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: ns-dns-vl3
+  name: ns-vl3-dns

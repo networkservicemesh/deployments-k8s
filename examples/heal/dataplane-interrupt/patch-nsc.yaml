@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://dataplane-interrupt/nsm-1
+        - name: alpine
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          image: alpine:3.15.0
+          imagePullPolicy: IfNotPresent
+          stdin: true
+          tty: true
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nse-kernel

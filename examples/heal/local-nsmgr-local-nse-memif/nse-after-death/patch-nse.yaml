@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-memif
+spec:
+  template:
+    metadata:
+      labels:
+        version: new
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.102/31
+            - name: NSM_SERVICE_NAMES
+              value: "local-nsmgr-local-nse-memif"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"

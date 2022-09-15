@@ -13,8 +13,7 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 Create test namespace:
 
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/use-cases/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-kernel2rvlan-breakout
 ```
 
 Create iperf server deployment:
@@ -61,19 +60,19 @@ EOF
 Deploy the application:
 
 ```bash
-kubectl apply -n ${NAMESPACE} -f ./first-iperf-s.yaml
+kubectl apply -n ns-kernel2rvlan-breakout -f ./first-iperf-s.yaml
 ```
 
 Wait for applications ready:
 
 ```bash
-kubectl -n ${NAMESPACE} wait --for=condition=ready --timeout=1m pod -l app=iperf1-s
+kubectl -n ns-kernel2rvlan-breakout wait --for=condition=ready --timeout=1m pod -l app=iperf1-s
 ```
 
 Get the iperf-NSC pods:
 
 ```bash
-NSCS=($(kubectl get pods -l app=iperf1-s -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS=($(kubectl get pods -l app=iperf1-s -n ns-kernel2rvlan-breakout --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
 Create a docker image for test external connections:
@@ -110,8 +109,8 @@ Start iperf client on tester:
     status=0
     for nsc in "${NSCS[@]}"
     do
-      IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ${NAMESPACE} -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-      kubectl exec ${nsc} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDRESS} -1
+      IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2rvlan-breakout -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+      kubectl exec ${nsc} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -sD -B ${IP_ADDRESS} -1
       docker exec rvm-tester iperf3 -i0 -t 25 -c ${IP_ADDRESS}
       if test $? -ne 0
       then
@@ -130,8 +129,8 @@ Start iperf client on tester:
     status=0
     for nsc in "${NSCS[@]}"
     do
-      IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ${NAMESPACE} -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-      kubectl exec ${nsc} -c iperf-server -n ${NAMESPACE} -- iperf3 -sD -B ${IP_ADDRESS} -1
+      IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2rvlan-breakout -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+      kubectl exec ${nsc} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -sD -B ${IP_ADDRESS} -1
       docker exec rvm-tester iperf3 -i0 -t 5 -u -c ${IP_ADDRESS}
       if test $? -ne 0
       then
@@ -153,7 +152,7 @@ Start iperf server on tester:
     for nsc in "${NSCS[@]}"
     do
       docker exec rvm-tester iperf3 -sD -B 172.10.0.254 -1
-      kubectl exec ${nsc} -c iperf-server -n ${NAMESPACE} -- iperf3 -i0 -t 5 -c 172.10.0.254
+      kubectl exec ${nsc} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -i0 -t 5 -c 172.10.0.254
       if test $? -ne 0
       then
         status=1
@@ -172,7 +171,7 @@ Start iperf server on tester:
     for nsc in "${NSCS[@]}"
     do
       docker exec rvm-tester iperf3 -sD -B 172.10.0.254 -1
-      kubectl exec ${NSCS[1]} -c iperf-server -n ${NAMESPACE} -- iperf3 -i0 -t 5 -u -c 172.10.0.254
+      kubectl exec ${NSCS[1]} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -i0 -t 5 -u -c 172.10.0.254
       if test $? -ne 0
       then
         status=1
@@ -197,5 +196,5 @@ true
 Delete the test namespace:
 
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-kernel2rvlan-breakout
 ```

@@ -4,8 +4,8 @@
 NSM supports tracing via the [OpenTelemetry](https://opentelemetry.io/) Collector. Each NSM component is a "tracer" (OpenTelemetry
 Span producer) and integrates with the `opentelemetry-go` library to export traces to OpenTelemery Collector.
 
-By default, tracing is disabled in all NSM components. You can enable tracing for a specific NSM component by adding the environment variable `NSM_LOG_LEVEL`
-with the value `TRACE`. It can be done with a patch for this NSM component. For example, the following code is the patch for NSM forwarder:
+By default, tracing is disabled in all NSM components. You can enable tracing for a specific NSM component by adding the environment variable `TELEMETRY`
+with the value `true`. It can be done with a patch for this NSM component. For example, the following code is the patch for NSM forwarder:
 ```yaml
 ---
 apiVersion: apps/v1
@@ -18,8 +18,8 @@ spec:
       containers:
         - name: forwarder-vpp
           env:
-            - name: NSM_LOG_LEVEL
-              value: TRACE
+            - name: TELEMETRY
+              value: "true"
 ```
 
 You can configure OpenTelemetry Collector to send traces to Jaeger. To do it you should specify Jaeger service in OpenTelemetry Config:
@@ -88,7 +88,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l name=jae
 
 Apply Jaeger and OpenTelemetry Collector:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/jaeger?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
 Wait for Jaeger pod status ready:
@@ -104,7 +104,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=open
 
 Apply NSM resources:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/jaeger/nsm-system?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
 Wait for admission-webhook-k8s:

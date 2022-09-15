@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alpine
   annotations:
-    networkservicemesh.io: kernel://my-networkservice/my-iface
+    networkservicemesh.io: kernel://select-forwarder/my-iface
 spec:
   containers:
   - name: alpine

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'pull_request' }}
     container:
-      image: lycheeverse/lychee:20211216183321587853
+      image: lycheeverse/lychee:0.10
       env:
         GITHUB_TOKEN: $LYCHEE_GITHUB_TOKEN
     steps:
@@ -21,4 +21,4 @@ jobs:
         uses: actions/checkout@v2
       - name: Check external links using lychee
         run: |
-          lychee -v '**/*.md' --exclude-mail --exclude '.*?ref=.*'
+          lychee -v '**/*.md' --exclude-mail --exclude-path examples/interdomain/nsm_kuma_universal_vl3/README.md --exclude '.*?ref=.*'

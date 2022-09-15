@@ -17,108 +17,41 @@ Expected that Endpoint(in this case NSMgr) will fail the Request from the client
 
 ## Run
 
-1. Create test namespace:
+Create test namespace:
 ```bash
-NAMESPACE=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/features/namespace.yaml)[0])
-NAMESPACE=${NAMESPACE:10}
+kubectl create ns ns-opa
 ```
 
-2. Select node to deploy NSC and NSE:
+Deploy NSC and NSE:
 ```bash
-NODE=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints  }}{{index .metadata.labels "kubernetes.io/hostname"}} {{end}}{{end}}')[0])
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/opa?ref=40eba2b9d535b7e3c0e3f7463af6227d863c5a32
 ```
 
-3. Create customization file:
+Wait for applications ready:
 ```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
-EOF
-```
-
-4. **Create NSC patch that making any generated token invalid:**
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_MAX_TOKEN_LIFETIME
-              value: -1m
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://icmp-responder/nsm-1
-      nodeName: ${NODE}
-EOF
-```
-
-5. Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/31
-      nodeName: ${NODE}
-EOF
-```
-
-6. Deploy NSC and NSE:
-```bash
-kubectl apply -k .
-```
-
-7. Wait for applications ready:
-```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-opa
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ${NAMESPACE}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-opa
 ```
 
-8. Find nsc and nse pods by labels:
+ind nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ns-opa --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-opa --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-9. Check that NSC is not privileged and it cannot connect to NSE.
+Check that NSC is not privileged and it cannot connect to NSE.
 
 ```bash
-kubectl logs ${NSC} -n ${NAMESPACE} | grep "PermissionDenied desc = no sufficient privileges"
+kubectl logs ${NSC} -n ns-opa | grep "PermissionDenied desc = no sufficient privileges"
 ```
 
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete ns ${NAMESPACE}
+kubectl delete ns ns-opa
 ```
