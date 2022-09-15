@@ -10,7 +10,7 @@ bases:
 - https://github.com/networkservicemesh/deployments-k8s/apps/registry-k8s?ref=dd875e768190907804ee83ca1412eae997d67871
 - https://github.com/networkservicemesh/deployments-k8s/apps/registry-proxy-dns?ref=dd875e768190907804ee83ca1412eae997d67871
 - https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr-proxy?ref=dd875e768190907804ee83ca1412eae997d67871
-- https://github.com/networkservicemesh/deployments-k8s/apps/admission-webhook-k8s?ref=dd875e768190907804ee83ca1412eae997d67871
+- ../../../../apps/admission-webhook-k8s
 
 resources:
   - namespace.yaml

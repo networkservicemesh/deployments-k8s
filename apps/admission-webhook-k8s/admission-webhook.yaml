@@ -46,4 +46,4 @@ spec:
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
-              value: NSM_LOG_LEVEL=TRACE
+              value: NSM_LIVENESS_CHECK_ENABLED=false
