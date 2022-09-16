@@ -21,7 +21,7 @@ brew install hashicorp/tap/consul-k8s
 
 Install Consul for the second cluster:
 ```bash
-consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 -auto-approve --kubeconfig=$KUBECONFIG2
+${CONSUL}/consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 -auto-approve --kubeconfig=$KUBECONFIG2
 ```
 
 Install networkservice for the second cluster::
@@ -79,18 +79,11 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/net
 Check UI again and ensure that the dashboard sees a new counting pod. 
 Congratulations! You have made a interdomain connection between via NSM + Consul!
 
-In your browser open localhost:9002 and verify the application works!
-Also, you can run this to check that it works:
+Verify connection from networkservicemesh client to the new counting service:
 ```bash
-result=$(curl --include --no-buffer --connect-timeout 20 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: 127.0.0.1:9002" -H "Origin: http://127.0.0.1:9002" -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" -H "Sec-WebSocket-Version: 13" http://127.0.0.1:9002/socket.io/?EIO=3&transport=websocket)
+kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001 
 ```
 
-```bash
-echo ${result}
-```
-```bash
-echo ${result} | grep  -o '\"count\":[1-9]\d*'
-``` 
 
 ## Cleanup
 
