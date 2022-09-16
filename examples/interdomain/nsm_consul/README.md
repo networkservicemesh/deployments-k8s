@@ -65,7 +65,7 @@ kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl coun
 
 Port forward and check connectivity from NSM+Consul by yourself!
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002 &
+kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002 & sleep 60
 ```
 Now we're simulating that something went wrong and counting from the consul cluster is down.
 ```bash
@@ -79,10 +79,24 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/net
 Check UI again and ensure that the dashboard sees a new counting pod. 
 Congratulations! You have made a interdomain connection between via NSM + Consul!
 
+In your browser open localhost:9002 and verify the application works!
+Also, you can run this to check that it works:
+```bash
+result=$(curl --include --no-buffer --connect-timeout 20 -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: 127.0.0.1:9002" -H "Origin: http://127.0.0.1:9002" -H "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" -H "Sec-WebSocket-Version: 13" http://127.0.0.1:9002/socket.io/?EIO=3&transport=websocket)
+```
+
+```bash
+echo ${result}
+```
+```bash
+echo ${result} | grep  -o '\"count\":[1-9]\d*'
+``` 
 
 ## Cleanup
 
-
+```bash
+pkill -f "port-forward"
+```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 delete deployment counting
 ```
