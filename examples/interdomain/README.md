@@ -15,5 +15,8 @@ This setup is basic for interdomain examples on two clusters. This setup can be 
 ## Includes
 
 - [NSM + Consul](./nsm_consul)
+- [NSM vl3 + Consul](./nsm_consul_vl3)
 - [NSM + Istio](./nsm_istio)
 - [NSM vl3 + Kuma universal](nsm_kuma_universal_vl3)
+
+

@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-nsm-consul-vl3
+
+resources:
+  - namespace.yaml
+  - ./nse-vl3-vpp
+  - ./vl3-ipam
+  - control_plane.yaml
+  - counting.yaml
+
+patchesStrategicMerge:
+- nse-patch.yaml
