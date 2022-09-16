@@ -53,6 +53,35 @@ spec:
         limits:
           memory: 40Mi
           cpu: 150m
+    - name: server
+      securityContext:
+        privileged: true
+      image: hashicorp/http-echo:alpine
+      args:
+        - -text="Alice in Wonderland
+          How do you get to Wonderland
+          Over the hill or under land
+          Or just behind a tree
+
+          When clouds go rolling by
+          They roll away and leave the sky
+          Where is the land behind the eye
+          People cannot see
+
+          Where can you see
+          Where do the stars go
+          Where is the crescent moon
+          They must be somewhere in the sunny afternoon
+
+          Alice in Wonderland
+          Where is the path to Wonderland
+          Over the hill or here or there
+          I wonder where
+          "
+        - -listen=:9080
+      ports:
+        - containerPort: 9080
+          name: http
   volumes:
     - name: spire-agent-socket
       hostPath:
