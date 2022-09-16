@@ -76,6 +76,11 @@ Now lets start counting on cluster1:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/58a90eb58a3e06f02cbd99c221b35327488025cc/examples/interdomain/nsm_consul/server/counting_nsm.yaml
 ```
+Wait for new counting pod to be ready:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=counting
+```
+
 Check UI again and ensure that the dashboard sees a new counting pod. 
 Congratulations! You have made a interdomain connection between via NSM + Consul!
 
