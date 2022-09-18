@@ -22,7 +22,7 @@ kubectl create ns ns-vl3-nse-death
 2. Deploy nsc and vl3 nses:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=aaf3d75aeeb57743aa1fbf5cd3acfc7bc04a3cd0
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=4768a5c5e974aeaeb3fe7b6ca82e4290f683d5f1
 ```
 
 3. Find all nscs:
