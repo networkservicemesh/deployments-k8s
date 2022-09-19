@@ -65,7 +65,7 @@ kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl coun
 
 Port forward and check connectivity from NSM+Consul by yourself!
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002 &
+kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002 & sleep 60
 ```
 Now we're simulating that something went wrong and counting from the consul cluster is down.
 ```bash
@@ -76,13 +76,25 @@ Now lets start counting on cluster1:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/bdf7c19e903c02c0101bc9f8a92646111e4a9c19/examples/interdomain/nsm_consul/server/counting_nsm.yaml
 ```
+Wait for new counting pod to be ready:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=counting
+```
+
 Check UI again and ensure that the dashboard sees a new counting pod. 
 Congratulations! You have made a interdomain connection between via NSM + Consul!
+
+Verify connection from networkservicemesh client to the new counting service:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001 
+```
 
 
 ## Cleanup
 
-
+```bash
+pkill -f "port-forward"
+```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 delete deployment counting
 ```
