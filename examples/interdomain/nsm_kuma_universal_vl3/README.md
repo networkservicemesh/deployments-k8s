@@ -67,12 +67,12 @@ kubectl --kubeconfig=$KUBECONFIG2 -n kuma-demo wait --for=condition=ready --time
 
 7. Forward ports to open counter page
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 port-forward svc/demo-app -n kuma-demo 5000:5000 &
+kubectl --kubeconfig=$KUBECONFIG2 port-forward svc/demo-app -n kuma-demo 8081:5000 &
 ```
 
 8. Send the request and check the response for no errors
 ```bash
-response=$(curl -X POST localhost:5000/increment)
+response=$(curl -X POST localhost:8081/increment)
 echo $response | grep '"err":null'
 ```
 
