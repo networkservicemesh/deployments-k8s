@@ -28,6 +28,7 @@ kumactl generate tls-certificate --hostname=control-plane-kuma.my-vl3-network --
 cp ./tls.crt ./ca.crt
 ```
 ```bash
+mkdir -p control-plane
 cat > ./control-plane/kustomization.yaml <<EOF
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -84,5 +85,5 @@ pkill -f "port-forward"
 kubectl --kubeconfig=$KUBECONFIG1 delete ns kuma-system kuma-demo ns-dns-vl3
 kubectl --kubeconfig=$KUBECONFIG2 delete ns kuma-demo
 rm tls.crt tls.key ca.crt
-rm -rf kuma-1.7.0
+rm -rf kuma-1.7.0 control-plane
 ```
