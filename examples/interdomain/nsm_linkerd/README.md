@@ -89,6 +89,18 @@ To check and adjust intercluster communication start `web-svc` with networkservi
 kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
 ```
 
+Now you can repeat same steps, but from the first cluster onto second:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 exec deploy/web -n ns-nsm-linkerd -c cmd-nsc -- curl -v greeting.ns-nsm-linkerd:8080
+```
+
+Last step is to run emojivoto services on the second clsuter, inject Linkerd onto them, port-forward web-svc and and check that you can vote for your favorite emoji.
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/emojivoto
+export KUBECONFIG=$KUBECONFIG2
+kubectl get -n ns-nsm-linkerd deploy emoji vote-bot voting -o yaml | linkerd inject --enable-debug-sidecar - | kubectl apply -f -
+```
+
 ## Cleanup
 
 Uninject linkerd proxy from deployments:
@@ -100,6 +112,7 @@ Delete network service:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 kubectl delete -n ns-nsm-linkerd networkservices.networkservicemesh.io nsm-linkerd
+
 ```
 
 export PATH="${PATH}:${HOME}/.krew/bin"
