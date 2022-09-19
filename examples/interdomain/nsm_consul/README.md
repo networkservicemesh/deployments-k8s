@@ -21,7 +21,7 @@ brew install hashicorp/tap/consul-k8s
 
 Install Consul for the second cluster:
 ```bash
-${CONSUL}/consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 -auto-approve --kubeconfig=$KUBECONFIG2
+consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 -auto-approve --kubeconfig=$KUBECONFIG2
 ```
 
 Install networkservice for the second cluster::
