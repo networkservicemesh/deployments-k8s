@@ -1,14 +1,4 @@
-# NSM + Consul interdomain example over kind clusters
-
-This example shows how Consul can be used over NSM. 
-
-
-## Requires
-
-- [Load balancer](../loadbalancer)
-- [Interdomain DNS](../dns)
-- [Interdomain spire](../spire)
-- [Interdomain nsm](../nsm)
+# Test NSM and Linkerd integration
 
 
 ## Run
@@ -22,91 +12,109 @@ Verify Linkerd CLI is installed:
 linkerd version
 ```
 If not, export linkerd path to $PATH:
+```bash
+export PATH=$PATH:/home/amalysheva/.linkerd2/bin
+```
 
-Install Linkerd onto the second cluster:
+Install Linkerd onto 2nd cluster:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-
 linkerd check --pre
 linkerd install --crds | kubectl apply -f -
 linkerd install | kubectl apply -f -
 linkerd check
 ```
+If on some step you've got error, resolve and repeat step.
 
-Install networkservice for the second cluster::
+Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/networkservice.yaml
-```
-
-Start `emojivo` networkservicemesh client for the first cluster:
-
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/client/dashboard.yaml
+kubectl --kubeconfig=$KUBECONFIG2 create ns ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 apply -f ./cluster2/netsvc.yaml
 ```
 
-Create kubernetes service for the networkservicemesh endpoint:
+Start `auto-scale` networkservicemesh endpoint and greeting service on the second cluster. 
+Proxy pod has injected Linkerd sidecars with annotations:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/service.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -k ./cluster2/nse-auto-scale
+kubectl --kubeconfig=$KUBECONFIG2 apply -n ns-nsm-linkerd -f ./cluster2/web-svc.yaml
 ```
 
-Start `auto-scale` networkservicemesh endpoint:
+Inject Linkerd proxy and debug sidecars into greeting service and install:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_consul/nse-auto-scale?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
+export KUBECONFIG=$KUBECONFIG2
+kubectl get -n ns-nsm-linkerd deploy greeting -o yaml | linkerd inject --enable-debug-sidecar - | kubectl apply -f -
 ```
 
-Install `counting` Consul workload on the second cluster:
+Wait for the pods to be ready on the second clusters:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/server/counting.yaml
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=web-local-svc -n ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 wait --timeout=2m --for=condition=ready pod -l app=greeting -n ns-nsm-linkerd
 ```
 
-Wait for the dashboard client to be ready
+Install required packages for work with iptables:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=dashboard-nsc
+export KUBECONFIG=$KUBECONFIG2
+kubectl exec -n ns-nsm-linkerd $PROXY_LOCAL -it -c nse --  apk add curl
+kubectl exec -n ns-nsm-linkerd $PROXY_LOCAL -it -c nse --  apk add iptables
+kubectl exec -n ns-nsm-linkerd $PROXY_LOCAL -it -c nse --  iptables -t nat -L
 ```
 
-Verify connection from networkservicemesh client to the consul counting service:
+You can use linkerd debug sidecar to get logs:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- apk add curl
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001 
+kubectl --kubeconfig=$KUBECONFIG2 logs $PROXY_LOCAL linkerd-debug -n ns-nsm-linkerd  > proxy-web-local-linkerd-exp2.log
 ```
 
-Port forward and check connectivity from NSM+Consul by yourself!
+Get curl for nsc:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002 &
+kubectl --kubeconfig=$KUBECONFIG2 exec deploy/web-local -n ns-nsm-linkerd -c cmd-nsc -- apk add curl
 ```
-Now we're simulating that something went wrong and counting from the consul cluster is down.
+Verify connectivity:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete deploy counting
+kubectl --kubeconfig=$KUBECONFIG2 exec deploy/web-local -n ns-nsm-linkerd -c cmd-nsc -- curl -v greeting.ns-nsm-linkerd:8080
 ```
-Check UI and ensure that you see errors.
-Now lets start counting on cluster1:
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/server/counting_nsm.yaml
-```
-Check UI again and ensure that the dashboard sees a new counting pod. 
-Congratulations! You have made a interdomain connection between via NSM + Consul!
+If something went wrong, add new rule to PROXY_LOCAL IPtables and try again.
 
+If you are using VM to run this example, you can use Ksniff utilite to analyse traffic with Wireshark later https://github.com/eldadru/ksniff:
+```bash
+kubectl krew install sniff
+```
+
+```bash
+kubectl sniff $PROXY_LOCAL -n ns-nsm-linkerd -c nse -o exp1/proxy-local-nse.pcap
+```
+
+Interdomain integration:
+To check and adjust intercluster communication start `web-svc` with networkservicemesh client on the first cluster:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 apply -k ./cluster1
+```
 
 ## Cleanup
 
+Uninject linkerd proxy from deployments:
+```bash
+export PATH=$PATH:/home/amalysheva/.linkerd2/bin
+kubectl --kubeconfig=$KUBECONFIG2 get deploy -n ns-nsm-linkerd -o yaml | linkerd uninject - | kubectl apply -f -
+```
+Delete network service:
+```bash
+export KUBECONFIG=$KUBECONFIG2
+kubectl delete -n ns-nsm-linkerd networkservices.networkservicemesh.io nsm-linkerd
+```
 
+export PATH="${PATH}:${HOME}/.krew/bin"
+
+kubectl krew install sniff
+kubectl sniff $PROXY -n ns-nsm-linkerd -c nse -o proxy-web-exp1.pcap
+kubectl sniff $PROXY -n ns-nsm-linkerd -c nse -o proxy-web-exp1.pcap
+kubectl sniff $PROXY -n ns-nsm-linkerd -c nse -o proxy-exp3.pcap
+Delete namespace:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete deployment counting
+kubectl --kubeconfig=$KUBECONFIG1 delete ns ns-nsm-linkerd
+kubectl --kubeconfig=$KUBECONFIG2 delete ns ns-nsm-linkerd
 ```
+Remove Linkerd control plane from cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_consul/nse-auto-scale?ref=5278bf09564d36b701e8434d9f1d4be912e6c266
+linkerd uninstall | kubectl delete -f -
 ```
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/client/dashboard.yaml
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5278bf09564d36b701e8434d9f1d4be912e6c266/examples/interdomain/nsm_consul/networkservice.yaml
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
-```
-```bash
-consul-k8s uninstall --kubeconfig=$KUBECONFIG2 -auto-approve=true -wipe-data=true
-```
+
