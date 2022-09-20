@@ -28,8 +28,14 @@ kumactl generate tls-certificate --hostname=control-plane-kuma.my-vl3-network --
 cp ./tls.crt ./ca.crt
 ```
 ```bash
-mkdir -p control-plane
-cat > ./control-plane/kustomization.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2fb959c3b6d969703bbf32df106fb955e68074f4/examples/interdomain/nsm_kuma_universal_vl3/namespace.yaml
+kubectl --kubeconfig=$KUBECONFIG1 create secret generic general-tls-certs --namespace=kuma-system --from-file=./tls.key --from-file=./tls.crt --from-file=./ca.crt
+```
+```bash
+kumactl install control-plane --tls-general-secret=general-tls-certs --tls-general-ca-bundle=$(cat ./ca.crt | base64) > control-plane.yaml
+```
+```bash
+cat > kustomization.yaml <<EOF
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -38,20 +44,13 @@ resources:
 - control-plane.yaml
 
 patchesStrategicMerge:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2fb959c3b6d969703bbf32df106fb955e68074f4/examples/interdomain/nsm_kuma_universal_vl3/control-plane/patch-control-plane.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2fb959c3b6d969703bbf32df106fb955e68074f4/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
 EOF
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2fb959c3b6d969703bbf32df106fb955e68074f4/examples/interdomain/nsm_kuma_universal_vl3/namespace.yaml
-kubectl --kubeconfig=$KUBECONFIG1 create secret generic general-tls-certs --namespace=kuma-system --from-file=./tls.key --from-file=./tls.crt --from-file=./ca.crt
-```
-```bash
-kumactl install control-plane --tls-general-secret=general-tls-certs --tls-general-ca-bundle=$(cat ./ca.crt | base64) > ./control-plane/control-plane.yaml
 ```
 
 4. Start the control-plane on the first cluster
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ./control-plane
+kubectl --kubeconfig=$KUBECONFIG1 apply -k .
 ```
 
 5. Start redis database with the sidecar on the first cluster
@@ -77,13 +76,13 @@ response=$(curl -X POST localhost:8081/increment)
 echo $response | grep '"err":null'
 ```
 
-You can also go to [locahost:5000](https://localhost:5000) to get the counter page and test the application yourself.
+You can also go to [locahost:8081](https://localhost:8081) to get the counter page and test the application yourself.
 
 ## Cleanup
 ```bash
 pkill -f "port-forward"
 kubectl --kubeconfig=$KUBECONFIG1 delete ns kuma-system kuma-demo ns-dns-vl3
 kubectl --kubeconfig=$KUBECONFIG2 delete ns kuma-demo
-rm tls.crt tls.key ca.crt
-rm -rf kuma-1.7.0 control-plane
+rm tls.crt tls.key ca.crt kustomization.yaml control-plane.yaml
+rm -rf kuma-1.7.0
 ```
