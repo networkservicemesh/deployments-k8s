@@ -533,7 +533,7 @@ kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 exec dashboard -c ubuntu 
 
 Port-forward the dashboard pod
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 port-forward dashboard 9002:9002
+kubectl --kubeconfig=$KUBECONFIG2 -n ns-nsm-consul-vl3 port-forward dashboard 9002:9002 &
 ```
 
 In your browser open localhost:9002 and verify the application works!
