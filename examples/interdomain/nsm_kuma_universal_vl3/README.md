@@ -44,7 +44,7 @@ resources:
 - control-plane.yaml
 
 patchesStrategicMerge:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2fb959c3b6d969703bbf32df106fb955e68074f4/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/80e99c336cf8275f613c54e5e4347d3a91214593/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
 EOF
 ```
 
