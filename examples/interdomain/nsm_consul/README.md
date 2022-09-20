@@ -65,7 +65,7 @@ kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl coun
 
 Port forward and check connectivity from NSM+Consul by yourself!
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002
+kubectl --kubeconfig=$KUBECONFIG1 port-forward pod/dashboard-nsc 9002:9002 &
 ```
 Now we're simulating that something went wrong and counting from the consul cluster is down.
 ```bash
