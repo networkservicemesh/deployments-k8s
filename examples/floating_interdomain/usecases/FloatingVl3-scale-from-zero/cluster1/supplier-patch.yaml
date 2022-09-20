@@ -12,7 +12,7 @@ spec:
             - name: NSM_SERVICE_NAME
               value: "autoscale-interdomain-vl3-network@my.cluster3"
             - name: NSM_LABELS
-              value: "app:vl3-supplier,clusterName:cluster1"
+              value: "app:vl3-supplier"
             - name: NSM_NAMESPACE
               valueFrom:
                 fieldRef:

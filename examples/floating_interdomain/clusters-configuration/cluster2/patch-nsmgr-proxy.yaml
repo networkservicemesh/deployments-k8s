@@ -12,7 +12,7 @@ spec:
       containers:
         - name: "nsmgr-proxy"
           volumeMounts:
-            - mountPath: "/etc/clusterinfo.yaml"
+            - mountPath: "/etc/clusterinfo"
               name: "cluster-info"
       volumes:
         - name: "cluster-info"
