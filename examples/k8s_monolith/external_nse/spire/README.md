@@ -8,7 +8,7 @@ Docker container uses binary spire server.
 1. Setup spire on the k8s cluster
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/spire?ref=5035864a6ae448c1632f5ed5c1657e7b82e8bf0e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/spire?ref=8c8865988abbe7d836a970476f82b38c68fdc141
 ```
 
 Wait for PODs status ready:
