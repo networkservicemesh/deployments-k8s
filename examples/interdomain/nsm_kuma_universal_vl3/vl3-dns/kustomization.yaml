@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: ns-dns-vl3
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=d698d71997c619a4c85ae3ed97894681e077f37d
-- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=d698d71997c619a4c85ae3ed97894681e077f37d
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-vl3-vpp?ref=4e507ee4af6c30ba9d07f2712490877ac8aca801
+- https://github.com/networkservicemesh/deployments-k8s/apps/vl3-ipam?ref=4e507ee4af6c30ba9d07f2712490877ac8aca801
 
 resources:
 - namespace.yaml
