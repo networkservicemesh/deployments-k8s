@@ -13,10 +13,12 @@ This example shows how Consul can be used over NSM.
 
 ## Run
 
-Install Consul
+Install [Consul](https://www.consul.io/docs/k8s/installation/install-cli)
 ```bash
-brew tap hashicorp/tap
-brew install hashicorp/tap/consul-k8s
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt-get install consul-k8s
+consul-k8s version
 ```
 
 Install Consul for the second cluster:
