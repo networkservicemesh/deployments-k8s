@@ -48,7 +48,7 @@ EOF
 
 Deploy NSCs and NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Vxlan2Kernel&Vfio2Noop?ref=ce000c9d4ddc1e3663ea7e4a4ca4c910bb90c077
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Vxlan2Kernel&Vfio2Noop?ref=48279641c5fe4744942cdf3aabe83e84b5dc90fd
 ```
 
 Wait for applications ready:
