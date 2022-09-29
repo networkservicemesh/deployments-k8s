@@ -18,7 +18,7 @@ kubectl create ns ns-local-forwarder-remote-forwarder
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-remote-forwarder?ref=c853869be6388a8cdda4785ec426df1a9266b287
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-remote-forwarder?ref=de5616136e545774e23992f5f4749e256aa122f8
 ```
 
 Wait for applications ready:
