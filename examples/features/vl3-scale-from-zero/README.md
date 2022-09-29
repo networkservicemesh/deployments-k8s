@@ -15,7 +15,7 @@ kubectl create ns ns-vl3-scale-from-zero
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-scale-from-zero?ref=4dcb6cd1daf3fb03b22c5c013c8f5deee7e76a27
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-scale-from-zero?ref=99a92469c32c96057d88fdd9ba24f3f89d445052
 ```
 
 Wait for applications ready:
