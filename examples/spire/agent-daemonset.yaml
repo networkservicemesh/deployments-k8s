@@ -34,7 +34,10 @@ spec:
           # It checks if the bundle is in place and ready to be parsed or not.
           image: gcr.io/spiffe-io/wait-for-it
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', "t=0; until [ -f /run/spire/bundle/bundle.crt 2>&1 ] || [ $t -eq 5 ]; do t=`expr $t + 1`; sleep 1; done"]
+          command: ['sh', '-c', "t=0; until [ -f /run/spire/bundle/bundle.crt 2>&1 ] || [ $t -eq 60 ]; do t=`expr $t + 1`; sleep 1; done"]
+          volumeMounts:
+            - name: spire-bundle
+              mountPath: /run/spire/bundle
       containers:
         - name: spire-agent
           image: gcr.io/spiffe-io/spire-agent:1.2.3
