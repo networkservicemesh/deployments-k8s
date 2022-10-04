@@ -9,8 +9,8 @@
 - [Memif to Memif Connection](../use-cases/Memif2Memif)
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
 - [Kernel to VXLAN to Kernel Connection](../use-cases/Kernel2Vxlan2Kernel)
-- [Kernel to Kernel Connection & VFIO Connection](../use-cases/Kernel2Kernel&Vfio2Noop)
-- [Kernel to VXLAN to Kernel Connection & VFIO Connection](../use-cases/Kernel2Vxlan2Kernel&Vfio2Noop)
+- [Kernel to Kernel Connection & VFIO Connection](../use-cases/Kernel2Kernel_Vfio2Noop)
+- [Kernel to VXLAN to Kernel Connection & VFIO Connection](../use-cases/Kernel2Vxlan2Kernel_Vfio2Noop)
 
 ## SR-IOV config
 

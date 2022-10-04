@@ -10,9 +10,9 @@ spec:
         - name: nsc
           env:
             - name: NSM_NETWORK_SERVICES
-              value: kernel://kernel2kernel-vfio2noop/nsm-1
+              value: kernel://kernel2vxlan2kernel/nsm-1
       affinity:
-        podAffinity:
+        podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: kubernetes.io/hostname
               labelSelector:

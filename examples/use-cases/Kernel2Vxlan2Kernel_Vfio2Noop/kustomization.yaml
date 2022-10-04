@@ -2,7 +2,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ns-kernel2kernel-vfio2noop
+namespace: ns-kernel2vxlan2kernel-vfio2noop
 
 bases:
 - ../../../apps/nsc-kernel
@@ -16,4 +16,3 @@ resources:
 patchesStrategicMerge:
 - patch-nsc.yaml
 - patch-nse.yaml
-- patch-nse-vfio.yaml

@@ -19,7 +19,7 @@ spec:
       containers:
         - name: ponger
           # https://github.com/glazychev-art/docker-dpdk
-          image: artgl/dpdk-pingpong:latest
+          image: artgl/dpdk-pingpong:20.11.6
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "/root/scripts/pong.sh", "ens6f3", "31", "0a:55:44:33:22:11"]
           securityContext:
