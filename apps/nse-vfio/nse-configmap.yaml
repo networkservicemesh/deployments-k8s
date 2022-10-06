@@ -55,7 +55,7 @@ data:
     test $? -eq 0 || exit 3
 
     # Run dpdk-pingpong (server)
-    /root/dpdk-pingpong/build/app/pingpong \
+    /root/dpdk-pingpong/build/pingpong \
       --no-huge \
       --pci-whitelist="${pci_addr}" \
       -- \

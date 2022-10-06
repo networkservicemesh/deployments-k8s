@@ -12,6 +12,6 @@ spec:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
-              value: "kernel2kernel-vfio2noop"
+              value: "kernel2vxlan2kernel"
             - name: NSM_REGISTER_SERVICE
               value: "false"
