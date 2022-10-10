@@ -53,19 +53,6 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 1.4. Prepare a patch with **vl3 ipam URL**:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
--  https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=2828e1f02618ec4e05fecb8a1124eaeb28450eb3
-
-patchesStrategicMerge:
-- patch-vl3-nse.yaml
-EOF
-```
 
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster1?ref=2828e1f02618ec4e05fecb8a1124eaeb28450eb3
@@ -78,19 +65,6 @@ export KUBECONFIG=$KUBECONFIG2
 ```
 
 1.7. Prepare a patch with **vl3 ipam URL**:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-- https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=2828e1f02618ec4e05fecb8a1124eaeb28450eb3
-
-patchesStrategicMerge:
-- patch-vl3-nse.yaml
-EOF
-```
 
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=2828e1f02618ec4e05fecb8a1124eaeb28450eb3
