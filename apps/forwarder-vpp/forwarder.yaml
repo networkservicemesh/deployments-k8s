@@ -24,6 +24,13 @@ spec:
           name: forwarder-vpp
           securityContext:
             privileged: true
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            capabilities:
+              drop:
+                - ALL
+              add: ["DAC_OVERRIDE", "SYS_ADMIN", "NET_ADMIN", "IPC_LOCK", "NET_RAW", "SYS_PTRACE", "SETGID"]
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock

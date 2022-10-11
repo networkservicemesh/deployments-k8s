@@ -16,6 +16,10 @@ spec:
         "spiffe.io/spiffe-id": "true"
     spec:
       serviceAccount: nsmgr-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
       containers:
         - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:5b232e8
           imagePullPolicy: IfNotPresent
@@ -81,6 +85,11 @@ spec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
             failureThreshold: 25
             periodSeconds: 5
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+              add: ["DAC_OVERRIDE"]
         - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:454b980
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
@@ -94,6 +103,10 @@ spec:
             limits:
               memory: 40Mi
               cpu: 75m
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
       volumes:
         - name: spire-agent-socket
           hostPath:
