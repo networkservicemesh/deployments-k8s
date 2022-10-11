@@ -7,6 +7,7 @@ NSC requests the service and creates the required interface on the monolith:
 
 ## Requires
 
+- [LoadBalancer](../configuration/loadbalancer)
 - [Docker container](./docker)
 - [DNS](./dns)
 - [spire](./spire)
