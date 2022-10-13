@@ -30,9 +30,14 @@ Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns?ref=3824d9283a9e50655f80ed3a2753cdb8a62be30b
 ```
 
+Wait for clients to be ready:
+```bash
+kubectl wait --for=condition=ready --timeout=2m pod -l app=alpine -n ns-vl3-dns
+```
+
 Find all nscs:
 ```bash
-nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-dns) 
+nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-dns)
 [[ ! -z $nscs ]]
 ```
 
@@ -42,7 +47,7 @@ for nsc in $nscs
 do
     for pinger in $nscs
     do
-        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.vl3-dns
+        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.vl3-dns -4
     done
 done
 ```

@@ -23,7 +23,7 @@ spec:
             - name: NSM_LISTEN_ON
               value: tcp://:5006
             - name: NSM_PREFIX
-              value: 169.254.0.0/16
+              value: 172.16.0.0/16
             - name: NSM_LOG_LEVEL
               value: TRACE
           imagePullPolicy: IfNotPresent

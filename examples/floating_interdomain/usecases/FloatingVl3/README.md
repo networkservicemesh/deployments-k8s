@@ -39,7 +39,7 @@ export KUBECONFIG=$KUBECONFIG3
 1.2. Start **vl3 ipam** and register **vl3 network service** in the *floating domain*.
 
 
-Note: *By default we're using ipam prefix is `169.254.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we are expect to have a two vl3 addresses: `169.254.0.0` and `169.254.1.0` that should be accessible by each client.*
+Note: *By default ipam prefix is `172.16.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we expect to have two vl3 addresses: `172.16.0.0` and `172.16.1.0` that should be accessible by each client.*
 
 
 ```bash
@@ -102,8 +102,8 @@ kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 $ipAddr2
 
 3.2. Ping vl3 nses:
 ```bash
-kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 169.254.0.0
-kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 169.254.1.0
+kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 172.16.0.0
+kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 172.16.1.0
 ```
 
 
