@@ -10,62 +10,51 @@ There are three supported ways to install MetalLB: using plain Kubernetes manife
 
 Switch to the first cluster:
 
-```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-
 Apply metallb for the first cluster:
 ```bash
 if [[ ! -z $CLUSTER1_CIDR ]]; then
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-  kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-  cat > metallb-config.yaml <<EOF
-  apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    namespace: metallb-system
-    name: config
-  data:
-    config: |
-      address-pools:
-      - name: default
-        protocol: layer2
-        addresses:
-        - $CLUSTER1_CIDR
+    kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+    kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
+    cat > metallb-config.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - $CLUSTER1_CIDR
 EOF
-  kubectl apply -f metallb-config.yaml
-  kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+    kubectl --kubeconfig=$KUBECONFIG1 apply -f metallb-config.yaml
+    kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
-```
-
-Switch to the second cluster:
-```bash
-export KUBECONFIG=$KUBECONFIG2
 ```
 
 Apply metallb for the second cluster:
 ```bash
 if [[ ! -z $CLUSTER2_CIDR ]]; then
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-  kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-  cat > metallb-config.yaml <<EOF
-  apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    namespace: metallb-system
-    name: config
-  data:
-    config: |
-      address-pools:
-      - name: default
-        protocol: layer2
-        addresses:
-        - $CLUSTER2_CIDR
+    kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+    kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
+    cat > metallb-config.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - $CLUSTER2_CIDR
 EOF
-  kubectl apply -f metallb-config.yaml
-  kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+    kubectl --kubeconfig=$KUBECONFIG2 apply -f metallb-config.yaml
+    kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
 ```
 
@@ -77,25 +66,24 @@ export KUBECONFIG=$KUBECONFIG3
 Apply metallb for the second cluster:
 ```bash
 if [[ ! -z $CLUSTER3_CIDR ]]; then
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-  kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
-  kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-  cat > metallb-config.yaml <<EOF
-  apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    namespace: metallb-system
-    name: config
-  data:
-    config: |
-      address-pools:
-      - name: default
-        protocol: layer2
-        addresses:
-        - $CLUSTER3_CIDR
+    kubectl --kubeconfig=$KUBECONFIG3 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+    kubectl --kubeconfig=$KUBECONFIG3 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
+    cat > metallb-config.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - $CLUSTER3_CIDR
 EOF
-  kubectl apply -f metallb-config.yaml
-  kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+    kubectl --kubeconfig=$KUBECONFIG3 apply -f metallb-config.yaml
+    kubectl --kubeconfig=$KUBECONFIG3 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
 ```
 
