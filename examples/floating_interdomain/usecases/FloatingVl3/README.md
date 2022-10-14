@@ -121,8 +121,8 @@ kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 $ipAddr1
 
 3.5. Ping vl3 nses:
 ```bash
-kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 169.254.0.0
-kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 169.254.1.0
+kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 172.16.0.0
+kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 172.16.1.0
 ```
 
 ## Cleanup
