@@ -29,7 +29,7 @@ Note: *By default ipam prefix is `172.16.0.0/16` and client prefix len is `24`. 
 
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster3?ref=b7725bb41c07a557a8065a0d3edbd571ea08ca99
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster3?ref=cb0e481138b49f5a2dc29326eed10570af3b494a
 ```
 
 1.3. Switch context to the *cluster1*.
@@ -41,7 +41,7 @@ export KUBECONFIG=$KUBECONFIG1
 1.6. Start **nse-supplier-k8s** and client in the *cluster1*.
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster1?ref=b7725bb41c07a557a8065a0d3edbd571ea08ca99
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster1?ref=cb0e481138b49f5a2dc29326eed10570af3b494a
 ```
 
 1.7. Switch context to the *cluster2*.
@@ -53,7 +53,7 @@ export KUBECONFIG=$KUBECONFIG2
 1.10. Start **nse-supplier-k8s** and client in the *cluster2*.
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster2?ref=b7725bb41c07a557a8065a0d3edbd571ea08ca99
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster2?ref=cb0e481138b49f5a2dc29326eed10570af3b494a
 ```
 
 **2. Get assigned IP addresses**
@@ -114,17 +114,17 @@ kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 172.16.1.0
 1. Cleanup floating domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster3?ref=b7725bb41c07a557a8065a0d3edbd571ea08ca99
+export KUBECONFIG=$KUBECONFIG3 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster3?ref=cb0e481138b49f5a2dc29326eed10570af3b494a
 ```
 
 2. Cleanup cluster2 domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster2?ref=b7725bb41c07a557a8065a0d3edbd571ea08ca99
+export KUBECONFIG=$KUBECONFIG2 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster2?ref=cb0e481138b49f5a2dc29326eed10570af3b494a
 ```
 
 3. Cleanup cluster1 domain:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster1?ref=b7725bb41c07a557a8065a0d3edbd571ea08ca99
+export KUBECONFIG=$KUBECONFIG1 && kubectl delete -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3-scale-from-zero/cluster1?ref=cb0e481138b49f5a2dc29326eed10570af3b494a
 ```
