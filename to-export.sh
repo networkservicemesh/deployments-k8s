@@ -23,5 +23,5 @@ done
 
 grep 'github.com\/networkservicemesh\/deployments-k8s' -rl examples/* | while IFS= read -r file; do
   root="$(get_root "$file")"
-  sedi -E "s/(https:\/\/)?github.com\/networkservicemesh\/deployments-k8s\/(.*)\?ref=[a-z0-9.]*/${root}\2/g" "${file}"
+  sedi -E "s/(https:\/\/)?github.com\/networkservicemesh\/deployments-k8s\/(.*)\?ref=v1.6.1[a-z0-9.]*/${root}\2/g" "${file}"
 done
