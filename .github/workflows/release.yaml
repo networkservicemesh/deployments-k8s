@@ -43,28 +43,28 @@ jobs:
               docker pull $image
             done
 
-  update-refs:
-     name: Update References to the latest tag
-     needs: check-images
-     runs-on: ubuntu-latest
-     outputs:
-      tag: ${{ needs.check-images.outputs.tag }}
-     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.ref }}
+  # update-refs:
+  #    name: Update References to the latest tag
+  #    needs: check-images
+  #    runs-on: ubuntu-latest
+  #    outputs:
+  #     tag: ${{ needs.check-images.outputs.tag }}
+  #    steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ github.event.ref }}
 
-      - name: Update references
-        run: |
-          sed -r -i 's/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
-          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
-          git config --global user.email "nsmbot@networkservicmesh.io"
-          git config --global user.name "NSMBot"
-          git add -- .
-          git commit -s -m "Update references to the latest tag"
-          ref=${{ github.event.ref }}
-          git push origin ${ref#refs/heads/}
+  #     - name: Update references
+  #       run: |
+  #         sed -r -i 's/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
+  #         sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
+  #         git config --global user.email "nsmbot@networkservicmesh.io"
+  #         git config --global user.name "NSMBot"
+  #         git add -- .
+  #         git commit -s -m "Update references to the latest tag"
+  #         ref=${{ github.event.ref }}
+  #         git push origin ${ref#refs/heads/}
 
   create-release:
     name: Create release
