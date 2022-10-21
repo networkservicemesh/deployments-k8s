@@ -31,7 +31,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/spire/cluster1?ref=bf472f8b9457301ba27fccd49609cff49225a9e8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/spire/cluster1?ref=a84b670f19d8e40dd376d6bfc7550b436b90ae6b
 ```
 
 Wait for PODs status ready:
@@ -48,7 +48,7 @@ export KUBECONFIG=$KUBECONFIG2
 ```
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/spire/cluster2?ref=bf472f8b9457301ba27fccd49609cff49225a9e8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/spire/cluster2?ref=a84b670f19d8e40dd376d6bfc7550b436b90ae6b
 ```
 
 Wait for PODs status ready:
@@ -65,7 +65,7 @@ export KUBECONFIG=$KUBECONFIG3
 ```
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/spire/cluster3?ref=bf472f8b9457301ba27fccd49609cff49225a9e8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/spire/cluster3?ref=a84b670f19d8e40dd376d6bfc7550b436b90ae6b
 ```
 
 Wait for PODs status ready:
