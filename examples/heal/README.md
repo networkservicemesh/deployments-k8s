@@ -32,6 +32,12 @@ One component:
  - [Remote NSMgr + Remote Endpoint](./remote-nsmgr-remote-endpoint)
  - [Registry + Remote NSMgr](./registry-remote-nsmgr)
 
+SPIRE:
+ - [SPIRE server restart](./spire-server-restart)
+ - [SPIRE agent restart](./spire-agent-restart)
+ - [SPIRE server + agents](./spire-server-agent-restart)
+ - [SPIRE upgrade](./spire-upgrade)
+
  NSM-system:
  - [NSM system restart - local](./local-nsm-system-restart)
  - [NSM system restart - remote memif ip](./remote-nsm-system-restart-memif-ip)

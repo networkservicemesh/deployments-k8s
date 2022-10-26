@@ -1,0 +1,9 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: spire-server-agent-restart
+#  namespace: nsm-system
+  namespace: nsm
+spec:
+  payload: ETHERNET
