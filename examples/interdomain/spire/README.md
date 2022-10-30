@@ -1,10 +1,10 @@
-## Setup spire for three clusters
+## Setup spire for two clusters
 
 This example shows how to simply configure two spire servers from different clusters to know each other.
 
 ## Run
 
-1. Make sure that you have three KUBECONFIG files.
+1. Make sure that you have two KUBECONFIG files.
 
 Check `KUBECONFIG1` env:
 ```bash
