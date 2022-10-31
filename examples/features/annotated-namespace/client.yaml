@@ -4,8 +4,6 @@ kind: Deployment
 metadata:
   name: alpine
   namespace: ns-annotated-namespace
-#  labels:
-#    app: alpine
 spec:
   selector:
     matchLabels:
