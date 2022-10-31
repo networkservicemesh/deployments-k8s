@@ -15,7 +15,7 @@ kubectl create ns ns-sriov-kernel2noop
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SriovKernel2Noop?ref=0af80162e4553b44fd357ccd6a671740aaa2e24f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SriovKernel2Noop?ref=869c4eacc62cffa3ac9346be2c60028071df0115
 ```
 
 Wait for applications ready:
