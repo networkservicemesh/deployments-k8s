@@ -18,6 +18,9 @@ if [[ $ip1 == *"no value"* ]]; then
     ip1=$(kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip1=$(dig +short $ip1 | head -1)
 fi
+# if IPv6
+if [[ $ip1 =~ ":" ]]; then ip1=[$ip1]; fi
+
 echo Selected externalIP: $ip1 for cluster1
 ```
 
@@ -34,6 +37,9 @@ if [[ $ip2 == *"no value"* ]]; then
     ip2=$(kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip2=$(dig +short $ip2 | head -1)
 fi
+# if IPv6
+if [[ $ip2 =~ ":" ]]; then ip2=[$ip2]; fi
+
 echo Selected externalIP: $ip2 for cluster2
 ```
 

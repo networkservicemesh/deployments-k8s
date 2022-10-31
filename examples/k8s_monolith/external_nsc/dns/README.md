@@ -22,6 +22,9 @@ if [[ $ipk8s == *"no value"* ]]; then
     $ipk8s=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     $ipk8s=$(dig +short $ipk8s | head -1)
 fi
+# if IPv6
+if [[ $ipk8s =~ ":" ]]; then $ipk8s=[$ipk8s]; fi
+
 echo Selected externalIP: $ipk8s
 [[ ! -z $ipk8s ]]
 ```
@@ -29,6 +32,9 @@ echo Selected externalIP: $ipk8s
 2. Get an externalIP of the docker container:
 ```bash
 ipdock=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nsc-simple-docker)
+# if IPv6
+if [[ $ipdock =~ ":" ]]; then $ipdock=[$ipdock]; fi
+
 echo Selected dockerIP: $ipdock
 [[ ! -z $ipdock ]]
 ```
