@@ -4,13 +4,5 @@ kind: Kustomization
 
 namespace: ns-registry-restart
 
-bases:
-- ../../../../apps/nsc-kernel
-
-patchesJson6902:
-- target:
-    group: apps
-    version: v1
-    kind: Deployment
-    name: nsc-kernel
-  path: patch-nsc.yaml
+resources:
+- client.yaml
