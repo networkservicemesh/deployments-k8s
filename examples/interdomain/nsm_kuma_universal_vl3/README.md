@@ -56,13 +56,13 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -k .
 5. Start redis database with the sidecar on the first cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8d99b0c03d0416d79742ff0795c8a2cc40931b54/examples/interdomain/nsm_kuma_universal_vl3/demo-redis.yaml
-kubectl --kubeconfig=$KUBECONFIG1 -n kuma-demo wait --for=condition=ready --timeout=3m pod -l app=redis
+kubectl --kubeconfig=$KUBECONFIG1 -n kuma-demo wait --for=condition=ready --timeout=5m pod -l app=redis
 ```
 
 6. Start counter page with the sidecar on the second cluster
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8d99b0c03d0416d79742ff0795c8a2cc40931b54/examples/interdomain/nsm_kuma_universal_vl3/demo-app.yaml
-kubectl --kubeconfig=$KUBECONFIG2 -n kuma-demo wait --for=condition=ready --timeout=3m pod -l app=demo-app
+kubectl --kubeconfig=$KUBECONFIG2 -n kuma-demo wait --for=condition=ready --timeout=5m pod -l app=demo-app
 ```
 
 7. Forward ports to open counter page
