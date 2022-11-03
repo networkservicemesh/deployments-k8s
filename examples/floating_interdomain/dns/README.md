@@ -155,6 +155,11 @@ data:
         loop
         reload 5s
     }
+    # Azure reverse DNS zone
+    internal.cloudapp.net:53 {
+      errors
+      forward . 168.63.129.16
+    }
     my.cluster2:53 {
       forward . ${ip2}:53 {
         force_tcp
@@ -241,6 +246,11 @@ data:
         loop
         reload 5s
     }
+    # Azure reverse DNS zone
+    internal.cloudapp.net:53 {
+      errors
+      forward . 168.63.129.16
+    }
     my.cluster1:53 {
       forward . ${ip1}:53 {
         force_tcp
@@ -326,6 +336,11 @@ data:
         }
         loop
         reload 5s
+    }
+    # Azure reverse DNS zone
+    internal.cloudapp.net:53 {
+      errors
+      forward . 168.63.129.16
     }
     my.cluster1:53 {
       forward . ${ip1}:53 {
