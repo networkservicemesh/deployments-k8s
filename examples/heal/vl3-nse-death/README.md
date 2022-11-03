@@ -13,27 +13,28 @@ Diagram:
 ## Run
 
 
-1. Create ns to deploy nse and nsc:
-
+Create ns to deploy nse and nsc:
 ```bash
 kubectl create ns ns-vl3-nse-death
 ```
 
-2. Deploy nsc and vl3 nses:
-
+Deploy nsc and vl3 nses:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=2b4374aec83267373830d4ad69e7b9a661b51810
 ```
 
-3. Find all nscs:
-
+Wait for clients to be ready:
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nse-death) 
+kubectl wait -n ns-vl3-nse-death --for=condition=ready --timeout=1m pod -l app=alpine
+```
+
+Find all nscs:
+```bash
+nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nse-death) 
 [[ ! -z $nscs ]]
 ```
 
-4. Ping each client by each client:
-
+Ping each client by each client:
 ```bash
 for nsc in $nscs 
 do
