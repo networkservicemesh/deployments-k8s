@@ -6,8 +6,9 @@ namespace: ns-remote-nsmgr-remote-endpoint
 
 bases:
 - ../base
-- ../../../../apps/nsc-kernel
+
+resources:
+- client.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
-- patch-nsc.yaml
