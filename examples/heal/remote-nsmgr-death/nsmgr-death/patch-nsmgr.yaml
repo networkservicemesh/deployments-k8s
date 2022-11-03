@@ -19,4 +19,4 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - nsc-kernel
+                      - alpine
