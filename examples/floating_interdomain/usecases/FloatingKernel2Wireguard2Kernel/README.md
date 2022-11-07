@@ -8,7 +8,7 @@ Forwarders are using the `wireguard` mechanism to connect with each other.
 
 Important points:
 - nsc deploys on cluster1 and requests network service from *cluster3*.
-- nse deploys on cluster2 and registers itself  in *cluster3* with IP payload.
+- nse deploys on cluster2 and registers itself in *cluster3* with IP payload.
 
 
 ## Requires
@@ -60,13 +60,13 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=nsc-kernel -n ns-floating-kernel2wireguard2kernel-fi-cluster-1
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-floating-kernel2wireguard2kernel-fi-cluster-1
 ```
 
 
 Find NSC pod by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-floating-kernel2wireguard2kernel-fi-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-floating-kernel2wireguard2kernel-fi-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 [[ ! -z $NSC ]]
 ```
 
