@@ -4,11 +4,6 @@ kind: Kustomization
 
 namespace: ns-kernel2wireguard2kernel-monolith-nse
 
-bases:
-- ../../../../../apps/nsc-kernel
-
 resources:
 - netsvc.yaml
-
-patchesStrategicMerge:
-- patch-nsc.yaml
+- client.yaml
