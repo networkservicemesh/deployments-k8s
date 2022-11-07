@@ -50,6 +50,12 @@ Wait for nsmgr-proxy-service exposing:
 kubectl get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
+Wait for admission-webhook-k8s:
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+```
+
 **2. Apply deployments for cluster2:**
 
 ```bash
@@ -69,6 +75,12 @@ kubectl apply -k ./clusters-configuration/cluster2
 Wait for nsmgr-proxy-service exposing:
 ```bash
 kubectl get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+```
+
+Wait for admission-webhook-k8s:
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
 **3. Apply deployments for cluster3:**
@@ -97,10 +109,16 @@ kubectl get services registry -n nsm-system -o go-template='{{index (index (inde
 To free resouces follow the next command:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete ns nsm-system
+export KUBECONFIG=$KUBECONFIG1
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete ns nsm-system
 ```
 ```bash
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete ns nsm-system
+export KUBECONFIG=$KUBECONFIG2
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete ns nsm-system
 ```
 ```bash
 export KUBECONFIG=$KUBECONFIG3 && kubectl delete ns nsm-system
