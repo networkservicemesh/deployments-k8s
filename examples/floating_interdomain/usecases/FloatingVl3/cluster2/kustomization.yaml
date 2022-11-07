@@ -7,7 +7,4 @@ namespace: ns-vl3-interdomain
 resources:
   - namespace.yaml
   - nse-vl3-vpp.yaml
-  - ../../../../../apps/nsc-kernel
-
-patchesStrategicMerge:
-- nsc-patch.yaml
+  - client.yaml

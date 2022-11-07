@@ -70,13 +70,15 @@ export KUBECONFIG=$KUBECONFIG2
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/FloatingVl3/cluster2?ref=2b4374aec83267373830d4ad69e7b9a661b51810
 ```
 
-
 **2. Get assigned IP addresses**
 
 2.1. Find NSC in the *cluster2*:
 
 ```bash
-nsc2=$(kubectl get pods -l app=nsc-kernel -n ns-vl3-interdomain --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-vl3-interdomain
+```
+```bash
+nsc2=$(kubectl get pods -l app=alpine -n ns-vl3-interdomain --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 2.2. Switch context to the *cluster1*.
@@ -88,7 +90,10 @@ export KUBECONFIG=$KUBECONFIG1
 2.3. Find NSC in the *cluster1*:
 
 ```bash
-nsc1=$(kubectl get pods -l app=nsc-kernel -n ns-vl3-interdomain --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-vl3-interdomain
+```
+```bash
+nsc1=$(kubectl get pods -l app=alpine -n ns-vl3-interdomain --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 **3. Check connectivity**
