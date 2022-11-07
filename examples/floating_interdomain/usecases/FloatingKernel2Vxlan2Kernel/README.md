@@ -57,12 +57,12 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=nsc-kernel -n ns-floating-kernel2vxlan2kernel-floating-interdomain-cluster-1
+kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-kernel2vxlan2kernel-floating-interdomain-cluster-1
 ```
 
 Find NSC pod by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-floating-kernel2vxlan2kernel-floating-interdomain-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-floating-kernel2vxlan2kernel-floating-interdomain-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 [[ ! -z $NSC ]]
 ```
 
