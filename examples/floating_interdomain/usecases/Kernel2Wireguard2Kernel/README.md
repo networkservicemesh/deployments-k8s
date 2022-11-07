@@ -11,139 +11,59 @@ Make sure that you have completed steps from [interdomain](../../)
 
 ## Run
 
-**1. Prepare cluster2**
-
-Switch to *cluster2*:
+**1. Deploy endpoint on cluster2**
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-Create test namespace:
 ```bash
-NAMESPACE1=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2b4374aec83267373830d4ad69e7b9a661b51810/examples/floating_interdomain/usecases/namespace.yaml)[0])
-NAMESPACE1=${NAMESPACE1:10}
-```
-
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE1}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=2b4374aec83267373830d4ad69e7b9a661b51810
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
-Create NSE patch:
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.1.2/31
-            - name: NSM_PAYLOAD
-              value: IP
-            - name: NSM_SERVICE_NAMES
-              value: my-networkservice-ip
-EOF
+kubectl create ns ns-kernel2wireguard2kernel-floating-interdomain-cluster-2
 ```
 
 Deploy NSE:
 ```bash
-kubectl apply -k .
-```
-
-Find NSE pod by labels:
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ${NAMESPACE1} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-[[ ! -z $NSE ]]
-```
-
-**2. Prepare cluster1**
-
-Switch to *cluster1*:
-
-```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-
-Create test namespace:
-```bash
-NAMESPACE2=($(kubectl create -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2b4374aec83267373830d4ad69e7b9a661b51810/examples/floating_interdomain/usecases/namespace.yaml)[0])
-NAMESPACE2=${NAMESPACE2:10}
-```
-
-Create kustomization file:
-```bash
-cat > kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ${NAMESPACE2}
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=2b4374aec83267373830d4ad69e7b9a661b51810
-
-patchesStrategicMerge:
-- patch-nsc.yaml
-EOF
-```
-
-Create NSC patch:
-```bash
-cat > patch-nsc.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nsc-kernel
-spec:
-  template:
-    spec:
-      containers:
-        - name: nsc
-          env:
-            - name: NSM_NETWORK_SERVICES
-              value: kernel://my-networkservice-ip@my.cluster2/nsm-1
-EOF
-``````
-
-Deploy NSC:
-```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/Kernel2Wireguard2Kernel/cluster2?ref=2b4374aec83267373830d4ad69e7b9a661b51810
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=nsc-kernel -n ${NAMESPACE2}
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-kernel2wireguard2kernel-floating-interdomain-cluster-2
 ```
 
+Find NSE pod by labels:
+```bash
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-kernel2wireguard2kernel-floating-interdomain-cluster-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+[[ ! -z $NSE ]]
+```
+
+**2. Deploy client on cluster1**
+
+```bash
+export KUBECONFIG=$KUBECONFIG1
+```
+
+```bash
+kubectl create ns ns-kernel2wireguard2kernel-floating-interdomain-cluster-1
+```
+
+Deploy NSC:
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/Kernel2Wireguard2Kernel/cluster1?ref=2b4374aec83267373830d4ad69e7b9a661b51810
+```
+
+Wait for applications ready:
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-kernel2wireguard2kernel-floating-interdomain-cluster-1
+```
 
 Find NSC pod by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ${NAMESPACE2} --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nsc-kernel -n ns-kernel2wireguard2kernel-floating-interdomain-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+[[ ! -z $NSC ]]
 ```
 
-
-**3. Ping from NSC to NSE:**
+**3. Check connectivity**
 
 Switch to *cluster1*:
 
@@ -152,7 +72,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
-kubectl exec ${NSC} -n ${NAMESPACE2} -- ping -c 4 172.16.1.2
+kubectl exec ${NSC} -n ns-kernel2wireguard2kernel-floating-interdomain-cluster-1 -- ping -c 4 172.16.1.2
 ```
 
 Switch to *cluster2*:
@@ -163,7 +83,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ${NAMESPACE1} -- ping -c 4 172.16.1.3
+kubectl exec ${NSE} -n ns-kernel2wireguard2kernel-floating-interdomain-cluster-2 -- ping -c 4 172.16.1.3
 ```
 
 ## Cleanup
@@ -173,7 +93,7 @@ kubectl exec ${NSE} -n ${NAMESPACE1} -- ping -c 4 172.16.1.3
 export KUBECONFIG=$KUBECONFIG1
 ```
 ```bash
-kubectl delete ns ${NAMESPACE2}
+kubectl delete ns ns-kernel2wireguard2kernel-floating-interdomain-cluster-1
 ```
 
 2. Cleanup resources for *cluster2*:
@@ -181,5 +101,5 @@ kubectl delete ns ${NAMESPACE2}
 export KUBECONFIG=$KUBECONFIG2
 ```
 ```bash
-kubectl delete ns ${NAMESPACE1}
+kubectl delete ns ns-kernel2wireguard2kernel-floating-interdomain-cluster-2
 ```
