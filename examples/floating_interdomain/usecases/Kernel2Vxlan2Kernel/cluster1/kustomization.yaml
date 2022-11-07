@@ -4,8 +4,5 @@ kind: Kustomization
 
 namespace: ns-kernel2vxlan2kernel-floating-interdomain-cluster-1
 
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nsc-kernel?ref=2b4374aec83267373830d4ad69e7b9a661b51810
-
-patchesStrategicMerge:
-- patch-nsc.yaml
+resources:
+- client.yaml

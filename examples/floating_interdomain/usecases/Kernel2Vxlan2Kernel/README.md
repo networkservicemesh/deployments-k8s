@@ -54,12 +54,12 @@ kubectl apply -k cluster1
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-kernel2vxlan2kernel-floating-interdomain-cluster-1
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-kernel2vxlan2kernel-floating-interdomain-cluster-1
 ```
 
 Find client pod by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-kernel2vxlan2kernel-floating-interdomain-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-kernel2vxlan2kernel-floating-interdomain-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 **3. Check connectivity**
