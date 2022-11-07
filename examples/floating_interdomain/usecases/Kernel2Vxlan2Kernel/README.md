@@ -23,7 +23,7 @@ kubectl create ns ns-kernel2vxlan2kernel-floating-interdomain-cluster-2
 
 Deploy NSE:
 ```bash
-kubectl apply -k cluster2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/Kernel2Vxlan2Kernel/cluster2?ref=2b4374aec83267373830d4ad69e7b9a661b51810
 ```
 
 Find NSE pod by labels:
@@ -49,7 +49,7 @@ kubectl create ns ns-kernel2vxlan2kernel-floating-interdomain-cluster-1
 
 Deploy client:
 ```bash
-kubectl apply -k cluster1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/floating_interdomain/usecases/Kernel2Vxlan2Kernel/cluster1?ref=2b4374aec83267373830d4ad69e7b9a661b51810
 ```
 
 Wait for applications ready:
@@ -60,6 +60,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-kernel2v
 Find client pod by labels:
 ```bash
 NSC=$(kubectl get pods -l app=alpine -n ns-kernel2vxlan2kernel-floating-interdomain-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+[[ ! -z $NSC ]]
 ```
 
 **3. Check connectivity**

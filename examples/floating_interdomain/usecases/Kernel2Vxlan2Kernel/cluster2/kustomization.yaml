@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-kernel2vxlan2kernel-floating-interdomain-cluster-2
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=2b4374aec83267373830d4ad69e7b9a661b51810
+- ../../../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml
