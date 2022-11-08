@@ -6,4 +6,3 @@ namespace: ns-floating-kernel2wireguard2kernel-fi-cluster-2
 
 resources:
 - nse.yaml
-
