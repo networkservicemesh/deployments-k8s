@@ -6,8 +6,8 @@ namespace: ns-vl3-interdomain
 
 resources:
   - namespace.yaml
-  - ../../../../../apps/nsc-kernel
   - ../../../../../apps/nse-supplier-k8s
+  - client.yaml
 
 patchesStrategicMerge:
   - nsc-patch.yaml
