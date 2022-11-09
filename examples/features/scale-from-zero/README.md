@@ -33,7 +33,7 @@ if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node f
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=4f7fd73ac0f75e0f9492f2a65a6b393a4b708de9
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=11270dce0c3935d3ccd62ca81a387d13b3829f8b
 ```
 
 Wait for applications ready:
