@@ -18,7 +18,7 @@ kubectl create ns ns-remote-forwarder-death
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-forwarder-death?ref=fa3d2a654f51788710c0e3b1026cd9cc3565f55a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-forwarder-death?ref=b92461483cd8f3cf2585f92b5db3b4add40077ef
 ```
 
 Wait for applications ready:
