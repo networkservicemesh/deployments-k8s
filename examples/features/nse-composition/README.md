@@ -17,7 +17,7 @@ kubectl create ns ns-nse-composition
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition?ref=eb5c122a9a868742e5d9b4e6b026e18e6d350faa
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/nse-composition?ref=0cc74fa762d1d46da6c92e81072bc7a8e978af82
 ```
 
 Wait for applications ready:
