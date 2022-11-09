@@ -8,7 +8,10 @@ This setup is basic for interdomain examples on two clusters. This setup can be 
 
 - [Load balancer](./loadbalancer)
 - [Interdomain DNS](./dns)
-- [Interdomain spire](./spire)
+- Interdomain spire
+    - [Spire on first cluster](../spire/cluster1)
+    - [Spire on second cluster](../spire/cluster2)
+    - [Spiffe Federation](./spiffe-federation)
 - [Interdomain nsm](./nsm)
 
 
