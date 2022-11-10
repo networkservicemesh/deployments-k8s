@@ -1,6 +1,9 @@
 # Spire
 
-This is a part of the Spire setup that installs Spire to the first cluster in a multi-cluster (interdomain) scenarios.
+This is a part of the Spire setup that installs Spire to the first cluster in a multi-cluster scenarios.
+
+This example assumes [interdomain](../../interdomain/) or [floating interdomain](../../floating_interdomain/) scenario.
+If your cluster setup differs from these scenarios you may need to adjust spire configs (rename trust domains, change URLS, etc.).
 
 ## Run
 

@@ -1,6 +1,11 @@
 ## Setup spire for two clusters
 
-This example shows how to simply configure two spire servers from different clusters to know each other.
+By default Spire servers don't trust each other, even though they are configured as a federation.
+They need to be manually configured to be able to authenticate other servers.
+
+Here we obtain Spiffe trust bundles for required clusters to initiate connection between Spire servers.
+
+Once federation is bootstrapped, the trust bundle updates are fetched trough the federation endpoint API using the current trust bundle.
 
 ## Run
 

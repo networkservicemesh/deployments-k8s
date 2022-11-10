@@ -35,7 +35,7 @@ export KUBECONFIG=$KUBECONFIG1
 
 Expose kube-dns service:
 ```bash
-  kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
+kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:

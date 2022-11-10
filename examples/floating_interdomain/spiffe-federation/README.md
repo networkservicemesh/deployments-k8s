@@ -1,9 +1,9 @@
 ## Bootstrap Spiffe Federation
 
-To enable the SPIRE Servers to fetch the trust bundles from each other
-they need each other's trust bundle first,
-because they have to authenticate the SPIFFE identity of the federated server
-that is trying to access the federation endpoint.
+By default Spire servers don't trust each other, even though they are configured as a federation.
+They need to be manually configured to be able to authenticate other servers.
+
+Here we obtain Spiffe trust bundles for required clusters to initiate connection between Spire servers.
 
 Once federation is bootstrapped, the trust bundle updates are fetched trough the federation endpoint API using the current trust bundle.
 
