@@ -30,9 +30,11 @@ ifw2=$(docker exec kind-worker2 ip -o link | grep ${MACS[@]/#/-e } | cut -f1 -d"
 
 (docker exec kind-worker ip link set $ifw1 down &&
 docker exec kind-worker ip link set $ifw1 name ext_net1 &&
+docker exec kind-worker ip link set dev ext_net1 mtu 1450 &&
 docker exec kind-worker ip link set ext_net1 up &&
 docker exec kind-worker2 ip link set $ifw2 down &&
 docker exec kind-worker2 ip link set $ifw2 name ext_net1 &&
+docker exec kind-worker2 ip link set dev ext_net1 mtu 1450 &&
 docker exec kind-worker2 ip link set ext_net1 up)
 ```
 
