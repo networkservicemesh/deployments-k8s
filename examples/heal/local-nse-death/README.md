@@ -52,7 +52,7 @@ kubectl scale deployment nse-kernel -n ns-local-nse-death --replicas=0
 ```
 
 ```bash
-kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 | grep "100% packet loss"
+kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 2>&1 | egrep "100% packet loss|Network unreachable"
 ```
 
 Apply patch:
