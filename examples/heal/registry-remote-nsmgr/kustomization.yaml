@@ -5,12 +5,11 @@ kind: Kustomization
 namespace: ns-registry-remote-nsmgr
 
 bases:
-- ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
 
 resources:
 - netsvc.yaml
+- client.yaml
 
 patchesStrategicMerge:
-- patch-nsc.yaml
 - patch-nse.yaml

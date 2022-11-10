@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-new
+  labels:
+    app: alpine-new
+  annotations:
+    networkservicemesh.io: kernel://registry-restart/nsm-1
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.15.0
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - topologyKey: kubernetes.io/hostname
+        labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - nse-kernel

@@ -7,14 +7,13 @@ namespace: ns-vl3-scale-from-zero
 resources:
 - autoscale-netsvc.yaml
 - vl3-netsvc.yaml
+- client.yaml
 
 bases:
-- ../../../apps/nsc-kernel
 - ../../../apps/vl3-ipam
 - ../../../apps/nse-supplier-k8s
 
 patchesStrategicMerge:
-- nsc-patch.yaml
 - supplier-patch.yaml
 
 configMapGenerator:

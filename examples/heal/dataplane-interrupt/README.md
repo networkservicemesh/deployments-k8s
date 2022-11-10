@@ -22,7 +22,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-dataplane-interrupt
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-dataplane-interrupt
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-dataplane-interrupt
@@ -30,7 +30,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-data
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-dataplane-interrupt --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-dataplane-interrupt --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ns-dataplane-interrupt --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -38,7 +38,7 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-dataplane-interrupt --template '{
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
@@ -49,7 +49,7 @@ kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101
 Run a pinger process in the background. The pinger will run until it encounters missing packets.
 ```bash
 PINGER_PATH=/tmp/done-${RANDOM}
-kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- sh -c '
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- sh -c '
   PINGER_PATH=$1; rm -f "$PINGER_PATH"
   seq=0
   ping -i 0.2 172.16.1.100 | while :; do
@@ -61,22 +61,22 @@ kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- sh -c '
   done
 ' - "$PINGER_PATH" &
 sleep 5
-kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- test ! -f /tmp/done || { echo pinger is done; false; }
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- test ! -f /tmp/done || { echo pinger is done; false; }
 ```
 
 Simulate data plane interruption by shutting down the kernel interface:
 ```bash
-kubectl exec ${NSC} -n ns-dataplane-interrupt -c alpine -- ip link set nsm-1 down
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- ip link set nsm-1 down
 ```
 
 Wait until the pinger process stops. This would be an indication that the data plane was temporarily interrupted.
 ```bash
-kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- sh -c 'timeout 10 sh -c "while ! [ -f \"$1\" ];do sleep 1; done"' - "$PINGER_PATH"
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- sh -c 'timeout 10 sh -c "while ! [ -f \"$1\" ];do sleep 1; done"' - "$PINGER_PATH"
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-dataplane-interrupt -c nsc -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:

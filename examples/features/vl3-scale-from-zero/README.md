@@ -23,7 +23,7 @@ Wait for applications ready:
 kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=alpine
 ```
 ```bash
 kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp
@@ -31,7 +31,7 @@ kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l
 
 Find all nscs:
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-scale-from-zero) 
+nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-scale-from-zero)
 [[ ! -z $nscs ]]
 ```
 

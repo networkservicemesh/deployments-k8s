@@ -9,3 +9,4 @@ bases:
 
 resources:
 - netsvc.yaml
+- client.yaml

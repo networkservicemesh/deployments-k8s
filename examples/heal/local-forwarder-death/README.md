@@ -22,7 +22,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-local-forwarder-death
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-local-forwarder-death
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-local-forwarder-death
@@ -30,7 +30,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-loca
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-local-forwarder-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ns-local-forwarder-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -48,7 +48,7 @@ kubectl exec ${NSE} -n ns-local-forwarder-death -- ping -c 4 172.16.1.101
 
 Find nsc node:
 ```bash
-NSC_NODE=$(kubectl get pods -l app=nsc-kernel -n ns-local-forwarder-death --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
+NSC_NODE=$(kubectl get pods -l app=alpine -n ns-local-forwarder-death --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}')
 ```
 
 Find local Forwarder:

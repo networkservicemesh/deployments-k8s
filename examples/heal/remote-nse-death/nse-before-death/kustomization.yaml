@@ -6,8 +6,6 @@ namespace: ns-remote-nse-death
 
 bases:
 - ../base
-- ../../../../apps/nsc-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml
-- patch-nsc.yaml

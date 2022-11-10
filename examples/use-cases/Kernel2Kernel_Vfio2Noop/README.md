@@ -16,7 +16,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-kernel2kernel-vfio2noop
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-kernel2kernel-vfio2noop
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-kernel2kernel-vfio2noop
@@ -30,7 +30,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-vfio -n ns-kernel
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC_KERNEL=$(kubectl get pods -l app=nsc-kernel -n ns-kernel2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC_KERNEL=$(kubectl get pods -l app=alpine -n ns-kernel2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE_KERNEL=$(kubectl get pods -l app=nse-kernel -n ns-kernel2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')

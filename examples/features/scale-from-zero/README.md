@@ -23,14 +23,6 @@ Create test namespace:
 kubectl create ns ns-scale-from-zero
 ```
 
-Select nodes to deploy NSC and supplier:
-```bash
-NODES=($(kubectl get nodes -o go-template='{{range .items}}{{ if not .spec.taints }}{{ .metadata.name }} {{end}}{{end}}'))
-NSC_NODE=${NODES[0]}
-SUPPLIER_NODE=${NODES[1]}
-if [ "$SUPPLIER_NODE" == "" ]; then SUPPLIER_NODE=$NSC_NODE; echo "Only 1 node found, testing that pod is created on the same node is useless"; fi
-```
-
 Deploy NSC and supplier:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=1c91525906fde1ba14b0c8ef06013602349f7f66
@@ -41,7 +33,7 @@ Wait for applications ready:
 kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=alpine
 ```
 ```bash
 kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
@@ -49,7 +41,7 @@ kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nsc-kernel)
+NSC=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=alpine)
 NSE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
@@ -64,7 +56,7 @@ kubectl exec $NSE -n ns-scale-from-zero -- ping -c 4 169.254.0.1
 Check that the NSE spawned on the same node as NSC:
 ```bash
 NSE_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
-NSC_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=nsc-kernel)
+NSC_NODE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.spec.nodeName}}{{"\n"}}{{end}}' -l app=alpine)
 ```
 ```bash
 if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; false; fi
@@ -72,7 +64,7 @@ if [ $NSC_NODE == $NSE_NODE ]; then echo "OK"; else echo "different nodes"; fals
 
 Remove NSC:
 ```bash
-kubectl scale -n ns-scale-from-zero deployment nsc-kernel --replicas=0
+kubectl delete pod -n ns-scale-from-zero alpine
 ```
 
 Wait for the NSE pod to be deleted:

@@ -5,13 +5,12 @@ kind: Kustomization
 namespace: ns-vl3
 
 bases:
-- ../../../apps/nsc-kernel
 - ../../../apps/nse-vl3-vpp
 - ../../../apps/vl3-ipam
 
 resources:
 - vl3-netsvc.yaml
+- client.yaml
 
 patchesStrategicMerge:
-- nsc-patch.yaml
 - nse-patch.yaml
