@@ -1,15 +1,22 @@
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: alpine
   namespace: ns-annotated-namespace
-  labels:
-    app: alpine
 spec:
-  containers:
-    - name: alpine
-      image: alpine:3.15.0
-      imagePullPolicy: IfNotPresent
-      stdin: true
-      tty: true
+  selector:
+    matchLabels:
+      app: alpine
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3.15.0
+          imagePullPolicy: IfNotPresent
+          stdin: true
+          tty: true

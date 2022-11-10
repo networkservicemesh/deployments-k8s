@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccount: nsmgr-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:f9e9189
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:6fb0fc1
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
@@ -81,7 +81,7 @@ spec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=:5001"]
             failureThreshold: 25
             periodSeconds: 5
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:b3294f4
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:4153e91
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:

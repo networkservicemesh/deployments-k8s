@@ -45,7 +45,7 @@ kubectl exec ${NSC} -c dnsutils -n ns-dns -- ping -c 4 my.coredns.service
 
 Validate that default DNS server is working:
 ```bash
-kubectl exec ${NSC} -c dnsutils -n ns-dns -- nslookup kubernetes.default
+kubectl exec ${NSC} -c dnsutils -n ns-dns -- dig kubernetes.default A kubernetes.default AAAA | grep "kubernetes.default.svc.cluster.local"
 ```
 
 ## Cleanup
