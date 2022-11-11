@@ -4,23 +4,6 @@ kind: Kustomization
 
 namespace: spire
 
-# generatorOptions:
-#   disableNameSuffixHash: true
-
-# configMapGenerator:
-# - name: spire-server
-#   namespace: spire
-#   files:
-#   - server.conf
-# - name: spire-agent
-#   namespace: spire
-#   files:
-#   - agent.conf
-# - name: k8s-workload-registrar
-#   namespace: spire
-#   files:
-#     - k8s-workload-registrar.conf
-
 resources:
 - k8s-workload-registrar-crd.yaml
 - spire-namespace.yaml
