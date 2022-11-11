@@ -13,29 +13,30 @@ Diagram:
 ## Run
 
 
-1. Create ns to deploy nse and nsc:
-
+Create ns to deploy nse and nsc:
 ```bash
 kubectl create ns ns-vl3-nscs-death
 ```
 
-2. Deploy nsc and vl3 nses:
-
+Deploy nsc and vl3 nses:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nscs-death?ref=88fa4d08aca35783d6aab60f1bf0233d2d01130a
 ```
 
-3. Find all nscs:
-
+Wait for clients to be ready:
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death) 
+kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=alpine
+```
+
+Find all nscs:
+```bash
+nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
 [[ ! -z $nscs ]]
 ```
 
-4. Ping each client by each client:
-
+Ping each client by each client:
 ```bash
-for nsc in $nscs 
+for nsc in $nscs
 do
     ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
@@ -48,28 +49,28 @@ done
 ```
 
 ```bash
-kubectl scale -n ns-vl3-nscs-death deployment nsc-kernel --replicas=0
+kubectl scale -n ns-vl3-nscs-death deployment alpine --replicas=0
 ```
 
 ```bash
-kubectl wait -n ns-vl3-nscs-death --for=delete --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-vl3-nscs-death --for=delete --timeout=1m pod -l app=alpine
 ```
 
 ```bash
-kubectl scale -n ns-vl3-nscs-death deployment nsc-kernel --replicas=2
+kubectl scale -n ns-vl3-nscs-death deployment alpine --replicas=2
 ```
 
 ```bash
-kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=nsc-kernel
+kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=alpine
 ```
 
 ```bash
-nscs=$(kubectl  get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death) 
+nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
 [[ ! -z $nscs ]]
 ```
 
 ```bash
-for nsc in $nscs 
+for nsc in $nscs
 do
     ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1)
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
@@ -82,7 +83,6 @@ done
 ```
 
 ## Cleanup
-
 
 To cleanup the example just follow the next command:
 

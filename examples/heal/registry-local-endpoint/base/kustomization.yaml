@@ -5,11 +5,8 @@ kind: Kustomization
 namespace: ns-registry-local-endpoint
 
 bases:
-- ../../../../apps/nsc-kernel
 - ../../../../apps/nse-kernel
 
 resources:
 - netsvc.yaml
-
-patchesStrategicMerge:
-- patch-nsc.yaml
+- client.yaml

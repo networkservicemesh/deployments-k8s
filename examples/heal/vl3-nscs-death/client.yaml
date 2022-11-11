@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+      annotations:
+        networkservicemesh.io: kernel://vl3-nscs-death/nsm-1
+    spec:
+      containers:
+      - name: alpine
+        image: alpine:3.15.0
+        imagePullPolicy: IfNotPresent
+        stdin: true
+        tty: true

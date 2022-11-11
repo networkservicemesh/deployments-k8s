@@ -6,13 +6,12 @@ namespace: ns-scale-from-zero
 
 resources:
 - autoscale-netsvc.yaml
+- client.yaml
 
 bases:
 - ../../../apps/nse-supplier-k8s
-- ../../../apps/nsc-kernel
 
 patchesStrategicMerge:
-- patch-nsc.yaml
 - patch-supplier.yaml
 
 configMapGenerator:

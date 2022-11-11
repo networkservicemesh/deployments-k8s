@@ -22,7 +22,7 @@ kubectl apply -k nse-before-death
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-local-nse-death
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-local-nse-death
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-local-nse-death
@@ -30,7 +30,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-loca
 
 Find NSC and NSE pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-local-nse-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-local-nse-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ns-local-nse-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -52,7 +52,7 @@ kubectl scale deployment nse-kernel -n ns-local-nse-death --replicas=0
 ```
 
 ```bash
-kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 | grep "100% packet loss"
+kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 2>&1 | egrep "100% packet loss|Network unreachable"
 ```
 
 Apply patch:

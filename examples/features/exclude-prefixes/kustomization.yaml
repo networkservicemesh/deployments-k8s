@@ -6,11 +6,10 @@ namespace: ns-exclude-prefixes
 
 resources:
 - netsvc.yaml
+- client.yaml
 
 bases:
-- ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
 
 patchesStrategicMerge:
-- patch-nsc.yaml
 - patch-nse.yaml
