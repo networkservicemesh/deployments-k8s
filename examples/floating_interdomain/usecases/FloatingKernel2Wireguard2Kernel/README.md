@@ -24,7 +24,7 @@ export KUBECONFIG=$KUBECONFIG2
 ```
 
 ```bash
-kubectl create ns ns-floating-kernel2wireguard2kernel-fi-cluster-2
+kubectl create ns ns-floating-kernel2wireguard2kernel
 ```
 
 Deploy NSE:
@@ -34,12 +34,12 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-floating-kernel2wireguard2kernel-fi-cluster-2
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-floating-kernel2wireguard2kernel
 ```
 
 Find NSE pod by labels:
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-floating-kernel2wireguard2kernel-fi-cluster-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl get pods -l app=nse-kernel -n ns-floating-kernel2wireguard2kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 [[ ! -z $NSE ]]
 ```
 
@@ -50,7 +50,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
-kubectl create ns ns-floating-kernel2wireguard2kernel-fi-cluster-1
+kubectl create ns ns-floating-kernel2wireguard2kernel
 ```
 
 Deploy NSC:
@@ -60,13 +60,13 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-kernel2wireguard2kernel-fi-cluster-1
+kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-kernel2wireguard2kernel
 ```
 
 
 Find NSC pod by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-floating-kernel2wireguard2kernel-fi-cluster-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=alpine -n ns-floating-kernel2wireguard2kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 [[ ! -z $NSC ]]
 ```
 
@@ -79,7 +79,7 @@ export KUBECONFIG=$KUBECONFIG1
 ```
 
 ```bash
-kubectl exec ${NSC} -n ns-floating-kernel2wireguard2kernel-fi-cluster-1 -- ping -c 4 172.16.1.2
+kubectl exec ${NSC} -n ns-floating-kernel2wireguard2kernel -- ping -c 4 172.16.1.2
 ```
 
 Switch to *cluster2*:
@@ -90,7 +90,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-floating-kernel2wireguard2kernel-fi-cluster-2 -- ping -c 4 172.16.1.3
+kubectl exec ${NSE} -n ns-floating-kernel2wireguard2kernel -- ping -c 4 172.16.1.3
 ```
 
 ## Cleanup
@@ -100,7 +100,7 @@ kubectl exec ${NSE} -n ns-floating-kernel2wireguard2kernel-fi-cluster-2 -- ping 
 export KUBECONFIG=$KUBECONFIG1
 ```
 ```bash
-kubectl delete ns ns-floating-kernel2wireguard2kernel-fi-cluster-1
+kubectl delete ns ns-floating-kernel2wireguard2kernel
 ```
 
 2. Cleanup resources for *cluster2*:
@@ -108,5 +108,5 @@ kubectl delete ns ns-floating-kernel2wireguard2kernel-fi-cluster-1
 export KUBECONFIG=$KUBECONFIG2
 ```
 ```bash
-kubectl delete ns ns-floating-kernel2wireguard2kernel-fi-cluster-2
+kubectl delete ns ns-floating-kernel2wireguard2kernel
 ```
