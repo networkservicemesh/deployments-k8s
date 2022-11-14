@@ -24,7 +24,7 @@ kubectl create ns nsm-system
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=88fa4d08aca35783d6aab60f1bf0233d2d01130a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=f2f32c367a72a5ebd5d43fe6a9d8aa13d38dd71c
 ```
 
 Wait for registry service exposing:
@@ -36,5 +36,7 @@ kubectl get services registry -n nsm-system -o go-template='{{index (index (inde
 
 To free resources follow the next command:
 ```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system
 ```
