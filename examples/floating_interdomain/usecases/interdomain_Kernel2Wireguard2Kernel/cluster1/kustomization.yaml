@@ -2,7 +2,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ns-kernel2wireguard2kernel
+namespace: ns-interdomain-kernel2wireguard2kernel
 
 resources:
 - client.yaml
