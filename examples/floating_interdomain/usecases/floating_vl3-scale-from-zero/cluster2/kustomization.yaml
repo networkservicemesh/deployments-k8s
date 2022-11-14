@@ -10,7 +10,6 @@ resources:
   - client.yaml
 
 patchesStrategicMerge:
-  - nsc-patch.yaml
   - supplier-patch.yaml
 
 configMapGenerator:

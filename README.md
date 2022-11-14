@@ -22,7 +22,7 @@
     * [Interdomain and floating interdomain examples](./examples/floating_interdomain)
         * [NSM and Istio interdomain example](./examples/interdomain/nsm_istio_booking/)
         * [NSM and Monolith interdomain example](./examples/k8s_monolith/)
-        * [NSM and floating interdomain vl3 example](./examples/floating_interdomain/usecases/FloatingVl3/)
+        * [NSM and floating interdomain vl3 example](./examples/floating_interdomain/usecases/floating_vl3-basic/)
         * [And other usecases](./examples/floating_interdomain/usecases/)
     * [Open telemetry examples](./examples/observability/)
     * [Features examples](./examples/features)
