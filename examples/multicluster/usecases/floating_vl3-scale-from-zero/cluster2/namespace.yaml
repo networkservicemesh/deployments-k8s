@@ -2,4 +2,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ns-vl3-interdomain
+  name: ns-floating-vl3-scale-from-zero

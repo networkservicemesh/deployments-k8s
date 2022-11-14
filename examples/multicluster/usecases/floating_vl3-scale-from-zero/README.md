@@ -61,10 +61,10 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 2.1. Find NSC in the *cluster2*:
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-vl3-interdomain
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-floating-vl3-scale-from-zero
 ```
 ```bash
-nsc2=$(kubectl get pods -l app=alpine -n ns-vl3-interdomain --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+nsc2=$(kubectl get pods -l app=alpine -n ns-floating-vl3-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 2.2. Switch context to the *cluster1*.
@@ -76,25 +76,25 @@ export KUBECONFIG=$KUBECONFIG1
 2.3. Find NSC in the *cluster1*:
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-vl3-interdomain
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-floating-vl3-scale-from-zero
 ```
 ```bash
-nsc1=$(kubectl get pods -l app=alpine -n ns-vl3-interdomain --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+nsc1=$(kubectl get pods -l app=alpine -n ns-floating-vl3-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 **3. Check connectivity**
 
 3.1. Get assigned IP address from the vl3-NSE for the NSC2 and ping the remote client (NSC1):
 ```bash
-ipAddr2=$(kubectl --kubeconfig=$KUBECONFIG2 exec -n ns-vl3-interdomain $nsc2 -- ifconfig nsm-1)
+ipAddr2=$(kubectl --kubeconfig=$KUBECONFIG2 exec -n ns-floating-vl3-scale-from-zero $nsc2 -- ifconfig nsm-1)
 ipAddr2=$(echo $ipAddr2 | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
-kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 $ipAddr2
+kubectl exec $nsc1 -n ns-floating-vl3-scale-from-zero -- ping -c 4 $ipAddr2
 ```
 
 3.2. Ping vl3 nses:
 ```bash
-kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 172.16.0.0
-kubectl exec $nsc1 -n ns-vl3-interdomain -- ping -c 4 172.16.1.0
+kubectl exec $nsc1 -n ns-floating-vl3-scale-from-zero -- ping -c 4 172.16.0.0
+kubectl exec $nsc1 -n ns-floating-vl3-scale-from-zero -- ping -c 4 172.16.1.0
 ```
 
 3.3. Switch to the *cluster2*
@@ -104,15 +104,15 @@ export KUBECONFIG=$KUBECONFIG2
 
 3.4. Get assigned IP address from the vl3-NSE for the NSC1 and ping the remote client (NSC2):
 ```bash
-ipAddr1=$(kubectl --kubeconfig=$KUBECONFIG1 exec -n ns-vl3-interdomain $nsc1 -- ifconfig nsm-1)
+ipAddr1=$(kubectl --kubeconfig=$KUBECONFIG1 exec -n ns-floating-vl3-scale-from-zero $nsc1 -- ifconfig nsm-1)
 ipAddr1=$(echo $ipAddr1 | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
-kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 $ipAddr1
+kubectl exec $nsc2 -n ns-floating-vl3-scale-from-zero -- ping -c 4 $ipAddr1
 ```
 
 3.5. Ping vl3 nses:
 ```bash
-kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 172.16.0.0
-kubectl exec $nsc2 -n ns-vl3-interdomain -- ping -c 4 172.16.1.0
+kubectl exec $nsc2 -n ns-floating-vl3-scale-from-zero -- ping -c 4 172.16.0.0
+kubectl exec $nsc2 -n ns-floating-vl3-scale-from-zero -- ping -c 4 172.16.1.0
 ```
 
 ## Cleanup
