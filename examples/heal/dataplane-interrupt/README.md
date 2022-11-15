@@ -17,7 +17,7 @@ kubectl create ns ns-dataplane-interrupt
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/dataplane-interrupt?ref=f2f32c367a72a5ebd5d43fe6a9d8aa13d38dd71c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/dataplane-interrupt?ref=9f92298f36dfb49dccf5736ef899cc149235b00b
 ```
 
 Wait for applications ready:
@@ -38,12 +38,12 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-dataplane-interrupt --template '{
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.100 -I 172.16.1.101
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101 -I 172.16.1.100
 ```
 
 Run a pinger process in the background. The pinger will run until it encounters missing packets.
@@ -52,7 +52,7 @@ PINGER_PATH=/tmp/done-${RANDOM}
 kubectl exec ${NSC} -n ns-dataplane-interrupt -- sh -c '
   PINGER_PATH=$1; rm -f "$PINGER_PATH"
   seq=0
-  ping -i 0.2 172.16.1.100 | while :; do
+  ping -i 0.2 172.16.1.100 -I 172.16.1.101 | while :; do
     read -t 1 line || { echo ping timeout; touch $PINGER_PATH; break; }
     seq1=$(echo $line | sed -n "s/.* seq=\([0-9]\+\) .*/\1/p")
     [ "$seq1" ] || continue
@@ -76,12 +76,12 @@ kubectl exec ${NSC} -n ns-dataplane-interrupt -- sh -c 'timeout 10 sh -c "while 
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.100
+kubectl exec ${NSC} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.100 -I 172.16.1.101
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101
+kubectl exec ${NSE} -n ns-dataplane-interrupt -- ping -c 4 172.16.1.101 -I 172.16.1.100
 ```
 
 ## Cleanup
