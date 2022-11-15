@@ -17,7 +17,7 @@ kubectl create ns ns-local-nsm-system-restart
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsm-system-restart?ref=6255acf0d15ffc982081a5e24e9bbdd7dcbf5f4e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsm-system-restart?ref=928d68b2c4198be41a0b16828cf7b3dcf50c4405
 ```
 
 Wait for applications ready:
@@ -56,7 +56,7 @@ kubectl delete ns nsm-system
 kubectl create ns nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=6255acf0d15ffc982081a5e24e9bbdd7dcbf5f4e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=928d68b2c4198be41a0b16828cf7b3dcf50c4405
 ```
 
 Ping from NSC to NSE:
