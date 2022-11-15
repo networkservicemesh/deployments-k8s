@@ -18,7 +18,7 @@ kubectl create ns ns-kernel2wireguard2kernel
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Wireguard2Kernel?ref=b4cccb0526a2101a37a50584f2f59d7cd4b8e99f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Wireguard2Kernel?ref=66216a1dd012803b249584891a0c1b9a0c46b3e2
 ```
 
 Wait for applications ready:
