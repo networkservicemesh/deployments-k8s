@@ -20,7 +20,7 @@ kubectl create ns ns-memif2vxlan2kernel
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Vxlan2Kernel?ref=b7f12b064720c63f45e7e975f71fa44ca0269ae8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Vxlan2Kernel?ref=e472a9ffcd57d8ce38de60ecc7e810367eac8018
 ```
 
 Wait for applications ready:
