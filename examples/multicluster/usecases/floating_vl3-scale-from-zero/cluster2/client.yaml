@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+  annotations:
+    networkservicemesh.io: kernel://autoscale-interdomain-vl3-network@my.cluster3/nsm-1?clusterName=cluster2
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.15.0
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true

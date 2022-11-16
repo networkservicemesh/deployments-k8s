@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-floating-vl3-scale-from-zero
+
+resources:
+  - namespace.yaml
+  - ../../../../../apps/nse-supplier-k8s
+  - client.yaml
+
+patchesStrategicMerge:
+  - supplier-patch.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap
+    files:
+      - pod-template.yaml

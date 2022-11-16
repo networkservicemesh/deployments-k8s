@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-floating-vl3-basic
+
+resources:
+  - namespace.yaml
+  - nse-vl3-vpp.yaml
+  - client.yaml
