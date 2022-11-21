@@ -11,7 +11,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:7f4101c
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-l7-proxy:65c8808
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
