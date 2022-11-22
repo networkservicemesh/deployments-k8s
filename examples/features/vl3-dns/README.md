@@ -43,13 +43,15 @@ nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items
 
 Ping each client by each client via DNS:
 ```bash
+(
 for nsc in $nscs 
 do
     for pinger in $nscs
     do
-        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.vl3-dns -4
+        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.vl3-dns -4 || exit
     done
 done
+)
 ```
 
 ## Cleanup

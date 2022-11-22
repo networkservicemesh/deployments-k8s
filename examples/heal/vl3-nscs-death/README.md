@@ -1,17 +1,9 @@
-# vL3 single cluster example
+# vL3-network - NSC death
 
-This example shows how could be configured vL3 network via NSM.
+This example shows vl3-network recovery after redeploying all clients.
 
-
-Diagram: 
-
-![NSM vL3 Diagram](./diagram.png "NSM Authorize Scheme")
-
-
-**NOTE: Forwarder and NSMmgr are missed in the diagram for the simplicity**
 
 ## Run
-
 
 Create ns to deploy nse and nsc:
 ```bash
@@ -36,56 +28,59 @@ nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items
 
 Ping each client by each client:
 ```bash
+(
 for nsc in $nscs
 do
-    ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1)
+    ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1) || exit
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr
+        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr || exit
     done
 done
+)
 ```
 
+Scale NSCs to zero:
 ```bash
 kubectl scale -n ns-vl3-nscs-death deployment alpine --replicas=0
 ```
-
 ```bash
 kubectl wait -n ns-vl3-nscs-death --for=delete --timeout=1m pod -l app=alpine
 ```
 
+Rescale NSCs:
 ```bash
 kubectl scale -n ns-vl3-nscs-death deployment alpine --replicas=2
 ```
-
 ```bash
 kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=alpine
 ```
 
+Find all new nscs and run ping:
 ```bash
 nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
 [[ ! -z $nscs ]]
 ```
-
 ```bash
+(
 for nsc in $nscs
 do
-    ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1)
+    ipAddr=$(kubectl exec -n ns-vl3-nscs-death $nsc -- ifconfig nsm-1) || exit
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr
+        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr || exit
     done
 done
+)
 ```
 
 ## Cleanup
 
 To cleanup the example just follow the next command:
-
 ```bash
 kubectl delete ns ns-vl3-nscs-death
 ```
