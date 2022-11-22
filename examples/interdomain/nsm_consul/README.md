@@ -17,7 +17,7 @@ Install [Consul](https://www.consul.io/docs/k8s/installation/install-cli)
 ```bash
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install consul-k8s
+sudo apt-get update && sudo apt-get install consul-k8s=0.48.0-1
 consul-k8s version
 ```
 
