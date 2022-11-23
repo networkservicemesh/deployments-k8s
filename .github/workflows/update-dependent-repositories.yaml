@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.18
       - name: Setup envs
         run: |
           echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
@@ -29,10 +32,12 @@ jobs:
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
           fetch-depth: 2
       - name: Install gotestmd
-        run: "go get github.com/networkservicemesh/gotestmd"
+        run: |
+          go install github.com/networkservicemesh/gotestmd@main
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Install goimports
-        run: "go get golang.org/x/tools/cmd/goimports"
+        run: |
+          go install golang.org/x/tools/cmd/goimports@latest
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Get hash of PR commit
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
@@ -51,9 +56,6 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
           repository: networkservicemesh/${{ matrix.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.18
       - name: Update ${{ matrix.repository }} locally
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
