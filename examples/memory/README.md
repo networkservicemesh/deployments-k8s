@@ -22,7 +22,7 @@ kubectl create ns nsm-system
 2. Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=455f6fbb0db62d738e5bbe6103e9188d337427cf
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=6c36a460343802de2dfd2b21e94a55d2d8dfcaf7
 ```
 
 3. Wait for admission-webhook-k8s:
