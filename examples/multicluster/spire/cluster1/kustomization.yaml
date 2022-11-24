@@ -23,4 +23,4 @@ configMapGenerator:
 
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=b40af5d249083f5b7979c3a8b8ea69f6ddcba69b
+- https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=057b8ae106d5656f420bc380fb62efd6fd54d3a9
