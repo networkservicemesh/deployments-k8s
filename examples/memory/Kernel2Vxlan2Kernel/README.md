@@ -18,7 +18,7 @@ kubectl create ns ns-kernel2vxlan2kernel
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory/Kernel2Vxlan2Kernel?ref=84b1a817f19ff99d18eda88a8ef0e13557dd9966
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory/Kernel2Vxlan2Kernel?ref=ed2aded47dd1526fc9db60aab660a73adde1fd3a
 ```
 
 Wait for applications ready:
