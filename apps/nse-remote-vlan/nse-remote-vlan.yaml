@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-remote-vlan:1b81b9d
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-remote-vlan:bda4733
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5003
