@@ -7,8 +7,8 @@ This example simply show how can be deployed and configured two NSM on different
 
 Install NSM
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=0401662b871979580b3d8814a4432006d90eb181
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=0401662b871979580b3d8814a4432006d90eb181
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=10e9fc545c1c5f5788a499c33e866e93d3a4dea0
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=10e9fc545c1c5f5788a499c33e866e93d3a4dea0
 ```
 
 Wait for admission-webhook-k8s:
@@ -30,6 +30,6 @@ kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration ${WH}
 WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl --kubeconfig=$KUBECONFIG2 delete mutatingwebhookconfiguration ${WH}
 
-kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=0401662b871979580b3d8814a4432006d90eb181
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=0401662b871979580b3d8814a4432006d90eb181
+kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=10e9fc545c1c5f5788a499c33e866e93d3a4dea0
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=10e9fc545c1c5f5788a499c33e866e93d3a4dea0
 ```
