@@ -356,6 +356,32 @@ Get the NSC pods from first k8s namespace:
 NSCS=($(kubectl get pods -l app=alpine-1 -n ns-kernel2vlan-multins-1 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
+Check the MTU adjustment for the NSC pods from first k8s namespace::
+
+```bash
+status=0
+LINK_MTU=$(docker exec kind-worker cat /sys/class/net/ext_net1/mtu)
+for nsc in "${NSCS[@]}"
+do
+  MTU=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2vlan-multins-1 -- cat /sys/class/net/nsm-1/mtu)
+
+  echo "$LINK_MTU vs $MTU"
+
+  if test "${MTU}" = ""
+    then
+      status=1
+  fi
+  if test $MTU -ne $LINK_MTU
+    then
+      status=2
+  fi
+done
+if test ${status} -ne 0
+  then
+    false
+fi
+```
+
 Get the IP addresses for NSCs from first k8s namespace:
 
 ```bash
@@ -397,6 +423,31 @@ Get the NSC pods from second k8s namespace:
 ```bash
 NSCS_BLUE=($(kubectl get pods -l app=alpine-2 -n ns-kernel2vlan-multins-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 NSCS_GREEN=($(kubectl get pods -l app=alpine-3 -n ns-kernel2vlan-multins-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+```
+
+Check the MTU adjustment for the NSC pods from second k8s namespace::
+
+```bash
+status=0
+for nsc in "${NSCS_BLUE[@]} ${NSCS_GREEN[@]}"
+do
+  MTU=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2vlan-multins-2 -- cat /sys/class/net/nsm-1/mtu)
+
+  echo "$LINK_MTU vs $MTU"
+
+  if test "${MTU}" = ""
+    then
+      status=1
+  fi
+  if test $MTU -ne $LINK_MTU
+    then
+      status=2
+  fi
+done
+if test ${status} -ne 0
+  then
+    false
+fi
 ```
 
 Get the IP addresses for NSCs from second k8s namespace:
@@ -484,6 +535,31 @@ Get the NSC pods from nsm-system k8s namespace:
 
 ```bash
 NSCS=($(kubectl get pods -l app=alpine-4 -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+```
+
+Check the MTU adjustment for the NSC pods from nsm-system k8s namespace::
+
+```bash
+status=0
+for nsc in "${NSCS[@]}"
+do
+  MTU=$(kubectl exec ${nsc} -c cmd-nsc -n nsm-system -- cat /sys/class/net/nsm-1/mtu)
+
+  echo "$LINK_MTU vs $MTU"
+
+  if test "${MTU}" = ""
+    then
+      status=1
+  fi
+  if test $MTU -ne $LINK_MTU
+    then
+      status=2
+  fi
+done
+if test ${status} -ne 0
+  then
+    false
+fi
 ```
 
 Get the IP addresses for NSCs from first k8s namespace:
