@@ -10,7 +10,9 @@ NSC requests the service and creates the required interface on the monolith:
 - [LoadBalancer](../configuration/loadbalancer)
 - [Docker container](./docker)
 - [DNS](./dns)
-- [spire](./spire)
+- Spire
+    - [Spire in k8s](../../spire/single-cluster)
+    - [Spiffe Federation](./spiffe-federation)
 
 ## Includes
 
