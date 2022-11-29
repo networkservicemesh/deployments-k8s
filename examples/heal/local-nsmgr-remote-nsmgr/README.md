@@ -18,7 +18,7 @@ kubectl create ns ns-local-nsmgr-remote-nsmgr
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-remote-nsmgr?ref=f27ee363e8b9f25fdbfe24c1a2adea54eb980909
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-remote-nsmgr?ref=4c12912ae21f4d1dd1f9f7fdd410c1ed7f2e3db8
 ```
 
 Wait for applications ready:
