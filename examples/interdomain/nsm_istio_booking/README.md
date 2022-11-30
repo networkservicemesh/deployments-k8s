@@ -20,7 +20,7 @@ The required steps are listed below.
 - Interdomain spire
     - [Spire on first cluster](../../spire/cluster1)
     - [Spire on second cluster](../../spire/cluster2)
-    - [Spiffe Federation](../spiffe-federation)
+    - [Spiffe Federation](../spiffe_federation)
 - [Interdomain nsm](../nsm)
 
 

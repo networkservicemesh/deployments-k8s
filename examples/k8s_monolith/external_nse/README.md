@@ -11,8 +11,8 @@ This NSE creates the required interface on the monolith:
 - [Docker container](./docker)
 - [DNS](./dns)
 - Spire
-    - [Spire in k8s](../../spire/single-cluster)
-    - [Spiffe Federation](./spiffe-federation)
+    - [Spire in k8s](../../spire/single_cluster)
+    - [Spiffe Federation](./spiffe_federation)
 
 ## Includes
 

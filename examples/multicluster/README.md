@@ -19,7 +19,7 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
     - [Spire on first cluster](../spire/cluster1)
     - [Spire on second cluster](../spire/cluster2)
     - [Spire on third cluster](../spire/cluster3)
-    - [Spiffe Federation](./spiffe-federation)
+    - [Spiffe Federation](./spiffe_federation)
 
 ## Includes
 
