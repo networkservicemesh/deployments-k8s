@@ -4,7 +4,7 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 
 ## Requires
 
-- [spire](../spire/single-cluster)
+- [spire](../spire/single_cluster)
 
 ## Includes
 

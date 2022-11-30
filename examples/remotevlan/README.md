@@ -4,7 +4,7 @@ This setup can be used to check remote vlan mechanism with both OVS and VPP forw
 
 ## Requires
 
-- [spire](../spire/single-cluster)
+- [spire](../spire/single_cluster)
 
 ## Includes
 

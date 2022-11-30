@@ -11,7 +11,7 @@ This setup is basic for interdomain examples on two clusters. This setup can be 
 - Interdomain spire
     - [Spire on first cluster](../spire/cluster1)
     - [Spire on second cluster](../spire/cluster2)
-    - [Spiffe Federation](./spiffe-federation)
+    - [Spiffe Federation](./spiffe_federation)
 - [Interdomain nsm](./nsm)
 
 

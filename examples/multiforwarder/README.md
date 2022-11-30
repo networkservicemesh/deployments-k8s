@@ -1,6 +1,6 @@
 ## Requires
 
-- [spire](../spire/single-cluster)
+- [spire](../spire/single_cluster)
 
 ## Includes
 
