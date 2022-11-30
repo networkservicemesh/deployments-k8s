@@ -7,7 +7,10 @@ This example shows how Consul can be used over NSM with vl3.
 
 - [Load balancer](../loadbalancer)
 - [Interdomain DNS](../dns)
-- [Interdomain spire](../spire)
+- Interdomain spire
+    - [Spire on first cluster](../../spire/cluster1)
+    - [Spire on second cluster](../../spire/cluster2)
+    - [Spiffe Federation](../spiffe-federation)
 - [Interdomain nsm](../nsm)
 
 

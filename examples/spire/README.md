@@ -1,24 +1,9 @@
 # Spire
 
-## Run
+This folder contains setup instructions for Spire for different scenarios.
 
-To apply spire deployments following the next command:
-```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=018115284deca950e03b046df9f5d98527545f59
-```
+For most examples in this repository you will need the single cluster setup.
 
-Wait for PODs status ready:
-```bash
-kubectl wait -n spire --timeout=2m --for=condition=ready pod -l app=spire-agent
-```
-```bash
-kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
-```
-
-## Cleanup
-
-Delete ns:
-```bash
-kubectl delete crd spiffeids.spiffeid.spiffe.io
-kubectl delete ns spire
-```
+For some more complex scenarios like multi-cluster or k8s_monolith example
+you will need more complex setup, usually including Spiffe Federation setup.
+Check certain scenario readme file for more concrete instructions.

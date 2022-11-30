@@ -99,7 +99,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Apply Spire deployments (required for NSM system)
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire?ref=018115284deca950e03b046df9f5d98527545f59
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single-cluster?ref=018115284deca950e03b046df9f5d98527545f59
 ```
 
 Wait for Spire pods status ready:

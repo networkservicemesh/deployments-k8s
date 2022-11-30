@@ -11,13 +11,15 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 
 ![NSM  interdomain Scheme](./interdomain_concept.png "NSM Basic floating interdomain Scheme")
 
-
-
 ## Requires
 
 - [Load balancer](./loadbalancer)
-- [Interdomain-DNS](./dns)
-- [Interdomain-spire](./spire)
+- [Interdomain DNS](./dns)
+- Interdomain spire
+    - [Spire on first cluster](../spire/cluster1)
+    - [Spire on second cluster](../spire/cluster2)
+    - [Spire on third cluster](../spire/cluster3)
+    - [Spiffe Federation](./spiffe-federation)
 
 ## Includes
 

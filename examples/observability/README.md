@@ -4,7 +4,7 @@ This document contains links for observability examples of NSM.
 
 ## Requires
 
-- [spire](../spire)
+- [spire](../spire/single-cluster)
 
 ## Includes
 

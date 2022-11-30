@@ -4,7 +4,7 @@ Memory example contains setup and tear down logic with default NSM infrastructur
 
 ## Requires
 
-- [spire](../spire)
+- [spire](../spire/single-cluster)
 
 ## Includes
 
