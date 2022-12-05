@@ -18,7 +18,7 @@ kubectl create ns ns-remote-nsmgr-restart
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-restart?ref=848fe196a227a4a7e55b87b84c702bcae152326c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-restart?ref=ebcd0d83efa2273671132e4ede6103dd4030419d
 ```
 
 Wait for applications ready:
