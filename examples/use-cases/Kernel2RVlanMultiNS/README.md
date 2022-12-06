@@ -234,7 +234,7 @@ resources:
 - third-client.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=3621ceb853fa957c462a2323cbab33c31a93cfb5
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=c2e01a9dd3f2f87ea07074dc361b06a39384e6d6
 
 nameSuffix: -bg
 
