@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-supplier-k8s-client
+  labels:
+    app: nse-supplier-k8s-client
+spec:
+  selector:
+    matchLabels:
+      app: nse-supplier-k8s-client
+  template:
+    metadata:
+      annotations:
+        'consul.hashicorp.com/connect-inject': 'false'
+      labels:
+        app: nse-supplier-k8s-client
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      containers:
+        - name: nse-supplier
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:91ee642
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NSM_SERVICE_NAME
+              value: autoscale-consul-proxy-client
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NSM_LABELS
+              value: any:true
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_POD_DESCRIPTION_FILE
+              value: /run/supplier/pod-template.yaml
+          volumeMounts:
+            - name: pod-file
+              mountPath: /run/supplier
+              readOnly: true
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: true
+          resources:
+            limits:
+              memory: 40Mi
+              cpu: 100m
+      volumes:
+        - name: pod-file
+          configMap:
+            name: supplier-pod-template-configmap-client
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate

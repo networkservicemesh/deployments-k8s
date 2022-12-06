@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- supplier.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap-client
+    files:
+      - pod-template.yaml
+  - name: iptables-map-client
+    files:
+      - iptables-map.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
