@@ -14,7 +14,7 @@ kubectl create ns ns-kernel2kernel-dual-stack
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/Kernel2Kernel_dual_stack?ref=bf1e078f4dc5c6bd871df4deabba2dc1d93320bb
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/Kernel2Kernel_dual_stack?ref=8b551d0135df7a4636f22c7ae00a47e6b5e31d30
 ```
 
 Wait for applications ready:
