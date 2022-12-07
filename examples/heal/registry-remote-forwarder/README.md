@@ -18,7 +18,7 @@ kubectl create ns ns-registry-remote-forwarder
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-remote-forwarder?ref=9a4470dd59f6ef4b1315d0ae557507eee926186e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-remote-forwarder?ref=fb3465287a79bff12fcb8c1144074a2fc2667f7b
 ```
 
 Wait for applications ready:
