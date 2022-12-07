@@ -12,7 +12,7 @@ kubectl create ns ns-vl3-nse-death
 
 Deploy nsc and vl3 nses:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=2e24045186b2e913708ba0ce86b4852f1401622c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=a45ff51f70cb4a5e9a2241969be4beb56c07345e
 ```
 
 Wait for clients to be ready:
