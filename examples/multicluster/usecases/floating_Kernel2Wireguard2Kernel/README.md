@@ -29,7 +29,7 @@ kubectl create ns ns-floating-kernel2wireguard2kernel
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Wireguard2Kernel/cluster2?ref=fb3465287a79bff12fcb8c1144074a2fc2667f7b
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Wireguard2Kernel/cluster2?ref=daaba14001237102cb75764cc3d5210fd51e9260
 ```
 
 Wait for applications ready:
@@ -55,7 +55,7 @@ kubectl create ns ns-floating-kernel2wireguard2kernel
 
 Deploy NSC:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Wireguard2Kernel/cluster1?ref=fb3465287a79bff12fcb8c1144074a2fc2667f7b
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Wireguard2Kernel/cluster1?ref=daaba14001237102cb75764cc3d5210fd51e9260
 ```
 
 Wait for applications ready:
