@@ -19,7 +19,7 @@ kubectl create ns ns-kernel2rvlan-breakout
 Deploy iperf server:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanBreakout?ref=5210312687d974de4c19cc2e6397f84ca677bc85
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanBreakout?ref=7eddf126eba7b7b0e75b861ee7bc5e300bd9c82d
 ```
 
 Wait for applications ready:
