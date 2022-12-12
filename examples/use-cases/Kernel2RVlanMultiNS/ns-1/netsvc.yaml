@@ -2,7 +2,7 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: kernel2rvlan-breakout
-  namespace: nsm-system
+  name: private-bridge.ns-kernel2vlan-multins-1
+  namespace: ns-kernel2vlan-multins-1
 spec:
   payload: ETHERNET

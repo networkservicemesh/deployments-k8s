@@ -1,9 +1,1 @@
-ns-1/first-client.yaml
-ns-1/patch-nse.yaml
-ns-1/kustomization.yaml
-ns-2/second-client.yaml
-ns-2/third-client.yaml
-ns-2/patch-nse.yaml
-ns-2/kustomization.yaml
-client.yaml
 Dockerfile

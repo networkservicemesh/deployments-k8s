@@ -17,284 +17,20 @@ kubectl create ns ns-kernel2vlan-multins-1
 kubectl create ns ns-kernel2vlan-multins-2
 ```
 
-Create example directories to separate deployments:
-
-```bash
-mkdir -p ns-1 ns-2
-```
-
-Create first client:
-
-```bash
-cat > ns-1/first-client.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: alpine-1
-  labels:
-    app: alpine-1
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: alpine-1
-  template:
-    metadata:
-      labels:
-        app: alpine-1
-      annotations:
-        networkservicemesh.io: kernel://private-bridge.ns-kernel2vlan-multins-1/nsm-1
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - alpine-1
-            topologyKey: "kubernetes.io/hostname"
-      containers:
-      - name: alpine
-        image: alpine:3.15.0
-        imagePullPolicy: IfNotPresent
-        stdin: true
-        tty: true
-EOF
-```
-
-Create NSE patch:
-
-```bash
-cat > ns-1/patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-remote-vlan
-spec:
-  template:
-    spec:
-      containers:
-      - name: nse
-        env:
-          - name: NSM_CONNECT_TO
-            value: "registry.nsm-system:5002"
-          - name: NSM_SERVICES
-            value: "private-bridge.ns-kernel2vlan-multins-1 { vlan: 0; via: gw1 }"
-          - name: NSM_CIDR_PREFIX
-            value: 172.10.1.0/24
-EOF
-```
-
-Create customization file:
-
-```bash
-cat > ns-1/kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-kernel2vlan-multins-1
-
-resources:
-- first-client.yaml
-
-bases:
-- ../../../../apps/nse-remote-vlan
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
-```
-
 Deployment in first namespace
-
 ```bash
- kubectl apply -k ./ns-1
-```
-
-Create second and third client:
-
-```bash
-cat > ns-2/second-client.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: alpine-2
-  labels:
-    app: alpine-2
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: alpine-2
-  template:
-    metadata:
-      labels:
-        app: alpine-2
-      annotations:
-        networkservicemesh.io: kernel://blue-bridge.ns-kernel2vlan-multins-2/nsm-1
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - alpine-2
-            topologyKey: "kubernetes.io/hostname"
-      containers:
-      - name: alpine
-        image: alpine:3.15.0
-        imagePullPolicy: IfNotPresent
-        stdin: true
-        tty: true
-EOF
-cat > ns-2/third-client.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: alpine-3
-  labels:
-    app: alpine-3
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: alpine-3
-  template:
-    metadata:
-      labels:
-        app: alpine-3
-      annotations:
-        networkservicemesh.io: kernel://green-bridge.ns-kernel2vlan-multins-2/nsm-1
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - alpine-3
-            topologyKey: "kubernetes.io/hostname"
-      containers:
-      - name: alpine
-        image: alpine:3.15.0
-        imagePullPolicy: IfNotPresent
-        stdin: true
-        tty: true
-EOF
-```
-
-Create NSE patch:
-
-```bash
-cat > ns-2/patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nse-remote-vlan
-spec:
-  template:
-    spec:
-      containers:
-      - name: nse
-        env:
-          - name: NSM_CONNECT_TO
-            value: "registry.nsm-system:5002"
-          - name: NSM_SERVICES
-            value: "blue-bridge.ns-kernel2vlan-multins-2 { vlan: 300; via: gw1 }, green-bridge.ns-kernel2vlan-multins-2 { vlan: 300; via: gw1 }"
-          - name: NSM_CIDR_PREFIX
-            value: 172.10.2.0/24
-EOF
-```
-
-Create customization file:
-
-```bash
-cat > ns-2/kustomization.yaml <<EOF
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: ns-kernel2vlan-multins-2
-
-resources:
-- second-client.yaml
-- third-client.yaml
-
-bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-remote-vlan?ref=41b4bc0ef86c5638440230cb31a0060f1bfb83b0
-
-nameSuffix: -bg
-
-patchesStrategicMerge:
-- patch-nse.yaml
-EOF
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=28515d2875418e735ca29b79e0a7fa3c8c0df482
 ```
 
 Deployment in second namespace:
-
 ```bash
- kubectl apply -k ./ns-2
-```
-
-Create the last client:
-
-```bash
-cat > client.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: alpine-4
-  labels:
-    app: alpine-4
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: alpine-4
-  template:
-    metadata:
-      labels:
-        app: alpine-4
-      annotations:
-        networkservicemesh.io: kernel://finance-bridge/nsm-1
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - alpine-4
-            topologyKey: "kubernetes.io/hostname"
-      containers:
-      - name: alpine
-        image: alpine:3.15.0
-        imagePullPolicy: IfNotPresent
-        stdin: true
-        tty: true
-EOF
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/28515d2875418e735ca29b79e0a7fa3c8c0df482/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=28515d2875418e735ca29b79e0a7fa3c8c0df482
 ```
 
 Deploy the last client
-
 ```bash
-kubectl apply -n nsm-system -f client.yaml
+kubectl apply -n nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/28515d2875418e735ca29b79e0a7fa3c8c0df482/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
 ```
 
 Wait for applications ready:
@@ -611,7 +347,7 @@ true
 Delete the last client:
 
 ```bash
-kubectl delete --namespace=nsm-system -f client.yaml
+kubectl delete --namespace=nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/28515d2875418e735ca29b79e0a7fa3c8c0df482/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
 ```
 
 Delete the test namespace:
@@ -622,10 +358,4 @@ kubectl delete ns ns-kernel2vlan-multins-1
 
 ```bash
 kubectl delete ns ns-kernel2vlan-multins-2
-```
-
-Delete the directories:
-
-```bash
-rm -rf ns-1 ns-2
 ```

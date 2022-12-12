@@ -16,51 +16,10 @@ Create test namespace:
 kubectl create ns ns-kernel2rvlan-breakout
 ```
 
-Create iperf server deployment:
+Deploy iperf server:
 
 ```bash
-cat > first-iperf-s.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: iperf1-s
-  labels:
-    app: iperf1-s
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: iperf1-s
-  template:
-    metadata:
-      labels:
-        app: iperf1-s
-      annotations:
-        networkservicemesh.io: kernel://finance-bridge/nsm-1
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - iperf1-s
-            topologyKey: "kubernetes.io/hostname"
-      containers:
-      - name: iperf-server
-        image: networkstatic/iperf3:latest
-        imagePullPolicy: IfNotPresent
-        command: ["tail", "-f", "/dev/null"]
-EOF
-```
-
-Deploy the application:
-
-```bash
-kubectl apply -n ns-kernel2rvlan-breakout -f ./first-iperf-s.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanBreakout?ref=28515d2875418e735ca29b79e0a7fa3c8c0df482
 ```
 
 Wait for applications ready:

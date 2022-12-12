@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-2
+  labels:
+    app: alpine-2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alpine-2
+  template:
+    metadata:
+      labels:
+        app: alpine-2
+      annotations:
+        networkservicemesh.io: kernel://blue-bridge.ns-kernel2vlan-multins-2/nsm-1
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - alpine-2
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: alpine
+          image: alpine:3.15.0
+          imagePullPolicy: IfNotPresent
+          stdin: true
+          tty: true
