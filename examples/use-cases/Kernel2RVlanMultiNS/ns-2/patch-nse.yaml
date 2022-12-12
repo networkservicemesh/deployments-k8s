@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-remote-vlan
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_CONNECT_TO
+              value: "registry.nsm-system:5002"
+            - name: NSM_SERVICES
+              value: "blue-bridge.ns-kernel2vlan-multins-2 { vlan: 300; via: gw1 }, green-bridge.ns-kernel2vlan-multins-2 { vlan: 300; via: gw1 }"
+            - name: NSM_CIDR_PREFIX
+              value: 172.10.2.0/24
+            - name: NSM_REGISTER_SERVICE
+              value: "false"

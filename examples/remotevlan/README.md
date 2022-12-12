@@ -44,36 +44,10 @@ Create ns for deployments:
 kubectl create ns nsm-system
 ```
 
-Create NSE patch:
-
-```bash
-cat > patch-nse.yaml <<EOF
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-    name: nse-remote-vlan
-spec:
-  template:
-    spec:
-      containers:
-        - name: nse
-          env:
-          - name: NSM_CONNECT_TO
-            value: "registry:5002"
-          - name: NSM_SERVICES
-            value: "finance-bridge { vlan: 100; via: gw1}"
-          - name: NSM_CIDR_PREFIX
-            value: 172.10.0.0/24,100:200::/64
-          - name: NSM_MAX_TOKEN_LIFETIME
-            value: "60s"
-EOF
-```
-
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan?ref=4e84cfef5a2762fb633d49873a20f7af53e48a62
 ```
 
 Wait for NSE application:

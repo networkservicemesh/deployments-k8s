@@ -1,0 +1,16 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: blue-bridge.ns-kernel2vlan-multins-2
+  namespace: ns-kernel2vlan-multins-2
+spec:
+  payload: ETHERNET
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: green-bridge.ns-kernel2vlan-multins-2
+  namespace: ns-kernel2vlan-multins-2
+spec:
+  payload: ETHERNET
