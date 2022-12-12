@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nse-vl3-vpp-1
+  name: scaled-nse-vl3-vpp-1
   annotations:
     spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
   labels:
@@ -19,7 +19,7 @@ spec:
         - name: SPIFFE_ENDPOINT_SOCKET
           value: unix:///run/spire/sockets/agent.sock
         - name: NSM_NAME
-          value: "nse-vl3-vpp-1@my.cluster3"
+          value: "scaled-nse-vl3-vpp-1@my.cluster3"
         - name: NSM_SERVICE_NAMES
           value: "autoscale-interdomain-vl3-network@my.cluster3,my-vl3-network@my.cluster3"
         - name: NSM_REGISTER_SERVICE
