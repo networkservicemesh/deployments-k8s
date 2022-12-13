@@ -43,54 +43,54 @@ jobs:
               docker pull $image
             done
 
-  update-refs:
-     name: Update References to the latest tag
-     needs: check-images
-     runs-on: ubuntu-latest
-     outputs:
-      tag: ${{ needs.check-images.outputs.tag }}
-     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.ref }}
+  # update-refs:
+  #    name: Update References to the latest tag
+  #    needs: check-images
+  #    runs-on: ubuntu-latest
+  #    outputs:
+  #     tag: ${{ needs.check-images.outputs.tag }}
+  #    steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ github.event.ref }}
 
-      - name: Update references
-        run: |
-          sed -r -i 's/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
-          sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
-          git config --global user.email "nsmbot@networkservicmesh.io"
-          git config --global user.name "NSMBot"
-          git add -- .
-          git commit -s -m "Update references to the latest tag"
-          ref=${{ github.event.ref }}
-          git push origin ${ref#refs/heads/}
+  #     - name: Update references
+  #       run: |
+  #         sed -r -i 's/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
+  #         sed -r -i '/raw.githubusercontent.com/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
+  #         git config --global user.email "nsmbot@networkservicmesh.io"
+  #         git config --global user.name "NSMBot"
+  #         git add -- .
+  #         git commit -s -m "Update references to the latest tag"
+  #         ref=${{ github.event.ref }}
+  #         git push origin ${ref#refs/heads/}
 
-  create-release:
-    name: Create release
-    needs: update-refs
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ needs.update-refs.outputs.tag }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{github.event.ref}}
-      - name: Push tag ${{ needs.update-refs.outputs.tag }}
-        run: |
-          git status
-          git tag ${{ needs.update-refs.outputs.tag }}
-          git push origin ${{ needs.update-refs.outputs.tag }} -f
-      - name: Create release ${{ needs.update-refs.outputs.tag }}
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-        with:
-          tag_name: refs/tags/${{ needs.update-refs.outputs.tag }}
-          release_name: ${{ needs.update-refs.outputs.tag }}
-          draft: false
-          prerelease: false
+  # create-release:
+  #   name: Create release
+  #   needs: update-refs
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     tag: ${{ needs.update-refs.outputs.tag }}
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{github.event.ref}}
+  #     - name: Push tag ${{ needs.update-refs.outputs.tag }}
+  #       run: |
+  #         git status
+  #         git tag ${{ needs.update-refs.outputs.tag }}
+  #         git push origin ${{ needs.update-refs.outputs.tag }} -f
+  #     - name: Create release ${{ needs.update-refs.outputs.tag }}
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: refs/tags/${{ needs.update-refs.outputs.tag }}
+  #         release_name: ${{ needs.update-refs.outputs.tag }}
+  #         draft: false
+  #         prerelease: false
 
   update-dependent-repositories:
     strategy:
@@ -126,7 +126,7 @@ jobs:
         working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - uses: actions/setup-go@v1
         with:
-          go-version: 1.16
+          go-version: 1.18
       - name: Checkout networkservicemesh/${{ matrix.repository }}
         uses: actions/checkout@v2
         with:
