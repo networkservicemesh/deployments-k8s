@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create test namespace and deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/annotated-namespace?ref=60af7a03af9d7d020e5e17dcbb822c7bd6a77c02
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/annotated-namespace?ref=85ff8571d7d1570f9f7b4ef8c0435bcdcd055e2a
 ```
 
 Wait for NSE to be ready:
@@ -28,7 +28,7 @@ kubectl annotate ns ns-annotated-namespace networkservicemesh.io=kernel://annota
 
 Apply client patch:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/60af7a03af9d7d020e5e17dcbb822c7bd6a77c02/examples/features/annotated-namespace/client.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/85ff8571d7d1570f9f7b4ef8c0435bcdcd055e2a/examples/features/annotated-namespace/client.yaml
 ```
 
 Wait for client to be ready:

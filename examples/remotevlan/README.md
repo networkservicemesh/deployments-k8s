@@ -47,7 +47,7 @@ kubectl create ns nsm-system
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan?ref=60af7a03af9d7d020e5e17dcbb822c7bd6a77c02
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan?ref=85ff8571d7d1570f9f7b4ef8c0435bcdcd055e2a
 ```
 
 Wait for NSE application:
