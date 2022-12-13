@@ -40,7 +40,7 @@ do
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-kernel2wireguard2kernel-monolith-nse -- ping -c4 $ipAddr || exit
+        kubectl exec $pinger -n ns-kernel2wireguard2kernel-monolith-nse -- ping -c2 -i 0.5 $ipAddr || exit
     done
 done
 )
@@ -52,7 +52,7 @@ Ping docker-nse by each client:
 for nsc in $nscs
 do
     echo $nsc pings docker-nse
-    kubectl exec -n ns-kernel2wireguard2kernel-monolith-nse $nsc -- ping 169.254.0.1 -c4  || exit
+    kubectl exec -n ns-kernel2wireguard2kernel-monolith-nse $nsc -- ping 169.254.0.1 -c2 -i 0.5  || exit
 done
 )
 ```
@@ -64,7 +64,7 @@ for nsc in $nscs
 do
     ipAddr=$(kubectl exec -n ns-kernel2wireguard2kernel-monolith-nse $nsc -- ifconfig nsm-1) || exit
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
-    docker exec nse-simple-vl3-docker ping -c4 $ipAddr || exit
+    docker exec nse-simple-vl3-docker ping -c2 -i 0.5 $ipAddr || exit
 done
 )
 ```

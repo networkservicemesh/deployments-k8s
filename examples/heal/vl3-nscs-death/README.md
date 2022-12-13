@@ -36,7 +36,7 @@ do
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr || exit
+        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c2 -i 0.5 $ipAddr || exit
     done
 done
 )
@@ -72,7 +72,7 @@ do
     for pinger in $nscs
     do
         echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c4 $ipAddr || exit
+        kubectl exec $pinger -n ns-vl3-nscs-death -- ping -c2 -i 0.5 $ipAddr || exit
     done
 done
 )

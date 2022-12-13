@@ -48,7 +48,7 @@ for nsc in $nscs
 do
     for pinger in $nscs
     do
-        kubectl exec $pinger -n ns-vl3-dns -- ping -c4 $nsc.vl3-dns -4 || exit
+        kubectl exec $pinger -n ns-vl3-dns -- ping -c2 -i 0.5 $nsc.vl3-dns -4 || exit
     done
 done
 )
