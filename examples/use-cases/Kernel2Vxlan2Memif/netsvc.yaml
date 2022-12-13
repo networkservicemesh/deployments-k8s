@@ -1,8 +1,0 @@
----
-apiVersion: networkservicemesh.io/v1
-kind: NetworkService
-metadata:
-  name: kernel2vxlan2memif
-  namespace: nsm-system
-spec:
-  payload: ETHERNET
