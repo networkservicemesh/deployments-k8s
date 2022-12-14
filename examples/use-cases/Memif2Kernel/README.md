@@ -18,7 +18,7 @@ kubectl create ns ns-memif2kernel
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Kernel?ref=5e66d659f8233ecfbe0cc74c73a40eb97f10251c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Kernel?ref=186f638e0f9c36767643c5d432ebd4f824e2510c
 ```
 
 Wait for applications ready:
