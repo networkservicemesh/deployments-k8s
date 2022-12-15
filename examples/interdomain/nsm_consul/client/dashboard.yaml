@@ -6,7 +6,7 @@ metadata:
   labels:
     app: dashboard-nsc
   annotations:
-    networkservicemesh.io: kernel://autoscale-consul-proxy@my.cluster2/nsm-1?app=dashboard-nsc
+    networkservicemesh.io: kernel://autoscale-consul-proxy-client@my.cluster2/nsm-1?app=counting
 spec:
   containers:
   - name: dashboard

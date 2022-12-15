@@ -2,7 +2,6 @@
 
 This example shows how Consul can be used over NSM. 
 
-
 ## Requires
 
 - [Load balancer](../loadbalancer)
@@ -29,30 +28,33 @@ Install Consul for the second cluster:
 consul-k8s install -config-file=helm-consul-values.yaml -set global.image=hashicorp/consul:1.12.0 -auto-approve --kubeconfig=$KUBECONFIG2
 ```
 
-Install networkservice for the second cluster::
+Deploy `counting` service and Consul workload on the second cluster:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/server/counting_service.yaml
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/server/counting.yaml
+```
+
+Deploy networkservice on the second cluster:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/27af934a97ce233926204569f84bd932d1d800b8/examples/interdomain/nsm_consul/networkservice.yaml
 ```
 
-Start `dashboard` networkservicemesh client for the first cluster:
-
+Start `auto-scale` networkservicemesh endpoints:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/27af934a97ce233926204569f84bd932d1d800b8/examples/interdomain/nsm_consul/client/dashboard.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/nse-auto-scale-client
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/nse-auto-scale-server
 ```
 
-Create kubernetes service for the networkservicemesh endpoint:
+Create kubernetes service for the networkservicemesh proxy-endpoint:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/27af934a97ce233926204569f84bd932d1d800b8/examples/interdomain/nsm_consul/service.yaml
 ```
 
-Start `auto-scale` networkservicemesh endpoint:
+Start `dashboard` networkservicemesh client on the first cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_consul/nse-auto-scale?ref=27af934a97ce233926204569f84bd932d1d800b8
-```
-
-Install `counting` Consul workload on the second cluster:
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/27af934a97ce233926204569f84bd932d1d800b8/examples/interdomain/nsm_consul/server/counting.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/client/dashboard.yaml
 ```
 
 Wait for the dashboard client to be ready
@@ -65,7 +67,7 @@ Verify connection from networkservicemesh client to the consul counting service:
 kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- apk add curl
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001 
+kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001
 ```
 
 Port forward and check connectivity from NSM+Consul by yourself!
@@ -91,9 +93,8 @@ Congratulations! You have made a interdomain connection between via NSM + Consul
 
 Verify connection from networkservicemesh client to the new counting service:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001 
+kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl counting:9001
 ```
-
 
 ## Cleanup
 
@@ -101,18 +102,13 @@ kubectl --kubeconfig=$KUBECONFIG1 exec pod/dashboard-nsc -c cmd-nsc -- curl coun
 pkill -f "port-forward"
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete deployment counting
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_consul/nse-auto-scale?ref=27af934a97ce233926204569f84bd932d1d800b8
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/27af934a97ce233926204569f84bd932d1d800b8/examples/interdomain/nsm_consul/client/dashboard.yaml
-```
-```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/27af934a97ce233926204569f84bd932d1d800b8/examples/interdomain/nsm_consul/networkservice.yaml
-```
-```bash
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/server/counting_nsm.yaml
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/client/dashboard.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/nse-auto-scale-client
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/nse-auto-scale-server
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/service.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/server/counting_service.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/dcd66ec4b3bedfaa40494d9c22a59211d76045b2/examples/interdomain/nsm_consul/networkservice.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
 ```
 ```bash

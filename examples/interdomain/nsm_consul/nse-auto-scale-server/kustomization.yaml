@@ -9,7 +9,7 @@ patchesStrategicMerge:
 - patch-supplier.yaml
 
 configMapGenerator:
-  - name: supplier-pod-template-configmap
+  - name: supplier-pod-template-configmap-server
     files:
       - pod-template.yaml
   - name: iptables-map

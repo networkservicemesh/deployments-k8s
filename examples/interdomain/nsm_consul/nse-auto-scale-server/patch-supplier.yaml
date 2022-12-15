@@ -13,7 +13,7 @@ spec:
         - name: nse-supplier
           env:
             - name: NSM_SERVICE_NAME
-              value: autoscale-consul-proxy
+              value: autoscale-consul-proxy-server
             - name: NSM_LABELS
               value: any:true
             - name: NSM_NAMESPACE
@@ -29,4 +29,4 @@ spec:
       volumes:
         - name: pod-file
           configMap:
-            name: supplier-pod-template-configmap
+            name: supplier-pod-template-configmap-server
