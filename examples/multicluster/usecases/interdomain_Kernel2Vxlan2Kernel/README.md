@@ -23,7 +23,7 @@ kubectl create ns ns-interdomain-kernel2vxlan2kernel
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster2?ref=2eeb5df7d50b4605c96f57b79b0ea22a66223688
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster2?ref=0c09b974ddd04be32ed3b5d3919aff3227662713
 ```
 
 Find NSE pod by labels:
@@ -49,7 +49,7 @@ kubectl create ns ns-interdomain-kernel2vxlan2kernel
 
 Deploy client:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster1?ref=2eeb5df7d50b4605c96f57b79b0ea22a66223688
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster1?ref=0c09b974ddd04be32ed3b5d3919aff3227662713
 ```
 
 Wait for applications ready:
