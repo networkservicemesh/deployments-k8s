@@ -21,7 +21,7 @@ kubectl create ns ns-kernel2kernel-vlan
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2KernelVLAN?ref=c92ec43c4b09de9cfce37cf137e711ef773eded5
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2KernelVLAN?ref=0b9d4c503a39ad445746d98a09d43c5c7f7a3b34
 ```
 
 Wait for applications ready:
