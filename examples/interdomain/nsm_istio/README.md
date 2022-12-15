@@ -31,25 +31,25 @@ istioctl --kubeconfig=$KUBECONFIG2 proxy-status
 
 Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/991cb2f62120870e28ab32ccd9951dc843ce4dbf/examples/interdomain/nsm_istio/networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd/examples/interdomain/nsm_istio/networkservice.yaml
 ```
 
 Start `alpine` with networkservicemesh client on the first cluster:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/991cb2f62120870e28ab32ccd9951dc843ce4dbf/examples/interdomain/nsm_istio/greeting/client.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd/examples/interdomain/nsm_istio/greeting/client.yaml
 ```
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio/nse-auto-scale?ref=991cb2f62120870e28ab32ccd9951dc843ce4dbf
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio/nse-auto-scale?ref=74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd
 ```
 
 Install http-server for the second cluster:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection=enabled
 
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/991cb2f62120870e28ab32ccd9951dc843ce4dbf/examples/interdomain/nsm_istio/greeting/server.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd/examples/interdomain/nsm_istio/greeting/server.yaml
 ```
 
 Wait for the `alpine` client to be ready:
@@ -74,10 +74,10 @@ You have made a interdomain connection between two clusters via NSM + Istio!
 ## Cleanup
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/991cb2f62120870e28ab32ccd9951dc843ce4dbf/examples/interdomain/nsm_istio/greeting/server.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio/nse-auto-scale?ref=991cb2f62120870e28ab32ccd9951dc843ce4dbf
-kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/991cb2f62120870e28ab32ccd9951dc843ce4dbf/examples/interdomain/nsm_istio/greeting/client.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/991cb2f62120870e28ab32ccd9951dc843ce4dbf/examples/interdomain/nsm_istio/networkservice.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd/examples/interdomain/nsm_istio/greeting/server.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio/nse-auto-scale?ref=74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd/examples/interdomain/nsm_istio/greeting/client.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/74ae1d6fb3f5b1aa584ce6bbbab8d705c8a4a4cd/examples/interdomain/nsm_istio/networkservice.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete ns istio-system
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection-
 kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
