@@ -19,7 +19,7 @@ kubectl create ns ns-kernel2rvlan-internal
 Deploy iperf server:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanInternal?ref=c05fcb3951ee296a6bc870bf2ebfecb0d4a6fae3
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanInternal?ref=fff1940bef328cbb9def325e365c70dfaa00c7a7
 ```
 
 Wait for applications ready:
