@@ -25,7 +25,7 @@ spec:
             - name: vfio
               mountPath: /dev/vfio
 
-        - name: sidecar
+        - name: nsc
           image: ghcr.io/networkservicemesh/ci/cmd-nsc:41e0d21
           imagePullPolicy: IfNotPresent
           env:

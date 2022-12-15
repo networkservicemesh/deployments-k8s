@@ -4,14 +4,14 @@ kind: Kustomization
 
 namespace: ns-kernel2ethernet2kernel-vfio2noop
 
-bases:
-- ../../../apps/nse-kernel
-- ../../../apps/nsc-vfio
-- ../../../apps/nse-vfio
-
 resources:
-- netsvc.yaml
-- client.yaml
+  - ../../../apps/nse-kernel
+  - ../../../apps/nsc-vfio
+  - ../../../apps/nse-vfio
+  - netsvc.yaml
+  - client.yaml
 
 patchesStrategicMerge:
-- patch-nse.yaml
+  - patch-nse.yaml
+  - patch-nsc-vfio.yaml
+  - patch-nse-vfio.yaml
