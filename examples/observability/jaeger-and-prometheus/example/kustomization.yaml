@@ -9,7 +9,7 @@ resources:
 - netsvc.yaml
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=ad3cb6d6dcd73df9b4b8aa656e84278596244b21
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=4c8c3122ea0f4cf23a707e1a1205ae0ab4892bd4
 
 patchesStrategicMerge:
 - patch-nse.yaml
