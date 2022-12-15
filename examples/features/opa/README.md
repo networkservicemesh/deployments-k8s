@@ -24,7 +24,7 @@ kubectl create ns ns-opa
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/opa?ref=ba7e0ae41039d81643c9e4136afdc36ad4db1b35
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/opa?ref=8ed1e6a271ce2a2b908c32dfa69dd780ab7db17d
 ```
 
 Wait for applications ready:
