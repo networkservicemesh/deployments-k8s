@@ -4,6 +4,11 @@ kind: Kustomization
 
 namespace: ns-vfio2noop
 
-bases:
-- ../../../apps/nsc-vfio
-- ../../../apps/nse-vfio
+resources:
+  - ../../../apps/nsc-vfio
+  - ../../../apps/nse-vfio
+  - netsvc.yaml
+
+patchesStrategicMerge:
+  - patch-nsc-vfio.yaml
+  - patch-nse-vfio.yaml

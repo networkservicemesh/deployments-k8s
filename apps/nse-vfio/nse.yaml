@@ -31,7 +31,7 @@ spec:
             - name: vfio
               mountPath: /dev/vfio
 
-        - name: sidecar
+        - name: nse
           image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:f02a407
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -42,7 +42,7 @@ spec:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
               value: TRACE
-            - name: NSM_SERVICES
+            - name: NSM_SERVICE_NAMES
               value: "pingpong@worker.domain: { addr: 0a:55:44:33:22:11 }"
           volumeMounts:
             - name: spire-agent-socket
