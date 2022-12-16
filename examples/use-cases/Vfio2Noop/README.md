@@ -15,7 +15,7 @@ kubectl create ns ns-vfio2noop
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2Noop?ref=00a192d20a339c7d25b7b2d0f407c819eec2cb26
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2Noop?ref=32a7dae01d40fbf8ca94f7260c49b2deaa23b2c5
 ```
 
 Wait for applications ready:
