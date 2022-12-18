@@ -27,7 +27,7 @@ The template could be changed via env variable of [cmd-nse-vl3-vpp](../../../app
 
 Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns?ref=210aa5bc4c5dd570756e803b54bb61da22aebb0d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-dns?ref=279c5cfb470d3ecc6ba4d937b2cbb1fd2cc41a1c
 ```
 
 Wait for clients to be ready:
