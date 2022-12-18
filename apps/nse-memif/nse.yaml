@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder-vpp:408192f
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder-vpp:d39a944
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
