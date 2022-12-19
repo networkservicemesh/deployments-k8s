@@ -17,7 +17,7 @@ kubectl create ns ns-registry-restart
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-before-death?ref=394b54bf80bea5059a1851c6ed001983093b27f6
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-before-death?ref=b8be94bb5f8b082c75c7b32c2e3e3aab61d251ba
 ```
 
 Wait for applications ready:
@@ -61,7 +61,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=registry -n nsm-syste
 
 Apply:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-after-death?ref=394b54bf80bea5059a1851c6ed001983093b27f6
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-after-death?ref=b8be94bb5f8b082c75c7b32c2e3e3aab61d251ba
 ```
 
 Wait for a new NSC to start:
