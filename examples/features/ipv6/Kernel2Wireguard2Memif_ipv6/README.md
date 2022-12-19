@@ -15,7 +15,7 @@ kubectl create ns ns-kernel2wireguard2memif-ipv6
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Kernel2Wireguard2Memif_ipv6?ref=57178e7ad0a7f12d7bd1d9b5d385e2eaca532b06
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Kernel2Wireguard2Memif_ipv6?ref=371369f557152dda380480d69e162428294bc86e
 ```
 
 Wait for applications ready:
