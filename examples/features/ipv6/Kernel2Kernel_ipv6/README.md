@@ -14,7 +14,7 @@ kubectl create ns ns-kernel2kernel-ipv6
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Kernel2Kernel_ipv6?ref=4677f1dd287c7efe177f024854d4920d4f20ab41
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Kernel2Kernel_ipv6?ref=edefaa748d679de1e3e1cd79d268dbb90ff1becf
 ```
 
 Wait for applications ready:
