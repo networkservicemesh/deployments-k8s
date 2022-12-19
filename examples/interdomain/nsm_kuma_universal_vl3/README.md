@@ -11,7 +11,7 @@
 ## Run
 1. Start vl3
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_kuma_universal_vl3/vl3-dns?ref=8f09e2c87bb4b96c49925390a93394f37abe40ff
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_kuma_universal_vl3/vl3-dns?ref=0f34d635a9ed76921fe9597d3080fe15c9ec3d5a
 kubectl --kubeconfig=$KUBECONFIG1 -n ns-dns-vl3 wait --for=condition=ready --timeout=5m pod -l app=vl3-ipam
 ```
 
@@ -31,7 +31,7 @@ kumactl generate tls-certificate --hostname=control-plane-kuma.my-vl3-network --
 cp ./tls.crt ./ca.crt
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8f09e2c87bb4b96c49925390a93394f37abe40ff/examples/interdomain/nsm_kuma_universal_vl3/namespace.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0f34d635a9ed76921fe9597d3080fe15c9ec3d5a/examples/interdomain/nsm_kuma_universal_vl3/namespace.yaml
 kubectl --kubeconfig=$KUBECONFIG1 create secret generic general-tls-certs --namespace=kuma-system --from-file=./tls.key --from-file=./tls.crt --from-file=./ca.crt
 ```
 ```bash
@@ -47,7 +47,7 @@ resources:
 - control-plane.yaml
 
 patchesStrategicMerge:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8f09e2c87bb4b96c49925390a93394f37abe40ff/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
+- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0f34d635a9ed76921fe9597d3080fe15c9ec3d5a/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
 EOF
 ```
 
@@ -58,13 +58,13 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -k .
 
 5. Start redis database with the sidecar on the first cluster
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8f09e2c87bb4b96c49925390a93394f37abe40ff/examples/interdomain/nsm_kuma_universal_vl3/demo-redis.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0f34d635a9ed76921fe9597d3080fe15c9ec3d5a/examples/interdomain/nsm_kuma_universal_vl3/demo-redis.yaml
 kubectl --kubeconfig=$KUBECONFIG1 -n kuma-demo wait --for=condition=ready --timeout=5m pod -l app=redis
 ```
 
 6. Start counter page with the sidecar on the second cluster
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/8f09e2c87bb4b96c49925390a93394f37abe40ff/examples/interdomain/nsm_kuma_universal_vl3/demo-app.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0f34d635a9ed76921fe9597d3080fe15c9ec3d5a/examples/interdomain/nsm_kuma_universal_vl3/demo-app.yaml
 kubectl --kubeconfig=$KUBECONFIG2 -n kuma-demo wait --for=condition=ready --timeout=5m pod -l app=demo-app
 ```
 
