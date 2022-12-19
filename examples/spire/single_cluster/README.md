@@ -6,7 +6,7 @@ This is a Spire setup for the single cluster scenario.
 
 To apply spire deployments following the next command:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster/?ref=eb626858d0f7956b6ce68aca62af19298cb6c950
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster/?ref=c7884d155b1a8f26903157b1144555c2e59578e7
 ```
 
 Wait for PODs status ready:
