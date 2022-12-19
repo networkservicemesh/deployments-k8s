@@ -18,7 +18,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-forwarder-sriov:2cb338c
+        - image: ghcr.io/networkservicemesh/cmd-forwarder-sriov:v1.7.0-rc.3
           imagePullPolicy: IfNotPresent
           name: forwarder-sriov
           securityContext:
