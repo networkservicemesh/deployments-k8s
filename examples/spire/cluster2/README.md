@@ -14,7 +14,7 @@ Check that we have config for the cluster:
 
 Apply spire deployments:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/cluster2?ref=afd86bf3b50d9ab90e5d21b57d08a4eb0fe0d70a
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/cluster2?ref=b3bff8ed6bdd172f3281c6726ebc641ccb59ca13
 ```
 
 Wait for PODs status ready:
