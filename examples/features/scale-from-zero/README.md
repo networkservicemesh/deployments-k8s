@@ -25,7 +25,7 @@ kubectl create ns ns-scale-from-zero
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=298b51e09d1199ca60a536438f5871efc45813ce
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=925e500915e347ca009f71dc366576988650a20b
 ```
 
 Wait for applications ready:
