@@ -41,10 +41,11 @@ spec:
               mountPath: /run/spire/sockets
           resources:
             requests:
-              cpu: 100m
-            limits:
-              memory: 40Mi
+              memory: 100Mi
               cpu: 200m
+            limits:
+              memory: 260Mi
+              cpu: 300m
       volumes:
         - name: spire-agent-socket
           hostPath:
