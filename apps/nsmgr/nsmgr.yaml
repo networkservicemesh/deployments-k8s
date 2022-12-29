@@ -56,8 +56,8 @@ spec:
               mountPath: /var/lib/networkservicemesh/config/
           resources:
             requests:
-              cpu: 200m
               memory: 100Mi
+              cpu: 200m
             limits:
               memory: 200Mi
               cpu: 400m
