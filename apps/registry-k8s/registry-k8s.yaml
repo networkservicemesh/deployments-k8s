@@ -42,10 +42,10 @@ spec:
           resources:
             requests:
               memory: 100Mi
-              cpu: 200m
+              cpu: 100m
             limits:
               memory: 260Mi
-              cpu: 300m
+              cpu: 200m
       volumes:
         - name: spire-agent-socket
           hostPath:
