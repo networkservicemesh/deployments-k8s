@@ -23,7 +23,7 @@ kubectl create ns ns-interdomain-kernel2wireguard2kernel
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Wireguard2Kernel/cluster2?ref=30c5453cabd871d88065c2aa20eb797b7687c693
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Wireguard2Kernel/cluster2?ref=ba8ebf88d38fc04d04bfc12f185b85f204ba0c6c
 ```
 
 Wait for applications ready:
@@ -49,7 +49,7 @@ kubectl create ns ns-interdomain-kernel2wireguard2kernel
 
 Deploy NSC:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Wireguard2Kernel/cluster1?ref=30c5453cabd871d88065c2aa20eb797b7687c693
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Wireguard2Kernel/cluster1?ref=ba8ebf88d38fc04d04bfc12f185b85f204ba0c6c
 ```
 
 Wait for applications ready:
