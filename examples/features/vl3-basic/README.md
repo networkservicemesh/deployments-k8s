@@ -18,7 +18,7 @@ kubectl create ns ns-vl3
 
 Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=ce1d2681dbbd25e7a9f0932fe5cdcf0754d421b0
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=644ce5cc96ac2005848438220a3814cb279ac60b
 ```
 
 Wait for clients to be ready:
