@@ -17,7 +17,7 @@ kubectl create ns ns-webhook
 
 Deploy client and nginx-nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook?ref=4d2936bdfd0913b035e16c8133180ee24ff2d99f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook?ref=bc825aa4c291f51a64414c00a36eec49469f6491
 ```
 
 Wait for applications ready:
