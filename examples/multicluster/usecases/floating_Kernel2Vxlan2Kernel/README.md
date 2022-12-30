@@ -17,6 +17,19 @@ Make sure that you have completed steps from [interdomain](../../)
 **1. Deploy endpoint on cluster2**
 
 ```bash
+export KUBECONFIG=$KUBECONFIG3
+```
+
+```bash
+kubectl create ns ns-floating-kernel2vxlan2kernel
+```
+
+Deploy NSE:
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=ef47464164fef0374667a130bd785be4f2682229
+```
+
+```bash
 export KUBECONFIG=$KUBECONFIG2
 ```
 
@@ -102,6 +115,14 @@ kubectl delete ns ns-floating-kernel2vxlan2kernel
 2. Cleanup resources for *cluster2*:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
+```
+```bash
+kubectl delete ns ns-floating-kernel2vxlan2kernel
+```
+
+3. Cleanup resources for *cluster3*:
+```bash
+export KUBECONFIG=$KUBECONFIG3
 ```
 ```bash
 kubectl delete ns ns-floating-kernel2vxlan2kernel

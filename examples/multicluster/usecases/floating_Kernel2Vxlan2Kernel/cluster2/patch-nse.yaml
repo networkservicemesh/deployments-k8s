@@ -19,4 +19,6 @@ spec:
           - name: NSM_CIDR_PREFIX
             value: 172.16.1.2/31
           - name: NSM_SERVICE_NAMES
-            value: icmp-responder@my.cluster3
+            value: floating-kernel2vxlan2kernel@my.cluster3
+          - name: NSM_REGISTER_SERVICE
+            value: "false"

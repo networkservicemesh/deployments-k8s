@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alpine
   annotations:
-    networkservicemesh.io: kernel://icmp-responder@my.cluster3/nsm-1
+    networkservicemesh.io: kernel://floating-kernel2vxlan2kernel@my.cluster3/nsm-1
 spec:
   containers:
   - name: alpine
