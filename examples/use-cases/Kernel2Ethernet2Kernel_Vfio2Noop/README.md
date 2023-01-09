@@ -11,7 +11,7 @@ kubectl create ns ns-kernel2ethernet2kernel-vfio2noop
 
 Deploy NSCs and NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Ethernet2Kernel_Vfio2Noop?ref=2c54ddd87c0863d52d294d6b869cfe0f9c722452
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Ethernet2Kernel_Vfio2Noop?ref=bb8c298a273c6fa72c19afa342e5c04041fcf11f
 ```
 
 Wait for applications ready:
