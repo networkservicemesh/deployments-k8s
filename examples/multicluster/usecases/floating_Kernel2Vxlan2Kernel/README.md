@@ -14,7 +14,7 @@ Make sure that you have completed steps from [interdomain](../../)
 
 ## Run
 
-**1. Deploy endpoint on cluster2**
+**1. Deploy network service on cluster3**
 
 ```bash
 export KUBECONFIG=$KUBECONFIG3
@@ -28,6 +28,8 @@ Deploy NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=1ff6fba635f4d5c9648e5b83ec5eb7c69f6afddb
 ```
+
+**2. Deploy endpoint on cluster2**
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
