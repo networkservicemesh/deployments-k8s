@@ -15,7 +15,7 @@ kubectl create ns ns-smartvf2smartvf
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=1ff6fba635f4d5c9648e5b83ec5eb7c69f6afddb
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=2c54ddd87c0863d52d294d6b869cfe0f9c722452
 ```
 
 Wait for applications ready:
