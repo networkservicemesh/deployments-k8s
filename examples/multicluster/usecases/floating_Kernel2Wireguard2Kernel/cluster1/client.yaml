@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alpine
   annotations:
-    networkservicemesh.io: kernel://my-networkservice-ip@my.cluster3/nsm-1
+    networkservicemesh.io: kernel://floating-kernel2wireguard2kernel@my.cluster3/nsm-1
 spec:
   containers:
   - name: alpine

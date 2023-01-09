@@ -17,7 +17,23 @@ Make sure that you have completed steps from [interdomain](../../)
 
 ## Run
 
-**1. Deploy endpoint on cluster2**
+**1. Deploy network service on cluster3**
+
+```bash
+export KUBECONFIG=$KUBECONFIG3
+```
+
+```bash
+kubectl create ns ns-floating-kernel2wireguard2kernel
+```
+
+Deploy NS:
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Wireguard2Kernel/cluster3?ref=1ff6fba635f4d5c9648e5b83ec5eb7c69f6afddb
+```
+
+
+**2. Deploy endpoint on cluster2**
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
@@ -106,6 +122,14 @@ kubectl delete ns ns-floating-kernel2wireguard2kernel
 2. Cleanup resources for *cluster2*:
 ```bash
 export KUBECONFIG=$KUBECONFIG2
+```
+```bash
+kubectl delete ns ns-floating-kernel2wireguard2kernel
+```
+
+3. Cleanup resources for *cluster3*:
+```bash
+export KUBECONFIG=$KUBECONFIG3
 ```
 ```bash
 kubectl delete ns ns-floating-kernel2wireguard2kernel
