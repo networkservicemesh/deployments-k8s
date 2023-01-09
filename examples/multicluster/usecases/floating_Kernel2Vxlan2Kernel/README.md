@@ -26,7 +26,7 @@ kubectl create ns ns-floating-kernel2vxlan2kernel
 
 Deploy NS:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=bb8c298a273c6fa72c19afa342e5c04041fcf11f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=3a06b0a7df639f30193c782d9e73b28e262d150a
 ```
 
 **2. Deploy endpoint on cluster2**
@@ -41,7 +41,7 @@ kubectl create ns ns-floating-kernel2vxlan2kernel
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster2?ref=bb8c298a273c6fa72c19afa342e5c04041fcf11f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster2?ref=3a06b0a7df639f30193c782d9e73b28e262d150a
 ```
 
 Wait for applications ready:
@@ -67,7 +67,7 @@ kubectl create ns ns-floating-kernel2vxlan2kernel
 
 Deploy NSC:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster1?ref=bb8c298a273c6fa72c19afa342e5c04041fcf11f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster1?ref=3a06b0a7df639f30193c782d9e73b28e262d150a
 ```
 
 Wait for applications ready:
