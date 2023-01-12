@@ -10,3 +10,6 @@ bases:
 - ../../apps/forwarder-sriov
 - ../../apps/registry-k8s
 - ../../apps/admission-webhook-k8s
+
+resources:
+- ../basic/nsm-system-namespace.yaml

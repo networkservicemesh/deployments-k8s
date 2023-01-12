@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-exclude-prefixes
 
 resources:
+- ns-exclude-prefixes.yaml
 - netsvc.yaml
 - client.yaml
 

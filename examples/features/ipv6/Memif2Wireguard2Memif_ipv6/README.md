@@ -7,11 +7,6 @@ Forwarders are using the `wireguard` mechanism to connect with each other.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-memif2wireguard2memif-ipv6
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Memif2Wireguard2Memif_ipv6?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

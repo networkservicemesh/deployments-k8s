@@ -10,11 +10,6 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-local-nse-death
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k nse-before-death

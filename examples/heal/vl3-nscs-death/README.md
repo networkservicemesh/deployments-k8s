@@ -5,11 +5,6 @@ This example shows vl3-network recovery after redeploying all clients.
 
 ## Run
 
-Create ns to deploy nse and nsc:
-```bash
-kubectl create ns ns-vl3-nscs-death
-```
-
 Deploy nsc and vl3 nses:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nscs-death?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-registry-remote-forwarder.yaml
 - netsvc.yaml
 - client.yaml
 

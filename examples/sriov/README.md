@@ -29,11 +29,6 @@ For the `worker` node:
 
 ## Run
 
-1. Create ns for deployments:
-```bash
-kubectl create ns nsm-system
-```
-
 Apply NSM resources for basic tests:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

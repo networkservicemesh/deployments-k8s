@@ -9,6 +9,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-memif2ip2kernel.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

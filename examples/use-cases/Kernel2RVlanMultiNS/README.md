@@ -10,13 +10,6 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 
 ## Run
 
-Create test namespace:
-
-```bash
-kubectl create ns ns-kernel2vlan-multins-1
-kubectl create ns ns-kernel2vlan-multins-2
-```
-
 Deployment in first namespace
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

@@ -6,11 +6,6 @@ NSC and NSE are using the `memif` mechanism to connect to its local forwarder.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-memif2memif-ipv6
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k .

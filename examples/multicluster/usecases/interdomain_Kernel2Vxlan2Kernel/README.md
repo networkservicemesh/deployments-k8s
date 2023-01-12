@@ -17,10 +17,6 @@ Make sure that you have completed steps from [interdomain](../../)
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-```bash
-kubectl create ns ns-interdomain-kernel2vxlan2kernel
-```
-
 Deploy NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster2?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51
@@ -41,10 +37,6 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-inte
 
 ```bash
 export KUBECONFIG=$KUBECONFIG1
-```
-
-```bash
-kubectl create ns ns-interdomain-kernel2vxlan2kernel
 ```
 
 Deploy client:

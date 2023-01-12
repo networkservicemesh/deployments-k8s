@@ -4,11 +4,6 @@ This example shows that local kernel connection and VFIO connection can be setup
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-kernel2kernel-vfio2noop
-```
-
 Deploy NSCs and NSEs:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Kernel_Vfio2Noop?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

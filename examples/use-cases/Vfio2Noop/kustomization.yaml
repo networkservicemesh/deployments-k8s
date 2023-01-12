@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-vfio2noop
 
 resources:
+  - ns-vfio2noop.yaml
   - ../../../apps/nsc-vfio
   - ../../../apps/nse-vfio
   - netsvc.yaml

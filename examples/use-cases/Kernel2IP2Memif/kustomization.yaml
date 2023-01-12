@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-memif
 
 resources:
+- ns-kernel2ip2memif.yaml
 - client.yaml
 - netsvc.yaml
 

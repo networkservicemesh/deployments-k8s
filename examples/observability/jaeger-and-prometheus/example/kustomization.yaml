@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-jaeger-and-prometheus
 
 resources:
+- ns-jaeger-and-prometheus.yaml
 - client.yaml
 - netsvc.yaml
 

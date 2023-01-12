@@ -14,11 +14,6 @@ hugepage, so in this case NSE pod should be created with memory limit > 2.2 GB.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-kernel2kernel-vlan
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2KernelVLAN?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

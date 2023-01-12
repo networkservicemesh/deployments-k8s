@@ -10,11 +10,6 @@ Make sure that you have completed steps from [ovs](../../ovs) setup
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-webhook
-```
-
 Note: Admission webhook is required and should be started at this moment.
 ```bash
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')

@@ -15,7 +15,8 @@ bases:
 - ../../../../apps/admission-webhook-k8s
 
 resources:
-  - "cluster-property.yaml"
+- ../../../basic/nsm-system-namespace.yaml
+- cluster-property.yaml
 
 patchesStrategicMerge:
 - patch-nsmgr-proxy.yaml

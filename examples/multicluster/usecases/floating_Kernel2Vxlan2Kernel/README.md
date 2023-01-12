@@ -20,10 +20,6 @@ Make sure that you have completed steps from [interdomain](../../)
 export KUBECONFIG=$KUBECONFIG3
 ```
 
-```bash
-kubectl create ns ns-floating-kernel2vxlan2kernel
-```
-
 Deploy NS:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51
@@ -33,10 +29,6 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-```
-
-```bash
-kubectl create ns ns-floating-kernel2vxlan2kernel
 ```
 
 Deploy NSE:
@@ -59,10 +51,6 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-floating-kernel2vxlan2kernel --te
 
 ```bash
 export KUBECONFIG=$KUBECONFIG1
-```
-
-```bash
-kubectl create ns ns-floating-kernel2vxlan2kernel
 ```
 
 Deploy NSC:

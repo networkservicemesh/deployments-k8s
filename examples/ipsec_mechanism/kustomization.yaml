@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 resources:
+- ../basic/nsm-system-namespace.yaml
 - ../../apps/nsmgr
 - ../../apps/forwarder-vpp
 - ../../apps/registry-k8s

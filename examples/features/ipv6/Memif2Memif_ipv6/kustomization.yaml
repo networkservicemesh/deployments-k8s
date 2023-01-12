@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-memif2memif-ipv6
 
 resources:
+- ns-memif2memif-ipv6.yaml
 - netsvc.yaml
 
 bases:

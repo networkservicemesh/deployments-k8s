@@ -9,6 +9,7 @@ bases:
 - ../../../apps/nse-vlan-vpp
 
 resources:
+- ns-kernel2kernel-vlan.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-webhook.yaml
 - postgres-cl.yaml
 - netsvc.yaml
 

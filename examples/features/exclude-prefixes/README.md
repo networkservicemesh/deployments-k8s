@@ -10,11 +10,6 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-exclude-prefixes
-```
-
 Create config map with excluded prefixes
 ```bash
 kubectl apply -f exclude-prefixes-config-map.yaml

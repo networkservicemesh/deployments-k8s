@@ -9,3 +9,6 @@ bases:
 
 patchesStrategicMerge:
 - patch-nse.yaml
+
+resources:
+  - ns-local-nsmgr-local-nse-memif.yaml

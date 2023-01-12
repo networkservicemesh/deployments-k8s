@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-select-forwarder.yaml
 - client.yaml
 - service.yaml
 - forwarder.yaml

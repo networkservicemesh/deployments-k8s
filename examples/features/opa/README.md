@@ -17,11 +17,6 @@ Expected that Endpoint(in this case NSMgr) will fail the Request from the client
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-opa
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/opa?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

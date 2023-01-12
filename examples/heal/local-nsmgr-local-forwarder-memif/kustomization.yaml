@@ -9,6 +9,7 @@ bases:
 - ../../../apps/nse-memif
 
 resources:
+- ns-local-nsmgr-local-forwarder-memif.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

@@ -40,10 +40,6 @@ docker exec kind-worker2 ip link set ext_net1 up)
 
 Create ns for deployments:
 
-```bash
-kubectl create ns nsm-system
-```
-
 Apply NSM resources for basic tests:
 
 ```bash

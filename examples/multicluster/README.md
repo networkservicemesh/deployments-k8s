@@ -38,10 +38,6 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-```bash
-kubectl create ns nsm-system
-```
-
 Apply NSM resources for basic tests:
 ```bash
 kubectl apply -k ./clusters-configuration/cluster1
@@ -62,10 +58,6 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 ```bash
 export KUBECONFIG=$KUBECONFIG2
-```
-
-```bash
-kubectl create ns nsm-system
 ```
 
 Apply NSM resources for basic tests:
@@ -89,10 +81,6 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 ```bash
 export KUBECONFIG=$KUBECONFIG3
-```
-
-```bash
-kubectl create ns nsm-system
 ```
 
 Apply NSM resources for basic tests:

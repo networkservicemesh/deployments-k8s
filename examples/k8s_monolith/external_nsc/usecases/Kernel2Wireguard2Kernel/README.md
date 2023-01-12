@@ -9,11 +9,6 @@ Make sure that you have completed steps from [external NSC](../../)
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-kernel2wireguard2kernel-monolith-nsc
-```
-
 Deploy NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nsc/usecases/Kernel2Wireguard2Kernel?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

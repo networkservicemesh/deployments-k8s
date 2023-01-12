@@ -11,11 +11,6 @@ Make sure that you have completed steps from [basic](../../basic).
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-remote-nsm-system-restart-memif-ip
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsm-system-restart-memif-ip?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

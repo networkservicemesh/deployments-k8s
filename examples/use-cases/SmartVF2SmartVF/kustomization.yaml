@@ -9,6 +9,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-smartvf2smartvf.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

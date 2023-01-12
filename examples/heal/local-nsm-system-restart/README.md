@@ -10,11 +10,6 @@ Make sure that you have completed steps from [basic](../../basic).
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-local-nsm-system-restart
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsm-system-restart?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51
@@ -51,9 +46,6 @@ Restart nsm-system:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system
-```
-```bash
-kubectl create ns nsm-system
 ```
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

@@ -9,3 +9,6 @@ bases:
 
 patchesStrategicMerge:
 - patch-registry-k8s.yaml
+
+resources:
+- ../../../basic/nsm-system-namespace.yaml

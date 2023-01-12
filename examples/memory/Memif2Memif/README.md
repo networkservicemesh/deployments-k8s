@@ -11,11 +11,6 @@ Make sure that you have completed steps from [memory](../) setup.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-memif2memif
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory/Memif2Memif?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

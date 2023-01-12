@@ -7,11 +7,6 @@ NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-kernel2kernel-dual-stack
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/Kernel2Kernel_dual_stack?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

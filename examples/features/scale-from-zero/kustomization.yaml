@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-scale-from-zero
 
 resources:
+- ns-scale-from-zero.yaml
 - autoscale-netsvc.yaml
 - client.yaml
 

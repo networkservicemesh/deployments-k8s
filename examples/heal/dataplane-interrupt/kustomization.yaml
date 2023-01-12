@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-dataplane-interrupt.yaml
 - netsvc.yaml
 - client.yaml
 

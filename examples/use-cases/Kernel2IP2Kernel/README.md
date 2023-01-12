@@ -11,11 +11,6 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-kernel2ip2kernel
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2IP2Kernel?ref=dcfff3a876ea114d67f9daddc6d09cc2b8c28a51

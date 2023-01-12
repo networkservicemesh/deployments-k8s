@@ -9,6 +9,7 @@ bases:
 - ../../../apps/vl3-ipam
 
 resources:
+- ns-vl3-nscs-death.yaml
 - netsvc.yaml
 - client.yaml
 

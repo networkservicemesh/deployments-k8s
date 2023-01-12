@@ -10,12 +10,6 @@ Make sure that you have completed steps from [remotevlan](../../remotevlan) setu
 
 ## Run
 
-Create test namespace:
-
-```bash
-kubectl create ns ns-kernel2rvlan-internal
-```
-
 Deploy iperf server:
 
 ```bash

@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-local-nsmgr-restart.yaml
 - netsvc.yaml
 - client.yaml
 

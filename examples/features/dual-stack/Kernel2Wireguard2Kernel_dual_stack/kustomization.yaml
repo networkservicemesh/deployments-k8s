@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-kernel2wireguard2kernel-dual-stack
 
 resources:
+- ns-kernel2wireguard2kernel-dual-stack.yaml
 - client.yaml
 - netsvc.yaml
 
