@@ -14,7 +14,7 @@ kubectl create ns ns-kernel2wireguard2kernel-dual-stack
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/Kernel2Wireguard2Kernel_dual_stack?ref=073f1c95159f18449309006b713b4f82a71b76bf
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/Kernel2Wireguard2Kernel_dual_stack?ref=55fe931f001b41a1fb25bc930de3fb0b81540aa2
 ```
 
 Wait for applications ready:
