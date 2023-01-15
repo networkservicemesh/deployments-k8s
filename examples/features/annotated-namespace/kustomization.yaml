@@ -9,7 +9,7 @@ resources:
   - namespace.yaml
 
 bases:
-  - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=98d763d5ce16e62b9085d56dc7b12b58ed5d4ea8
+  - https://github.com/networkservicemesh/deployments-k8s/apps/nse-kernel?ref=5ddda93a69ef53b2003165d83dbea92200ff3a4d
 
 patchesStrategicMerge:
   - patch-nse.yaml
