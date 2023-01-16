@@ -16,7 +16,7 @@ kubectl create ns ns-dns
 
 Deploy alpine and nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=ceec69734231f55c0e08982da5665517e75e27c8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=b9b03674fe584f8e2b6ca2cf4758a6847fd94ad5
 ```
 
 Wait for applications ready:

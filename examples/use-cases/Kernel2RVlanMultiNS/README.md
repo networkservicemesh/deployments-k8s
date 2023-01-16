@@ -19,18 +19,18 @@ kubectl create ns ns-kernel2vlan-multins-2
 
 Deployment in first namespace
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=ceec69734231f55c0e08982da5665517e75e27c8
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=b9b03674fe584f8e2b6ca2cf4758a6847fd94ad5
 ```
 
 Deployment in second namespace:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ceec69734231f55c0e08982da5665517e75e27c8/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=ceec69734231f55c0e08982da5665517e75e27c8
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b9b03674fe584f8e2b6ca2cf4758a6847fd94ad5/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=b9b03674fe584f8e2b6ca2cf4758a6847fd94ad5
 ```
 
 Deploy the last client
 ```bash
-kubectl apply -n nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ceec69734231f55c0e08982da5665517e75e27c8/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
+kubectl apply -n nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b9b03674fe584f8e2b6ca2cf4758a6847fd94ad5/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
 ```
 
 Wait for applications ready:
@@ -347,7 +347,7 @@ true
 Delete the last client:
 
 ```bash
-kubectl delete --namespace=nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/ceec69734231f55c0e08982da5665517e75e27c8/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
+kubectl delete --namespace=nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/b9b03674fe584f8e2b6ca2cf4758a6847fd94ad5/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
 ```
 
 Delete the test namespace:
