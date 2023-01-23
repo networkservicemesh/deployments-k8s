@@ -18,7 +18,7 @@ kubectl create ns ns-local-nsmgr-local-forwarder-memif
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-forwarder-memif?ref=27b22d3467f018a13df8a3e29cfefb62abde6cc4
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-forwarder-memif?ref=b96cd1dcc732d2a26be1f162a0cd27aa1b59103c
 ```
 
 Wait for applications ready:
