@@ -17,7 +17,7 @@ kubectl create ns ns-exclude-prefixes-client
 
 Deploy NSC, services and NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes-client?ref=f6d19956d509dcdbeee66a24a069580e0020e4de
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes-client?ref=d8dffea313f50b023ac2f1bdc00d36bb27d49c4c
 ```
 
 Wait for applications ready:
