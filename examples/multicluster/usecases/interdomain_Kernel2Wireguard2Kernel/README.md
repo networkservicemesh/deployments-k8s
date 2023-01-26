@@ -17,10 +17,6 @@ Make sure that you have completed steps from [interdomain](../../)
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-```bash
-kubectl create ns ns-interdomain-kernel2wireguard2kernel
-```
-
 Deploy NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Wireguard2Kernel/cluster2?ref=17e6ce5be94dbf409e616c304359499ccbcd903f
@@ -41,10 +37,6 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-interdomain-kernel2wireguard2kern
 
 ```bash
 export KUBECONFIG=$KUBECONFIG1
-```
-
-```bash
-kubectl create ns ns-interdomain-kernel2wireguard2kernel
 ```
 
 Deploy NSC:

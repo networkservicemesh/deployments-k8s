@@ -10,6 +10,7 @@ bases:
 - ../../../apps/nsc-kernel-ponger
 
 resources:
+- ns-sriov-kernel2noop.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

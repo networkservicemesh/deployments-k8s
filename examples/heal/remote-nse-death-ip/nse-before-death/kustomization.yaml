@@ -9,3 +9,6 @@ bases:
 
 patchesStrategicMerge:
 - patch-nse.yaml
+
+resources:
+  - ns-remote-nse-death-ip.yaml

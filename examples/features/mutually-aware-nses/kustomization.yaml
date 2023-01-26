@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nsc-kernel
 
 resources:
+- ns-mutually-aware-nses.yaml
 - nse-1.yaml
 - nse-2.yaml
 - netsvc-1.yaml

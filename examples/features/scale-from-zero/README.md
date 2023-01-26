@@ -18,11 +18,6 @@ thus saving cluster resources (see step 14).
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-scale-from-zero
-```
-
 Deploy NSC and supplier:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=17e6ce5be94dbf409e616c304359499ccbcd903f

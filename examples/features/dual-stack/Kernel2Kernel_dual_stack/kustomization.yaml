@@ -8,6 +8,7 @@ bases:
 - ../../../../apps/nse-kernel
 
 resources:
+- ns-kernel2kernel-dual-stack.yaml
 - client.yaml
 - netsvc.yaml
 

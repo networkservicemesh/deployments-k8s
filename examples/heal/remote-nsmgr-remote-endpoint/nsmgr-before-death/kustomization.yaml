@@ -8,6 +8,7 @@ bases:
 - ../base
 
 resources:
+- ns-remote-nsmgr-remote-endpoint.yaml
 - client.yaml
 
 patchesStrategicMerge:

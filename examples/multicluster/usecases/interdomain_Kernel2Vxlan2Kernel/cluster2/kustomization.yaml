@@ -9,3 +9,6 @@ bases:
 
 patchesStrategicMerge:
 - patch-nse.yaml
+
+resources:
+- ../ns-interdomain-kernel2vxlan2kernel.yaml

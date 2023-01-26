@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-kernel2vxlan2kernel.yaml
 - client.yaml
 
 patchesStrategicMerge:

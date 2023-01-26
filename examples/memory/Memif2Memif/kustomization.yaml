@@ -11,3 +11,6 @@ bases:
 patchesStrategicMerge:
 - patch-nsc.yaml
 - patch-nse.yaml
+
+resources:
+- ns-memif2memif.yaml

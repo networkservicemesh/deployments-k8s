@@ -5,4 +5,5 @@ kind: Kustomization
 namespace: ns-kernel2rvlan-internal
 
 resources:
+  - ns-kernel2rvlan-internal.yaml
   - first-iperf-s.yaml

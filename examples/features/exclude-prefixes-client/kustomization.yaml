@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-exclude-prefixes-client
 
 resources:
+- ns-exclude-prefixes-client.yaml
 - test-client.yaml
 - nsm-service-1.yaml
 - nsm-service-2.yaml

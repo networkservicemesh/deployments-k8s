@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-dns.yaml
 - dnsutils.yaml
 - coredns-config-map.yaml
 - netsvc.yaml

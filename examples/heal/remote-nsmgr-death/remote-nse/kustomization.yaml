@@ -8,6 +8,7 @@ bases:
 - ../../../../apps/nse-kernel
 
 resources:
+- ns-remote-nsmgr-death.yaml
 - netsvc.yaml
 - client.yaml
 

@@ -5,4 +5,5 @@ kind: Kustomization
 namespace: ns-floating-kernel2vxlan2kernel
 
 resources:
+- ../ns-floating-kernel2vxlan2kernel.yaml
 - netsvc.yaml

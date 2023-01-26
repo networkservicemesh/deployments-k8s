@@ -15,3 +15,6 @@ patchesStrategicMerge:
 - patch-forwarder.yaml
 - patch-registry-k8s.yaml
 - patch-nsmgr-proxy.yaml
+
+resources:
+- ../../../basic/nsm-system-namespace.yaml

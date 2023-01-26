@@ -9,6 +9,7 @@ bases:
 - ../../../apps/nse-memif
 
 resources:
+- ns-remote-nsm-system-restart-memif-ip.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

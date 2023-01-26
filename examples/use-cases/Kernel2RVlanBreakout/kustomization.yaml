@@ -5,4 +5,5 @@ kind: Kustomization
 namespace: ns-kernel2rvlan-breakout
 
 resources:
+  - ns-kernel2rvlan-breakout.yaml
   - first-iperf-s.yaml

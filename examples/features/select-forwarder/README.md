@@ -16,11 +16,6 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-select-forwarder
-```
-
 Apply example resources:
 
 ```bash

@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-kernel2ethernet2kernel.yaml
 - client.yaml
 - netsvc.yaml
 

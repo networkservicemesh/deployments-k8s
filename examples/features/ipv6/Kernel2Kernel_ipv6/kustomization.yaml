@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-kernel2kernel-ipv6
 
 resources:
+- ns-kernel2kernel-ipv6.yaml
 - client.yaml
 - netsvc.yaml
 

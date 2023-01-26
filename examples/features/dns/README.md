@@ -9,11 +9,6 @@ Make sure that you have completed steps from [features](../)
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-dns
-```
-
 Deploy alpine and nse
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=17e6ce5be94dbf409e616c304359499ccbcd903f

@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: ns-opa
 
 resources:
+- ns-opa.yaml
 - netsvc.yaml
 
 bases:

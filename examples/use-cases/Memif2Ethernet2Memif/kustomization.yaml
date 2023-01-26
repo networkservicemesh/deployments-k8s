@@ -9,6 +9,7 @@ bases:
 - ../../../apps/nse-memif
 
 resources:
+- ns-memif2ethernet2memif.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

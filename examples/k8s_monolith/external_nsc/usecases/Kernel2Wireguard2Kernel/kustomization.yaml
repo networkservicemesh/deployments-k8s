@@ -8,6 +8,7 @@ bases:
 - ../../../../../apps/nse-kernel
 
 resources:
+- ns-kernel2wireguard2kernel-monolith-nsc.yaml
 - netsvc.yaml
 
 patchesStrategicMerge:

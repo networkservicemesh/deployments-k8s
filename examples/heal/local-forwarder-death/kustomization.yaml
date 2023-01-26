@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-local-forwarder-death.yaml
 - client.yaml
 - netsvc.yaml
 

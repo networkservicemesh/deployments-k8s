@@ -11,11 +11,6 @@ Make sure that you have completed steps from [memory](../) setup.
 
 ## Run
 
-Create test namespace:
-```bash
-kubectl create ns ns-kernel2vxlan2kernel
-```
-
 Deploy NSC and NSE:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory/Kernel2Vxlan2Kernel?ref=17e6ce5be94dbf409e616c304359499ccbcd903f

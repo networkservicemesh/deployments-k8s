@@ -8,6 +8,7 @@ bases:
 - ../../../apps/nse-kernel
 
 resources:
+- ns-remote-nsmgr-restart-ip.yaml
 - netsvc.yaml
 - client.yaml
 

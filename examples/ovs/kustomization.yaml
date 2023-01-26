@@ -9,3 +9,6 @@ bases:
 - ../../apps/forwarder-ovs
 - ../../apps/registry-k8s
 - ../../apps/admission-webhook-k8s
+
+resources:
+- ../basic/nsm-system-namespace.yaml
