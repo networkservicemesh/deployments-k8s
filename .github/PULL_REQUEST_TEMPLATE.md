@@ -20,7 +20,7 @@
 ## Types of changes
 <!--- What types of changes does your code introduce -->
 - [ ] Bug fix
-- [ ] New functionallity
+- [ ] New functionality
 - [ ] Documentation
 - [ ] Refactoring
 - [ ] CI
