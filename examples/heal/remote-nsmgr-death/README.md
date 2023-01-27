@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/remote-nse?ref=5abfca8a638965d8544bfe10e238dac21148c5ee
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/remote-nse?ref=db61d1bb8f1757c3f5adaf1fa5c9024fced192e6
 ```
 
 Wait for applications ready:
@@ -44,12 +44,12 @@ kubectl exec ${NSE} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.101
 
 Kill remote NSMgr:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/nsmgr-death?ref=5abfca8a638965d8544bfe10e238dac21148c5ee
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/nsmgr-death?ref=db61d1bb8f1757c3f5adaf1fa5c9024fced192e6
 ```
 
 Start local NSE instead of the remote one:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/local-nse?ref=5abfca8a638965d8544bfe10e238dac21148c5ee
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-death/local-nse?ref=db61d1bb8f1757c3f5adaf1fa5c9024fced192e6
 ```
 
 Wait for the new NSE to start:
@@ -76,7 +76,7 @@ kubectl exec ${NEW_NSE} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.103
 
 Restore NSMgr setup:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=5abfca8a638965d8544bfe10e238dac21148c5ee -n nsm-system
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/nsmgr?ref=db61d1bb8f1757c3f5adaf1fa5c9024fced192e6 -n nsm-system
 ```
 
 Delete ns:
