@@ -11,4 +11,4 @@ bases:
 - ../../apps/admission-webhook-k8s
 
 resources:
-- ../basic/nsm-system-namespace.yaml
+- nsm-system-namespace.yaml
