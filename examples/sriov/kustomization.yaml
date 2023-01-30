@@ -13,4 +13,4 @@ patchesStrategicMerge:
   - forwarder-vpp.yaml
 
 resources:
-  - ../basic/nsm-system-namespace.yaml
+  - nsm-system-namespace.yaml
