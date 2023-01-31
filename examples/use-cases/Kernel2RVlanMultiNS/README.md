@@ -17,6 +17,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Deployment in second namespace:
 ```bash
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/af97993138fd6a7b37944d0b726fa7d31bee4fcd/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/af97993138fd6a7b37944d0b726fa7d31bee4fcd/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=af97993138fd6a7b37944d0b726fa7d31bee4fcd
 ```

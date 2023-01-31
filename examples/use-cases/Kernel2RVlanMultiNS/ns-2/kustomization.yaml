@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: ns-kernel2vlan-multins-2
 
 resources:
-  - ns-kernel2vlan-multins-2.yaml
   - second-client.yaml
   - third-client.yaml
   - ../../../../apps/nse-remote-vlan
