@@ -11,4 +11,4 @@ patchesStrategicMerge:
 - patch-nse.yaml
 
 resources:
-- ../ns-floating-kernel2wireguard2kernel.yaml
+- ns-floating-kernel2wireguard2kernel.yaml
