@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death-ip/nse-before-death?ref=25e1055bd5995a31cf8ae9f396dfd5abfe615c3e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death-ip/nse-before-death?ref=ac4ca5f0834c87a8d811c9df9ac5515e17a945d7
 ```
 
 Wait for applications ready:
@@ -44,7 +44,7 @@ kubectl exec ${NSE} -n ns-remote-nse-death-ip -- ping -c 4 172.16.1.101
 
 Apply patch:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death-ip/nse-after-death?ref=25e1055bd5995a31cf8ae9f396dfd5abfe615c3e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death-ip/nse-after-death?ref=ac4ca5f0834c87a8d811c9df9ac5515e17a945d7
 ```
 
 Wait for new NSE to start:

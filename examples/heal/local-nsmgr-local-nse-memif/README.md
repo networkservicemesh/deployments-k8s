@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif/nse-before-death?ref=25e1055bd5995a31cf8ae9f396dfd5abfe615c3e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif/nse-before-death?ref=ac4ca5f0834c87a8d811c9df9ac5515e17a945d7
 ```
 
 Wait for applications ready:
@@ -66,7 +66,7 @@ Restart local NSMgr and NSE:
 kubectl delete pod ${NSMGR} -n nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif/nse-after-death?ref=25e1055bd5995a31cf8ae9f396dfd5abfe615c3e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsmgr-local-nse-memif/nse-after-death?ref=ac4ca5f0834c87a8d811c9df9ac5515e17a945d7
 ```
 
 Waiting for new ones:
