@@ -54,6 +54,25 @@ done
 )
 ```
 
+Find vl3-nses:
+```bash
+nses=$(kubectl get pods -l app=nse-vl3-vpp -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-dns)
+[[ ! -z nses ]]
+```
+
+Ping each vl3-nse by each client via DNS:
+```bash
+(
+for nse in $nses
+do
+    for pinger in $nscs
+    do
+        kubectl exec $pinger -n ns-vl3-dns -- ping -c2 -i 0.5 $nse.vl3-dns -4 || exit
+    done
+done
+)
+```
+
 ## Cleanup
 
 To cleanup the example just follow the next command:

@@ -26,6 +26,10 @@ spec:
           value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
         - name: NSM_LOG_LEVEL
           value: TRACE
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets

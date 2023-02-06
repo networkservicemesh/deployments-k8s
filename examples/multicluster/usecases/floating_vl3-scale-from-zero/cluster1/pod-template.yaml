@@ -32,6 +32,10 @@ spec:
           value: 15s
         - name: NSM_LOG_LEVEL
           value: TRACE
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
