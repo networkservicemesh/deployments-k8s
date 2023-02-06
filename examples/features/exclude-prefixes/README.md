@@ -17,7 +17,7 @@ kubectl apply -f exclude-prefixes-config-map.yaml
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes?ref=ac4ca5f0834c87a8d811c9df9ac5515e17a945d7
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes?ref=41a5547ecf36f09e7092ffaf5be7a55fb8ddec3d
 ```
 
 Wait for applications ready:
