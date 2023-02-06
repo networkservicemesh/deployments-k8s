@@ -31,6 +31,8 @@ spec:
               value: tcp://:5002
             - name: NSM_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
+            - name: NSM_KUBELET_QPS
+              value: "10"
           imagePullPolicy: IfNotPresent
           name: registry
           ports:
