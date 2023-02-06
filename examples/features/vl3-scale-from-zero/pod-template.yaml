@@ -30,6 +30,10 @@ spec:
           value: 15s
         - name: NSM_LABELS
           value: app:nse-vl3-vpp
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
