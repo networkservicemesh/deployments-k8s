@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: nse-supplier
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:fc6ee4a
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:a9c49de
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_SERVICE_NAME
