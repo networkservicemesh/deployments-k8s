@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 bases:
-- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=37f6ab1f7f2b5a49d4e6796fc5527385ddebeb13
+- https://github.com/networkservicemesh/deployments-k8s/apps/nse-supplier-k8s?ref=0ca5300c83c8b20323eda32adbd6b275adcf9797
 
 patchesStrategicMerge:
 - patch-supplier.yaml
