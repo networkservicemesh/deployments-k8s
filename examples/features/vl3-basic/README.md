@@ -13,7 +13,7 @@ Diagram:
 
 Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=8f415f4019223997eaf5aa1fb76ae0bb17a7a8a0
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-basic?ref=94eb7ef6f3f01abfeeb6b0f57ee9d471b6cd02de
 ```
 
 Wait for clients to be ready:
