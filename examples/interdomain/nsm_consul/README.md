@@ -25,6 +25,7 @@ sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com 
 ```bash
 sudo apt-get update && sudo apt-get install -y consul-k8s=0.48.0-1
 ```
+```bash
 consul-k8s version
 ```
 
