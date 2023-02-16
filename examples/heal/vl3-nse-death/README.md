@@ -15,6 +15,11 @@ Wait for clients to be ready:
 kubectl wait -n ns-vl3-nse-death --for=condition=ready --timeout=1m pod -l app=alpine
 ```
 
+Wait for vl3-nses to be ready:
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp -n ns-vl3-nse-death
+```
+
 Find all nscs:
 ```bash
 nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nse-death) 
