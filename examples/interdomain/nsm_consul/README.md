@@ -18,8 +18,14 @@ This example shows how Consul can be used over NSM.
 Install [Consul](https://www.consul.io/docs/k8s/installation/install-cli)
 ```bash
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install consul-k8s=0.48.0-1
+```
+```bash
+sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+```
+```bash
+sudo apt-get update && sudo apt-get install -y consul-k8s=0.48.0-1
+```
+```bash
 consul-k8s version
 ```
 
@@ -59,7 +65,7 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/net
 
 Wait for the dashboard client to be ready
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=dashboard-nsc
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=10m --for=condition=ready pod -l app=dashboard-nsc
 ```
 
 Verify connection from networkservicemesh client to the consul counting service:
