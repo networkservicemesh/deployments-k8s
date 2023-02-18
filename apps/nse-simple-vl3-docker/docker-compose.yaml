@@ -1,7 +1,7 @@
 ---
 services:
   nse-simple-vl3-docker:
-    image: ghcr.io/networkservicemesh/ci/cmd-nse-simple-vl3-docker:9af0d0d
+    image: ghcr.io/networkservicemesh/ci/cmd-nse-simple-vl3-docker:18ebd35
     privileged: true
     container_name: nse-simple-vl3-docker
     restart: always
