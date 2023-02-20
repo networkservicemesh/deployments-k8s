@@ -12,7 +12,7 @@ Make sure that you have completed steps from [features](../)
 
 Deploy client and nginx-nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook?ref=65044a43b38a7637139a8d69ba1b7f03ff69ee79
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook?ref=be42c52017eac7930753c623d3092ffabf21dec0
 ```
 
 Wait for applications ready:
