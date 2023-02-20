@@ -54,7 +54,7 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/net
 
 Wait for the `alpine` client to be ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=alpine
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=alpine
 ```
 
 Get curl for nsc:
