@@ -25,7 +25,7 @@ Install Istio for second cluster:
 ```bash
 curl -sL https://istio.io/downloadIstioctl | sh -
 export PATH=$PATH:$HOME/.istioctl/bin
-istioctl install --timeout 10m0s --set profile=minimal -y --kubeconfig=$KUBECONFIG2
+istioctl install --readiness-timeout 10m0s --set profile=minimal -y --kubeconfig=$KUBECONFIG2
 istioctl --kubeconfig=$KUBECONFIG2 proxy-status
 ```
 
@@ -54,7 +54,7 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/net
 
 Wait for the `alpine` client to be ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=2m --for=condition=ready pod -l app=alpine
+kubectl --kubeconfig=$KUBECONFIG1 wait --timeout=5m --for=condition=ready pod -l app=alpine
 ```
 
 Get curl for nsc:
