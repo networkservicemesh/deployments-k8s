@@ -13,7 +13,7 @@ jobs:
       - name: Get tag
         run: |
           branch=${{ github.event.ref }}
-          echo 'tag=${branch#refs/heads/release/*/*/}' >> $GITHUB_OUTPUT
+          echo tag=${branch#refs/heads/release/*/*/} >> $GITHUB_OUTPUT
         id: get-tag-step
 
       - uses: actions/checkout@v2
