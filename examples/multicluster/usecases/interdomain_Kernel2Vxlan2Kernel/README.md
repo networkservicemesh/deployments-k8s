@@ -19,7 +19,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster2?ref=7eaf84304101bac8dd17e58caeda697c39fb962a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster2?ref=cce6eb2a7545ec25f52870a00b47e4456f0f543a
 ```
 
 Find NSE pod by labels:
@@ -41,7 +41,7 @@ export KUBECONFIG=$KUBECONFIG1
 
 Deploy client:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster1?ref=7eaf84304101bac8dd17e58caeda697c39fb962a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Vxlan2Kernel/cluster1?ref=cce6eb2a7545ec25f52870a00b47e4456f0f543a
 ```
 
 Wait for applications ready:
