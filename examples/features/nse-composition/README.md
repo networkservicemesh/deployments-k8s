@@ -17,7 +17,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-nse-composition
+kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-nse-composition
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-nse-composition
