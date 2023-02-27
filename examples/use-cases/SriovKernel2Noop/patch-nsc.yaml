@@ -11,6 +11,8 @@ spec:
           env:
             - name: NSM_NETWORK_SERVICES
               value: kernel://sriov-kernel2noop/nsm-1?sriovToken=worker.domain/10G
+            - name: NSM_LIVENESSCHECKENABLED
+              value: "false"
           resources:
             limits:
               worker.domain/10G: 1
