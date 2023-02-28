@@ -22,7 +22,7 @@ export KUBECONFIG=$KUBECONFIG3
 
 Deploy NS:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=9ce2f3429533f1d7c17efa8be7698b9c9e53a178
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster3?ref=1447933dba9b802248bc4cd6359053bc8841f404
 ```
 
 **2. Deploy endpoint on cluster2**
@@ -33,7 +33,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster2?ref=9ce2f3429533f1d7c17efa8be7698b9c9e53a178
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster2?ref=1447933dba9b802248bc4cd6359053bc8841f404
 ```
 
 Wait for applications ready:
@@ -55,7 +55,7 @@ export KUBECONFIG=$KUBECONFIG1
 
 Deploy NSC:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster1?ref=9ce2f3429533f1d7c17efa8be7698b9c9e53a178
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_Kernel2Vxlan2Kernel/cluster1?ref=1447933dba9b802248bc4cd6359053bc8841f404
 ```
 
 Wait for applications ready:
