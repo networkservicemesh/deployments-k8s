@@ -8,10 +8,10 @@ The client will be `alpine` (**Workload-1**), we will use curl.
 
 ## Requires
 
-- [Load balancer](../../loadbalancer)
-- [Interdomain DNS](../../dns)
-- [Interdomain spire](../../spire)
-- [Interdomain nsm](../../nsm)
+- [Load balancer](../loadbalancer)
+- [Interdomain DNS](../dns)
+- [Interdomain spire](../spire)
+- [Interdomain nsm](../nsm)
 
 
 ## Run
