@@ -12,7 +12,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: nse
-      image: nikitaxored/cmd-nse-l7-proxy:custom-subnet
+      image: nikitaxored/cmd-nse-l7-proxy:clean
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true
