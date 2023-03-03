@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-nse-composition
+
+bases:
+- ../../../../../apps/nse-kernel
+
+patchesStrategicMerge:
+- patch-nse.yaml
+
+resources:
+- ns-nse-composition.yaml
