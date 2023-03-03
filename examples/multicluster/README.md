@@ -33,65 +33,53 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 ## Run
 
 **1. Apply deployments for cluster1:**
-
-```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-
 Apply NSM resources for basic tests:
+
 ```bash
-kubectl apply -k ./clusters-configuration/cluster1
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=592e04c0686c87350d882b4f1642ceca814f0dbb
 ```
 
 Wait for nsmgr-proxy-service exposing:
 ```bash
-kubectl get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+kubectl --kubeconfig=$KUBECONFIG1 get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 Wait for admission-webhook-k8s:
 ```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
 **2. Apply deployments for cluster2:**
 
-```bash
-export KUBECONFIG=$KUBECONFIG2
-```
-
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k ./clusters-configuration/cluster2
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=592e04c0686c87350d882b4f1642ceca814f0dbb
 ```
 
 Wait for nsmgr-proxy-service exposing:
 ```bash
-kubectl get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+kubectl --kubeconfig=$KUBECONFIG2 get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 Wait for admission-webhook-k8s:
 ```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
 **3. Apply deployments for cluster3:**
 
-```bash
-export KUBECONFIG=$KUBECONFIG3
-```
-
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k ./clusters-configuration/cluster3
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=592e04c0686c87350d882b4f1642ceca814f0dbb
 ```
 
 Wait for nsmgr-proxy-service exposing:
 ```bash
-kubectl get services registry -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+kubectl --kubeconfig=$KUBECONFIG3 get services registry -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 ## Cleanup
@@ -99,17 +87,15 @@ kubectl get services registry -n nsm-system -o go-template='{{index (index (inde
 To free resouces follow the next command:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
-kubectl delete ns nsm-system
+WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration ${WH}
+kubectl --kubeconfig=$KUBECONFIG1 delete ns nsm-system
 ```
 ```bash
-export KUBECONFIG=$KUBECONFIG2
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
-kubectl delete ns nsm-system
+WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 delete mutatingwebhookconfiguration ${WH}
+kubectl --kubeconfig=$KUBECONFIG2 delete ns nsm-system
 ```
 ```bash
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete ns nsm-system
+kubectl --kubeconfig=$KUBECONFIG3 delete ns nsm-system
 ```
