@@ -15,4 +15,7 @@ patchesStrategicMerge:
 resources:
 - ns-nse-composition.yaml
 
-
+configMapGenerator:
+  - name: nginx-config
+    files:
+      - nginx.conf

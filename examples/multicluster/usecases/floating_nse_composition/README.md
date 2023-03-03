@@ -7,8 +7,17 @@ Forwarders are using the `vxlan` mechanism to connect with each other.
 
 NSE is registering in the floating registry.
 
-
-![Interdomain NSE Composition Scheme](./nse-composition-interdomain.svg "Interdomain NSE Composition Scheme")
+```mermaid
+flowchart LR
+nsmgr-proxy1 --> nsmgr-proxy2
+subgraph cluster1
+nsc --> nsmgr--> forwarder --> nse-firewall -->| ..... | passthrough-1 -->| ..... | nsmgr-proxy1[nsmgr-proxy]
+    end
+subgraph cluster2
+    nsmgr-proxy2[nsmgr-proxy] -->| ..... | passthrough-2 -->| ..... | passthrough-3 -->| ..... | nse-kernel 
+end
+```
+Interdomain NSE Composition Scheme
 
 ## Requires
 
@@ -23,7 +32,7 @@ Deploy NS:
 kubectl --kubeconfig=$KUBECONFIG3 apply -k cluster3
 ```
 
-**2. Deploy endpoint on cluster2**
+**2. Deploy endpoints on cluster2**
 
 Deploy NSE:
 ```bash
@@ -61,16 +70,25 @@ NSC=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=alpine -n ns-nse-composi
 
 **3. Check connectivity**
 
-Switch to *cluster1*:
-
+Ping from NSC to NSE:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -n ns-nse-composition -- ping -c 4 172.16.1.100
 ```
 
-Switch to *cluster2*:
-
+Check TCP Port 8080 on NSE is accessible to NSC
 ```bash
-export KUBECONFIG=$KUBECONFIG2
+kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -n ns-nse-composition -- wget -O /dev/null --timeout 5 "172.16.1.100:8080"
+```
+
+Check TCP Port 80 on NSE is inaccessible to NSC
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -n ns-nse-composition -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
+if [ 0 -eq $? ]; then
+  echo "error: port :80 is available" >&2
+  false
+else
+  echo "success: port :80 is unavailable"
+fi
 ```
 
 Ping from NSE to NSC:

@@ -22,10 +22,12 @@ spec:
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: NSM_NAME
+            - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: NSM_NAME
+              value: "$(POD_NAME)"
             - name: NSM_LOG_LEVEL
               value: TRACE
             - name: NSM_CONNECT_TO
