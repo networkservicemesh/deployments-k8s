@@ -33,12 +33,8 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 ## Run
 
 **1. Apply deployments for cluster1:**
-
-```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-
 Apply NSM resources for basic tests:
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/cluster-configuration/cluster1?ref=592e04c0686c87350d882b4f1642ceca814f0dbb
 ```
