@@ -87,17 +87,15 @@ kubectl --kubeconfig=$KUBECONFIG3 get services registry -n nsm-system -o go-temp
 To free resouces follow the next command:
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
-kubectl delete ns nsm-system
+WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration ${WH}
+kubectl --kubeconfig=$KUBECONFIG1 delete ns nsm-system
 ```
 ```bash
-export KUBECONFIG=$KUBECONFIG2
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
-kubectl delete ns nsm-system
+WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl --kubeconfig=$KUBECONFIG2 delete mutatingwebhookconfiguration ${WH}
+kubectl --kubeconfig=$KUBECONFIG2 delete ns nsm-system
 ```
 ```bash
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete ns nsm-system
+kubectl --kubeconfig=$KUBECONFIG3 delete ns nsm-system
 ```
