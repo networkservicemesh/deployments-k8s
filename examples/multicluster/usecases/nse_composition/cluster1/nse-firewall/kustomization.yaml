@@ -5,14 +5,8 @@ kind: Kustomization
 namespace: ns-nse-composition
 
 bases:
-- ../../../../../apps/nse-kernel
-- nse-passthrough-2
-- nse-passthrough-3
+- ../../../../../../apps/nse-firewall-vpp
 
 patchesStrategicMerge:
-- patch-nse.yaml
-
-resources:
-- ns-nse-composition.yaml
-
-
+- patch-nse-firewall-vpp.yaml
+- config-patch.yaml

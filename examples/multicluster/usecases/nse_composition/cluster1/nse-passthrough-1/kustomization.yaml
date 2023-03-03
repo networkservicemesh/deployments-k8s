@@ -4,11 +4,5 @@ kind: Kustomization
 
 namespace: ns-nse-composition
 
-bases:
-- nse-firewall
-- nse-passthrough-1
-
 resources:
-- ns-nse-composition.yaml
-- client.yaml
-- config-file.yaml
+- passthrough.yaml

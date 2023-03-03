@@ -21,3 +21,5 @@ spec:
             value: "nse-composition@my.cluster3"
           - name: NSM_REGISTER_SERVICE
             value: "false"
+          - name: NSM_LABELS
+            value: "app:gateway"

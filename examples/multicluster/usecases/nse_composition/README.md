@@ -8,6 +8,8 @@ Forwarders are using the `vxlan` mechanism to connect with each other.
 NSE is registering in the floating registry.
 
 
+![Interdomain NSE Composition Scheme](./nse-composition-interdomain.svg "Interdomain NSE Composition Scheme")
+
 ## Requires
 
 Make sure that you have completed steps from [interdomain](../../)
@@ -30,12 +32,12 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -k cluster2
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-nse-composition
+kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-nse-composition
 ```
 
 Find NSE pod by labels:
 ```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-nse-composition --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSE=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=nse-kernel -n ns-nse-composition --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 [[ ! -z $NSE ]]
 ```
 
@@ -48,12 +50,12 @@ kubectl --kubeconfig=$KUBECONFIG1 apply -k cluster1
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-nse-composition
+kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-nse-composition
 ```
 
 Find NSC pod by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-nse-composition --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=alpine -n ns-nse-composition --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 [[ ! -z $NSC ]]
 ```
 
@@ -62,7 +64,7 @@ NSC=$(kubectl get pods -l app=alpine -n ns-nse-composition --template '{{range .
 Switch to *cluster1*:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -n ns-nse-composition -- ping -c 4 172.16.1.2
+kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -n ns-nse-composition -- ping -c 4 172.16.1.100
 ```
 
 Switch to *cluster2*:
@@ -73,7 +75,7 @@ export KUBECONFIG=$KUBECONFIG2
 
 Ping from NSE to NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 exec ${NSE} -n ns-nse-composition -- ping -c 4 172.16.1.3
+kubectl --kubeconfig=$KUBECONFIG2 exec ${NSE} -n ns-nse-composition -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup

@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nse-firewall-vpp
+  name: nse-passthrough-2
+spec:
+  selector:
+    matchLabels:
+      app: nse-firewall-vpp
+  template:
+    metadata:
+      labels:
+        app: nse-firewall-vpp
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      containers:
+        - name: nse
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:5d66abd
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NSM_SERVICE_NAME
+              value: "nse-composition@my.cluster3"
+            - name: NSM_LABELS
+              value: app:passthrough-2
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_NAME
+              value: "$(POD_NAME)@my.cluster3"
+            - name: NSM_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+          volumeMounts:
+            - mountPath: /run/spire/sockets
+              name: spire-agent-socket
+              readOnly: true
+            - mountPath: /var/lib/networkservicemesh
+              name: nsm-socket
+              readOnly: true
+          resources:
+            requests:
+              cpu: 150m
+            limits:
+              memory: 450Mi
+              cpu: 500m
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
