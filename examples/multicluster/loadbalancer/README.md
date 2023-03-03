@@ -58,12 +58,7 @@ EOF
 fi
 ```
 
-Switch to the third cluster:
-```bash
-export KUBECONFIG=$KUBECONFIG3
-```
-
-Apply metallb for the second cluster:
+Apply metallb for the third cluster:
 ```bash
 if [[ ! -z $CLUSTER3_CIDR ]]; then
     kubectl --kubeconfig=$KUBECONFIG3 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
