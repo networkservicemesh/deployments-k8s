@@ -55,7 +55,7 @@ kubectl delete ns spire
 
 Deploy SPIRE and wait for SPIRE server and agents:
 ```bash
-kubectl apply -k ../../spire
+kubectl apply -k ../../spire/single_cluster
 ```
 
 ```bash
