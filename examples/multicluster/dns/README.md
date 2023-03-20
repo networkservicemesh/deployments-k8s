@@ -83,7 +83,7 @@ fi
 # if IPv6
 if [[ $ip2 =~ ":" ]]; then ip2=[$ip2]; fi
 
-echo Selected externalIP: $ip2 for cluster1
+echo Selected externalIP: $ip2 for cluster2
 [[ ! -z $ip2 ]]
 ```
 
@@ -114,7 +114,7 @@ fi
 # if IPv6
 if [[ $ip3 =~ ":" ]]; then ip3=[$ip3]; fi
 
-echo Selected externalIP: $ip3 for cluster1
+echo Selected externalIP: $ip3 for cluster3
 [[ ! -z $ip3 ]]
 ```
 

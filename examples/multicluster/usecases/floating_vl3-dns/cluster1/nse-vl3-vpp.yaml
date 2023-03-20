@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nse-vl3-vpp-2
+  name: nse-vl3-dns-vpp-1
   annotations:
-    spiffe.io/federatesWith: nsm.cluster1,nsm.cluster3
+    spiffe.io/federatesWith: nsm.cluster2,nsm.cluster3
   labels:
     app: nse-vl3-vpp
     "spiffe.io/spiffe-id": "true"
@@ -17,13 +17,15 @@ spec:
         - name: SPIFFE_ENDPOINT_SOCKET
           value: unix:///run/spire/sockets/agent.sock
         - name: NSM_NAME
-          value: "nse-vl3-vpp-2@my.cluster3"
+          value: "nse-vl3-dns-vpp-1@my.cluster3"
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_SERVICE_NAMES
-          value: "my-interdomain-vl3-network@my.cluster3"
+          value: "floating-vl3-dns@my.cluster3"
+        - name: NSM_DNS_TEMPLATES
+          value: "{{ index .Labels \"podName\" }}.{{ target .NetworkService }}.{{ domain .NetworkService }}."
         - name: NSM_PREFIX_SERVER_URL
-          value: "tcp://vl3-ipam.ns-floating-vl3-basic.my.cluster3:5006"
+          value: "tcp://vl3-ipam.ns-floating-vl3-dns.my.cluster3:5006"
         - name: NSM_LOG_LEVEL
           value: TRACE
         - name: POD_NAME
