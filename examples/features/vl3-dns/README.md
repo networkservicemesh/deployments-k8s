@@ -44,11 +44,26 @@ nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items
 Ping each client by each client via DNS:
 ```bash
 (
-for nsc in $nscs 
+for nsc in $nscs
 do
     for pinger in $nscs
     do
         kubectl exec $pinger -n ns-vl3-dns -- ping -c2 -i 0.5 $nsc.vl3-dns -4 || exit
+    done
+done
+)
+```
+
+Check NSCs PTR records:
+```bash
+(
+for nsc in $nscs
+do
+    for pinger in $nscs
+    do
+        # Get IP address for PTR request
+        nscAddr=$(kubectl exec $pinger -n ns-vl3-dns -- nslookup -type=a $nsc.vl3-dns | grep -A1 Name | tail -n1 | sed 's/Address: //')
+        kubectl exec $pinger -n ns-vl3-dns -- nslookup $nscAddr || exit
     done
 done
 )
@@ -68,6 +83,21 @@ do
     for pinger in $nscs
     do
         kubectl exec $pinger -n ns-vl3-dns -- ping -c2 -i 0.5 $nse.vl3-dns -4 || exit
+    done
+done
+)
+```
+
+Check NSEs PTR records:
+```bash
+(
+for nse in $nses
+do
+    for pinger in $nscs
+    do
+        # Get IP address for PTR request
+        nseAddr=$(kubectl exec $pinger -n ns-vl3-dns -- nslookup -type=a $nse.vl3-dns | grep -A1 Name | tail -n1 | sed 's/Address: //')
+        kubectl exec $pinger -n ns-vl3-dns -- nslookup $nseAddr || exit
     done
 done
 )
