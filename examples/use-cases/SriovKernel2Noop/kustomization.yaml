@@ -4,13 +4,10 @@ kind: Kustomization
 
 namespace: ns-sriov-kernel2noop
 
-bases:
+resources:
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
-- ../../../apps/nsc-kernel-ponger
-
-resources:
-- ns-sriov-kernel2noop.yaml
+- namespace
 - netsvc.yaml
 
 patchesStrategicMerge:
