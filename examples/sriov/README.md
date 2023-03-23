@@ -31,7 +31,7 @@ For the `worker` node:
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=d09ce4aae7ed6427bf68e7e19699755b96812f21
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=618b7f9cf12113e27df4b63248589ebeb19af1c8
 ```
 
 ## Cleanup
