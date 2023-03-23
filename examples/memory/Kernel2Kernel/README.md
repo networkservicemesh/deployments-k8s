@@ -19,7 +19,7 @@ Make sure that you have completed steps from [memory](../) setup.
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory/Kernel2Kernel?ref=8b3b3517d26dcfd79d373564d0b401a5582642cd
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory/Kernel2Kernel?ref=68c6b6289ed500a16a6ee7ad11d7cb4c607e9928
 ```
 
 Wait for applications ready:
