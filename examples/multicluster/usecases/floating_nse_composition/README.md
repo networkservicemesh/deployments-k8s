@@ -49,7 +49,7 @@ NSE=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=nse-kernel -n ns-nse-com
 [[ ! -z $NSE ]]
 ```
 
-**2. Deploy client on cluster1**
+**3. Deploy client on cluster1**
 
 Deploy NSC:
 ```bash
@@ -67,7 +67,7 @@ NSC=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=alpine -n ns-nse-composi
 [[ ! -z $NSC ]]
 ```
 
-**3. Check connectivity**
+**4. Check connectivity**
 
 Ping from NSC to NSE:
 ```bash
