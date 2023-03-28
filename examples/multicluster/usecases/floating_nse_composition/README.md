@@ -1,11 +1,10 @@
-# Floating interdomain kernel2vxlan2kernel example
+# Floating Intedomain NSE Composition Example
 
-This example shows that NSC can reach NSE registered in floating registry.
+This example demonstrates a more complex Network Service, where we chain three passthrough and one ACL Filtering NS endpoints.
 
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
-Forwarders are using the `vxlan` mechanism to connect with each other.
+The chain is formed from NSEs which are located on different clusters. It involves a combination of local and remote mechanisms.
 
-NSE is registering in the floating registry.
+All NSEs are registered in the floating registry.
 
 ```mermaid
 flowchart LR
@@ -24,8 +23,6 @@ Interdomain NSE Composition Scheme
 Make sure that you have completed steps from [interdomain](../../)
 
 ## Run
-
-777c5a656769d83eb31b746b4e77048aac9eecd3
 
 **1. Deploy network service on cluster3**
 

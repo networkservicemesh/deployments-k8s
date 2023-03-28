@@ -9,10 +9,10 @@ spec:
       containers:
         - name: nse
           volumeMounts:
-            - mountPath: /etc/vppagent-firewall/config.yaml
+            - mountPath: /etc/firewall/config.yaml
               subPath: config.yaml
-              name: vppagent-firewall-config-volume
+              name: firewall-config-volume
       volumes:
-        - name: vppagent-firewall-config-volume
+        - name: firewall-config-volume
           configMap:
-            name: vppagent-firewall-config-file
+            name: firewall-config-file
