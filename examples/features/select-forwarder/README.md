@@ -19,7 +19,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 Apply example resources:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=0b84cfeb2ad94bbb6faa549d065fb9f5e0741953
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=bb92521f4e05b61ea1ec96a31f4f3721553cb06e
 ```
 
 Wait for applications ready:
