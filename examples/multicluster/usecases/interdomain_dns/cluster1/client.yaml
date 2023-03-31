@@ -6,7 +6,7 @@ metadata:
   labels:
     app: dnsutils
   annotations:
-    networkservicemesh.io: kernel://dns@my.cluster2/nsm-1
+    networkservicemesh.io: kernel://interdomain-dns@my.cluster2/nsm-1
 spec:
   containers:
     - name: dnsutils

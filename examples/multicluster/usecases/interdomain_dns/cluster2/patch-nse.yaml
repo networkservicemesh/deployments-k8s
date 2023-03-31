@@ -12,7 +12,7 @@ spec:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.2/31
             - name: NSM_SERVICE_NAMES
-              value: "dns"
+              value: "interdomain-dns"
             - name: NSM_DNS_CONFIGS
               value: "[{\"dns_server_ips\": [\"172.16.1.2\"], \"search_domains\": [\"my.coredns.service\"]}]"
         - name: coredns
