@@ -1,3 +1,4 @@
+---
 apiVersion: spire.spiffe.io/v1alpha1
 kind: ControllerManagerConfig
 metrics:
