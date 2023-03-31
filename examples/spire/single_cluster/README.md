@@ -17,10 +17,17 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 ```
 
+Apply the ClusterSPIFFEID CR for the cluster:
+```bash
+kubectl apply -f clusterspiffeid-template.yaml
+```
+
 ## Cleanup
 
 Delete ns:
 ```bash
-kubectl delete crd spiffeids.spiffeid.spiffe.io
+kubectl delete crd clusterspiffeids.spire.spiffe.io
+kubectl delete crd clusterfederatedtrustdomains.spire.spiffe.io
+kubectl delete validatingwebhookconfiguration.admissionregistration.k8s.io/spire-controller-manager-webhook
 kubectl delete ns spire
 ```

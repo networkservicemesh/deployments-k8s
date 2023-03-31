@@ -1,0 +1,18 @@
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ControllerManagerConfig
+metrics:
+  bindAddress: 127.0.0.1:8082
+healthProbe:
+  bindAddress: 127.0.0.1:8083
+leaderElection:
+  leaderElect: true
+  resourceName: 98c9c988.spiffe.io
+  resourceNamespace: spire
+clusterName: nsm.cluster2
+trustDomain: nsm.cluster2
+spireServerSocketPath: /run/spire/sockets/api.sock
+ignoreNamespaces:
+  - kube-system
+  - kube-public
+  - spire
+  - local-path-storage
