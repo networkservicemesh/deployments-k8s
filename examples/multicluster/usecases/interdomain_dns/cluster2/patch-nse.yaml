@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.2/31
+            - name: NSM_SERVICE_NAMES
+              value: "interdomain-dns"
+            - name: NSM_DNS_CONFIGS
+              value: "[{\"dns_server_ips\": [\"172.16.1.2\"], \"search_domains\": [\"my.coredns.service\"]}]"
+        - name: coredns
+          image: coredns/coredns:1.8.3
+          imagePullPolicy: IfNotPresent
+          args: ["-conf", "/etc/coredns/Corefile"]
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/coredns
+              readOnly: true
+          ports:
+            - containerPort: 53
+              name: dns
+              protocol: UDP
+            - containerPort: 53
+              name: dns-tcp
+              protocol: TCP
+      volumes:
+        - name: config-volume
+          configMap:
+            name: coredns
+            items:
+              - key: Corefile
+                path: Corefile

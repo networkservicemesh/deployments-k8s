@@ -52,7 +52,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 export KUBECONFIG=$KUBECONFIG1
 ```
 
-1.4. Prepare a patch with **vl3 ipam URL**:
+1.4. Deploy a vl3-NSE and a client on the cluster1:
 
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_vl3-basic/cluster1?ref=e61f4fcb9caf8ea7e16e6e395066f0059fd620e6
@@ -64,7 +64,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 export KUBECONFIG=$KUBECONFIG2
 ```
 
-1.7. Prepare a patch with **vl3 ipam URL**:
+1.6. Deploy a vl3-NSE and a client on the cluster2:
 
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_vl3-basic/cluster2?ref=e61f4fcb9caf8ea7e16e6e395066f0059fd620e6

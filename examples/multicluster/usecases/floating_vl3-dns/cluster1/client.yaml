@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-1
+  labels:
+    app: alpine
+  annotations:
+    networkservicemesh.io: kernel://floating-vl3-dns@my.cluster3/nsm-1
+spec:
+  containers:
+  - name: alpine
+    image: alpine:3.15.0
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true

@@ -2,11 +2,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: ns-floating-vl3-basic
+namespace: ns-floating-vl3-dns
 
 resources:
   - namespace.yaml
-  - networkservice.yaml
+  - netsvc.yaml
   - ../../../../../apps/vl3-ipam
 
 patchesStrategicMerge:
