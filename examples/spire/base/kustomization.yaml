@@ -5,16 +5,20 @@ kind: Kustomization
 namespace: spire
 
 resources:
-- k8s-workload-registrar-crd.yaml
+- spire.spiffe.io_clusterspiffeids.yaml
+- spire.spiffe.io_clusterfederatedtrustdomains.yaml
 - spire-namespace.yaml
 - agent-account.yaml
 - agent-cluster-role.yaml
 - agent-daemonset.yaml
+- role.yaml
+- role_binding.yaml
 - server-account.yaml
 - server-cluster-role.yaml
 - server-service.yaml
 - server-statefulset.yaml
 - spire-bundle-configmap.yaml
-- k8s-workload-registrar-cluster-role.yaml
-- k8s-workload-registrar-service.yaml
-- k8s-workload-registrar-validating-webhook-configuration.yaml
+- server-role.yaml
+- leader_election_role.yaml
+- leader_election_role_binding.yaml
+- spire-controller-manager-webhook.yaml

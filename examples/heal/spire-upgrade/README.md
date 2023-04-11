@@ -49,7 +49,9 @@ kubectl exec ${NSE} -n ns-spire-upgrade -- ping -c 4 172.16.1.101
 
 Remove SPIRE deployment completely:
 ```bash
-kubectl delete crd spiffeids.spiffeid.spiffe.io
+kubectl delete crd clusterspiffeids.spire.spiffe.io
+kubectl delete crd clusterfederatedtrustdomains.spire.spiffe.io
+kubectl delete validatingwebhookconfiguration.admissionregistration.k8s.io/spire-controller-manager-webhook
 kubectl delete ns spire
 ```
 

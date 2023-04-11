@@ -1,0 +1,11 @@
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: nsm-workloads
+spec:
+  spiffeIDTemplate: "spiffe://nsm.cluster2/ns/{{.PodMeta.Namespace}}/pod/{{.PodMeta.Name}}"
+  podSelector:
+    matchLabels:
+      "spiffe.io/spiffe-id": "true"
+  federatesWith: ["nsm.cluster1", "nsm.cluster3"]
