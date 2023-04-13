@@ -9,6 +9,16 @@ Once federation is bootstrapped, the trust bundle updates are fetched trough the
 
 ## Run
 
+Apply the ClusterSPIFFEID CR for the first cluster:
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 apply -f cluster1-spiffeid-template.yaml
+```
+
+Apply the ClusterSPIFFEID CR for the second cluster:
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 apply -f cluster2-spiffeid-template.yaml
+```
+
 Get and store bundles for clusters:
 ```bash
 bundle1=$(kubectl --kubeconfig=$KUBECONFIG1 exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)

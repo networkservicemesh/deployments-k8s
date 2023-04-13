@@ -67,6 +67,11 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-server -n spire
 kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire
 ```
 
+Apply the ClusterSPIFFEID CR for the cluster:
+```bash
+kubectl apply -f ../../spire/single_cluster/clusterspiffeid-template.yaml
+```
+
 Ping from NSC to NSE:
 ```bash
 kubectl exec ${NSC} -n ns-spire-upgrade -- ping -c 4 172.16.1.100
