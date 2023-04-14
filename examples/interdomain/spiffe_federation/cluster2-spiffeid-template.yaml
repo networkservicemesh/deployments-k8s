@@ -4,7 +4,7 @@ kind: ClusterSPIFFEID
 metadata:
   name: nsm-workloads
 spec:
-  spiffeIDTemplate: "spiffe://nsm.cluster1/ns/{{.PodMeta.Namespace}}/pod/{{.PodMeta.Name}}"
+  spiffeIDTemplate: "spiffe://nsm.cluster2/ns/{{.PodMeta.Namespace}}/pod/{{.PodMeta.Name}}"
   podSelector:
     matchLabels:
       "spiffe.io/spiffe-id": "true"
