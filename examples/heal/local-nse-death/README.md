@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k nse-before-death
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-before-death?ref=ce50746ddcac231b39c549da2dd66e19d362d5a1
 ```
 
 Wait for applications ready:
@@ -23,22 +23,14 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-local-ns
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-local-nse-death
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-local-nse-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-local-nse-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 -I 172.16.1.101
+kubectl exec pods/alpine -n ns-local-nse-death -- ping -c 4 172.16.1.100 -I 172.16.1.101
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-local-nse-death -- ping -c 4 172.16.1.101 -I 172.16.1.100
+kubectl exec deployments/nse-kernel -n ns-local-nse-death -- ping -c 4 172.16.1.101 -I 172.16.1.100
 ```
 
 Stop NSE pod:
@@ -47,12 +39,12 @@ kubectl scale deployment nse-kernel -n ns-local-nse-death --replicas=0
 ```
 
 ```bash
-kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.100 -I 172.16.1.101 2>&1 | egrep "100% packet loss|Network unreachable|can't set multicast source"
+kubectl exec pods/alpine -n ns-local-nse-death -- ping -c 4 172.16.1.100 -I 172.16.1.101 2>&1 | egrep "100% packet loss|Network unreachable|can't set multicast source"
 ```
 
 Apply patch:
 ```bash
-kubectl apply -k nse-after-death
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-after-death?ref=ce50746ddcac231b39c549da2dd66e19d362d5a1
 ```
 
 Restore NSE pod:
@@ -75,7 +67,7 @@ Ping should pass with newly configured addresses.
 
 Ping from NSC to new NSE:
 ```bash
-kubectl exec ${NSC} -n ns-local-nse-death -- ping -c 4 172.16.1.102 -I 172.16.1.103
+kubectl exec pods/alpine -n ns-local-nse-death -- ping -c 4 172.16.1.102 -I 172.16.1.103
 ```
 
 Ping from new NSE to NSC:

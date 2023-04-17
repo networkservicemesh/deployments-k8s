@@ -9,8 +9,6 @@ resources:
 - client.yaml
 - config-file-nse.yaml
 - netsvc.yaml
-
-bases:
 - ../../../apps/nse-kernel
 
 patchesStrategicMerge:

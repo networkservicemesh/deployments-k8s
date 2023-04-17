@@ -4,11 +4,9 @@ kind: Kustomization
 
 namespace: ns-registry-local-endpoint
 
-bases:
+resources:
+- ns-registry-local-endpoint.yaml
 - ../base
 
 patchesStrategicMerge:
 - patch-nse.yaml
-
-resources:
-  - ns-registry-local-endpoint.yaml

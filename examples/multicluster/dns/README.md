@@ -27,27 +27,21 @@ Check `KUBECONFIG3` env:
 
 2. Get clusters IPs
 
-Switch to cluster1:
-
+Expose kube-dns service on the cluster1:
 ```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-
-Expose kube-dns service:
-```bash
-kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
+kubectl --kubeconfig=$KUBECONFIG1 expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:
 ```bash
-kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 Get and store externalIP of the coredns
 ```bash
-ip1=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
+ip1=$(kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
 if [[ $ip1 == *"no value"* ]]; then 
-    ip1=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
+    ip1=$(kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip1=$(dig +short $ip1 | head -1)
 fi
 # if IPv6
@@ -57,27 +51,21 @@ echo Selected externalIP: $ip1 for cluster1
 [[ ! -z $ip1 ]]
 ```
 
-Switch to cluster2:
-
+Expose kube-dns service on the cluster2:
 ```bash
-export KUBECONFIG=$KUBECONFIG2
-```
-
-Expose kube-dns service:
-```bash
-kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
+kubectl --kubeconfig=$KUBECONFIG2 expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:
 ```bash
-kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 Get and store externalIP of the coredns
 ```bash
-ip2=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
+ip2=$(kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
 if [[ $ip2 == *"no value"* ]]; then 
-    ip2=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
+    ip2=$(kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip2=$(dig +short $ip2 | head -1)
 fi
 # if IPv6
@@ -87,28 +75,21 @@ echo Selected externalIP: $ip2 for cluster2
 [[ ! -z $ip2 ]]
 ```
 
-
-Switch to cluster3:
-
+Expose kube-dns service on the cluster3:
 ```bash
-export KUBECONFIG=$KUBECONFIG3
-```
-
-Expose kube-dns service:
-```bash
-kubectl expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
+kubectl --kubeconfig=$KUBECONFIG3 expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
 Wait for setting externalIP:
 ```bash
-kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+kubectl --kubeconfig=$KUBECONFIG3 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
 Get and store externalIP of the coredns
 ```bash
-ip3=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
+ip3=$(kubectl --kubeconfig=$KUBECONFIG3 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
 if [[ $ip3 == *"no value"* ]]; then 
-    ip3=$(kubectl get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
+    ip3=$(kubectl --kubeconfig=$KUBECONFIG3 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip3=$(dig +short $ip3 | head -1)
 fi
 # if IPv6
@@ -122,13 +103,9 @@ echo Selected externalIP: $ip3 for cluster3
 
 **For the first cluster:**
 
+Apply CoreDNS config map:
 ```bash
-export KUBECONFIG=$KUBECONFIG1
-```
-
-```bash
----
-cat > configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG1 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -168,16 +145,9 @@ data:
 EOF
 ```
 
-Apply CoreDNS config map:
-
-```bash
-kubectl apply -f configmap.yaml
-```
-
 Also if your cluster coredns is using `import` plugin it makes sense to use a custom-cordns configmap.
-
 ```bash
-cat > custom-configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG1 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -201,20 +171,11 @@ data:
 EOF
 ```
 
-Apply custom CoreDNS config map:
-```bash
-kubectl apply -f custom-configmap.yaml 
-```
-
-
 **For the second cluster:**
 
+Apply CoreDNS config map:
 ```bash
-export KUBECONFIG=$KUBECONFIG2
-```
-
-```bash
-cat > configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG2 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -255,9 +216,8 @@ EOF
 ```
 
 Also if your cluster coredns is using `import` plugin it makes sense to use a custom-cordns configmap.
-
 ```bash
-cat > custom-configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG2 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -281,26 +241,11 @@ data:
 EOF
 ```
 
-Apply custom CoreDNS config map:
-```bash
-kubectl apply -f custom-configmap.yaml 
-```
-
-Apply CoreDNS config map:
-
-```bash
-kubectl apply -f configmap.yaml
-```
-
-
 **For the third cluster:**
 
+Apply CoreDNS config map:
 ```bash
-export KUBECONFIG=$KUBECONFIG3
-```
-
-```bash
-cat > configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG3 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -340,15 +285,9 @@ data:
 EOF
 ```
 
-Apply CoreDNS config map:
-
-```bash
-kubectl apply -f configmap.yaml
-```
 Also if your cluster coredns is using `import` plugin it makes sense to use a custom-coredns configmap.
-
 ```bash
-cat > custom-configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG3 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -372,17 +311,10 @@ data:
 EOF
 ```
 
-Apply custom CoreDNS config map:
-```bash
-kubectl apply -f custom-configmap.yaml 
-```
-
-
 ## Cleanup
 
 ```bash
-export KUBECONFIG=$KUBECONFIG1 && kubectl delete service -n kube-system exposed-kube-dns
-export KUBECONFIG=$KUBECONFIG2 && kubectl delete service -n kube-system exposed-kube-dns
-export KUBECONFIG=$KUBECONFIG3 && kubectl delete service -n kube-system exposed-kube-dns
+kubectl --kubeconfig=$KUBECONFIG1 delete service -n kube-system exposed-kube-dns
+kubectl --kubeconfig=$KUBECONFIG2 delete service -n kube-system exposed-kube-dns
+kubectl --kubeconfig=$KUBECONFIG3 delete service -n kube-system exposed-kube-dns
 ```
-

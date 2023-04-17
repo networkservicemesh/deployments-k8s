@@ -4,14 +4,12 @@ kind: Kustomization
 
 namespace: ns-vl3-dns
 
-bases:
-- ../../../apps/nse-vl3-vpp
-- ../../../apps/vl3-ipam
-
 resources:
 - nsc.yaml
 - namespace.yaml
-- vl3-netsvc.yaml
+- netsvc.yaml
+- ../../../apps/nse-vl3-vpp
+- ../../../apps/vl3-ipam
 
 patchesStrategicMerge:
 - nse-patch.yaml

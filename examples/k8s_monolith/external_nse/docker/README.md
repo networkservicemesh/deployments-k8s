@@ -17,7 +17,7 @@ services:
     networks:
       - kind
     environment:
-      NSM_SERVICE_NAMES: kernel2wireguard2kernel-monolith-nse
+      NSM_SERVICE_NAMES: kernel2ip2kernel-monolith-nse
       NSM_REGISTER_SERVICE: false
 EOF
 ```
@@ -36,4 +36,7 @@ docker compose -f docker-compose.yaml -f docker-compose.override.yaml up -d
 
 ```bash
 docker compose -f docker-compose.yaml -f docker-compose.override.yaml down
+```
+```bash
+rm docker-compose.yaml
 ```

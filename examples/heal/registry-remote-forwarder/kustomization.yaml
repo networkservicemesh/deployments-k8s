@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-registry-remote-forwarder
 
-bases:
-- ../../../apps/nse-kernel
-
 resources:
 - ns-registry-remote-forwarder.yaml
 - netsvc.yaml
 - client.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml

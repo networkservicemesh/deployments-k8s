@@ -48,7 +48,6 @@ WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{r
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
-
 ## Cleanup
 
 To free resources follow the next commands:

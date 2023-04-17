@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-remote-nsmgr-death
 
-bases:
+resources:
 - ../../../../apps/nse-kernel
 
 patchesStrategicMerge:

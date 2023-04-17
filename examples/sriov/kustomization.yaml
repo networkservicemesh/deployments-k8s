@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: nsm-system
 
-bases:
+resources:
+  - nsm-system-namespace.yaml
   - ../../apps/nsmgr
   - ../../apps/forwarder-vpp
   - ../../apps/registry-k8s
 
 patchesStrategicMerge:
   - forwarder-vpp.yaml
-
-resources:
-  - nsm-system-namespace.yaml

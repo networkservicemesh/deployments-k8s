@@ -7,8 +7,6 @@ namespace: ns-opa
 resources:
 - ns-opa.yaml
 - netsvc.yaml
-
-bases:
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
 

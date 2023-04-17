@@ -4,9 +4,6 @@ kind: Kustomization
 
 namespace: ns-mutually-aware-nses
 
-bases:
-- ../../../apps/nsc-kernel
-
 resources:
 - ns-mutually-aware-nses.yaml
 - nse-1.yaml
@@ -15,6 +12,7 @@ resources:
 - netsvc-2.yaml
 - config-file-nse-1.yaml
 - config-file-nse-2.yaml
+- ../../../apps/nsc-kernel
 
 patchesStrategicMerge:
 - patch-nsc.yaml

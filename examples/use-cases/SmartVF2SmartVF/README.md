@@ -21,14 +21,9 @@ kubectl -n ns-smartvf2smartvf wait --for=condition=ready --timeout=1m pod -l app
 kubectl -n ns-smartvf2smartvf wait --for=condition=ready --timeout=1m pod -l app=nse-kernel
 ```
 
-Get NSC pod:
-```bash
-NSC=$(kubectl -n ns-smartvf2smartvf get pods -l app=nsc-kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl -n ns-smartvf2smartvf exec ${NSC} -- ping -c 4 172.16.1.100
+kubectl -n ns-smartvf2smartvf exec deployments/nsc-kernel -- ping -c 4 172.16.1.100
 ```
 
 ## Cleanup

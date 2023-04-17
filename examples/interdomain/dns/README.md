@@ -45,7 +45,7 @@ echo Selected externalIP: $ip2 for cluster2
 
 Add DNS forwarding from cluster1 to cluster2:
 ```bash
-cat > configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG1 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -78,8 +78,9 @@ data:
       }
     }
 EOF
-kubectl --kubeconfig=$KUBECONFIG1 apply -f configmap.yaml
-cat > custom-configmap.yaml <<EOF
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG1 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -95,13 +96,11 @@ data:
       }
     }
 EOF
-
-kubectl --kubeconfig=$KUBECONFIG1 apply -f custom-configmap.yaml
 ```
 
 Add DNS forwarding from cluster2 to cluster1:
 ```bash
-cat > configmap.yaml <<EOF
+kubectl --kubeconfig=$KUBECONFIG2 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -134,8 +133,9 @@ data:
       }
     }
 EOF
-kubectl --kubeconfig=$KUBECONFIG2 apply -f configmap.yaml
-cat > custom-configmap.yaml <<EOF
+```
+```bash
+kubectl --kubeconfig=$KUBECONFIG2 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -151,7 +151,6 @@ data:
       }
     }
 EOF
-kubectl --kubeconfig=$KUBECONFIG2 apply -f custom-configmap.yaml
 ```
 
 ## Cleanup

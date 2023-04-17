@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 resources:
-  - networkservice.yaml
+  - netsvc.yaml
   - ../../../../../apps/vl3-ipam
 
 patchesStrategicMerge:

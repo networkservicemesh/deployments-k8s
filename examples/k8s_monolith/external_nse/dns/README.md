@@ -36,7 +36,7 @@ echo Selected dockerIP: $ipdock
 3. Update k8s CoreDNS configmap:
 
 ```bash
-cat > configmap.yaml <<EOF
+kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -70,12 +70,6 @@ data:
         reload 5s
     }
 EOF
-```
-
-Apply CoreDNS config map:
-
-```bash
-kubectl apply -f configmap.yaml
 ```
 
 Restart CoreDNS pods to immediately use the config map:
@@ -145,7 +139,6 @@ docker cp dnsentries.db nse-simple-vl3-docker:/
 ```
 
 Run coredns with this config:
-
 ```bash
 docker exec -d nse-simple-vl3-docker coredns -conf coredns-config
 ```
@@ -155,4 +148,6 @@ docker exec -d nse-simple-vl3-docker coredns -conf coredns-config
 ```bash
 kubectl delete service -n kube-system exposed-kube-dns
 ```
-
+```bash
+rm coredns-config dnsentries.db
+```

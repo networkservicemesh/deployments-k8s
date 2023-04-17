@@ -36,14 +36,9 @@ kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l a
 kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=nse-kernel
 ```
 
-Get NSC pod:
-```bash
-NSC=$(kubectl -n ns-sriov-kernel2noop get pods -l app=nsc-kernel --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl -n ns-sriov-kernel2noop exec ${NSC} -- ping -c 4 172.16.1.100
+kubectl -n ns-sriov-kernel2noop exec deployments/nsc-kernel -- ping -c 4 172.16.1.100
 ```
 
 ## Cleanup

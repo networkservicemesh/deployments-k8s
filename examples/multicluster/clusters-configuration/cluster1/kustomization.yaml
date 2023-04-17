@@ -4,8 +4,10 @@ kind: Kustomization
 
 namespace: nsm-system
 
-bases:
+resources:
 - https://github.com/kubernetes-sigs/about-api/clusterproperty/config/crd?ref=f9b81063dfa88c032a47789c7cd3357ba0c17f7d
+- cluster-property.yaml
+- nsm-system-namespace.yaml
 - ../../../../apps/cluster-info
 - ../../../../apps/nsmgr
 - ../../../../apps/forwarder-vpp
@@ -13,10 +15,6 @@ bases:
 - ../../../../apps/registry-proxy-dns
 - ../../../../apps/nsmgr-proxy
 - ../../../../apps/admission-webhook-k8s
-
-resources:
-- nsm-system-namespace.yaml
-- cluster-property.yaml
 
 patchesStrategicMerge:
 - patch-nsmgr-proxy.yaml

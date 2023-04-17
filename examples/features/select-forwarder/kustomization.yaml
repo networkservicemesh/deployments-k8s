@@ -4,14 +4,12 @@ kind: Kustomization
 
 namespace: ns-select-forwarder
 
-bases:
-- ../../../apps/nse-kernel
-
 resources:
 - ns-select-forwarder.yaml
 - client.yaml
 - service.yaml
 - forwarder.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - nse-patch.yaml

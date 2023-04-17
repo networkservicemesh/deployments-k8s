@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-kernel2ethernet2kernel
+
+resources:
+- ns-kernel2ethernet2kernel.yaml
+- client.yaml
+- ../../../apps/nse-kernel
+
+patchesStrategicMerge:
+- patch-nse.yaml

@@ -1,0 +1,7 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: kernel2ip2kernel-monolith-nse
+spec:
+  payload: IP

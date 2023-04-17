@@ -30,18 +30,10 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-opa
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-opa
 ```
 
-ind nsc and nse pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-opa --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-opa --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Check that NSC is not privileged and it cannot connect to NSE.
 
 ```bash
-kubectl logs ${NSC} -n ns-opa | grep "PermissionDenied desc = no sufficient privileges"
+kubectl logs deployments/nsc-kernel -n ns-opa | grep "PermissionDenied desc = no sufficient privileges"
 ```
 
 ## Cleanup

@@ -4,14 +4,12 @@ kind: Kustomization
 
 namespace: ns-vl3-nscs-death
 
-bases:
-- ../../../apps/nse-vl3-vpp
-- ../../../apps/vl3-ipam
-
 resources:
 - ns-vl3-nscs-death.yaml
 - netsvc.yaml
 - client.yaml
+- ../../../apps/nse-vl3-vpp
+- ../../../apps/vl3-ipam
 
 patchesStrategicMerge:
 - nse-patch.yaml

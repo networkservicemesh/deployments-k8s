@@ -23,27 +23,19 @@ kubectl wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-nse-comp
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-nse-composition
 ```
 
-Find nsc and nse pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-nse-composition --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-nse-composition --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-nse-composition -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-nse-composition -- ping -c 4 172.16.1.100
 ```
 
 Check TCP Port 8080 on NSE is accessible to NSC
 ```bash
-kubectl exec ${NSC} -n ns-nse-composition -- wget -O /dev/null --timeout 5 "172.16.1.100:8080"
+kubectl exec pods/alpine -n ns-nse-composition -- wget -O /dev/null --timeout 5 "172.16.1.100:8080"
 ```
 
 Check TCP Port 80 on NSE is inaccessible to NSC
 ```bash
-kubectl exec ${NSC} -n ns-nse-composition -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
+kubectl exec pods/alpine -n ns-nse-composition -- wget -O /dev/null --timeout 5 "172.16.1.100:80"
 if [ 0 -eq $? ]; then
   echo "error: port :80 is available" >&2
   false
@@ -54,7 +46,7 @@ fi
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-nse-composition -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-nse-composition -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup

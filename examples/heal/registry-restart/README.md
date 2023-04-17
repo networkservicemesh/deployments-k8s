@@ -33,12 +33,12 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-registry-restart --template '{{ra
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-registry-restart -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-registry-restart -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-registry-restart -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-registry-restart -- ping -c 4 172.16.1.101
 ```
 
 Find Registry:
@@ -54,7 +54,7 @@ kubectl delete pod ${REGISTRY} -n nsm-system
 kubectl wait --for=condition=ready --timeout=1m pod -l app=registry -n nsm-system
 ```
 
-Apply:
+Apply a new client:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-restart/registry-after-death?ref=85319af45db0bc5ac19eb5c522c88bf48cffb24b
 ```
@@ -64,19 +64,14 @@ Wait for a new NSC to start:
 kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine-new -n ns-registry-restart
 ```
 
-Find new NSC pod:
-```bash
-NEW_NSC=$(kubectl get pods -l app=alpine-new -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from new NSC to NSE:
 ```bash
-kubectl exec ${NEW_NSC} -n ns-registry-restart -- ping -c 4 172.16.1.102
+kubectl exec pods/alpine-new -n ns-registry-restart -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to new NSC:
 ```bash
-kubectl exec ${NSE} -n ns-registry-restart -- ping -c 4 172.16.1.103
+kubectl exec deployments/nse-kernel -n ns-registry-restart -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup

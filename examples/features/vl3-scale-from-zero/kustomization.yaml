@@ -9,8 +9,6 @@ resources:
 - autoscale-netsvc.yaml
 - vl3-netsvc.yaml
 - client.yaml
-
-bases:
 - ../../../apps/vl3-ipam
 - ../../../apps/nse-supplier-k8s
 

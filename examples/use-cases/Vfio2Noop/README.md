@@ -21,11 +21,6 @@ kubectl -n ns-vfio2noop wait --for=condition=ready --timeout=1m pod -l app=nsc-v
 kubectl -n ns-vfio2noop wait --for=condition=ready --timeout=1m pod -l app=nse-vfio
 ```
 
-Get NSC pod:
-```bash
-NSC_VFIO=$(kubectl -n ns-vfio2noop get pods -l app=nsc-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Check connectivity:
 ```bash
 function dpdk_ping() {
@@ -43,7 +38,7 @@ function dpdk_ping() {
       -C ${client_mac}                        \
       -S ${server_mac}
       "
-  out="$(kubectl -n ns-vfio2noop exec ${NSC_VFIO} --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
+  out="$(kubectl -n ns-vfio2noop exec deployments/nsc-vfio --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
 
   if [[ "$?" != 0 ]]; then
     echo "${out}"
@@ -77,10 +72,7 @@ dpdk_ping "0a:55:44:33:22:00" "0a:55:44:33:22:11"
 
 Stop ponger:
 ```bash
-NSE=$(kubectl -n ns-vfio2noop get pods -l app=nse-vfio --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-kubectl -n ns-vfio2noop exec ${NSE} --container ponger -- /bin/bash -c '\
+kubectl -n ns-vfio2noop exec deployments/nse-vfio --container ponger -- /bin/bash -c '\
   (sleep 10 && kill $(pgrep "pingpong")) 1>/dev/null 2>&1 &             \
 '
 ```

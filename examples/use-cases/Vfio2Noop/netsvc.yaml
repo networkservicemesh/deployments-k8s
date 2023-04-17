@@ -3,4 +3,3 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: vfio2noop
-  namespace: nsm-system

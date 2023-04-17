@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-smartvf2smartvf
 
-bases:
-- ../../../apps/nsc-kernel
-- ../../../apps/nse-kernel
-
 resources:
 - ns-smartvf2smartvf.yaml
 - netsvc.yaml
+- ../../../apps/nsc-kernel
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nsc.yaml

@@ -23,10 +23,10 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 
 ## Includes
 
-- [Kernel to VXLAN to Kernel Connection](./usecases/interdomain_Kernel2Vxlan2Kernel)
-- [Kernel to VXLAN to Kernel Connection via floating registry](./usecases/floating_Kernel2Vxlan2Kernel)
-- [Kernel to WIREGUARD to Kernel Connection](./usecases/interdomain_Kernel2Wireguard2Kernel)
-- [Kernel to WIREGUARD to Kernel Connection via floating registry](./usecases/floating_Kernel2Wireguard2Kernel)
+- [Kernel to Ethernet to Kernel Connection](./usecases/interdomain_Kernel2Ethernet2Kernel)
+- [Kernel to Ethernet to Kernel Connection via floating registry](./usecases/floating_Kernel2Ethernet2Kernel)
+- [Kernel to IP to Kernel Connection](./usecases/interdomain_Kernel2IP2Kernel)
+- [Kernel to IP to Kernel Connection via floating registry](./usecases/floating_Kernel2IP2Kernel)
 - [DNS](./usecases/interdomain_dns)
 - [Floating DNS](./usecases/floating_dns)
 - [Floating VL3](./usecases/floating_vl3-basic)

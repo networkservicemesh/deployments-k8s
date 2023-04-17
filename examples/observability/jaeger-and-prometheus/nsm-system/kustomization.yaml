@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: nsm-system
 
-bases:
+resources:
   - ../../../basic
 
 patchesStrategicMerge:

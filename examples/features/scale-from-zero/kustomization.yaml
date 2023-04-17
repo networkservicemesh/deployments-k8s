@@ -6,10 +6,8 @@ namespace: ns-scale-from-zero
 
 resources:
 - ns-scale-from-zero.yaml
-- autoscale-netsvc.yaml
+- netsvc.yaml
 - client.yaml
-
-bases:
 - ../../../apps/nse-supplier-k8s
 
 patchesStrategicMerge:

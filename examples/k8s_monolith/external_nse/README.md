@@ -16,7 +16,7 @@ This NSE creates the required interface on the monolith:
 
 ## Includes
 
-- [Kernel to Wireguard to Kernel Connection](./usecases/Kernel2Wireguard2Kernel)
+- [Kernel to IP to Kernel Connection](./usecases/Kernel2IP2Kernel)
 
 ## Run
 

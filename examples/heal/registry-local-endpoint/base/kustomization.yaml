@@ -4,9 +4,7 @@ kind: Kustomization
 
 namespace: ns-registry-local-endpoint
 
-bases:
-- ../../../../apps/nse-kernel
-
 resources:
 - netsvc.yaml
 - client.yaml
+- ../../../../apps/nse-kernel

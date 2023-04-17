@@ -35,23 +35,15 @@ Wait for client to be ready:
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-annotated-namespace
 ```
- 
-Find nsc and nse pods by labels:
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-annotated-namespace --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-annotated-namespace --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-annotated-namespace -- ping -c 4 172.16.1.100
+kubectl exec deployments/alpine -n ns-annotated-namespace -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-annotated-namespace -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-annotated-namespace -- ping -c 4 172.16.1.101
 ```
 
 

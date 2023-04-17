@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-local-nsmgr-local-nse-memif
 
-bases:
+resources:
 - ../base
 
 patchesStrategicMerge:

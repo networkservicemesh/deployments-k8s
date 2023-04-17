@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-kernel2ip2memif-ipv6
+
+resources:
+- ns-kernel2ip2memif-ipv6.yaml
+- client.yaml
+- netsvc.yaml
+- ../../../../apps/nse-memif
+
+patchesStrategicMerge:
+- patch-nse.yaml

@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-kernel2ip2kernel-dual-stack
+
+resources:
+- ns-kernel2ip2kernel-dual-stack.yaml
+- netsvc.yaml
+- client.yaml
+- ../../../../apps/nse-kernel
+
+patchesStrategicMerge:
+- patch-nse.yaml

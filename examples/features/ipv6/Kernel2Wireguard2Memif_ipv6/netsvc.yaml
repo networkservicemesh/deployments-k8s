@@ -1,8 +1,0 @@
----
-apiVersion: networkservicemesh.io/v1
-kind: NetworkService
-metadata:
-  name: kernel2wireguard2memif-ipv6
-  namespace: nsm-system
-spec:
-  payload: IP

@@ -3,6 +3,5 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: kernel2kernel-dual-stack
-  namespace: nsm-system
 spec:
   payload: ETHERNET

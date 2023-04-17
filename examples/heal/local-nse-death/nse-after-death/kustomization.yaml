@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-local-nse-death
 
-bases:
+resources:
 - ../base
 
 patchesStrategicMerge:
