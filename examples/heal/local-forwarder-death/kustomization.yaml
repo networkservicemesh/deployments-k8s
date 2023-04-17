@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-local-forwarder-death
 
-bases:
-- ../../../apps/nse-kernel
-
 resources:
 - ns-local-forwarder-death.yaml
 - client.yaml
 - netsvc.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml

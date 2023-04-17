@@ -3,6 +3,5 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: dns
-  namespace: nsm-system
 spec:
   payload: ETHERNET

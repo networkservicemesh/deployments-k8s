@@ -3,6 +3,5 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: remote-nsm-system-restart-memif-ip
-  namespace: nsm-system
 spec:
   payload: IP

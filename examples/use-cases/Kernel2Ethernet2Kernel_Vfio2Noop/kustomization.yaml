@@ -6,10 +6,10 @@ namespace: ns-kernel2ethernet2kernel-vfio2noop
 
 resources:
   - ns-kernel2ethernet2kernel-vfio2noop.yaml
+  - netsvc.yaml
   - ../../../apps/nse-kernel
   - ../../../apps/nsc-vfio
   - ../../../apps/nse-vfio
-  - netsvc.yaml
   - client.yaml
 
 patchesStrategicMerge:

@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-webhook-smartvf
 
-bases:
-- ../../../apps/nse-kernel
-
 resources:
 - ns-webhook.yaml
 - postgres-cl.yaml
 - netsvc.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml

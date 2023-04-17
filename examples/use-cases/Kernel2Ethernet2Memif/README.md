@@ -25,22 +25,14 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-kernel2e
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ns-kernel2ethernet2memif
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-kernel2ethernet2memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-memif -n ns-kernel2ethernet2memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-kernel2ethernet2memif -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-kernel2ethernet2memif -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "ns-kernel2ethernet2memif" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec deployments/nse-memif -n "ns-kernel2ethernet2memif" -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```

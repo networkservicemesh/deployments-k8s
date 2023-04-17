@@ -17,13 +17,11 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 ## Run
 
 Apply example resources:
-
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/select-forwarder?ref=85319af45db0bc5ac19eb5c522c88bf48cffb24b
 ```
 
 Wait for applications ready:
-
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-select-forwarder
 ```
@@ -32,27 +30,19 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-select-f
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-select-forwarder
 ```
 
-Find nsc, nse pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-select-forwarder --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-select-forwarder -- ping -c 4 169.254.0.0
+kubectl exec pods/alpine -n ns-select-forwarder -- ping -c 4 169.254.0.0
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-select-forwarder -- ping -c 4 169.254.0.1
+kubectl exec deployments/nse-kernel -n ns-select-forwarder -- ping -c 4 169.254.0.1
 ```
 
 Verify that NSMgr selected the correct forwarder:
 ```bash
-kubectl logs ${NSC} -c cmd-nsc -n ns-select-forwarder | grep "my-forwarder-vpp"
+kubectl logs pods/alpine -c cmd-nsc -n ns-select-forwarder | grep "my-forwarder-vpp"
 ```
 
 ## Cleanup

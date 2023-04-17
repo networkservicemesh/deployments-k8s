@@ -4,10 +4,8 @@ kind: Kustomization
 
 namespace: ns-remote-nsmgr-remote-endpoint
 
-bases:
-- ../base
-
 resources:
+- ../base
 - ns-remote-nsmgr-remote-endpoint.yaml
 - client.yaml
 

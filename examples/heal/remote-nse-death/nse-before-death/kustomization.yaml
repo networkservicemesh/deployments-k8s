@@ -4,11 +4,9 @@ kind: Kustomization
 
 namespace: ns-remote-nse-death
 
-bases:
+resources:
+- ns-remote-nse-death.yaml
 - ../base
 
 patchesStrategicMerge:
 - patch-nse.yaml
-
-resources:
-  - ns-remote-nse-death.yaml

@@ -16,7 +16,7 @@ Apply metallb for the cluster:
 if [[ ! -z $CLUSTER_CIDR ]]; then
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
-    cat > metallb-config.yaml <<EOF
+    kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -30,7 +30,6 @@ data:
       addresses:
       - $CLUSTER_CIDR
 EOF
-    kubectl apply -f metallb-config.yaml
     kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
 ```

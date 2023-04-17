@@ -29,17 +29,9 @@ kubectl wait --for=condition=ready --timeout=5m pod -l app=nse-kernel -n ns-webh
 kubectl wait --for=condition=ready --timeout=1m pod postgres-cl -n ns-webhook-smartvf
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=postgres-cl -n ns-webhook-smartvf --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-webhook-smartvf --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Try to connect from postgres-nsc to database from postgresql service:
 ```bash
-kubectl exec ${NSC} -n ns-webhook-smartvf -c postgres-cl -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
+kubectl exec pods/postgres-cl -n ns-webhook-smartvf -c postgres-cl -- sh -c 'PGPASSWORD=admin psql -h 172.16.1.100 -p 5432 -U admin test'
 ```
 
 ## Cleanup

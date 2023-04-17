@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-registry-local-endpoint
 
-bases:
+resources:
 - ../base
 
 patchesStrategicMerge:

@@ -1,5 +1,0 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ns-memif2wireguard2memif-ipv6

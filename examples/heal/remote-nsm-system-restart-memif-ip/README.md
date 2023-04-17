@@ -24,24 +24,16 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ns-remot
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ns-remote-nsm-system-restart-memif-ip
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=nsc-memif -n ns-remote-nsm-system-restart-memif-ip --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-memif -n ns-remote-nsm-system-restart-memif-ip --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.100 repeat 4)
+result=$(kubectl exec deployments/nsc-memif -n ns-remote-nsm-system-restart-memif-ip -- vppctl ping 172.16.1.100 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec deployments/nse-memif -n ns-remote-nsm-system-restart-memif-ip -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
@@ -61,14 +53,14 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.100 repeat 4)
+result=$(kubectl exec deployments/nsc-memif -n ns-remote-nsm-system-restart-memif-ip -- vppctl ping 172.16.1.100 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "ns-remote-nsm-system-restart-memif-ip" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec deployments/nse-memif -n ns-remote-nsm-system-restart-memif-ip -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```

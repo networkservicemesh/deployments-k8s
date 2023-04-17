@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-memif2kernel
 
-bases:
-- ../../../apps/nsc-memif
-- ../../../apps/nse-kernel
-
 resources:
 - ns-memif2kernel.yaml
 - netsvc.yaml
+- ../../../apps/nsc-memif
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nsc.yaml

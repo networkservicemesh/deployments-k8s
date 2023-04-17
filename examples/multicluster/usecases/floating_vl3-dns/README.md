@@ -62,25 +62,25 @@ nse2=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=nse-vl3-vpp -n ns-float
 3.1. NSC1 pings another client and endpoints via DNS:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec $nsc1 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nsc2.floating-vl3-dns.my.cluster3. -4
+kubectl --kubeconfig=$KUBECONFIG1 exec pods/alpine-1 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nsc2.floating-vl3-dns.my.cluster3. -4
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec $nsc1 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse2.floating-vl3-dns.my.cluster3. -4
+kubectl --kubeconfig=$KUBECONFIG1 exec pods/alpine-1 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse2.floating-vl3-dns.my.cluster3. -4
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec $nsc1 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse1.floating-vl3-dns.my.cluster3. -4
+kubectl --kubeconfig=$KUBECONFIG1 exec pods/alpine-1 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse1.floating-vl3-dns.my.cluster3. -4
 ```
 
 3.2. NSC2 pings another client and endpoints via DNS:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 exec $nsc2 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nsc1.floating-vl3-dns.my.cluster3. -4
+kubectl --kubeconfig=$KUBECONFIG2 exec pods/alpine-2 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nsc1.floating-vl3-dns.my.cluster3. -4
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 exec $nsc2 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse1.floating-vl3-dns.my.cluster3. -4
+kubectl --kubeconfig=$KUBECONFIG2 exec pods/alpine-2 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse1.floating-vl3-dns.my.cluster3. -4
 ```
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 exec $nsc2 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse2.floating-vl3-dns.my.cluster3. -4
+kubectl --kubeconfig=$KUBECONFIG2 exec pods/alpine-2 -n ns-floating-vl3-dns -- ping -c2 -i 0.5 $nse2.floating-vl3-dns.my.cluster3. -4
 ```
 
 ## Cleanup

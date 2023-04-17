@@ -3,6 +3,5 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: dataplane-interrupt
-  namespace: nsm-system
 spec:
   payload: ETHERNET

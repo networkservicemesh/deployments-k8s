@@ -26,35 +26,24 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ns-ex
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ns-exclude-prefixes-client
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-exclude-prefixes-client --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE1=$(kubectl get pods -l app=nse-kernel-1 -n ns-exclude-prefixes-client --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE2=$(kubectl get pods -l app=nse-kernel-2 -n ns-exclude-prefixes-client --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE1:
 ```bash
-kubectl exec ${NSC} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.96
+kubectl exec pods/alpine -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.96
 ```
 
 Ping from NSC to NSE2:
 ```bash
-kubectl exec ${NSC} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.98
+kubectl exec pods/alpine -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.98
 ```
 
 Ping from NSE1 to NSC:
 ```bash
-kubectl exec ${NSE1} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.97
+kubectl exec deployments/nse-kernel-1 -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.97
 ```
 
 Ping from NSE2 to NSC:
 ```bash
-kubectl exec ${NSE2} -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.99
+kubectl exec deployments/nse-kernel-2 -n ns-exclude-prefixes-client -- ping -c 4 172.16.1.99
 ```
 
 ## Cleanup

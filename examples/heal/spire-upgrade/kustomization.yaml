@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-spire-upgrade
 
-bases:
+resources:
+- netsvc.yaml
+- client.yaml
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-kernel
 
-resources:
-- netsvc.yaml
-
 patchesStrategicMerge:
-- patch-nsc.yaml
 - patch-nse.yaml

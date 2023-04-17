@@ -1,0 +1,35 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: autoscale-consul-proxy-server
+spec:
+  payload: IP
+  matches:
+    - source_selector:
+      fallthrough: true
+      routes:
+        - destination_selector:
+            podName: "{{ .podName }}"
+    - source_selector:
+      routes:
+        - destination_selector:
+            any: "true"
+
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: autoscale-consul-proxy-client
+spec:
+  payload: IP
+  matches:
+    - source_selector:
+      fallthrough: true
+      routes:
+        - destination_selector:
+            podName: "{{ .podName }}"
+    - source_selector:
+      routes:
+        - destination_selector:
+            any: "true"

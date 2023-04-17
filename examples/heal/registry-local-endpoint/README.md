@@ -23,22 +23,14 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-registry
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-registry-local-endpoint
 ```
 
-Find nsc and nse pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-registry-local-endpoint --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-registry-local-endpoint --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-registry-local-endpoint -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-registry-local-endpoint -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-registry-local-endpoint -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-registry-local-endpoint -- ping -c 4 172.16.1.101
 ```
 
 Find Registry:
@@ -46,10 +38,12 @@ Find Registry:
 REGISTRY=$(kubectl get pods -l app=registry -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Restart Registry and NSE:
+Restart Registry:
 ```bash
 kubectl delete pod ${REGISTRY} -n nsm-system
 ```
+
+Restart NSE. This command recreates NSE with a new label:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-local-endpoint/nse-second?ref=85319af45db0bc5ac19eb5c522c88bf48cffb24b
 ```
@@ -69,7 +63,7 @@ NEW_NSE=$(kubectl get pods -l app=nse-kernel -l version=new -n ns-registry-local
 
 Ping from NSC to new NSE:
 ```bash
-kubectl exec ${NSC} -n ns-registry-local-endpoint -- ping -c 4 172.16.1.102
+kubectl exec pods/alpine -n ns-registry-local-endpoint -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:

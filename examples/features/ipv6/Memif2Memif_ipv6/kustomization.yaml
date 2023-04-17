@@ -7,8 +7,6 @@ namespace: ns-memif2memif-ipv6
 resources:
 - ns-memif2memif-ipv6.yaml
 - netsvc.yaml
-
-bases:
 - ../../../../apps/nsc-memif
 - ../../../../apps/nse-memif
 

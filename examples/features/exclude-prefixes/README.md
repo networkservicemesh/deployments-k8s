@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create config map with excluded prefixes
 ```bash
-kubectl apply -f exclude-prefixes-config-map.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes/configmap?ref=ce50746ddcac231b39c549da2dd66e19d362d5a1
 ```
 
 Deploy NSC and NSE:
@@ -28,22 +28,14 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-exclude-
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-exclude-prefixes
 ```
 
-Find nsc and nse pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-exclude-prefixes --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-exclude-prefixes --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-exclude-prefixes -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-exclude-prefixes -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-exclude-prefixes -- ping -c 4 172.16.1.103
+kubectl exec deployments/nse-kernel -n ns-exclude-prefixes -- ping -c 4 172.16.1.103
 ```
 
 ## Cleanup

@@ -3,6 +3,5 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: registry-remote-nsmgr
-  namespace: nsm-system
 spec:
   payload: ETHERNET

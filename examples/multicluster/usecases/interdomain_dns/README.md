@@ -16,12 +16,6 @@ Deploy NSE:
 kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_dns/cluster2?ref=85319af45db0bc5ac19eb5c522c88bf48cffb24b
 ```
 
-Find NSE pod by labels:
-```bash
-NSE=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=nse-kernel -n ns-interdomain-dns --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-[[ ! -z $NSE ]]
-```
-
 **2. Deploy client on cluster1**
 
 Deploy client:
@@ -34,27 +28,21 @@ Wait for applications ready:
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=dnsutils -n ns-interdomain-dns
 ```
 
-Find client pod by labels:
-```bash
-NSC=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=dnsutils -n ns-interdomain-dns --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-[[ ! -z $NSC ]]
-```
-
 **3. Check connectivity**
 
 Find dns server using nslookup: 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -c dnsutils -n ns-interdomain-dns -- nslookup -norec -nodef my.coredns.service
+kubectl --kubeconfig=$KUBECONFIG1 exec pods/dnsutils -c dnsutils -n ns-interdomain-dns -- nslookup -norec -nodef my.coredns.service
 ```
 
 Ping from dnsutils to NSE by domain name:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -c dnsutils -n ns-interdomain-dns -- ping -c 4 my.coredns.service
+kubectl --kubeconfig=$KUBECONFIG1 exec pods/dnsutils -c dnsutils -n ns-interdomain-dns -- ping -c 4 my.coredns.service
 ```
 
 Validate that the default DNS server is working:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 exec ${NSC} -c dnsutils -n ns-interdomain-dns -- dig kubernetes.default A kubernetes.default AAAA | grep "kubernetes.default.svc.cluster.local"
+kubectl --kubeconfig=$KUBECONFIG1 exec pods/dnsutils -c dnsutils -n ns-interdomain-dns -- dig kubernetes.default A kubernetes.default AAAA | grep "kubernetes.default.svc.cluster.local"
 ```
 
 ## Cleanup

@@ -24,22 +24,14 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-remote-n
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-remote-nsmgr-death
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-remote-nsmgr-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.101
 ```
 
 Kill remote NSMgr:
@@ -64,7 +56,7 @@ NEW_NSE=$(kubectl get pods -l nse-version=local -n ns-remote-nsmgr-death --templ
 
 Ping from NSC to new NSE:
 ```bash
-kubectl exec ${NSC} -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.102
+kubectl exec pods/alpine -n ns-remote-nsmgr-death -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:

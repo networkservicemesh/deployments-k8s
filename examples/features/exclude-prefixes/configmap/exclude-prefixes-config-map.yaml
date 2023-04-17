@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: excluded-prefixes-config
+data:
+  excluded_prefixes_input.yaml: |
+    prefixes:
+    - 172.16.1.101/32
+    - 172.16.1.102/32

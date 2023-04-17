@@ -23,17 +23,6 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-vfio -n ns-kernel
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-vfio -n ns-kernel2ethernet2kernel-vfio2noop
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC_KERNEL=$(kubectl get pods -l app=alpine -n ns-kernel2ethernet2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE_KERNEL=$(kubectl get pods -l app=nse-kernel -n ns-kernel2ethernet2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSC_VFIO=$(kubectl get pods -l app=nsc-vfio -n ns-kernel2ethernet2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Prepare VFIO ping function:
 ```bash
 function dpdk_ping() {
@@ -51,7 +40,7 @@ function dpdk_ping() {
       -C ${client_mac}                        \
       -S ${server_mac}
       "
-  out="$(kubectl -n ns-kernel2ethernet2kernel-vfio2noop exec ${NSC_VFIO} --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
+  out="$(kubectl -n ns-kernel2ethernet2kernel-vfio2noop exec deployments/nsc-vfio --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
 
   if [[ "$?" != 0 ]]; then
     echo "${out}"
@@ -78,12 +67,12 @@ function dpdk_ping() {
 
 Ping from kernel NSC to kernel NSE:
 ```bash
-kubectl exec ${NSC_KERNEL} -n ns-kernel2ethernet2kernel-vfio2noop -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-kernel2ethernet2kernel-vfio2noop -- ping -c 4 172.16.1.100
 ```
 
 Ping from kernel NSE to kernel NSC:
 ```bash
-kubectl exec ${NSE_KERNEL} -n ns-kernel2ethernet2kernel-vfio2noop -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-kernel2ethernet2kernel-vfio2noop -- ping -c 4 172.16.1.101
 ```
 
 Ping from VFIO NSC to VFIO NSE:
@@ -95,10 +84,7 @@ dpdk_ping "0a:55:44:33:22:00" "0a:55:44:33:22:11"
 
 Stop ponger:
 ```bash
-NSE_VFIO=$(kubectl get pods -l app=nse-vfio -n ns-kernel2ethernet2kernel-vfio2noop --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-kubectl -n ns-kernel2ethernet2kernel-vfio2noop exec ${NSE_VFIO} --container ponger -- /bin/bash -c '\
+kubectl -n ns-kernel2ethernet2kernel-vfio2noop exec deployments/nse-vfio --container ponger -- /bin/bash -c '\
   (sleep 10 && kill $(pgrep "pingpong")) 1>/dev/null 2>&1 &                    \
 '
 ```

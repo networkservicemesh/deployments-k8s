@@ -4,12 +4,10 @@ kind: Kustomization
 
 namespace: ns-local-nsmgr-local-nse-memif
 
-bases:
-- ../../../../apps/nsc-memif
-- ../../../../apps/nse-memif
-
 resources:
 - netsvc.yaml
+- ../../../../apps/nsc-memif
+- ../../../../apps/nse-memif
 
 patchesStrategicMerge:
 - patch-nsc.yaml

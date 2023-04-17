@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-dataplane-interrupt
 
-bases:
-- ../../../apps/nse-kernel
-
 resources:
 - ns-dataplane-interrupt.yaml
 - netsvc.yaml
 - client.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml

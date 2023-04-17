@@ -8,8 +8,6 @@ resources:
 - ns-exclude-prefixes.yaml
 - netsvc.yaml
 - client.yaml
-
-bases:
 - ../../../apps/nse-kernel
 
 patchesStrategicMerge:

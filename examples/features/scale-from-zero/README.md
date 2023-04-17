@@ -34,15 +34,14 @@ kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app
 kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
 ```
 
-Find NSC and NSE pods by labels:
+Find NSE pod by label:
 ```bash
-NSC=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=alpine)
 NSE=$(kubectl get pod -n ns-scale-from-zero --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-icmp-responder)
 ```
 
 Check connectivity:
 ```bash
-kubectl exec $NSC -n ns-scale-from-zero -- ping -c 4 169.254.0.0
+kubectl exec pods/alpine -n ns-scale-from-zero -- ping -c 4 169.254.0.0
 ```
 ```bash
 kubectl exec $NSE -n ns-scale-from-zero -- ping -c 4 169.254.0.1
@@ -72,8 +71,4 @@ kubectl wait -n ns-scale-from-zero --for=delete --timeout=1m pod -l app=nse-icmp
 Delete namespace:
 ```bash
 kubectl delete ns ns-scale-from-zero
-```
-Delete network service:
-```bash
-kubectl delete -n nsm-system networkservices.networkservicemesh.io scale-from-zero
 ```

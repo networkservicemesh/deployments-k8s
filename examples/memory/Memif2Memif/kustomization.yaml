@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-memif2memif
 
-bases:
+resources:
+- ns-memif2memif.yaml
 - ../../../apps/nsc-memif
 - ../../../apps/nse-memif
 
 patchesStrategicMerge:
 - patch-nsc.yaml
 - patch-nse.yaml
-
-resources:
-- ns-memif2memif.yaml

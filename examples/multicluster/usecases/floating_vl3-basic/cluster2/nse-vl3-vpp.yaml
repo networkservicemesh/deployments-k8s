@@ -21,7 +21,7 @@ spec:
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_SERVICE_NAMES
-          value: "my-interdomain-vl3-network@my.cluster3"
+          value: "floating-vl3-basic@my.cluster3"
         - name: NSM_PREFIX_SERVER_URL
           value: "tcp://vl3-ipam.ns-floating-vl3-basic.my.cluster3:5006"
         - name: NSM_LOG_LEVEL

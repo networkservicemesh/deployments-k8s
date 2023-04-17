@@ -3,7 +3,6 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: autoscale-icmp-responder
-  namespace: nsm-system
 spec:
   payload: IP
   matches:

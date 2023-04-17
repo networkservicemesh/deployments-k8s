@@ -13,7 +13,7 @@ Apply metallb for the first cluster:
 if [[ ! -z $CLUSTER1_CIDR ]]; then
     kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
     kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
-    cat > metallb-config.yaml <<EOF
+    kubectl --kubeconfig=$KUBECONFIG1 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -27,7 +27,6 @@ data:
       addresses:
       - $CLUSTER1_CIDR
 EOF
-    kubectl --kubeconfig=$KUBECONFIG1 apply -f metallb-config.yaml
     kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
 ```
@@ -37,7 +36,7 @@ Apply metallb for the second cluster:
 if [[ ! -z $CLUSTER2_CIDR ]]; then
     kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
     kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
-    cat > metallb-config.yaml <<EOF
+    kubectl --kubeconfig=$KUBECONFIG2 apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -51,7 +50,6 @@ data:
       addresses:
       - $CLUSTER2_CIDR
 EOF
-    kubectl --kubeconfig=$KUBECONFIG2 apply -f metallb-config.yaml
     kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
 fi
 ```
@@ -62,12 +60,12 @@ Delete metallb-system namespace from all clusters:
 
 ```bash
 if [[ ! -z $CLUSTER1_CIDR ]]; then
-  kubectl --kubeconfig=$KUBECONFIG2 delete ns metallb-system  
+  kubectl --kubeconfig=$KUBECONFIG1 delete ns metallb-system
 fi
 ```
 
 ```bash
 if [[ ! -z $CLUSTER2_CIDR ]]; then
-  kubectl --kubeconfig=$KUBECONFIG1 delete ns metallb-system  
+  kubectl --kubeconfig=$KUBECONFIG2 delete ns metallb-system
 fi
 ```

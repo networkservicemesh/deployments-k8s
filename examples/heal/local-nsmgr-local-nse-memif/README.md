@@ -23,24 +23,16 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-memif -n ns-local
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-memif -n ns-local-nsmgr-local-nse-memif
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=nsc-memif -n ns-local-nsmgr-local-nse-memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-memif -n ns-local-nsmgr-local-nse-memif --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.100 repeat 4)
+result=$(kubectl exec deployments/nsc-memif -n ns-local-nsmgr-local-nse-memif -- vppctl ping 172.16.1.100 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
 
 Ping from NSE to NSC:
 ```bash
-result=$(kubectl exec "${NSE}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.101 repeat 4)
+result=$(kubectl exec deployments/nse-memif -n ns-local-nsmgr-local-nse-memif -- vppctl ping 172.16.1.101 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```
@@ -48,7 +40,6 @@ echo ${result}
 Delete the previous NSE:
 ```bash
 kubectl delete deployment nse-memif -n ns-local-nsmgr-local-nse-memif
-kubectl wait --for=delete --timeout=1m pod ${NSE} -n ns-local-nsmgr-local-nse-memif
 ```
 
 Find nsc node:
@@ -84,7 +75,7 @@ NEW_NSE=$(kubectl get pods -l app=nse-memif -l version=new -n ns-local-nsmgr-loc
 
 Ping from NSC to NSE:
 ```bash
-result=$(kubectl exec "${NSC}" -n "ns-local-nsmgr-local-nse-memif" -- vppctl ping 172.16.1.102 repeat 4)
+result=$(kubectl exec deployments/nsc-memif -n ns-local-nsmgr-local-nse-memif -- vppctl ping 172.16.1.102 repeat 4)
 echo ${result}
 ! echo ${result} | grep -E -q "(100% packet loss)|(0 sent)|(no egress interface)"
 ```

@@ -4,8 +4,6 @@ kind: Kustomization
 
 namespace: ns-remote-nsmgr-remote-endpoint
 
-bases:
-- ../../../../apps/nse-kernel
-
 resources:
 - netsvc.yaml
+- ../../../../apps/nse-kernel

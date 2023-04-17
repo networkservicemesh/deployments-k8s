@@ -4,13 +4,11 @@ kind: Kustomization
 
 namespace: ns-kernel2kernel
 
-bases:
-- ../../../apps/nse-kernel
-
 resources:
 - ns-kernel2kernel.yaml
 - client.yaml
 - netsvc.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml

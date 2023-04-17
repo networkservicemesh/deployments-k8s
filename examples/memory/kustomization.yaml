@@ -4,11 +4,9 @@ kind: Kustomization
 
 namespace: nsm-system
 
-bases:
+resources:
+- nsm-system-namespace.yaml
 - ../../apps/nsmgr
 - ../../apps/forwarder-vpp
 - ../../apps/registry-memory
 - ../../apps/admission-webhook-k8s
-
-resources:
-- nsm-system-namespace.yaml

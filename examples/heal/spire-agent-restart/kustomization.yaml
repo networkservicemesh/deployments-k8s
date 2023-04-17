@@ -4,13 +4,10 @@ kind: Kustomization
 
 namespace: ns-spire-agent-restart
 
-bases:
-- ../../../apps/nsc-kernel
-- ../../../apps/nse-kernel
-
 resources:
 - netsvc.yaml
+- client.yaml
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
-- patch-nsc.yaml
 - patch-nse.yaml

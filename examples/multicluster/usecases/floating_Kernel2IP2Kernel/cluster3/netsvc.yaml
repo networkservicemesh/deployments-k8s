@@ -1,0 +1,7 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: floating-kernel2ip2kernel
+spec:
+  payload: IP

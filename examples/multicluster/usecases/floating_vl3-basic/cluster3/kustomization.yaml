@@ -6,7 +6,7 @@ namespace: ns-floating-vl3-basic
 
 resources:
   - namespace.yaml
-  - networkservice.yaml
+  - netsvc.yaml
   - ../../../../../apps/vl3-ipam
 
 patchesStrategicMerge:

@@ -11,10 +11,8 @@ resources:
 - passthrough-3.yaml
 - nse-composition-ns.yaml
 - client.yaml
-
-bases:
-- ../../../apps/nse-kernel
 - nse-firewall
+- ../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml

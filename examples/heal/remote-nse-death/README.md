@@ -34,15 +34,15 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-remote-nse-death --template '{{ra
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-remote-nse-death -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-remote-nse-death -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-remote-nse-death -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-remote-nse-death -- ping -c 4 172.16.1.101
 ```
 
-Apply patch:
+Apply patch. It recreates NSE with a new label:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nse-death/nse-after-death?ref=85319af45db0bc5ac19eb5c522c88bf48cffb24b
 ```
@@ -59,7 +59,7 @@ NEW_NSE=$(kubectl get pods -l app=nse-kernel -l version=new -n ns-remote-nse-dea
 
 Ping from NSC to new NSE:
 ```bash
-kubectl exec ${NSC} -n ns-remote-nse-death -- ping -c 4 172.16.1.102
+kubectl exec pods/alpine -n ns-remote-nse-death -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:

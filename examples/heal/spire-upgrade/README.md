@@ -18,7 +18,7 @@ kubectl create ns ns-spire-upgrade
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k .
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-upgrade?ref=ce50746ddcac231b39c549da2dd66e19d362d5a1
 ```
 
 Wait for applications ready:
@@ -29,22 +29,14 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel -n ns-spir
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-spire-upgrade
 ```
 
-Find NSC and NSE pods by labels:
-```bash
-NSC=$(kubectl get pods -l app=nsc-kernel -n ns-spire-upgrade --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-```bash
-NSE=$(kubectl get pods -l app=nse-kernel -n ns-spire-upgrade --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-```
-
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-spire-upgrade -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-spire-upgrade -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-spire-upgrade -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-spire-upgrade -- ping -c 4 172.16.1.101
 ```
 
 Remove SPIRE deployment completely:
@@ -57,7 +49,7 @@ kubectl delete ns spire
 
 Deploy SPIRE and wait for SPIRE server and agents:
 ```bash
-kubectl apply -k ../../spire/single_cluster
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster?ref=ce50746ddcac231b39c549da2dd66e19d362d5a1
 ```
 
 ```bash
@@ -69,17 +61,17 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl apply -f ../../spire/single_cluster/clusterspiffeid-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/a67c92a58c79d928eb0a7520bc19f8992ef93820/examples/spire/single_cluster/clusterspiffeid-template.yaml
 ```
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec ${NSC} -n ns-spire-upgrade -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-spire-upgrade -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec ${NSE} -n ns-spire-upgrade -- ping -c 4 172.16.1.101
+kubectl exec deployments/nse-kernel -n ns-spire-upgrade -- ping -c 4 172.16.1.101
 ```
 
 ## Cleanup

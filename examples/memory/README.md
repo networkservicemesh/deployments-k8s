@@ -10,7 +10,7 @@ Memory example contains setup and tear down logic with default NSM infrastructur
 
 - [Memif to Memif Connection](./Memif2Memif)
 - [Kernel to Kernel Connection](./Kernel2Kernel)
-- [Kernel to VXLAN to Kernel Connection](./Kernel2Vxlan2Kernel)
+- [Kernel to Ethernet to Kernel Connection](./Kernel2Ethernet2Kernel)
 
 ## Run
 
