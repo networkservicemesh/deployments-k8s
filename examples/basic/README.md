@@ -26,7 +26,7 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=f348c5ef58f96dac8411ed68c0257d9a777c80f9
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=20fe24857bc890b6aa6297d6cc11d502e66c1616
 ```
 
 Wait for admission-webhook-k8s:
