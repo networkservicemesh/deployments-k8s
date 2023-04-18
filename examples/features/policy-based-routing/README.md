@@ -14,7 +14,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/policy-based-routing?ref=aaca9c671b9c9d304b516a5682009bfc5151b731
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/policy-based-routing?ref=48695bdaf0e45c9095f00f90e2e9d15a98839cd3
 ```
 
 Wait for applications ready:
