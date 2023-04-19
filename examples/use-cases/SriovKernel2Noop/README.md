@@ -1,6 +1,7 @@
 # Test SR-IOV kernel connection
 
 This example shows that NSC and NSE can work with each other over the SR-IOV kernel connection.
+SR-IOV VF uses VLAN tag
 
 ## Requires
 
@@ -33,7 +34,7 @@ Wait for applications ready:
 kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=nsc-kernel
 ```
 ```bash
-kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=nse-kernel
+kubectl -n ns-sriov-kernel2noop wait --for=condition=ready --timeout=1m pod -l app=nse-noop
 ```
 
 Ping from NSC to NSE:

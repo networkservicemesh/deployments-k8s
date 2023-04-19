@@ -20,21 +20,40 @@ data:
       ip addr del ${addr}
     }
 
+    function delete_interface() {
+      link="$1"
+      vlanTag="$2"
+      ip link del link ${link} name ${link}.${vlanTag}
+    }
+
     link="$1"
     dst_ip_subnet="$2"
     src_ip_subnet="$3"
+    vlanTag="$4"
 
     dst_ip_addr="$(echo "${dst_ip_subnet}" | sed -E 's/(.*)\/.*/\1/g')"
 
     addr="dev ${link} ${dst_ip_subnet}"
     route="${src_ip_subnet} via ${dst_ip_addr} dev ${link}"
 
-    # Don't forget to delete IP address on exit
-    trap "delete_IP_route \"${addr}\" \"${route}\"" err exit
+    # If VLAN tag was set
+    if [[ $vlanTag -ne 0 ]]; then
+        addr="dev ${link}.${vlanTag} ${dst_ip_subnet}"
+        route="${src_ip_subnet} via ${dst_ip_addr} dev ${link}.${vlanTag}"
+        ip link add link ${link} name ${link}.${vlanTag} type vlan id ${vlanTag}
+        trap "delete_interface \"${link}\" \"${vlanTag}\"" err exit
+    else
+        # Don't forget to delete IP address on exit
+        trap "delete_IP_route \"${addr}\" \"${route}\"" err exit
+    fi
 
     # Add IP address and wake up the link
     ip addr add ${addr}
     ip link set dev "${link}" up || exit 2
+
+    if [[ $vlanTag -ne 0 ]]; then
+        ip link set dev "${link}.${vlanTag}" up || exit 3
+    fi
 
     # Add IP route
     ip route add ${route}

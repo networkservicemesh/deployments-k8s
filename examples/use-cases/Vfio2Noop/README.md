@@ -1,6 +1,7 @@
 # Test VFIO connection
 
 This example shows that NSC and NSE can work with each other over the VFIO connection.
+SR-IOV VF uses VLAN tag
 
 ## Requires
 

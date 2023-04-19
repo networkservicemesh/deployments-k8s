@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-kernel
+  name: nse-noop
 spec:
   template:
     spec:
@@ -14,7 +14,7 @@ spec:
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
-              value: "sriov-kernel2noop"
+              value: "sriov-kernel2noop: { vlan: 1044 }"
             - name: NSM_REGISTER_SERVICE
               value: "false"
           resources:

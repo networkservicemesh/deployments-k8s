@@ -1,6 +1,7 @@
 # Test kernel to Ethernet to kernel connection and VFIO connection
 
 This example shows that remote kernel over Ethernet connection and VFIO connection can be setup by NSM at the same time.
+SR-IOV VF uses VLAN tag.
 
 ## Run
 
