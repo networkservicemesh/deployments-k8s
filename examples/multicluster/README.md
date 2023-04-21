@@ -32,6 +32,7 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 - [Floating VL3](./usecases/floating_vl3-basic)
 - [Floating VL3_scale_from_zero](./usecases/floating_vl3-scale-from-zero)
 - [Floating VL3 DNS](./usecases/floating_vl3-dns)
+- [Floating NSE Composition](./usecases/floating_nse_composition)
 
 ## Run
 

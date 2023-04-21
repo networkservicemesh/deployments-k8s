@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-firewall-vpp
+spec:
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_NAME
+              value: "$(POD_NAME)@my.cluster3"
+            - name: NSM_SERVICE_NAME
+              value: "interdomain-nse-composition@my.cluster3"
+            - name: NSM_LABELS
+              value: app:firewall

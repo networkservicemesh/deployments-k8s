@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-interdomain-nse-composition
+
+bases:
+- ../../../../../apps/nse-kernel
+- nse-passthrough-2
+- nse-passthrough-3
+
+patchesStrategicMerge:
+- patch-nse.yaml
+
+resources:
+- ns-interdomain-nse-composition.yaml
+
+configMapGenerator:
+  - name: nginx-config
+    files:
+      - nginx.conf

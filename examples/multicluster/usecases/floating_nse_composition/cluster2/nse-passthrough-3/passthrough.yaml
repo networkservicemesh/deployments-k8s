@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-firewall-vpp
   labels:
     app: nse-firewall-vpp
+  name: nse-passthrough-3
 spec:
   selector:
     matchLabels:
@@ -17,9 +17,13 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:5bc5e04
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-firewall-vpp:5d66abd
           imagePullPolicy: IfNotPresent
           env:
+            - name: NSM_SERVICE_NAME
+              value: "interdomain-nse-composition@my.cluster3"
+            - name: NSM_LABELS
+              value: app:passthrough-3
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: POD_NAME
@@ -27,17 +31,15 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_NAME
-              value: "$(POD_NAME)"
-            - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: "$(POD_NAME)@my.cluster3"
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
           volumeMounts:
-            - name: spire-agent-socket
-              mountPath: /run/spire/sockets
+            - mountPath: /run/spire/sockets
+              name: spire-agent-socket
               readOnly: true
-            - name: nsm-socket
-              mountPath: /var/lib/networkservicemesh
+            - mountPath: /var/lib/networkservicemesh
+              name: nsm-socket
               readOnly: true
           resources:
             requests:
