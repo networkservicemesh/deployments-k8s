@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_SERVICE_NAME
-              value: "nse-composition@my.cluster3"
+              value: "interdomain-nse-composition@my.cluster3"
             - name: NSM_LABELS
               value: app:passthrough-1
             - name: SPIFFE_ENDPOINT_SOCKET
