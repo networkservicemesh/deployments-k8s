@@ -4,16 +4,14 @@ kind: Kustomization
 
 namespace: ns-interdomain-nse-composition
 
-bases:
+resources:
 - ../../../../../apps/nse-kernel
 - nse-passthrough-2
 - nse-passthrough-3
+- ns-interdomain-nse-composition.yaml
 
 patchesStrategicMerge:
 - patch-nse.yaml
-
-resources:
-- ns-interdomain-nse-composition.yaml
 
 configMapGenerator:
   - name: nginx-config

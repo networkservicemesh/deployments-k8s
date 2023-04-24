@@ -4,7 +4,7 @@ kind: Kustomization
 
 namespace: ns-interdomain-nse-composition
 
-bases:
+resources:
 - ../../../../../../apps/nse-firewall-vpp
 
 patchesStrategicMerge:
