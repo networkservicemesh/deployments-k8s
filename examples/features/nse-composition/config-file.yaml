@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: vppagent-firewall-config-file
+  name: firewall-config-file
 data:
   config.yaml: |
     allow icmp:
