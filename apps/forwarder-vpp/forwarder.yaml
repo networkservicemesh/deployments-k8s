@@ -57,6 +57,7 @@ spec:
               mountPath: /var/run/vpp/external
           resources:
             requests:
+              memory: 350Mi
               cpu: 150m
             limits:
               memory: 500Mi
