@@ -32,6 +32,12 @@ data:
       return 0
     }
 
+    function cleanup_vlan_interface() {
+      pf_link="$1"
+      vf_num="$2"
+      ip link set ${pf_link} vf ${vf_num} vlan 0
+    }
+
     ##
     ## Begin
     ##
@@ -39,6 +45,7 @@ data:
     pf_link="$1"
     vf_num="$2"
     server_mac="$3"
+    vlanTag="$4"
 
     device="/sys/class/net/${pf_link}/device/virtfn${vf_num}"
 
@@ -53,6 +60,14 @@ data:
     # Bind VFIO driver
     bind_driver "${pci_addr}" "vfio-pci"
     test $? -eq 0 || exit 3
+
+    # If VLAN tag was set
+    if [[ $vlanTag -ne 0 ]]; then
+        apt-get update
+        apt-get -y install iproute2
+        ip link set "${pf_link}" vf "${vf_num}" vlan "${vlanTag}"
+        trap "cleanup_vlan_interface \"${pf_link}\" \"${vf_num}\"" err exit
+    fi
 
     # Run dpdk-pingpong (server)
     /root/dpdk-pingpong/build/pingpong \

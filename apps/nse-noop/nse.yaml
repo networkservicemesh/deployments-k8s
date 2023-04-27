@@ -2,35 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-vfio
+  name: nse-noop
   labels:
-    app: nse-vfio
+    app: nse-noop
 spec:
   selector:
     matchLabels:
-      app: nse-vfio
+      app: nse-noop
   template:
     metadata:
       labels:
-        app: nse-vfio
+        app: nse-noop
         "spiffe.io/spiffe-id": "true"
     spec:
       hostNetwork: true
       containers:
-        - name: ponger
-          # https://github.com/glazychev-art/docker-dpdk
-          image: artgl/dpdk-pingpong:20.11.6
-          imagePullPolicy: IfNotPresent
-          command: ["/bin/bash", "/root/scripts/pong.sh", "ens6f3", "31", "0a:55:44:33:22:11", "1044"]
-          securityContext:
-            privileged: true
-          volumeMounts:
-            - name: scripts
-              mountPath: /root/scripts
-              readOnly: true
-            - name: vfio
-              mountPath: /dev/vfio
-
         - name: nse
           image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:dc4e583
           env:
@@ -64,9 +50,6 @@ spec:
               master.domain/10G: 1
 
       volumes:
-        - name: scripts
-          configMap:
-            name: nse-vfio
         - name: spire-agent-socket
           hostPath:
             path: /run/spire/sockets
@@ -75,7 +58,3 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: Directory
-        - name: vfio
-          hostPath:
-            path: /dev/vfio
-            type: DirectoryOrCreate

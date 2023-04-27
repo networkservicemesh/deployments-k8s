@@ -1,6 +1,7 @@
 # Test kernel to kernel connection and VFIO connection
 
 This example shows that local kernel connection and VFIO connection can be setup by NSM at the same time.
+SR-IOV VF uses VLAN tag.
 
 ## Run
 

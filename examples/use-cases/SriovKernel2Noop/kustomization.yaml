@@ -6,7 +6,7 @@ namespace: ns-sriov-kernel2noop
 
 resources:
 - ../../../apps/nsc-kernel
-- ../../../apps/nse-kernel
+- ../../../apps/nse-noop
 - namespace
 - netsvc.yaml
 
