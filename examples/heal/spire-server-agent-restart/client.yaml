@@ -12,8 +12,7 @@ spec:
     - name: alpine
       image: alpine:3.15.0
       imagePullPolicy: IfNotPresent
-      stdin: true
-      tty: true
+      command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:

@@ -12,8 +12,7 @@ spec:
   - name: nettools
     image: travelping/nettools:1.10.1
     imagePullPolicy: IfNotPresent
-    stdin: true
-    tty: true
+    command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
