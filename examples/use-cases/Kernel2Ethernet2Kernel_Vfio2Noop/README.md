@@ -7,7 +7,7 @@ SR-IOV VF uses VLAN tag.
 
 Deploy NSCs and NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Ethernet2Kernel_Vfio2Noop?ref=2c394a298f0d89c0ac8ce225f80bc8eab989770b
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Ethernet2Kernel_Vfio2Noop?ref=d50d5e83d0beb6c51d299c7ac4db9e89d50a2757
 ```
 
 Wait for applications ready:
