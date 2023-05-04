@@ -1,5 +1,6 @@
 # Multiforwarder examples
 These examples include 2 forwarders - _forwarder-vpp_ and _forwarder-sriov_
+SR-IOV uses VLAN tagged connections
 
 ## Requires
 
@@ -7,13 +8,13 @@ These examples include 2 forwarders - _forwarder-vpp_ and _forwarder-sriov_
 
 ## Includes
 
-- [VFIO Connection](../use-cases/Vfio2Noop)
-- [Kernel Connection](../use-cases/SriovKernel2Noop)
+- [VLAN tagged VFIO Connection](../use-cases/Vfio2NoopVlanTag)
+- [VLAN tagged Kernel Connection](../use-cases/SriovKernel2NoopVlanTag)
 - [Memif to Memif Connection](../use-cases/Memif2Memif)
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
 - [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
-- [Kernel to Kernel Connection & VFIO Connection](../use-cases/Kernel2Kernel_Vfio2Noop)
-- [Kernel to Ethernet to Kernel Connection & VFIO Connection](../use-cases/Kernel2Ethernet2Kernel_Vfio2Noop)
+- [Kernel to Kernel Connection & VLAN tagged VFIO Connection](../use-cases/Kernel2Kernel_Vfio2NoopVlanTag)
+- [Kernel to Ethernet to Kernel Connection & VLAN tagged VFIO Connection](../use-cases/Kernel2Ethernet2Kernel_Vfio2NoopVlanTag)
 
 ## SR-IOV config
 
@@ -39,7 +40,7 @@ For the `worker` node:
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=5df2c857e45af764a4fc06b74abc3e0c3efce3fd
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=1cc7aeba2118755aaad74152fc0052bd3a334fbe
 ```
 
 Wait for admission-webhook-k8s:

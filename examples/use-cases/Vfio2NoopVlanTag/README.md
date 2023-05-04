@@ -1,24 +1,26 @@
-# Test VFIO connection
+# Test VFIO VLAN tagged connection
+
+**_Note: 802.1Q must be enabled on your cluster_**
 
 This example shows that NSC and NSE can work with each other over the VFIO connection.
 
 ## Requires
 
-Make sure that you have completed steps from [sriov](../../sriov) setup.
+Make sure that you have completed steps from [sriov](../../sriov_vlantag) setup.
 
 ## Run
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2Noop?ref=5df2c857e45af764a4fc06b74abc3e0c3efce3fd
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2NoopVlanTag?ref=1cc7aeba2118755aaad74152fc0052bd3a334fbe
 ```
 
 Wait for applications ready:
 ```bash
-kubectl -n ns-vfio2noop wait --for=condition=ready --timeout=1m pod -l app=nsc-vfio
+kubectl -n ns-vfio2noop-vlantag wait --for=condition=ready --timeout=1m pod -l app=nsc-vfio
 ```
 ```bash
-kubectl -n ns-vfio2noop wait --for=condition=ready --timeout=1m pod -l app=nse-vfio
+kubectl -n ns-vfio2noop-vlantag wait --for=condition=ready --timeout=1m pod -l app=nse-vfio
 ```
 
 Check connectivity:
@@ -38,7 +40,7 @@ function dpdk_ping() {
       -C ${client_mac}                        \
       -S ${server_mac}
       "
-  out="$(kubectl -n ns-vfio2noop exec deployments/nsc-vfio --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
+  out="$(kubectl -n ns-vfio2noop-vlantag exec deployments/nsc-vfio --container pinger -- /bin/bash -c "${command}" 2>"${err_file}")"
 
   if [[ "$?" != 0 ]]; then
     echo "${out}"
@@ -72,12 +74,12 @@ dpdk_ping "0a:55:44:33:22:00" "0a:55:44:33:22:11"
 
 Stop ponger:
 ```bash
-kubectl -n ns-vfio2noop exec deployments/nse-vfio --container ponger -- /bin/bash -c '\
+kubectl -n ns-vfio2noop-vlantag exec deployments/nse-vfio --container ponger -- /bin/bash -c '\
   (sleep 10 && kill $(pgrep "pingpong")) 1>/dev/null 2>&1 &             \
 '
 ```
 
 Delete ns:
 ```bash
-kubectl delete ns ns-vfio2noop
+kubectl delete ns ns-vfio2noop-vlantag
 ```

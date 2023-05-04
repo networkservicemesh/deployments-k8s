@@ -1,7 +1,6 @@
 # Test SR-IOV kernel connection
 
 This example shows that NSC and NSE can work with each other over the SR-IOV kernel connection.
-SR-IOV VF uses VLAN tag
 
 ## Requires
 

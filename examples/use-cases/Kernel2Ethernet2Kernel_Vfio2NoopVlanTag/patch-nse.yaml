@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-vfio
+  name: nse-kernel
 spec:
   template:
     spec:
       containers:
         - name: nse
           env:
-            - name: NSM_LABELS
-              value: serviceDomain:worker.domain
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
-              value: "vfio2noop: { addr: 0a:55:44:33:22:11 }"
+              value: "kernel2ethernet2kernel"
             - name: NSM_REGISTER_SERVICE
               value: "false"
