@@ -1,4 +1,4 @@
-# SR-IOV examples
+# SR-IOV VLAN tagged connection examples
 
 ## Requires
 
@@ -6,8 +6,8 @@
 
 ## Includes
 
-- [VFIO Connection](../use-cases/Vfio2Noop)
-- [Kernel Connection](../use-cases/SriovKernel2Noop)
+- [VLAN tagged VFIO Connection](../use-cases/Vfio2NoopVlanTag)
+- [VLAN tagged Kernel Connection](../use-cases/SriovKernel2NoopVlanTag)
 
 ## SR-IOV config
 

@@ -1,0 +1,11 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ponger
+spec:
+  template:
+    spec:
+      containers:
+        - name: ponger
+          command: ["bin/bash", "root/scripts/pong.sh", "ens6f3", "172.16.1.100/32", "172.16.1.101/32", "1044"]

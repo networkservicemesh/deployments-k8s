@@ -12,6 +12,6 @@ spec:
             - name: NSM_LABELS
               value: serviceDomain:worker.domain
             - name: NSM_SERVICE_NAMES
-              value: "vfio2noop: { addr: 0a:55:44:33:22:11; vlan: 1044 }"
+              value: "vfio2noop: { addr: 0a:55:44:33:22:11 }"
             - name: NSM_REGISTER_SERVICE
               value: "false"

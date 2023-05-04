@@ -20,7 +20,7 @@ spec:
         - name: ponger
           image: frolvlad/alpine-bash:latest
           imagePullPolicy: IfNotPresent
-          command: ["bin/bash", "root/scripts/pong.sh", "ens6f3", "172.16.1.100/32", "172.16.1.101/32", "1044"]
+          command: ["bin/bash", "root/scripts/pong.sh", "ens6f3", "172.16.1.100/32", "172.16.1.101/32"]
           securityContext:
             privileged: true
           volumeMounts:

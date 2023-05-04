@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nse-vfio
+  name: nse-noop
 spec:
   template:
     spec:
@@ -11,7 +11,12 @@ spec:
           env:
             - name: NSM_LABELS
               value: serviceDomain:worker.domain
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.100/31
             - name: NSM_SERVICE_NAMES
-              value: "vfio2noop: { addr: 0a:55:44:33:22:11 }"
+              value: "sriov-kernel2noop-vlantag: { vlan: 1044 }"
             - name: NSM_REGISTER_SERVICE
               value: "false"
+          resources:
+            limits:
+              master.domain/10G: 1

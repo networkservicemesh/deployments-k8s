@@ -7,11 +7,13 @@ spec:
   template:
     spec:
       containers:
+        - name: ponger
+          command: ["/bin/bash", "/root/scripts/pong.sh", "ens6f3", "31", "0a:55:44:33:22:11", "1044"]
         - name: nse
           env:
             - name: NSM_LABELS
               value: serviceDomain:worker.domain
             - name: NSM_SERVICE_NAMES
-              value: "vfio2noop: { addr: 0a:55:44:33:22:11 }"
+              value: "vfio2noop-vlantag: { addr: 0a:55:44:33:22:11; vlan: 1044 }"
             - name: NSM_REGISTER_SERVICE
               value: "false"

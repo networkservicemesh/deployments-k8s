@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc-kernel
+spec:
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://sriov-kernel2noop-vlantag/nsm-1?sriovToken=worker.domain/10G
+          resources:
+            limits:
+              worker.domain/10G: 1

@@ -1,0 +1,13 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: kernel2kernel
+spec:
+  payload: ETHERNET
+
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: vfio2noop-vlantag

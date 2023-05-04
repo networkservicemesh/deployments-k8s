@@ -1,0 +1,7 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: sriov-kernel2noop-vlantag
+spec:
+  payload: ETHERNET
