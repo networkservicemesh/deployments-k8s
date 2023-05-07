@@ -22,7 +22,7 @@ This NSE creates the required interface on the monolith:
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=f421ba31ec3f2043353eaea0116a46c5bdc70622
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=b942b273456a2d1fcbacd3abe75d2138e91fb2a2
 ```
 
 Wait for admission-webhook-k8s:
