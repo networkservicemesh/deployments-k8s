@@ -36,6 +36,11 @@ Wait for client to be ready:
 kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-annotated-namespace
 ```
 
+Check if client ID is properly generated
+```bash
+kubectl logs deployments/alpine -n ns-annotated-namespace -c cmd-nsc-init | grep -c '\[id:alpine-.*-0\]'
+```
+
 Ping from NSC to NSE:
 ```bash
 kubectl exec deployments/alpine -n ns-annotated-namespace -- ping -c 4 172.16.1.100
