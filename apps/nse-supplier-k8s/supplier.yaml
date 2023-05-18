@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse-supplier
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:4aeb08f
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-supplier-k8s:c6835ed
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
