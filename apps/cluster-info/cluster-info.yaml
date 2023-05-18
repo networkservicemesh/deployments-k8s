@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccountName: cluster-info-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-cluster-info-k8s:c153be4
+        - image: ghcr.io/networkservicemesh/ci/cmd-cluster-info-k8s:7a9eda8
           env:
             - name: NSM_NAMESPACE
               valueFrom:
