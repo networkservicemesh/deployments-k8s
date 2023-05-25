@@ -20,6 +20,6 @@ jobs:
       - name: pull-request-action
         uses: vsoch/pull-request-action@add/retry
         env:
-          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_PREFIX: "update/"
           PULL_REQUEST_BRANCH: "main"
