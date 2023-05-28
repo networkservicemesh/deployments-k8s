@@ -11,4 +11,4 @@ spec:
       protocol: TCP
       port: 5006
       targetPort: 5006
-  type: LoadBalancer
+  type: ClusterIP

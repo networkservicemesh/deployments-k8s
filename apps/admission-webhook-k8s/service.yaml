@@ -11,3 +11,4 @@ spec:
       targetPort: 443
   selector:
     app: admission-webhook-k8s
+  type: ClusterIP

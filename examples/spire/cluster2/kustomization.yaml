@@ -23,3 +23,10 @@ configMapGenerator:
   namespace: spire
   files:
   - spire-controller-manager-config.yaml
+
+patches:
+ - target:
+      version: v1
+      kind: Service
+      name: spire-server
+   path: service-patch.yaml

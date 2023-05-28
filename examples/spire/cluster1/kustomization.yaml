@@ -10,6 +10,13 @@ resources:
 generatorOptions:
   disableNameSuffixHash: true
 
+patches:
+ - target:
+      version: v1
+      kind: Service
+      name: spire-server
+   path: service-patch.yaml
+
 configMapGenerator:
 - name: spire-server
   namespace: spire
