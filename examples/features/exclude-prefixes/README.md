@@ -30,12 +30,12 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-excl
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-exclude-prefixes -- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-exclude-prefixes -- ping -c 4 172.16.1.200
 ```
 
 Ping from NSE to NSC:
 ```bash
-kubectl exec deployments/nse-kernel -n ns-exclude-prefixes -- ping -c 4 172.16.1.103
+kubectl exec deployments/nse-kernel -n ns-exclude-prefixes -- ping -c 4 172.16.1.203
 ```
 
 ## Cleanup
