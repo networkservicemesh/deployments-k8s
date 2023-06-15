@@ -17,3 +17,10 @@ patchesStrategicMerge:
 - patch-nsmgr-proxy.yaml
 - patch-registry-proxy-dns.yaml
 - patch-registry.yaml
+
+patches:
+ - target:
+      version: v1
+      kind: Service
+      name: registry
+   path: patch-registry-service.yaml

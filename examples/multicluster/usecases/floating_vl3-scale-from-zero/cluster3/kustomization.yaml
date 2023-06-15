@@ -10,3 +10,10 @@ resources:
 
 patchesStrategicMerge:
 - patch-vl3-ipam.yaml
+
+patches:
+ - target:
+      version: v1
+      kind: Service
+      name: vl3-ipam
+   path: patch-ipam-service.yaml
