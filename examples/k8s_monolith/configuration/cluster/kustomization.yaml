@@ -16,3 +16,10 @@ patchesStrategicMerge:
 - patch-forwarder.yaml
 - patch-registry-k8s.yaml
 - patch-nsmgr-proxy.yaml
+
+patches:
+ - target:
+      version: v1
+      kind: Service
+      name: registry
+   path: patch-registry-service.yaml
