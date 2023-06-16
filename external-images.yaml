@@ -4,11 +4,13 @@
 images:
   - docker.io/library/postgres:latest
   - docker.io/library/nginx:latest
+  - docker.io/nginxinc/nginx-unprivileged:latest
   - docker.io/coredns/coredns:1.8.3
   - ghcr.io/spiffe/spire-agent:1.6.1
   - ghcr.io/spiffe/spire-server:1.6.1
   - gcr.io/spiffe-io/wait-for-it:latest
   - ghcr.io/spiffe/spire-controller-manager:0.2.2
+  - ghcr.io/spiffe/spiffe-csi-driver:0.2.3
   - quay.io/metallb/speaker:v0.12.1
   - quay.io/metallb/controller:v0.12.1
   - docker.io/library/alpine:3.15.0

@@ -1,0 +1,13 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admission-webhook-k8s
+spec:
+  template:
+    spec:
+      containers:
+        - name: admission-webhook-k8s
+          env:
+            - name: NSM_ENVS
+              value: NSM_LOG_LEVEL=TRACE,NSM_LOCALDNSSERVERENABLED=False

@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-vpp
+spec:
+  template:
+    spec:
+      volumes:
+        - name: spire-agent-socket
+          hostPath: null
+          csi:
+            driver: "csi.spiffe.io"
+            readOnly: true
+        - name: nsm-socket
+          hostPath: null
+          csi:
+            driver: "csi.networkservicemesh.io"
+            readOnly: true

@@ -1,0 +1,14 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-k8s
+spec:
+  template:
+    spec:
+      volumes:
+        - name: spire-agent-socket
+          hostPath: null
+          csi:
+            driver: "csi.spiffe.io"
+            readOnly: true
