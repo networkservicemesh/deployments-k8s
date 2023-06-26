@@ -1,0 +1,14 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nsmgr
+spec:
+  template:
+    spec:
+      volumes:
+        - name: spire-agent-socket
+          hostPath: null
+          csi:
+            driver: "csi.spiffe.io"
+            readOnly: true

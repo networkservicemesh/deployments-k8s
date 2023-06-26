@@ -1,0 +1,113 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: CSIDriver
+metadata:
+  name: "csi.networkservicemesh.io"
+spec:
+  # Only ephemeral, inline volumes are supported. There is no need for a
+  # controller to provision and attach volumes.
+  attachRequired: false
+
+  # Request the pod information which the CSI driver uses to verify that an
+  # ephemeral mount was requested.
+  podInfoOnMount: true
+
+  # Don't change ownership on the contents of the mount since the
+  # NS registration Unix Domain Socket is typically open to all (i.e. 0777).
+  fsGroupPolicy: None
+
+  # Declare support for ephemeral volumes only.
+  volumeLifecycleModes:
+    - Ephemeral
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nsm-csi
+  labels:
+    app: nsm-csi
+spec:
+  selector:
+    matchLabels:
+      app: nsm-csi
+  template:
+    metadata:
+      labels:
+        app: nsm-csi
+    spec:
+      containers:
+        # This is the container which runs the NSM CSI driver.
+        - name: nsm-csi-driver
+          image: ghcr.io/networkservicemesh/ci/cmd-csi-driver:0d19b58
+          imagePullPolicy: IfNotPresent
+          env:
+            # The CSI driver needs a unique node ID. The node name can be
+            # used for this purpose.
+            - name: NSM_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NSM_SOCKET_DIR
+              value: "/nsm-socket"
+            - name: NSM_CSI_SOCKET_PATH
+              value: "/nsm-csi/csi.sock"
+            - name: NSM_VERSION
+              value: cmd-csi-driver:0d19b58
+          volumeMounts:
+            # The volume containing the Network Service API socket.
+            # The NSM CSI driver will mount this directory into containers.
+            - mountPath: /nsm-socket
+              name: nsm-socket
+              readOnly: true
+            # The volume that will contain the CSI driver socket shared
+            # with the kubelet and the driver registrar.
+            - mountPath: /nsm-csi
+              name: nsm-csi-socket-dir
+            # The volume containing mount points for containers.
+            - mountPath: /var/lib/kubelet/pods
+              mountPropagation: Bidirectional
+              name: mountpoint-dir
+          securityContext:
+            privileged: true
+        # This container runs the CSI Node Driver Registrar which takes care
+        # of all the little details required to register a CSI driver with
+        # the kubelet.
+        - name: node-driver-registrar
+          image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0
+          imagePullPolicy: IfNotPresent
+          args: [
+            "-csi-address", "/nsm-csi/csi.sock",
+            "-kubelet-registration-path", "/var/lib/kubelet/plugins/csi.networkservicemesh.io/csi.sock",
+          ]
+          volumeMounts:
+            # The registrar needs access to the NSM CSI driver socket
+            - mountPath: /nsm-csi
+              name: nsm-csi-socket-dir
+            # The registrar needs access to the Kubelet plugin registration
+            # directory
+            - name: kubelet-plugin-registration-dir
+              mountPath: /registration
+      volumes:
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+        # This volume is where the socket for kubelet->driver communication lives
+        - name: nsm-csi-socket-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/csi.networkservicemesh.io
+            type: DirectoryOrCreate
+        # This volume is where the NSM CSI driver mounts volumes
+        - name: mountpoint-dir
+          hostPath:
+            path: /var/lib/kubelet/pods
+            type: Directory
+        # This volume is where the node-driver-registrar registers the plugin
+        # with kubelet
+        - name: kubelet-plugin-registration-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins_registry
+            type: Directory
+        - name: exclude-prefixes-volume
+          emptyDir: {}

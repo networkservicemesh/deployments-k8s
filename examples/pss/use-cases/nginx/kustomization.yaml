@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-nginx
+
+resources:
+- ns-nginx.yaml
+- client.yaml
+- netsvc.yaml
+- ../../../../apps/nse-kernel
+
+patches:
+  - path: patch-nse.yaml

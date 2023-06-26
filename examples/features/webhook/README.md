@@ -1,6 +1,6 @@
-# Client requests for postgresql service
+# Client requests for nginx service
 
-This example demonstrates how Postgres-client can get connectivity to Postgres-server deployment via NSM.
+This example demonstrates how the client can get connectivity to the nginx-server via NSM.
 Client pod and server deployment located on different nodes.
 
 
