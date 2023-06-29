@@ -1,9 +1,8 @@
-# Test kernel to IP to kernel connection
+# Test NSC connects to multiple Network Services
 
-This example shows that NSC and NSE on the different nodes could find and work with each other.
+This example shows that NSC can connect to multiple Network Services at the same time.
 
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
-Forwarders are using the `IP` payload to connect with each other.
+In this example there are two different Network Services which are implemented by two NSEs.
 
 ## Requires
 
@@ -11,7 +10,7 @@ Make sure that you have completed steps from [basic](../../basic) or [ipsec mech
 
 ## Run
 
-Deploy NSC and NSE:
+Deploy NSC and and two NSEs:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/multiple-services?ref=28cb182fec9b2e76efd82c6512e650bcaed0809b
 ```
@@ -27,22 +26,22 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-1 -n ns-mu
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-2 -n ns-multiple-services
 ```
 
-Ping from NSC to NSE:
+Ping from NSC to the first NSE:
 ```bash
 kubectl exec pods/alpine -n ns-multiple-services -- ping -c 4 172.16.1.100
 ```
 
-Ping from NSE to NSC:
+Ping from the first NSE to NSC:
 ```bash
 kubectl exec pods/nse-kernel-1 -n ns-multiple-services -- ping -c 4 172.16.1.101
 ```
 
-Ping from NSC to NSE:
+Ping from NSC to the second NSE:
 ```bash
 kubectl exec pods/alpine -n ns-multiple-services -- ping -c 4 172.16.2.100
 ```
 
-Ping from NSE to NSC:
+Ping from the second NSE to NSC:
 ```bash
 kubectl exec pods/nse-kernel-2 -n ns-multiple-services -- ping -c 4 172.16.2.101
 ```
