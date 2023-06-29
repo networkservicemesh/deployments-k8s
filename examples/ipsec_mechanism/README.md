@@ -20,7 +20,7 @@ Unlike the [basic setup](../basic), which uses `Wireguard` as the default IP rem
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/ipsec_mechanism?ref=15eea1fd0a73720858c8c194d560f8ff5d90595e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/ipsec_mechanism?ref=6a729d60c50262e729f295729f54e1b1a9993272
 ```
 
 Wait for admission-webhook-k8s:
