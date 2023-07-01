@@ -39,7 +39,7 @@ spec:
       containers:
         # This is the container which runs the NSM CSI driver.
         - name: nsm-csi-driver
-          image: ghcr.io/networkservicemesh/ci/cmd-csi-driver:0d19b58
+          image: ghcr.io/networkservicemesh/ci/cmd-csi-driver:aaecab5
           imagePullPolicy: IfNotPresent
           env:
             # The CSI driver needs a unique node ID. The node name can be
@@ -53,7 +53,7 @@ spec:
             - name: NSM_CSI_SOCKET_PATH
               value: "/nsm-csi/csi.sock"
             - name: NSM_VERSION
-              value: cmd-csi-driver:0d19b58
+              value: cmd-csi-driver:aaecab5
           volumeMounts:
             # The volume containing the Network Service API socket.
             # The NSM CSI driver will mount this directory into containers.
