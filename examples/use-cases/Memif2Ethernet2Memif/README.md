@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Ethernet2Memif?ref=c8dc78ebe23a7f7bbef57ff5f90445f60c436a71
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Memif2Ethernet2Memif?ref=665541c7d68de9c7a490fae0a5170c4b0b141a0c
 ```
 
 Wait for applications ready:
