@@ -74,7 +74,7 @@ FORWARDER=${FORWARDER//-/_}
 
 Retrieve metrics from Prometheus:
 ```bash
-result=$(curl -X GET localhost:9090/api/v1/query?query="${FORWARDER}_server_tx_bytes_sum")
+result=$(curl -X GET localhost:9090/api/v1/query?query="${FORWARDER}_server_tx_bytes")
 echo ${result}
 echo ${result} | grep -q "forwarder"
 ```
