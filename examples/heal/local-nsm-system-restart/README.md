@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic).
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsm-system-restart?ref=bfd822a8e9fcbdd4467f9fb9291570ecd0c427aa
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nsm-system-restart?ref=6b531dd592429d6295c5c311b83c7f524c5b8e0a
 ```
 
 Wait for applications ready:
@@ -40,7 +40,7 @@ kubectl delete mutatingwebhookconfiguration ${WH}
 kubectl delete ns nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=bfd822a8e9fcbdd4467f9fb9291570ecd0c427aa
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=6b531dd592429d6295c5c311b83c7f524c5b8e0a
 ```
 
 Ping from NSC to NSE:
