@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-remote-forwarder?ref=d5c46dc862c1e858c47ddf991df99fa681bcbc97
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-remote-forwarder?ref=4c021ba7abcbb84f1337e9054ffe0706bef0de08
 ```
 
 Wait for applications ready:
