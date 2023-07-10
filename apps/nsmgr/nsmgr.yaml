@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccount: nsmgr-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:67d3d61
+        - image: ghcr.io/networkservicemesh/cmd-nsmgr:v1.10.0-rc.1
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
