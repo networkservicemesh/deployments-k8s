@@ -6,7 +6,7 @@ This example shows that local kernel connection and VFIO connection can be setup
 
 Deploy NSCs and NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Kernel_Vfio2Noop?ref=21b265cfda5df9fc40ab55fb3bbd250dbe47cc93
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Kernel_Vfio2Noop?ref=d3d47759803840eb5f0a3c5d007f60ece27fb11b
 ```
 
 Wait for applications ready:

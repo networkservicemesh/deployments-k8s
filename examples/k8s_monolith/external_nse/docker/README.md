@@ -24,7 +24,7 @@ EOF
 
 Download docker compose base file:
 ```bash
-curl https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/21b265cfda5df9fc40ab55fb3bbd250dbe47cc93/apps/nse-simple-vl3-docker/docker-compose.yaml -o docker-compose.yaml
+curl https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d3d47759803840eb5f0a3c5d007f60ece27fb11b/apps/nse-simple-vl3-docker/docker-compose.yaml -o docker-compose.yaml
 ```
 
 Run docker-nse:

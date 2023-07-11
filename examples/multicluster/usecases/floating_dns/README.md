@@ -14,21 +14,21 @@ Make sure that you have completed steps from [multicluster](../../)
 
 Deploy NetworkService:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_dns/cluster3?ref=21b265cfda5df9fc40ab55fb3bbd250dbe47cc93
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_dns/cluster3?ref=d3d47759803840eb5f0a3c5d007f60ece27fb11b
 ```
 
 **2. Deploy endpoint on cluster2**
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_dns/cluster2?ref=21b265cfda5df9fc40ab55fb3bbd250dbe47cc93
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_dns/cluster2?ref=d3d47759803840eb5f0a3c5d007f60ece27fb11b
 ```
 
 **3. Deploy client on cluster1**
 
 Deploy client:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_dns/cluster1?ref=21b265cfda5df9fc40ab55fb3bbd250dbe47cc93
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/floating_dns/cluster1?ref=d3d47759803840eb5f0a3c5d007f60ece27fb11b
 ```
 
 Wait for applications ready:
