@@ -56,11 +56,7 @@ jobs:
           echo Conclusion for ${{ matrix.repository }} is $lastRunConclusion
           if [ "$lastRunConclusion" != "success" ]; then
             runID=$(echo $lastRun | jq -r '.id')
-            gh api \
-              --method POST \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              /repos/$owner/$repo/actions/runs/$runID/rerun
+            gh run rerun $runID --repo $owner/$repo
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
