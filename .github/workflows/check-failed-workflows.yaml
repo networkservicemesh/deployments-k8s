@@ -49,7 +49,7 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/$owner/$repo/actions/runs?branch=update/$owner/${{ matrix.repository }})
-          
+
           lastRun=$(echo $runs | jq '[.workflow_runs | .[] | select(.name=="Pull Request on update/* Branch Push")][0]')
           lastRunConclusion=$(echo $lastRun | jq -r '.conclusion')
 
