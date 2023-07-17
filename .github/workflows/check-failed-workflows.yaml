@@ -1,0 +1,66 @@
+---
+name: Check failed auto-pull-request workflows
+on:
+  schedule:
+    # Every hour
+    - cron: '0 */1 * * *'
+jobs:
+  check-failed-workflows:
+    strategy:
+      matrix:
+        repository:
+          - cmd-nsc-vpp
+          - cmd-forwarder-vpp
+          - cmd-nsc-simple-docker
+          - cmd-nse-vlan-vpp
+          - cmd-nse-simple-vl3-docker
+          - cmd-nse-firewall-vpp
+          - cmd-nse-icmp-responder-vpp
+          - cmd-nse-vl3-vpp
+          - cmd-forwarder-ovs
+          - cmd-nsc-init
+          - cmd-forwarder-sriov
+          - cmd-nse-l7-proxy
+          - cmd-nse-icmp-responder
+          - cmd-nsc
+          - cmd-map-ip-k8s
+          - cmd-nse-vfio
+          - cmd-nsmgr
+          - cmd-admission-webhook-k8s
+          - cmd-nsmgr-proxy
+          - cmd-cluster-info-k8s
+          - cmd-registry-proxy-dns
+          - cmd-ipam-vl3
+          - cmd-csi-driver
+          - cmd-exclude-prefixes-k8s
+          - cmd-nse-supplier-k8s
+          - cmd-registry-k8s
+          - cmd-registry-memory
+          - cmd-nse-remote-vlan
+    name: Check failed auto-pull-request workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Failed Workflows
+        run: |
+          repo="deployments-k8s"
+          owner="networkservicemesh"
+
+          runs=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/$owner/$repo/actions/runs?branch=update/$owner/${{ matrix.repository }})
+          
+          lastRun=$(echo $runs | jq '[.workflow_runs | .[] | select(.name=="Pull Request on update/* Branch Push")][0]')
+          lastRunConclusion=$(echo $lastRun | jq -r '.conclusion')
+
+          echo Conclusion for ${{ matrix.repository }} is $lastRunConclusion
+          if [ "$lastRunConclusion" != "success" ]; then
+            runID=$(echo $lastRun | jq -r '.id')
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/$owner/$repo/actions/runs/$runID/rerun
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
