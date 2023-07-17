@@ -17,6 +17,6 @@ jobs:
 
           prTitle="Update from $branch"
           prBody=$(git log --pretty='format:%B' -1 | sed '/^$/d;$d' | sed 's/#/# /g')
-          gh pr create -B "main" -H "$ref" --title "$prTitle" --body "$prBody" ; then
+          gh pr create -B "main" -H "$ref" --title "$prTitle" --body "$prBody"
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}

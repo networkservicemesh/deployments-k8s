@@ -5,40 +5,26 @@ on:
     # Every hour
     - cron: '0 */1 * * *'
 jobs:
+  fetch-cmd-repositories:
+    name: Fetch organization repositories
+    runs-on: ubuntu-latest
+    outputs:
+      repositories: ${{ steps.organization-repositories.outputs.repositories }}
+    steps:
+      - name: Run `get-organization-repositories`
+        id: organization-repositories
+        uses: denis-tingajkin/get-organization-repositories@v1.0.1
+        with:
+          github-organization: 'networkservicemesh'
+          regex: 'cmd-.*'
   check-failed-workflows:
     strategy:
       matrix:
-        repository:
-          - cmd-nsc-vpp
-          - cmd-forwarder-vpp
-          - cmd-nsc-simple-docker
-          - cmd-nse-vlan-vpp
-          - cmd-nse-simple-vl3-docker
-          - cmd-nse-firewall-vpp
-          - cmd-nse-icmp-responder-vpp
-          - cmd-nse-vl3-vpp
-          - cmd-forwarder-ovs
-          - cmd-nsc-init
-          - cmd-forwarder-sriov
-          - cmd-nse-l7-proxy
-          - cmd-nse-icmp-responder
-          - cmd-nsc
-          - cmd-map-ip-k8s
-          - cmd-nse-vfio
-          - cmd-nsmgr
-          - cmd-admission-webhook-k8s
-          - cmd-nsmgr-proxy
-          - cmd-cluster-info-k8s
-          - cmd-registry-proxy-dns
-          - cmd-ipam-vl3
-          - cmd-csi-driver
-          - cmd-exclude-prefixes-k8s
-          - cmd-nse-supplier-k8s
-          - cmd-registry-k8s
-          - cmd-registry-memory
-          - cmd-nse-remote-vlan
+        repository: ${{ fromJSON(needs.fetch-repositories.outputs.repositories) }}
+    needs: fetch-repositories
     name: Check failed auto-pull-request workflows
     runs-on: ubuntu-latest
+    if: github.repository != 'networkservicemesh/cmd-template'
     steps:
       - name: Check Failed Workflows
         run: |
