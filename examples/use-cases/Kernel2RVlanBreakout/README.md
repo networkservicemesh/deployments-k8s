@@ -40,18 +40,18 @@ RUN apt-get update \
 
 ENTRYPOINT [ "tail", "-f", "/dev/null" ]
 EOF
-docker build . -t rvm-tester
+docker build . -t rvm-tester-breakout
 ```
 
 Setup a docker container for traffic test:
 
 ```bash
-docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester rvm-tester tail -f /dev/null
-docker exec rvm-tester ip link set eth0 down
-docker exec rvm-tester ip link add link eth0 name eth0.100 type vlan id 100
-docker exec rvm-tester ip link set eth0 up
-docker exec rvm-tester ip addr add 172.10.0.254/24 dev eth0.100
-docker exec rvm-tester ethtool -K eth0 tx off
+docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester-breakout rvm-tester-breakout tail -f /dev/null
+docker exec rvm-tester-breakout ip link set eth0 down
+docker exec rvm-tester-breakout ip link add link eth0 name eth0.100 type vlan id 100
+docker exec rvm-tester-breakout ip link set eth0 up
+docker exec rvm-tester-breakout ip addr add 172.10.0.254/24 dev eth0.100
+docker exec rvm-tester-breakout ethtool -K eth0 tx off
 ```
 
 Start iperf client on tester:
@@ -64,7 +64,7 @@ Start iperf client on tester:
     do
       IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2rvlan-breakout -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
       kubectl exec ${nsc} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -sD -B ${IP_ADDRESS} -1
-      docker exec rvm-tester iperf3 -i0 -t 25 -c ${IP_ADDRESS}
+      docker exec rvm-tester-breakout iperf3 -i0 -t 25 -c ${IP_ADDRESS}
       if test $? -ne 0
       then
         status=1
@@ -84,7 +84,7 @@ Start iperf client on tester:
     do
       IP_ADDRESS=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2rvlan-breakout -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
       kubectl exec ${nsc} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -sD -B ${IP_ADDRESS} -1
-      docker exec rvm-tester iperf3 -i0 -t 5 -u -c ${IP_ADDRESS}
+      docker exec rvm-tester-breakout iperf3 -i0 -t 5 -u -c ${IP_ADDRESS}
       if test $? -ne 0
       then
         status=1
@@ -104,7 +104,7 @@ Start iperf server on tester:
     status=0
     for nsc in "${NSCS[@]}"
     do
-      docker exec rvm-tester iperf3 -sD -B 172.10.0.254 -1
+      docker exec rvm-tester-breakout iperf3 -sD -B 172.10.0.254 -1
       kubectl exec ${nsc} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -i0 -t 5 -c 172.10.0.254
       if test $? -ne 0
       then
@@ -123,7 +123,7 @@ Start iperf server on tester:
     status=0
     for nsc in "${NSCS[@]}"
     do
-      docker exec rvm-tester iperf3 -sD -B 172.10.0.254 -1
+      docker exec rvm-tester-breakout iperf3 -sD -B 172.10.0.254 -1
       kubectl exec ${NSCS[1]} -c iperf-server -n ns-kernel2rvlan-breakout -- iperf3 -i0 -t 5 -u -c 172.10.0.254
       if test $? -ne 0
       then
@@ -141,8 +141,8 @@ Start iperf server on tester:
 Delete the tester container and image:
 
 ```bash
-docker stop rvm-tester
-docker image rm rvm-tester:latest
+docker stop rvm-tester-breakout
+docker image rm rvm-tester-breakout:latest
 true
 ```
 
