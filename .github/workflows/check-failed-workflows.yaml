@@ -2,8 +2,8 @@
 name: Check failed auto-pull-request workflows
 on:
   schedule:
-    # Every hour
-    - cron: '0 */1 * * *'
+    # At 00:00 every day 
+    - cron: '0 0 * * *'
 jobs:
   fetch-cmd-repositories:
     name: Fetch organization repositories
