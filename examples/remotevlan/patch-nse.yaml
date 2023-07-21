@@ -12,7 +12,7 @@ spec:
             - name: NSM_CONNECT_TO
               value: "registry:5002"
             - name: NSM_SERVICES
-              value: "finance-bridge { vlan: 100; via: gw1}"
+              value: "finance-bridge { vlan: 1000; via: gw1}"
             - name: NSM_CIDR_PREFIX
               value: 172.10.0.0/24,100:200::/64
             - name: NSM_MAX_TOKEN_LIFETIME
