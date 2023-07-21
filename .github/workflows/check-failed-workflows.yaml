@@ -2,7 +2,7 @@
 name: Check failed auto-pull-request workflows
 on:
   schedule:
-    # At 00:00 every day 
+    # At 00:00 every day
     - cron: '0 0 * * *'
 jobs:
   fetch-cmd-repositories:
