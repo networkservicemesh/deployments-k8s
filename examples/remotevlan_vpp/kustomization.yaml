@@ -22,4 +22,3 @@ configMapGenerator:
   - name: device-selector
     files:
       - selector
-
