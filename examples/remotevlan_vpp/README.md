@@ -1,6 +1,6 @@
 # NSM Remote Vlan Examples
 
-This setup can be used to check remote vlan mechanism with both OVS and VPP forwarder. Contain basic setup for NSM that includes `nsmgr`, `registry-k8s`, `admission-webhook-k8s`, `nse-remote-vlan`. The `nse-remote-vlan` belongs to the nsm-system since does not have role in data-plane connection.
+This setup can be used to check remote vlan mechanism with both  VPP forwarder. Contain basic setup for NSM that includes `nsmgr`, `registry-k8s`, `forwarder-vpp`, `admission-webhook-k8s`, `nse-remote-vlan`. The `nse-remote-vlan` belongs to the nsm-system since does not have role in data-plane connection.
 
 ## Requires
 
@@ -8,8 +8,9 @@ This setup can be used to check remote vlan mechanism with both OVS and VPP forw
 
 ## Includes
 
-- [Remote VLAN mechanism using forwarder-ovs](./rvlanovs)
-- [Remote VLAN mechanism using forwarder-vpp](./rvlanvpp)
+- [Kernel2RVlanInternal](../../use-cases/Kernel2RVlanInternal)
+- [Kernel2RVlanBreakout](../../use-cases/Kernel2RVlanBreakout)
+- [Kernel2RVlanMultiNS](../../use-cases/Kernel2RVlanMultiNS)
 
 ## Run
 
@@ -43,7 +44,7 @@ Create ns for deployments:
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan?ref=f472892020037a1d3d4635a2bc521a58164c88b0
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan?ref=96a7e28bc4331b18533c6b3614c080014ca8c350
 ```
 
 Wait for NSE application:
@@ -57,6 +58,12 @@ Wait for admission-webhook-k8s:
 ```bash
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+```
+
+Wait for forwarder-vpp:
+
+```bash
+kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forwarder-vpp
 ```
 
 ## Cleanup
