@@ -8,9 +8,9 @@ This setup can be used to check remote vlan mechanism with OVS orwarder. Contain
 
 ## Includes
 
-- [Kernel2RVlanInternal](../../use-cases/Kernel2RVlanInternal)
-- [Kernel2RVlanBreakout](../../use-cases/Kernel2RVlanBreakout)
-- [Kernel2RVlanMultiNS](../../use-cases/Kernel2RVlanMultiNS)
+- [Kernel2RVlanInternal](../use-cases/Kernel2RVlanInternal)
+- [Kernel2RVlanBreakout](../use-cases/Kernel2RVlanBreakout)
+- [Kernel2RVlanMultiNS](../use-cases/Kernel2RVlanMultiNS)
 
 ## Run
 
