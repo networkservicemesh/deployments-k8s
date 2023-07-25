@@ -3,7 +3,7 @@
 <!--- Please describe the behavior you are expecting -->
 
 
-## Examaples
+## Examples
 
 <!--- Please provide examples related to provided question -->
 
