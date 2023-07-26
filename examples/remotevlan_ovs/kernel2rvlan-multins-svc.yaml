@@ -2,6 +2,6 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: finance-bridge
+  name: kernel2rvlan-multins
 spec:
   payload: ETHERNET

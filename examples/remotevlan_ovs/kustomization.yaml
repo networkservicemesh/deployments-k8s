@@ -11,8 +11,9 @@ resources:
   - ../../apps/nse-remote-vlan
   - ../../apps/admission-webhook-k8s
   - ../../apps/forwarder-ovs
-  - netsvc.yaml
+  - kernel2rvlan-internal-svc.yaml
   - kernel2rvlan-breakout-svc.yaml
+  - kernel2rvlan-multins-svc.yaml
 
 patchesStrategicMerge:
   - patch-nse.yaml
