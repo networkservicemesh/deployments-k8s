@@ -1,0 +1,9 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-floating-registry-death
+
+resources:
+- ns-floating-registry-death.yaml
+- client.yaml

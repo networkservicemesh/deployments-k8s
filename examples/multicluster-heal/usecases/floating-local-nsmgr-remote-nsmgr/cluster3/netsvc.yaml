@@ -1,7 +1,0 @@
----
-apiVersion: networkservicemesh.io/v1
-kind: NetworkService
-metadata:
-  name: floating-local-nsmgr-remote-nsmgr
-spec:
-  payload: ETHERNET
