@@ -1,11 +1,11 @@
-# Floating interdomain kernel to ethernet to kernel example
+# NSE death in floating interdomain scenario
 
-This example shows that NSC can reach NSE registered in floating registry.
+This example shows that NSM keeps working after NSE on the second cluster is deleted.
 
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
-Forwarders are using the `vxlan` mechanism to connect with each other.
+NSC and NSE use the `kernel` mechanism to connect to their local forwarders.
+Forwarders from the first and the second cluster use the `vxlan` mechanism to connect to each other.
 
-NSE is registering in the floating registry.
+NSE registers itself in the floating registry.
 
 
 ## Requires
@@ -45,7 +45,7 @@ Wait for applications ready:
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-nse-death
 ```
 
-**3. Check connectivity**
+**4. Check connectivity**
 
 Ping from NSC to NSE:
 ```bash
@@ -57,20 +57,26 @@ Ping from NSE to NSC:
 kubectl --kubeconfig=$KUBECONFIG2 exec deployments/nse-kernel -n ns-floating-nse-death -- ping -c 4 172.16.1.3
 ```
 
-**4. Delete NSE**
+**5. Find NSE on the second cluster**
+
 ```bash
 NSE=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=nse-kernel -n ns-floating-nse-death --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
+
+**6. Delete NSE**
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete pod ${NSE} -n ns-floating-nse-death
 ```
 
+**7.Wait until a new NSE is ready**
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-floating-nse-death
 ```
 
-**5. Check connectivity for a new NSE**
+**8. Check connectivity with the new NSE**
+
 Ping from NSC to NSE:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 exec pods/alpine -n ns-floating-nse-death -- ping -c 4 172.16.1.2

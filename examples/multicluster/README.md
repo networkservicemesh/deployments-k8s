@@ -23,12 +23,12 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 
 ## Includes
 
-- [nse death](./heal/floating-nse-death)
-- [Local and remote nsmgr death](./heal/floating-nsmgr-death)
-- [Local and remote forwarder death](./heal/floating-forwarder-death)
-- [Local and remote nsmgr-proxy death](./heal/floating-proxy-nsmgr-death)
-- [Local and remote nsmgr-proxy death](./heal/floating-nsm-system-death)
-- [Floating registry death](./heal/floating-registry-death)
+- [Forwarders death in floating interdomain scenario](./heal/floating-forwarder-death)
+- [NSE death in floating interdomain scenario](./heal/floating-nse-death)
+- [NSM systems death in floating interdomain scenario](./heal/floating-nsm-system-death)
+- [Proxy nsmgrs death in interdomain scenario](./heal/interdomain-proxy-nsmgr-death)
+- [NSMGRs death in interdomain scenario](./heal/interdomain-nsmgr-death)
+- [Registry death in interdomain scenario](./heal/interdomain-registry-death)
 
 ## Run
 

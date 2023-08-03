@@ -1,12 +1,11 @@
-# Floating interdomain NSE death example
+# Forwarders death in floating interdomain scenario
 
-This example shows that NSC can reach NSE registered in floating registry.
+This example shows that NSM keeps working after forwarders on the first and the second clusters are deleted.
 
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
-Forwarders are using the `vxlan` mechanism to connect with each other.
+NSC and NSE use the `kernel` mechanism to connect to their local forwarders.
+Forwarders from the first and the second cluster use the `vxlan` mechanism to connect to each other.
 
-NSE is registering in the floating registry.
-
+NSE registers itself in the floating registry.
 
 ## Requires
 
@@ -45,7 +44,7 @@ Wait for applications ready:
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-forwarder-death
 ```
 
-**3. Check connectivity**
+**4. Check connectivity**
 
 Ping from NSC to NSE:
 ```bash
@@ -57,12 +56,14 @@ Ping from NSE to NSC:
 kubectl --kubeconfig=$KUBECONFIG2 exec deployments/nse-kernel -n ns-floating-forwarder-death -- ping -c 4 172.16.1.3
 ```
 
-**4. Delete local and remote forwarders**
+**5. Find forwarders on the first and the second clusters**
 
 ```bash
 LOCALFWD=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=forwarder-vpp -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 REMOTEFWD=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=forwarder-vpp -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
+
+**6. Delete forwarders from both clusters**
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 delete pod ${LOCALFWD} -n nsm-system
@@ -72,6 +73,8 @@ kubectl --kubeconfig=$KUBECONFIG1 delete pod ${LOCALFWD} -n nsm-system
 kubectl --kubeconfig=$KUBECONFIG2 delete pod ${REMOTEFWD} -n nsm-system
 ```
 
+**7. Wait until newly created forwarders are ready**
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp -n nsm-system
 ```
@@ -79,6 +82,8 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod -l
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp -n nsm-system
 ```
+
+**8. Check connectivity with newly created forwarders**
 
 Ping from NSC to NSE:
 ```bash

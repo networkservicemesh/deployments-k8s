@@ -1,11 +1,11 @@
-# Floating interdomain NSE death example
+# NSM systems death in floating interdomain scenario
 
-This example shows that NSC can reach NSE registered in floating registry.
+This example shows that NSM keeps working the whole NSM system on the first and the second cluster is deleted.
 
-NSC and NSE are using the `kernel` mechanism to connect to its local forwarder.
-Forwarders are using the `vxlan` mechanism to connect with each other.
+NSC and NSE use the `kernel` mechanism to connect to their local forwarders.
+Forwarders from the first and the second cluster use the `vxlan` mechanism to connect to each other.
 
-NSE is registering in the floating registry.
+NSE registers itself in the floating registry.
 
 
 ## Requires
@@ -45,7 +45,7 @@ Wait for applications ready:
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-nsm-system-death
 ```
 
-**3. Check connectivity**
+**4. Check connectivity**
 
 Ping from NSC to NSE:
 ```bash
@@ -56,6 +56,8 @@ Ping from NSE to NSC:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 exec deployments/nse-kernel -n ns-floating-nsm-system-death -- ping -c 4 172.16.1.3
 ```
+
+**5. Delete NSM system components on all three clusters**
 
 ```bash
 WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -70,12 +72,24 @@ kubectl --kubeconfig=$KUBECONFIG2 delete ns nsm-system
 ```
 
 ```bash
+kubectl --kubeconfig=$KUBECONFIG3 delete ns nsm-system
+```
+
+**6. Create new NSM components**
+
+```bash
 kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
+
+```bash
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
+```
+
+**7. Wait until new NSM components are ready**
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 get services nsmgr-proxy -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
@@ -89,6 +103,11 @@ WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n 
 kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
+```bash
+kubectl --kubeconfig=$KUBECONFIG3 get services registry -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+```
+
+**8. Check connectivity with newly created NSM components**
 
 Ping from NSC to NSE:
 ```bash
