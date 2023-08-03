@@ -13,4 +13,3 @@ spec:
             value: 172.16.1.2/31
           - name: NSM_SERVICE_NAMES
             value: "interdomain-nsmgr-death"
-
