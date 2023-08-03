@@ -1,4 +1,4 @@
-# Local NSE death
+# Remote NSE death
 
 This example shows that NSM keeps working after the remote NSE death.
 

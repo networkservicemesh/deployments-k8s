@@ -1,4 +1,4 @@
-# Local NSE death
+# Remote NSE death IP
 
 This example shows that NSM keeps working after the remote NSE death.
 
