@@ -9,7 +9,7 @@ NSE registers itself in the floating registry.
 
 ## Requires
 
-Make sure that you have completed steps from [multicluster](../../)
+Make sure that you have completed steps from [multicluster_heal](../../)
 
 ## Run
 
@@ -17,14 +17,14 @@ Make sure that you have completed steps from [multicluster](../../)
 
 Deploy NS:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/heal/floating-forwarder-death/cluster3?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/usecases/floating-forwarder-death/cluster3?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 **2. Deploy endpoint on cluster2**
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/heal/floating-forwarder-death/cluster2?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/usecases/floating-forwarder-death/cluster2?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for applications ready:
@@ -36,7 +36,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/heal/floating-forwarder-death/cluster1?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/usecases/floating-forwarder-death/cluster1?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for applications ready:

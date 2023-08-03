@@ -10,7 +10,7 @@ NSE registers itself and its Network Service in the local registry on the second
 
 ## Requires
 
-Make sure that you have completed steps from [multicluster](../../)
+Make sure that you have completed steps from [multicluster_heal](../../)
 
 
 ## Run
@@ -19,7 +19,7 @@ Make sure that you have completed steps from [multicluster](../../)
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/heal/interdomain-nsmgr-death/cluster2?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/usecases/interdomain-nsmgr-death/cluster2?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for applications ready:
@@ -31,7 +31,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/heal/interdomain-nsmgr-death/cluster1?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/usecases/interdomain-nsmgr-death/cluster1?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for applications ready:
