@@ -23,12 +23,16 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 
 ## Includes
 
-- [Forwarders death in floating interdomain scenario](./heal/floating-forwarder-death)
-- [NSE death in floating interdomain scenario](./heal/floating-nse-death)
-- [NSM systems death in floating interdomain scenario](./heal/floating-nsm-system-death)
-- [Proxy nsmgrs death in interdomain scenario](./heal/interdomain-proxy-nsmgr-death)
-- [NSMGRs death in interdomain scenario](./heal/interdomain-nsmgr-death)
-- [Registry death in interdomain scenario](./heal/interdomain-registry-death)
+- [Kernel to Ethernet to Kernel Connection](./usecases/interdomain_Kernel2Ethernet2Kernel)
+- [Kernel to Ethernet to Kernel Connection via floating registry](./usecases/floating_Kernel2Ethernet2Kernel)
+- [Kernel to IP to Kernel Connection](./usecases/interdomain_Kernel2IP2Kernel)
+- [Kernel to IP to Kernel Connection via floating registry](./usecases/floating_Kernel2IP2Kernel)
+- [DNS](./usecases/interdomain_dns)
+- [Floating DNS](./usecases/floating_dns)
+- [Floating VL3](./usecases/floating_vl3-basic)
+- [Floating VL3_scale_from_zero](./usecases/floating_vl3-scale-from-zero)
+- [Floating VL3 DNS](./usecases/floating_vl3-dns)
+- [Floating NSE Composition](./usecases/floating_nse_composition)
 
 ## Run
 
@@ -36,7 +40,7 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k ../../../../../../../../home/nikita/repos/NSM/deployments-k8s/examples/multicluster/clusters-configuration/cluster1
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for nsmgr-proxy-service exposing:
@@ -55,7 +59,7 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod ${
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k ../../../../../../../../home/nikita/repos/NSM/deployments-k8s/examples/multicluster/clusters-configuration/cluster2
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for nsmgr-proxy-service exposing:
@@ -74,7 +78,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod ${
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k ../../../../../../../../home/nikita/repos/NSM/deployments-k8s/examples/multicluster/clusters-configuration/cluster3
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=b7a0736c9257da4c7e0880b8338f254f94097d4c
 ```
 
 Wait for nsmgr-proxy-service exposing:
