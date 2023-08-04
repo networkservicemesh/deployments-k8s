@@ -36,6 +36,25 @@ WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{r
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
 
+Wait for nsmgr:
+
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nsmgr -n nsm-system
+```
+
+Wait for forwarder-vpp:
+
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp -n nsm-system
+```
+
+Wait for registry-k8s:
+
+```bash
+RG=$(kubectl get pods -l app=registry -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${RG} -n nsm-system
+```
+
 ## Cleanup
 
 To free resources follow the next commands:
