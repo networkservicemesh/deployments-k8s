@@ -5,42 +5,60 @@ Can be skipped if clusters setupped with external DNS.
 
 ## Run
 
-Expose dns service for first cluster
+Expose kube-dns service on cluster 1:
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
-Wait for assigning IP address (note: you should see IP address in logs. If you dont see repeat this):
+Wait until IP of external DNS for cluster 1 is allocated:
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+```
+
+Get and store that IP:
+
+```bash
 ip1=$(kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
+# If cluster uses DNS records for load-balancer, resolve them
 if [[ $ip1 == *"no value"* ]]; then 
     ip1=$(kubectl --kubeconfig=$KUBECONFIG1 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip1=$(dig +short $ip1 | head -1)
 fi
 # if IPv6
-if [[ $ip1 =~ ":" ]]; then ip1=[$ip1]; fi
+if [[ $ip1 =~ ':' ]]; then ip1=[$ip1]; fi
 
 echo Selected externalIP: $ip1 for cluster1
+[[ ! -z $ip1 ]]
 ```
 
-Expose dns service for the second cluster:
+Expose kube-dns service on cluster 2:
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 expose service kube-dns -n kube-system --port=53 --target-port=53 --protocol=TCP --name=exposed-kube-dns --type=LoadBalancer
 ```
 
-Wait for assigning IP address (note: you should see IP address in logs. If you dont see repeat this):
+Wait until IP of external DNS for cluster 2 is allocated:
+
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
+```
+
+Get and store that IP:
+
+```bash
 ip2=$(kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}')
+# If cluster uses DNS records for load-balancer, resolve them
 if [[ $ip2 == *"no value"* ]]; then 
     ip2=$(kubectl --kubeconfig=$KUBECONFIG2 get services exposed-kube-dns -n kube-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "hostname"}}')
     ip2=$(dig +short $ip2 | head -1)
 fi
 # if IPv6
-if [[ $ip2 =~ ":" ]]; then ip2=[$ip2]; fi
+if [[ $ip2 =~ ':' ]]; then ip2=[$ip2]; fi
 
 echo Selected externalIP: $ip2 for cluster2
+[[ ! -z $ip2 ]]
 ```
 
 Add DNS forwarding from cluster1 to cluster2:
