@@ -106,7 +106,7 @@ metadata:
   namespace: kube-system
 data:
   server.override: |
-    k8s_external my.cluster2
+    k8s_external my.cluster1
   proxy1.server: |
     my.cluster2:53 {
       forward . ${ip2}:53 {
@@ -161,7 +161,7 @@ metadata:
   namespace: kube-system
 data:
   server.override: |
-    k8s_external my.cluster1
+    k8s_external my.cluster2
   proxy1.server: |
     my.cluster1:53 {
       forward . ${ip1}:53 {
