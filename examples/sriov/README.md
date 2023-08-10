@@ -33,7 +33,7 @@ For the `worker` node:
 
 Apply NSM resources for sriov tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=5de112ea591bf2b4ec6d34cad679e6fa2d856af7
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=3f740cfed7d56fd43092ed96e78ef39136821932
 ```
 
 ## Cleanup
