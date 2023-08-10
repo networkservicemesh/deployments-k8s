@@ -14,7 +14,7 @@ Make sure that you have completed steps from [PSS](../..).
 
 Deploy client and nginx-nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/pss/use-cases/nginx?ref=02338abe4f05fd21fac40c7948ff8b59d7ff3b22
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/pss/use-cases/nginx?ref=22260e0544acff456541d5bd9ecbd73635c02cd6
 ```
 
 Wait for applications ready:
