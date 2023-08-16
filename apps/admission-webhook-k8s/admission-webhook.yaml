@@ -17,7 +17,7 @@ spec:
       serviceAccount: admission-webhook-sa
       containers:
         - name: admission-webhook-k8s
-          image: ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:8ba6122
+          image: to-do-replace-this-image-with-actual
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
@@ -47,3 +47,11 @@ spec:
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
               value: NSM_LOG_LEVEL=TRACE
+            - name: NSM_RESOURCES_LIMITS_MEMORY
+              value: 40Mi
+            - name: NSM_RESOURCES_REQUESTS_MEMORY
+              value: 40Mi
+            - name: NSM_RESOURCES_LIMITS_CPU
+              value: 100m
+            - name: NSM_RESOURCES_REQUESTS_CPU
+              value: 100m
