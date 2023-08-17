@@ -1,6 +1,6 @@
 # NSM Remote Vlan Examples
 
-This setup can be used to check remote vlan mechanism with OVS orwarder. Contain basic setup for NSM that includes `nsmgr`, `registry-k8s`, `forwader-ovs`, `admission-webhook-k8s`, `nse-remote-vlan`. The `nse-remote-vlan` belongs to the nsm-system since does not have role in data-plane connection.
+This setup can be used to check remote vlan mechanism with OVS forwarder. Contain basic setup for NSM that includes `nsmgr`, `registry-k8s`, `forwader-ovs`, `admission-webhook-k8s`, `nse-remote-vlan`. The `nse-remote-vlan` belongs to the nsm-system since does not have role in data-plane connection.
 
 ## Requires
 
@@ -44,7 +44,7 @@ Create ns for deployments:
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan?ref=f472892020037a1d3d4635a2bc521a58164c88b0
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan_ovs?ref=f472892020037a1d3d4635a2bc521a58164c88b0
 ```
 
 Wait for NSE application:
