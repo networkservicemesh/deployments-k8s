@@ -6,7 +6,7 @@ Forwarders are using the `vlan` remote mechanism to set up the VLAN interface.
 
 ## Requires
 
-Make sure that you have completed steps from [remotevlan](../../remotevlan) setup.
+Make sure that you have completed steps from [remotevlan_ovs](../../remotevlan_ovs) or [remotevlan_vpp](../../remotevlan_vpp) setup.
 
 ## Run
 

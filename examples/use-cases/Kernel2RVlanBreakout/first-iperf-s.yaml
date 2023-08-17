@@ -15,7 +15,7 @@ spec:
       labels:
         app: iperf1-s
       annotations:
-        networkservicemesh.io: kernel://finance-bridge/nsm-1
+        networkservicemesh.io: kernel://kernel2rvlan-breakout/nsm-1
     spec:
       affinity:
         podAntiAffinity:

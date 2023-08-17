@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nsm-system
+
+resources:
+  - nsm-system-namespace.yaml
+  - ../../apps/nsmgr
+  - ../../apps/registry-k8s
+  - ../../apps/nse-remote-vlan
+  - ../../apps/admission-webhook-k8s
+  - ../../apps/forwarder-ovs
+  - kernel2rvlan-internal-svc.yaml
+  - kernel2rvlan-breakout-svc.yaml
+  - kernel2rvlan-multins-svc.yaml
+
+patchesStrategicMerge:
+  - patch-nse.yaml
+  - patch-forwarder-ovs.yaml
+
+configMapGenerator:
+  - name: device-selector
+    files:
+      - selector
