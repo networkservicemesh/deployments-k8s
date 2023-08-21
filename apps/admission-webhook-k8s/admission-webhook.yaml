@@ -55,11 +55,3 @@ spec:
               value: 200m
             - name: NSM_SIDECAR_REQUESTS_CPU
               value: 100m
-            - name: NSM_CONTAINER_LIMITS_MEMORY
-              value: 80Mi
-            - name: NSM_CONTAINER_REQUESTS_MEMORY
-              value: 40Mi
-            - name: NSM_CONTAINER_LIMITS_CPU
-              value: 200m
-            - name: NSM_CONTAINER_REQUESTS_CPU
-              value: 100m
