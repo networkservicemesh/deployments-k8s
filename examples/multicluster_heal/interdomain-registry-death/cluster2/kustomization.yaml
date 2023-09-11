@@ -6,7 +6,7 @@ namespace: ns-interdomain-registry-death
 
 resources:
 - ns-interdomain-registry-death.yaml
-- ../../../../../apps/nse-kernel
+- ../../../../apps/nse-kernel
 
 patchesStrategicMerge:
 - patch-nse.yaml
