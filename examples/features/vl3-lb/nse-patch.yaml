@@ -1,0 +1,18 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-vl3-vpp
+  labels:
+    app: nse-vl3-vpp
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_SERVICE_NAMES
+              value: "vl3-lb"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"

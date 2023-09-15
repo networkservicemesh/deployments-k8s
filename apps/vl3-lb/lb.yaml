@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vl3-lb
+spec:
+  selector:
+    matchLabels:
+      app: vl3-lb
+  template:
+    metadata:
+      labels:
+        app: vl3-lb
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      containers:
+        - name: lb
+          image: ghcr.io/networkservicemesh/ci/cmd-lb-vl3-vpp:cd64380
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAME
+              value: "$(NSM_NAME)"
+            - name: NSM_PORT
+              value: "80"
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: true
+          resources:
+            requests:
+              cpu: 150m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
