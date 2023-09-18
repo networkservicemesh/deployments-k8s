@@ -5,9 +5,9 @@ This example shows what is a vL3 Load Balancer (LB) and how it works.
 ## Description
 
 We all know and use Kubernetes Services in our work. 
-Service is a method for exposing a network application that is running as one or more Pods in your cluster. It distributes traffic across a set of selected Pods
+Service is a method for exposing a network application that is running as one or more Pods in your cluster. It distributes traffic across a set of selected Pods.
 
-To define Kubernetes Service:
+To define a Kubernetes Service:
 ```
 apiVersion: v1
 kind: Service
@@ -29,12 +29,12 @@ vL3-LB will help us with this. We will call these clients that implement the ser
 
 So, vL3-LB has the following parameters:
 
-NSM env | Description
-- | -
-`NSM_SELECTOR`    | labels that group the vL3 clients we need to implement any service
-`NSM_PROTOCOL`    | TCP or UDP IP protocol
-`NSM_PORT`        | LB port
-`NSM_TARGET_PORT` | real server port
+| NSM env            | Description                                                        |
+|--------------------|--------------------------------------------------------------------|
+| `NSM_SELECTOR`     | labels that group the vL3 clients we need to implement any service |
+| `NSM_PROTOCOL`     | TCP or UDP IP protocol                                             |
+| `NSM_PORT`         | LB port                                                            |
+| `NSM_TARGET_PORT`  | real server port                                                   |
 
 vL3-LB is a vL3-network client that monitors the real servers using `NSM_SELECTOR`. It has its own DNS name that we can use.<br />
 
@@ -56,7 +56,7 @@ When the http request reaches the balancer, it converts the destination address 
 
 Deploy the vL3 network service, vL3-NSE, vL3-LB, finance-servers and finance-client (the last 3 are actually clients of the vL3 network) (see `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-lb?ref=d68d513e07df93da520f6646006a9cad4050f043
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-lb?ref=fea72f963b344a0acdae636ceec6ea9f25fbfffb
 ```
 
 Wait for vL3-clients to be ready:
