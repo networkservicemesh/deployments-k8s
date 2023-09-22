@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nsc
-          image: ghcr.io/networkservicemesh/ci/cmd-nsc:b50c419
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc:ae63a2d
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
