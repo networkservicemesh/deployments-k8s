@@ -15,7 +15,7 @@ spec:
       labels:
         app: alpine
       annotations:
-        networkservicemesh.io: kernel://autoscale-icmp-responder/nsm-1
+        networkservicemesh.io: kernel://vl3-scale-from-zero/nsm-1
     spec:
       containers:
       - name: alpine
