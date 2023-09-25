@@ -2,7 +2,7 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: autoscale-icmp-responder
+  name: vl3-scale-from-zero
 spec:
   payload: IP
   matches:
@@ -12,6 +12,12 @@ spec:
         - destination_selector:
             app: nse-vl3-vpp
             nodeName: "{{.nodeName}}"
+    - source_selector:
+        capability: vl3
+      fallthrough: true
+      routes:
+        - destination_selector:
+            capability: vl3
     - source_selector:
       routes:
         - destination_selector:

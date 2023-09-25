@@ -23,13 +23,15 @@ spec:
         - name: NSM_LOG_LEVEL
           value: TRACE
         - name: NSM_SERVICE_NAMES
-          value: autoscale-icmp-responder,vl3-scale-from-zero
+          value: vl3-scale-from-zero
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_IDLE_TIMEOUT
           value: 15s
         - name: NSM_LABELS
-          value: app:nse-vl3-vpp
+          value: app:nse-vl3-vpp,capability:vl3
+        - name: NSM_REQUEST_LABELS
+          value: capability:vl3
         - name: POD_NAME
           valueFrom:
             fieldRef:

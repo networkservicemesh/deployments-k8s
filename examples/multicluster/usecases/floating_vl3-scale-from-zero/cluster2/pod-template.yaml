@@ -21,11 +21,13 @@ spec:
         - name: NSM_NAME
           value: "scaled-nse-vl3-vpp-2@my.cluster3"
         - name: NSM_SERVICE_NAMES
-          value: "autoscale-interdomain-vl3-network@my.cluster3,my-vl3-network@my.cluster3"
+          value: "autoscale-interdomain-vl3-network@my.cluster3"
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_LABELS
-          value: "app:nse-vl3-vpp"
+          value: "app:nse-vl3-vpp,capability:vl3"
+        - name: NSM_REQUEST_LABELS
+          value: capability:vl3
         - name: NSM_PREFIX_SERVER_URL
           value: "tcp://vl3-ipam.nsm-system.my.cluster3:5006"
         - name: NSM_IDLE_TIMEOUT
