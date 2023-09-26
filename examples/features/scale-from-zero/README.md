@@ -20,7 +20,7 @@ thus saving cluster resources (see step 14).
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=275454ddbab082e3b19c32f91ec2a1e0a9a4a0c1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scale-from-zero?ref=48785c4bf4bf4e66c4f0ced9e0ecee5eaccdc93d
 ```
 
 Wait for applications ready:
