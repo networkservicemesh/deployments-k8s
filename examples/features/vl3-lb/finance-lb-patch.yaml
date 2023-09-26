@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vl3-lb
+spec:
+  template:
+    metadata:
+      labels:
+        type: vl3-client
+    spec:
+      containers:
+        - name: lb
+          env:
+            - name: POD_NAME
+              value: "finance"
+            - name: NSM_PORT
+              value: "8080"
+            - name: NSM_TARGET_PORT
+              value: "80"
+            - name: NSM_SELECTOR
+              value: "app:finance"
+            - name: NSM_NETWORK_SERVICES
+              value: "memif://vl3-lb/nsm-1"

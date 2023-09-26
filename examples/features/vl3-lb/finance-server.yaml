@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finance-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: finance-server
+  template:
+    metadata:
+      labels:
+        app: finance-server
+        type: vl3-client
+      annotations:
+        networkservicemesh.io: kernel://vl3-lb/nsm-1?app=finance
+    spec:
+      containers:
+        - name: nginx
+          image: hashicorp/http-echo:alpine
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          args:
+            - "-text=Hello! I'm $(POD_NAME)"
+            - -listen=:80
+          ports:
+            - containerPort: 80
