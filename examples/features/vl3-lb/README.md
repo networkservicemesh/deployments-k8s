@@ -66,7 +66,7 @@ kubectl wait --for=condition=ready --timeout=2m pod -l type=vl3-client -n ns-vl3
 
 Send an http-request from the finance-client:
 ```bash
-kubectl exec deployments/finance-client -n ns-vl3-lb -- curl -s finance:8080 | grep "Hello! I'm finance-server"
+kubectl exec deployments/finance-client -n ns-vl3-lb -- curl -s finance.vl3-lb:8080 | grep "Hello! I'm finance-server"
 ```
 In the response you will see the name of the real server that performed the processing.
 If you run the command above many times, you will see that load balancing occurs and the responses are returned by different handlers.
