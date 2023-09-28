@@ -14,7 +14,7 @@ Check that we have config for the cluster:
 
 Apply spire deployments:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/cluster2?ref=195f5c3b84bc059b156eaa7562053f71597cbe76
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/cluster2?ref=df05e867e20fec9651edb91f9dc64e9f22a97149
 ```
 
 Wait for PODs status ready:
@@ -27,7 +27,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait -n spire --timeout=1m --for=condition=rea
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/195f5c3b84bc059b156eaa7562053f71597cbe76/examples/spire/cluster2/clusterspiffeid-template.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/df05e867e20fec9651edb91f9dc64e9f22a97149/examples/spire/cluster2/clusterspiffeid-template.yaml
 ```
 
 ## Cleanup
