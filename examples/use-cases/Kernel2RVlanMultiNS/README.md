@@ -12,19 +12,19 @@ Make sure that you have completed steps from [remotevlan_ovs](../../remotevlan_o
 
 Deployment in first namespace
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=36f9aaa7677754583d68e191ec88f14a4f5e1d9e
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=664d7572d861ce882fecfdd9e6199ac0168666ac
 ```
 
 Deployment in second namespace:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/36f9aaa7677754583d68e191ec88f14a4f5e1d9e/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/36f9aaa7677754583d68e191ec88f14a4f5e1d9e/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=36f9aaa7677754583d68e191ec88f14a4f5e1d9e
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/664d7572d861ce882fecfdd9e6199ac0168666ac/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/664d7572d861ce882fecfdd9e6199ac0168666ac/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=664d7572d861ce882fecfdd9e6199ac0168666ac
 ```
 
 Deploy the last client
 ```bash
-kubectl apply -n nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/36f9aaa7677754583d68e191ec88f14a4f5e1d9e/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
+kubectl apply -n nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/664d7572d861ce882fecfdd9e6199ac0168666ac/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
 ```
 
 Wait for applications ready:
@@ -341,7 +341,7 @@ true
 Delete the last client:
 
 ```bash
-kubectl delete --namespace=nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/36f9aaa7677754583d68e191ec88f14a4f5e1d9e/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
+kubectl delete --namespace=nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/664d7572d861ce882fecfdd9e6199ac0168666ac/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
 ```
 
 Delete the test namespace:

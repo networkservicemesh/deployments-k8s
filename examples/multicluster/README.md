@@ -40,7 +40,7 @@ Interdomain tests can be on two clusters, for thus tests scheme of request will 
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=36f9aaa7677754583d68e191ec88f14a4f5e1d9e
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=664d7572d861ce882fecfdd9e6199ac0168666ac
 ```
 
 Wait for nsmgr-proxy-service exposing:
@@ -59,7 +59,7 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod ${
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=36f9aaa7677754583d68e191ec88f14a4f5e1d9e
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=664d7572d861ce882fecfdd9e6199ac0168666ac
 ```
 
 Wait for nsmgr-proxy-service exposing:
@@ -78,7 +78,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod ${
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=36f9aaa7677754583d68e191ec88f14a4f5e1d9e
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=664d7572d861ce882fecfdd9e6199ac0168666ac
 ```
 
 Wait for nsmgr-proxy-service exposing:
