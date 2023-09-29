@@ -76,27 +76,27 @@ jobs:
 
   create-release:
     name: Create release
-    needs: update-refs
+    needs: replace-params
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ needs.update-refs.outputs.tag }}
+      tag: ${{ needs.replace-params.outputs.tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           ref: ${{github.event.ref}}
-      - name: Push tag ${{ needs.update-refs.outputs.tag }}
+      - name: Push tag ${{ needs.replace-params.outputs.tag }}
         run: |
           git status
-          git tag ${{ needs.update-refs.outputs.tag }}
-          git push origin ${{ needs.update-refs.outputs.tag }} -f
-      - name: Create release ${{ needs.update-refs.outputs.tag }}
+          git tag ${{ needs.replace-params.outputs.tag }}
+          git push origin ${{ needs.replace-params.outputs.tag }} -f
+      - name: Create release ${{ needs.replace-params.outputs.tag }}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
         with:
-          tag_name: refs/tags/${{ needs.update-refs.outputs.tag }}
-          release_name: ${{ needs.update-refs.outputs.tag }}
+          tag_name: refs/tags/${{ needs.replace-params.outputs.tag }}
+          release_name: ${{ needs.replace-params.outputs.tag }}
           draft: false
           prerelease: false
 
