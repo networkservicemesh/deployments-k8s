@@ -43,8 +43,8 @@ jobs:
               docker pull $image
             done
 
-  update-refs:
-     name: Update References to the latest tag
+  replace-params:
+     name: Replacing release specific parameters
      needs: check-images
      runs-on: ubuntu-latest
      outputs:
@@ -54,13 +54,21 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.ref }}
-
-      - name: Update references
+      - name: Git config
+        run: |
+          git config --global user.email "nsmbot@networkservicmesh.io"
+          git config --global user.name "NSMBot"
+      - name: Replace logging level with INFO
+        run: |
+          sed -r -i '/name: NSM_LOG_LEVEL/{ n; s/value: .*/value: INFO/g }' `grep 'NSM_LOG_LEVEL' -rl *`
+          sed -r -i 's/NSM_LOG_LEVEL: .*/NSM_LOG_LEVEL: INFO/g' `grep 'NSM_LOG_LEVEL' -rl *`
+          sed -r -i 's/NSM_LOG_LEVEL=TRACE/NSM_LOG_LEVEL=INFO/g' `grep 'NSM_LOG_LEVEL' -rl *`
+          git add -- .
+          git commit -s -m "Replace logging level with INFO"
+      - name: Update references to the latest tag
         run: |
           sed -r -i '/github.com\/networkservicemesh\/deployments-k8s/ s/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
           sed -r -i '/raw.githubusercontent.com\/networkservicemesh\/deployments-k8s/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
-          git config --global user.email "nsmbot@networkservicmesh.io"
-          git config --global user.name "NSMBot"
           git add -- .
           git commit -s -m "Update references to the latest tag"
           ref=${{ github.event.ref }}
