@@ -37,18 +37,18 @@ istioctl --kubeconfig=$KUBECONFIG2 proxy-status
 
 Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1aa77a03c6a6719abaccf45eac5ee3b0b930ff44/examples/interdomain/nsm_istio_booking/netsvc.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c61e02c119cc967c2098257dc7edb0086e987eb5/examples/interdomain/nsm_istio_booking/netsvc.yaml
 ```
 
 Start `productpage` networkservicemesh client for the first cluster:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1aa77a03c6a6719abaccf45eac5ee3b0b930ff44/examples/interdomain/nsm_istio_booking/productpage/productpage.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c61e02c119cc967c2098257dc7edb0086e987eb5/examples/interdomain/nsm_istio_booking/productpage/productpage.yaml
 ```
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio_booking/nse-auto-scale?ref=1aa77a03c6a6719abaccf45eac5ee3b0b930ff44
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio_booking/nse-auto-scale?ref=c61e02c119cc967c2098257dc7edb0086e987eb5
 ```
 
 Install istio booking example
@@ -81,9 +81,9 @@ You have made a interdomain connection between two clusters via NSM + Istio!
 
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/bookinfo/platform/kube/bookinfo.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio_booking/nse-auto-scale?ref=1aa77a03c6a6719abaccf45eac5ee3b0b930ff44 
-kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1aa77a03c6a6719abaccf45eac5ee3b0b930ff44/examples/interdomain/nsm_istio_booking/productpage/productpage.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1aa77a03c6a6719abaccf45eac5ee3b0b930ff44/examples/interdomain/nsm_istio_booking/netsvc.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm_istio_booking/nse-auto-scale?ref=c61e02c119cc967c2098257dc7edb0086e987eb5 
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c61e02c119cc967c2098257dc7edb0086e987eb5/examples/interdomain/nsm_istio_booking/productpage/productpage.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c61e02c119cc967c2098257dc7edb0086e987eb5/examples/interdomain/nsm_istio_booking/netsvc.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete ns istio-system
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection-
 kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
