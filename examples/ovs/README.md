@@ -11,6 +11,7 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
 - [Kernel to Kernel Connection over VLAN Trunking](../use-cases/Kernel2KernelVLAN)
 - [SmartVF to SmartVF Connection](../use-cases/SmartVF2SmartVF)
+- [SmartVF to SmartVF Connection over VLAN Trunking](../use-cases/SmartVf2SmartVfVlan)
 - [Admission webhook SmartVF example](../features/webhook-smartvf)
 
 ## SR-IOV config
