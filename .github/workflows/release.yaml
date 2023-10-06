@@ -11,33 +11,25 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
 
-  get-tag:
-    name: Tag
+  check-images:
+    name: Check images
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.tag-step.outputs.tag }}
+      tag: ${{ steps.get-tag-step.outputs.tag }}
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: Tag env
+      - name: Get tag
         run: |
           branch=${{ github.event.ref }}
           echo '::set-output name=tag::'${branch#refs/heads/release/}
-        id: tag-step
-
-  check-images:
-    name: Check images
-    needs: get-tag
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        id: get-tag-step
 
       - name: Check images
         run: |
           git fetch origin
-          git checkout origin/release/${{ needs.get-tag.outputs.tag }}
+          git checkout origin/release/${{ steps.get-tag-step.outputs.tag }}
 
           pattern="ghcr\.io\/networkservicemesh\/ci\/.*:[a-z0-9]\{7\}"
           grep -roh 'apps' -e ${pattern} || exit 0;
@@ -53,8 +45,10 @@ jobs:
 
   replace-params:
      name: Replacing release specific parameters
-     needs: [get-tag, check-images]
+     needs: check-images
      runs-on: ubuntu-latest
+     outputs:
+      tag: ${{ needs.check-images.outputs.tag }}
      steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -73,8 +67,8 @@ jobs:
           git commit -s -m "Replace logging level with INFO"
       - name: Update references to the latest tag
         run: |
-          sed -r -i '/github.com\/networkservicemesh\/deployments-k8s/ s/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.get-tag.outputs.tag }}"'/g' `grep '?ref=' -rl *`
-          sed -r -i '/raw.githubusercontent.com\/networkservicemesh\/deployments-k8s/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.get-tag.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
+          sed -r -i '/github.com\/networkservicemesh\/deployments-k8s/ s/(\?ref=[a-z0-9.]*)/\?ref='"${{ needs.check-images.outputs.tag }}"'/g' `grep '?ref=' -rl *`
+          sed -r -i '/raw.githubusercontent.com\/networkservicemesh\/deployments-k8s/ s/(deployments-k8s\/[a-z0-9.]*)/deployments-k8s\/'"${{ needs.check-images.outputs.tag }}"'/g' `grep 'raw.githubusercontent.com' -rl *`
           git add -- .
           git commit -s -m "Update references to the latest tag"
           ref=${{ github.event.ref }}
@@ -82,25 +76,27 @@ jobs:
 
   create-release:
     name: Create release
-    needs: [get-tag, update-refs]
+    needs: replace-params
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ needs.replace-params.outputs.tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           ref: ${{github.event.ref}}
-      - name: Push tag ${{ needs.get-tag.outputs.tag }}
+      - name: Push tag ${{ needs.replace-params.outputs.tag }}
         run: |
           git status
-          git tag ${{ needs.get-tag.outputs.tag }}
-          git push origin ${{ needs.get-tag.outputs.tag }} -f
-      - name: Create release ${{ needs.get-tag.outputs.tag }}
+          git tag ${{ needs.replace-params.outputs.tag }}
+          git push origin ${{ needs.replace-params.outputs.tag }} -f
+      - name: Create release ${{ needs.replace-params.outputs.tag }}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
         with:
-          tag_name: refs/tags/${{ needs.get-tag.outputs.tag }}
-          release_name: ${{ needs.get-tag.outputs.tag }}
+          tag_name: refs/tags/${{ needs.replace-params.outputs.tag }}
+          release_name: ${{ needs.replace-params.outputs.tag }}
           draft: false
           prerelease: false
 
@@ -110,7 +106,7 @@ jobs:
         repository:
           - integration-tests
     name: Update ${{ matrix.repository }}
-    needs: [get-tag, create-release]
+    needs: create-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v1
@@ -127,7 +123,7 @@ jobs:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
           repository: ${{ github.repository }}
           token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-          ref: release/${{ needs.get-tag.outputs.tag }}
+          ref: release/${{ needs.create-release.outputs.tag }}
       - name: Install gotestmd
         run: |
           go install github.com/networkservicemesh/gotestmd@main
@@ -157,7 +153,7 @@ jobs:
       - name: Push update to the ${{ matrix.repository }}
         working-directory: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
         run: |
-          sed -r -i 's/sha = "[a-z0-9]*"/sha = "tags\/${{ needs.get-tag.outputs.tag }}"/g' extensions/base/suite.go
+          sed -r -i 's/sha = "[a-z0-9]*"/sha = "tags\/${{ needs.create-release.outputs.tag }}"/g' extensions/base/suite.go
           git add -- .
           echo Starting to update repositotry ${{ matrix.repository }}
           if ! [ -n "$(git diff --cached --exit-code)" ]; then
@@ -166,7 +162,7 @@ jobs:
           fi
           git config --global user.email "nsmbot@networkservicmesh.io"
           git config --global user.name "NSMBot"
-          echo "Update to ${{ github.repository }}@${{ needs.get-tag.outputs.tag }}" >> /tmp/commit-message
+          echo "Update to ${{ github.repository }}@${{ needs.create-release.outputs.tag }}" >> /tmp/commit-message
           git commit -s -F /tmp/commit-message
-          git checkout -b release/${{ needs.get-tag.outputs.tag }}
-          git push -f origin release/${{ needs.get-tag.outputs.tag }}
+          git checkout -b release/${{ needs.create-release.outputs.tag }}
+          git push -f origin release/${{ needs.create-release.outputs.tag }}
