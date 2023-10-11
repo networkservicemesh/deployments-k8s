@@ -82,7 +82,7 @@ jobs:
 
   create-release:
     name: Create release
-    needs: [get-tag, update-refs]
+    needs: [get-tag, replace-params]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
