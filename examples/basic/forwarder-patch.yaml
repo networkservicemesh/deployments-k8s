@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-vpp
+spec:
+  selector: {}
+  template:
+    spec:
+      containers:
+      - name: forwarder-vpp
+        env:
+        # Usually forwarder finds tunnel IP automatically.
+        # Here we effectively set it to node Internal IP because in basic (single-cluster) setup
+        # we are guaranteed to have connectivity between cluster nodes using this IP.
+        - name: NSM_TUNNEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
