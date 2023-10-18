@@ -6,7 +6,7 @@ metadata:
   labels:
     spiffe.io/webhook: "true"
 webhooks:
-- admissionReviewVersions: 
+- admissionReviewVersions:
   - v1
   clientConfig:
     service:
