@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: admission-webhook-k8s
+        dns-name: admission-webhook-svc
+        "spiffe.io/spiffe-id-webhook": "true"
     spec:
       serviceAccount: admission-webhook-sa
       containers:
@@ -55,3 +57,12 @@ spec:
               value: 200m
             - name: NSM_SIDECAR_REQUESTS_CPU
               value: 100m
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
