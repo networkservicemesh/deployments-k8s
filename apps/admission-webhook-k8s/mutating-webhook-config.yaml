@@ -16,7 +16,7 @@ webhooks:
       port: 443
   failurePolicy: Fail
   matchPolicy: Equivalent
-  name: nsm-admission-webhook-k8s-5dfd78487d-26n5b.networkservicemesh.io
+  name: nsm-admission-webhook.networkservicemesh.io
   namespaceSelector: {}
   objectSelector: {}
   reinvocationPolicy: Never
@@ -43,6 +43,7 @@ webhooks:
     - statefulsets
     - daemonsets
     - replicasets
+    - namespaces
     scope: '*'
   sideEffects: None
   timeoutSeconds: 10
