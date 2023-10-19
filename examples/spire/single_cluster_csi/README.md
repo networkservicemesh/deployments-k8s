@@ -19,7 +19,11 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f2733592d3e1742a3dfeed90a102f0a6a2a20dc2/examples/spire/single_cluster/clusterspiffeid-template.yaml && kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7b3392766b2f86f994fb05fd7172b79aeceff7e7/examples/spire/webhook/clusterspiffeid-webhook-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f2733592d3e1742a3dfeed90a102f0a6a2a20dc2/examples/spire/single_cluster/clusterspiffeid-template.yaml
+```
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7b3392766b2f86f994fb05fd7172b79aeceff7e7/examples/spire/webhook/clusterspiffeid-webhook-template.yaml
 ```
 
 ## Cleanup
