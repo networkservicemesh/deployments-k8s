@@ -9,6 +9,5 @@ resources:
 - binding.yaml
 - role.yaml
 - mutating-webhook-config.yaml
-- clusterspiffeid-webhook-template.yaml
 
 namespace: default

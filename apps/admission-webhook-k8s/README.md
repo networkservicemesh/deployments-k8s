@@ -11,8 +11,11 @@ This is only possible for local setup:
 
 If you want to use the automatically generated configuration and certificate for the admission webhook, you need to complete the following steps:
 
+- remove Spire spiffeid template if it exists:
+```bash
+  $ kubectl delete clusterspiffeid.spire.spiffe.io/nsm-workloads-webhook
+```
 - remove `mutating-webhook-config.yaml` from `kustomization.yaml` resources
-- remove `clusterspiffeid-webhook-template.yaml` from `kustomization.yaml` resources
 - add env variable to `admission-webhook.yaml`:
 ```bash
 - name: NSM_WEBHOOK_MODE
