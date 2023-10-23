@@ -19,5 +19,5 @@ If you want to use the automatically generated configuration and certificate for
 - add env variable to `admission-webhook.yaml`:
 ```bash
 - name: NSM_WEBHOOK_MODE
-  value: auto
+  value: selfsigned
 ```
