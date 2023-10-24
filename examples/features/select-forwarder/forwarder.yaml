@@ -29,6 +29,10 @@ spec:
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_LOG_LEVEL
               value: TRACE
+            - name: NSM_TUNNEL_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_LISTEN_ON
