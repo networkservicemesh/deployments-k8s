@@ -30,7 +30,6 @@ spec:
           name: vl3-ipam
           ports:
             - containerPort: 5006
-              hostPort: 5006
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
