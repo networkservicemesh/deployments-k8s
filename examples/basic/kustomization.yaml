@@ -10,3 +10,6 @@ resources:
 - ../../apps/forwarder-vpp
 - ../../apps/registry-k8s
 - ../../apps/admission-webhook-k8s
+
+patches:
+- path: forwarder-patch.yaml
