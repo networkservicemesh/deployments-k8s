@@ -28,7 +28,6 @@ spec:
           name: registry
           ports:
             - containerPort: 5005
-              hostPort: 5005
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
