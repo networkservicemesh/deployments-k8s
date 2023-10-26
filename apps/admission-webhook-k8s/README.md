@@ -14,10 +14,11 @@ Usual way to apply example:
 
 In order for the changes below to work, they must be made before step 2.
 
-As the first step for all cases below delete the spiffeid Spire webhook template if it exists, or skip it's installation step if you haven't configured Spire yet:
+As the first step for all cases below delete the spiffeid Spire webhook template if it exists:
 ```bash
   $ kubectl delete clusterspiffeid.spire.spiffe.io/nsm-workloads-webhook
 ```
+or skip it's installation step if you haven't configured Spire yet
 
 ## Use existing certificates
 
@@ -128,7 +129,7 @@ $ openssl req -x509 -nodes -days 365 -subj '/C=US/O=Community/CN=NSM root CA' -n
 $ openssl req -nodes -new -subj '/C=US/O=Community/CN=NSM' -newkey rsa:2048 -keyout tls.key -out tls.csr
 $ openssl x509 -req -days 365 -sha256 -extensions SAN -extfile <(cat "${CONFIG}"; echo '[SAN]'; echo 'subjectAltName=DNS:admission-webhook-svc.nsm-system,DNS:admission-webhook-svc.nsm-system.svc') -CA caBundle.crt -CAkey caBundle.key -CAcreateserial -in tls.csr -out tls.crt
 ```
-To use created certificates convert to base64 format first:
+To use the generated certificates, first convert them to base64 format:
 ```bash
 $ cat ./tls.key | base64
 $ cat ./tls.key | base64
