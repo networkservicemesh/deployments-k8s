@@ -12,5 +12,5 @@ rules:
       - "mutatingwebhookconfigurations"
     verbs: ["*"]
   - apiGroups: [""]
-    resources: ["namespaces"]
+    resources: ["namespaces", "secrets"]
     verbs: ["get"]
