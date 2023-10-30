@@ -22,6 +22,7 @@ spec:
           name: nsmgr
           ports:
             - containerPort: 5001
+              hostPort: 5001
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
