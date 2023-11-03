@@ -6,6 +6,7 @@ namespace: ns-kernel2kernel
 
 resources:
 - ns-kernel2kernel.yaml
+- client.yaml
 - netsvc.yaml
 - ../../../apps/nse-kernel
 
