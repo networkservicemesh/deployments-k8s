@@ -20,6 +20,14 @@ kubectl delete clusterspiffeid.spire.spiffe.io/nsm-workloads-webhook
 ```
 or skip it's installation step if you haven't configured Spire yet
 
+**Note** The following labels are only used for certificates signed by Spire and can be removed from `admission-webhook.yaml`:
+
+```yaml
+labels:
+  dns-name: admission-webhook-svc
+  spiffe.io/spiffe-id-webhook: "true"
+```
+
 ## Use existing certificates
 
 If you want to use the existing certificates, you need to complete the following steps:
@@ -30,7 +38,12 @@ If you want to use the existing certificates, you need to complete the following
     spiffe.io/webhook: "true"
 ```
 
-- Create a secret with your certificate:
+- create [nsm-namespace](../../examples/basic/nsm-system-namespace.yaml)
+```bash
+kubectl apply -f ../../examples/basic/nsm-system-namespace.yaml
+```
+
+- create a secret with your certificate:
 ```bash
 kubectl create secret tls webhook-cert -n nsm-system --key="tls.key" --cert="tls.crt"
 ```
@@ -44,14 +57,6 @@ cat ./ca.crt | base64
 ```yaml
 clientConfig:
     caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS...
-```
-
-**Note** The following labels are not needed in this case and can be removed from `admission-webhook.yaml` if necessary:
-
-```yaml
-labels:
-  dns-name: admission-webhook-svc
-  spiffe.io/spiffe-id-webhook: "true"
 ```
 
 - add env variables to `admission-webhook.yaml`:
@@ -80,14 +85,6 @@ labels:
 
 As a first step in both cases, remove `mutating-webhook-config.yaml` from the `kustomization.yaml` resources because it will be generated automatically.
 
-**Note** The following labels are not needed in this case and can be removed from `admission-webhook.yaml` if necessary:
-
-```yaml
-labels:
-  dns-name: admission-webhook-svc
-  spiffe.io/spiffe-id-webhook: "true"
-```
-
 ### Automatically generated configuration and certificate for the admission webhook
 
 - add env variable to `admission-webhook.yaml`:
@@ -98,9 +95,14 @@ labels:
 
 ### Automatically generated configuration with existing certificate for the admission webhook
 
-- Create a secret with your certificate:
+- create [nsm-namespace](../../examples/basic/nsm-system-namespace.yaml)
 ```bash
-kubectl create secret generic webhook-cert --from-file=tls.key="tls.key" --from-file=tls.crt="tls.crt" --from-file=ca.crt="ca.crt" --type="kubernetes.io/tls"
+kubectl apply -f ../../examples/basic/nsm-system-namespace.yaml
+```
+
+- create a secret with your certificate:
+```bash
+kubectl create secret generic webhook-cert -n nsm-system --from-file=tls.key="tls.key" --from-file=tls.crt="tls.crt" --from-file=ca.crt="ca.crt" --type="kubernetes.io/tls"
 ```
 
 - add env variables to `admission-webhook.yaml`:
@@ -131,7 +133,7 @@ kubectl create secret generic webhook-cert --from-file=tls.key="tls.key" --from-
 
 ## Generate certificates
 
-For testing purposes the openssl tool can be used with the following script:
+For testing purposes the openssl tool can be used with the following commands:
 ```bash
 CONFIG="$(openssl version -d | sed -E 's/OPENSSLDIR: "(.*)"/\1/g')/openssl.cnf"
 openssl req -x509 -nodes -days 365 -subj '/C=US/O=Community/CN=NSM root CA' -newkey rsa:2048 -keyout ca.key -out ca.crt
