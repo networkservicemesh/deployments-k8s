@@ -93,7 +93,7 @@ labels:
 - add env variable to `admission-webhook.yaml`:
 ```yaml
 - name: NSM_WEBHOOK_MODE
-  value: "1"
+  value: "selfregister"
 ```
 
 ### Automatically generated configuration with existing certificate for the admission webhook
@@ -106,7 +106,7 @@ kubectl create secret generic webhook-cert --from-file=tls.key="tls.key" --from-
 - add env variables to `admission-webhook.yaml`:
 ```yaml
 - name: NSM_WEBHOOK_MODE
-  value: "1"
+  value: "selfregister"
 - name: NSM_CERT_FILE_PATH
   value: /etc/cert/tls.crt
 - name: NSM_KEY_FILE_PATH
