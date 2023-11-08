@@ -11,7 +11,7 @@ Make sure that you have completed steps from [features](../)
 
 Deploy alpine and nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=47e190ef1069b15a1aac8640e927b51622724f1a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dns?ref=a4fc10f14f4cdf1b5cabfdaaaa7c9417c543128e
 ```
 
 Wait for applications ready:
