@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: lb
-          image: ghcr.io/networkservicemesh/ci/cmd-lb-vl3-vpp:fe6b1ce
+          image: ghcr.io/networkservicemesh/ci/cmd-lb-vl3-vpp:a9ebc4e
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
