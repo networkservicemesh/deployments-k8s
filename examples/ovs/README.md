@@ -38,7 +38,7 @@ For the `worker` node:
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/ovs?ref=237508004ef52fbd0ef58aee69b55214c989b24a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/ovs?ref=d1078dfa65e9fc5ab9d6baca5b2c26724d114b55
 ```
 
 Wait for admission-webhook-k8s:
