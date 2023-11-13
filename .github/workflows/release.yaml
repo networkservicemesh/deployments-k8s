@@ -51,6 +51,13 @@ jobs:
               docker pull $image
             done
 
+      - name: Check CVEs
+        run: |
+            images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:v.*..*..*")
+            for image in $images; do
+              docker scout cves $image
+            done
+
   replace-params:
      name: Replacing release specific parameters
      needs: [get-tag, check-images]
