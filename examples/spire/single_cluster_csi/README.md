@@ -6,7 +6,7 @@ This setup deploys SPIRE along with [SPIFFE CSI driver](https://github.com/spiff
 
 To apply spire deployments following the next command:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster_csi?ref=2dbd6cd1c52b62b8cb8bd974f45bd346d9d4122c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster_csi?ref=a7e7dc3ffc676d12bdc96ac69bfcd94798e4c02a
 ```
 
 Wait for PODs status ready:
@@ -19,7 +19,7 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2dbd6cd1c52b62b8cb8bd974f45bd346d9d4122c/examples/spire/single_cluster/clusterspiffeid-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/a7e7dc3ffc676d12bdc96ac69bfcd94798e4c02a/examples/spire/single_cluster/clusterspiffeid-template.yaml
 ```
 
 ## Cleanup
