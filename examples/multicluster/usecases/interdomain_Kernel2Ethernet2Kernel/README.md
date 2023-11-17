@@ -15,7 +15,7 @@ Make sure that you have completed steps from [interdomain](../../)
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Ethernet2Kernel/cluster2?ref=b677a815c28b85062ea1ba2379ecc3385ee43095
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Ethernet2Kernel/cluster2?ref=114197004622472a9a8432d0f49cbbce8a6168c4
 ```
 
 Wait for applications ready:
@@ -27,7 +27,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy client:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Ethernet2Kernel/cluster1?ref=b677a815c28b85062ea1ba2379ecc3385ee43095
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/usecases/interdomain_Kernel2Ethernet2Kernel/cluster1?ref=114197004622472a9a8432d0f49cbbce8a6168c4
 ```
 
 Wait for applications ready:
