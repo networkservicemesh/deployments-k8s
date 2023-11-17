@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-remote-nsmgr?ref=fc1f6199559bb970afbcbf60fca5043744343587
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/registry-remote-nsmgr?ref=93417d5e922108660b577158cd0b53b1e9c4fa48
 ```
 
 Wait for applications ready:
