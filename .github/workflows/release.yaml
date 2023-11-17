@@ -53,9 +53,11 @@ jobs:
 
       - name: Check CVEs
         run: |
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
             images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:v.*..*..*")
             for image in $images; do
-              docker scout cves $image
+              trivy image $image --severity=CRITICAL
+              trivy image $image --severity=HIGH
             done
 
   replace-params:
