@@ -1,0 +1,44 @@
+---
+name: Check CVEs
+on:
+  schedule:
+    # At 00:00 on Sunday
+    - cron: '0 0 * * *'
+jobs:
+  check-images:
+    name: Check & Upload CVEs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+      - name: "Setup jq"
+        uses: dcarbone/install-jq-action@v2.1.0
+        with:
+          version: '1.7'
+          force: true
+      - name: Check CVEs
+        run: |
+            # login
+            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+            
+            # install docker scout
+            curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s --
+            
+            # collect CVEs from all images in apps folder
+            mkdir cves
+            grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*:.*" | while read -r image ; do
+              filename=$(echo $image | awk -F/ '{print $NF}' | awk -F: '{print $1F}')
+              docker scout cves $image --format sarif --output cves/$filename.sarif
+            done
+
+            # merge all files with CVEs
+            files=""
+            for file in cves/*; do
+              files="${files} $file"
+            done
+            jq '.runs[0].results += [inputs.runs[0].results.[]] | .runs[0].results |= unique_by(.ruleId)' $files > results.json 
+        
+      - name: Upload CVEs
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.json
