@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-before-death?ref=bd33fc04c3796fb0907f3e688e1a7dd95e0c9f63
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-before-death?ref=d39c20120d9bbc2a6a230032fa7780cc70d798be
 ```
 
 Wait for applications ready:
@@ -44,7 +44,7 @@ kubectl exec pods/alpine -n ns-local-nse-death -- ping -c 4 172.16.1.100 -I 172.
 
 Apply patch:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-after-death?ref=bd33fc04c3796fb0907f3e688e1a7dd95e0c9f63
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-nse-death/nse-after-death?ref=d39c20120d9bbc2a6a230032fa7780cc70d798be
 ```
 
 Restore NSE pod:

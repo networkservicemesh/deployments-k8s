@@ -11,7 +11,7 @@ Make sure that you have completed steps from [external NSC](../../)
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nsc/usecases/Kernel2IP2Kernel?ref=bd33fc04c3796fb0907f3e688e1a7dd95e0c9f63
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/external_nsc/usecases/Kernel2IP2Kernel?ref=d39c20120d9bbc2a6a230032fa7780cc70d798be
 ```
 
 Wait for applications ready:
