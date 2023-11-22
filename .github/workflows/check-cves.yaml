@@ -20,10 +20,10 @@ jobs:
         run: |
             # login
             docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-            
+
             # install docker scout
             curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s --
-            
+
             # collect CVEs from all images in apps folder
             mkdir cves
             grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*:.*" | while read -r image ; do
@@ -36,8 +36,7 @@ jobs:
             for file in cves/*; do
               files="${files} $file"
             done
-            jq '.runs[0].results += [inputs.runs[0].results.[]] | .runs[0].results |= unique_by(.ruleId)' $files > results.json 
-        
+            jq '.runs[0].results += [inputs.runs[0].results.[]] | .runs[0].results |= unique_by(.ruleId)' $files > results.json
       - name: Upload CVEs
         uses: github/codeql-action/upload-sarif@v2
         with:
