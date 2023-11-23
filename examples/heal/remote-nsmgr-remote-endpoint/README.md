@@ -13,7 +13,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint/nsmgr-before-death?ref=e707c9e1a4793c75781f1c08655a8e006cdf9eb2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint/nsmgr-before-death?ref=bd37fae3f96da42ca29579a5f24615ba21c949bc
 ```
 
 Wait for applications ready:
@@ -49,7 +49,7 @@ Restart remote NSMgr and NSE:
 kubectl delete pod ${NSMGR} -n nsm-system
 ```
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint/nsmgr-after-death?ref=e707c9e1a4793c75781f1c08655a8e006cdf9eb2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/remote-nsmgr-remote-endpoint/nsmgr-after-death?ref=bd37fae3f96da42ca29579a5f24615ba21c949bc
 ```
 
 Waiting for new ones:
