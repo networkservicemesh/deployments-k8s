@@ -8,4 +8,4 @@ spec:
   dnsNameTemplates: ["{{index .PodMeta.Labels \"spiffe.io/spiffe-dns-webhook\"}}.{{.PodMeta.Namespace}}", "{{index .PodMeta.Labels \"spiffe.io/spiffe-dns-webhook\"}}.{{.PodMeta.Namespace}}.svc"]
   podSelector:
     matchLabels:
-      spiffe.io/spiffe-id-webhook: "true"
+      app: admission-webhook-k8s

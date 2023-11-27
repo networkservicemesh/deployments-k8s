@@ -14,7 +14,6 @@ spec:
       labels:
         app: admission-webhook-k8s
         spiffe.io/spiffe-dns-webhook: admission-webhook-svc
-        spiffe.io/spiffe-id-webhook: "true"
     spec:
       serviceAccount: admission-webhook-sa
       containers:
