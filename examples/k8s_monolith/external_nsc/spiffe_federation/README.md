@@ -17,6 +17,10 @@ Apply the ClusterSPIFFEID CR for the cluster:
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1e2ab91f22f17ce4f91a049b287d0129bdd6069d/examples/k8s_monolith/external_nsc/spiffe_federation/clusterspiffeid-template.yaml
 ```
 
+```bash
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7b3392766b2f86f994fb05fd7172b79aeceff7e7/examples/spire/base/clusterspiffeid-webhook-template.yaml
+```
+
 Get and store spire/spiffe bundles:
 ```bash
 bundlek8s=$(kubectl exec spire-server-0 -n spire -- bin/spire-server bundle show -format spiffe)

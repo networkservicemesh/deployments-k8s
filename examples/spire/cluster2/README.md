@@ -30,6 +30,10 @@ Apply the ClusterSPIFFEID CR for the cluster:
 kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/1e2ab91f22f17ce4f91a049b287d0129bdd6069d/examples/spire/cluster2/clusterspiffeid-template.yaml
 ```
 
+```bash
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/7b3392766b2f86f994fb05fd7172b79aeceff7e7/examples/spire/base/clusterspiffeid-webhook-template.yaml
+```
+
 ## Cleanup
 
 Delete ns:
