@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: admission-webhook-k8s
-        dns-name: admission-webhook-svc
+        spiffe.io/spiffe-dns-webhook: admission-webhook-svc
         spiffe.io/spiffe-id-webhook: "true"
     spec:
       serviceAccount: admission-webhook-sa
