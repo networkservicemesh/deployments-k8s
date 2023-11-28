@@ -31,7 +31,7 @@ kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/net
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fffb582cbffd3d9cb6b4acc694addf40fc6162e1/examples/spire/base/clusterspiffeid-webhook-template.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fffb582cbffd3d9cb6b4acc694addf40fc6162e1/examples/spire/base/clusterspiffeid-webhook-template.yaml
 ```
 
 ## Cleanup
