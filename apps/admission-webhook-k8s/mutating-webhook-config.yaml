@@ -16,7 +16,7 @@ webhooks:
       port: 443
   failurePolicy: Fail
   matchPolicy: Equivalent
-  name: nsm-admission-webhook.networkservicemesh.io
+  name: nsm-mutating-webhook.networkservicemesh.io
   namespaceSelector: {}
   objectSelector: {}
   reinvocationPolicy: Never

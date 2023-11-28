@@ -60,14 +60,12 @@ kubectl --kubeconfig=$KUBECONFIG2 exec deployments/nse-kernel -n ns-floating-nsm
 **5. Delete NSM system components on all three clusters**
 
 ```bash
-WH=$(kubectl --kubeconfig=$KUBECONFIG1 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration ${WH}
+kubectl --kubeconfig=$KUBECONFIG1 delete mutatingwebhookconfiguration nsm-mutating-webhook
 kubectl --kubeconfig=$KUBECONFIG1 delete ns nsm-system
 ```
 
 ```bash
-WH=$(kubectl --kubeconfig=$KUBECONFIG2 get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl --kubeconfig=$KUBECONFIG2 delete mutatingwebhookconfiguration ${WH}
+kubectl --kubeconfig=$KUBECONFIG2 delete mutatingwebhookconfiguration nsm-mutating-webhook
 kubectl --kubeconfig=$KUBECONFIG2 delete ns nsm-system
 ```
 

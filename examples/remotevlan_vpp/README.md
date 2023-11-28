@@ -71,8 +71,7 @@ kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forward
 To free resources follow the next command:
 
 ```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete mutatingwebhookconfiguration nsm-mutating-webhook
 kubectl delete ns nsm-system
 ```
 

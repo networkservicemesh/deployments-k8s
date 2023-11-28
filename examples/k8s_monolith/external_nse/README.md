@@ -40,7 +40,6 @@ kubectl get services registry -n nsm-system -o go-template='{{index (index (inde
 
 To free resources follow the next command:
 ```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete mutatingwebhookconfiguration nsm-mutating-webhook
 kubectl delete ns nsm-system
 ```
