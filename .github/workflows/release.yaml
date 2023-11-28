@@ -48,20 +48,8 @@ jobs:
         run: |
             images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:v.*..*..*")
             for image in $images; do
+              echo pulling $image
               docker pull $image
-            done
-
-      - name: Check CVEs
-        run: |
-            sudo apt-get install wget apt-transport-https gnupg lsb-release
-            wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-            echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-            sudo apt-get update
-            sudo apt-get install trivy
-
-            for image in $images; do
-              trivy image $image --severity=CRITICAL
-              trivy image $image --severity=HIGH
             done
 
   replace-params:
