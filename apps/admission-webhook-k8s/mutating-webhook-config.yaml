@@ -17,7 +17,14 @@ webhooks:
   failurePolicy: Fail
   matchPolicy: Equivalent
   name: nsm-mutating-webhook.networkservicemesh.io
-  namespaceSelector: {}
+  namespaceSelector:
+    matchExpressions:
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - nsm-system
+      - kube-system
+      - spire
   objectSelector: {}
   reinvocationPolicy: Never
   rules:
