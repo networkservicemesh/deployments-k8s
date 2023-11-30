@@ -22,7 +22,6 @@ webhooks:
     - key: kubernetes.io/metadata.name
       operator: NotIn
       values:
-      - nsm-system
       - kube-system
       - spire
   objectSelector: {}
