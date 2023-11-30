@@ -9,3 +9,4 @@ This document contains links for observability examples of NSM.
 ## Includes
 
 - [Jaeger and Prometheus](./jaeger-and-prometheus)
+- [NSM Dashboard](./dashboard)
