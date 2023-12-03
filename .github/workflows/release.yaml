@@ -48,6 +48,7 @@ jobs:
         run: |
             images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:v.*..*..*")
             for image in $images; do
+              echo pulling $image ...
               docker pull $image
             done
 
