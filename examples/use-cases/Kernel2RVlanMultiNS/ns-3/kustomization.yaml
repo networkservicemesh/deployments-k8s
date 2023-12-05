@@ -1,0 +1,9 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-kernel2vlan-multins-3
+
+resources:
+  - client.yaml
+  - ns-kernel2vlan-multins-3.yaml

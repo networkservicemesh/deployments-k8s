@@ -24,6 +24,7 @@ webhooks:
       values:
       - kube-system
       - spire
+      - nsm-system
   objectSelector: {}
   reinvocationPolicy: Never
   rules:
