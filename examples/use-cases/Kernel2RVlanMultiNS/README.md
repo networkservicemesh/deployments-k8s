@@ -24,7 +24,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Deployment in third namespace:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-3?ref=b9b6089539c6ba92f34cb317b7c1a59f4ce33cee
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-3?ref=6071c739686b48908f9399be0196ba8c23ab110c
 ```
 
 Wait for applications ready:
