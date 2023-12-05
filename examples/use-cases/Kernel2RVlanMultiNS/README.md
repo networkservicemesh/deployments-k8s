@@ -10,7 +10,7 @@ Make sure that you have completed steps from [remotevlan_ovs](../../remotevlan_o
 
 ## Run
 
-Deployment in first namespace
+Deployment in first namespace:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=b9b6089539c6ba92f34cb317b7c1a59f4ce33cee
 ```
@@ -22,7 +22,7 @@ kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployment
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=b9b6089539c6ba92f34cb317b7c1a59f4ce33cee
 ```
 
-Deploy the last client
+Deployment in third namespace:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-3?ref=b9b6089539c6ba92f34cb317b7c1a59f4ce33cee
 ```
@@ -155,7 +155,7 @@ NSCS_BLUE=($(kubectl get pods -l app=alpine-2 -n ns-kernel2vlan-multins-2 --temp
 NSCS_GREEN=($(kubectl get pods -l app=alpine-3 -n ns-kernel2vlan-multins-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
-Check the MTU adjustment for the NSC pods from second k8s namespace::
+Check the MTU adjustment for the NSC pods from second k8s namespace:
 
 ```bash
 status=0
@@ -261,13 +261,13 @@ if test ${status} -eq 1
 fi
 ```
 
-Get the NSC pods from nsm-system k8s namespace:
+Get the NSC pods from the third k8s namespace:
 
 ```bash
 NSCS=($(kubectl get pods -l app=alpine-4 -n ns-kernel2vlan-multins-3 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
-Check the MTU adjustment for the NSC pods from nsm-system k8s namespace::
+Check the MTU adjustment for the NSC pods from the third k8s namespace:
 
 ```bash
 status=0
@@ -292,7 +292,7 @@ if test ${status} -ne 0
 fi
 ```
 
-Get the IP addresses for NSCs from first k8s namespace:
+Get the IP addresses for NSCs from the third k8s namespace:
 
 ```bash
 declare -A IP_ADDR
@@ -338,12 +338,6 @@ docker image rm rvm-tester:latest
 true
 ```
 
-Delete the last client:
-
-```bash
-kubectl delete ns ns-kernel2vlan-multins-3
-```
-
 Delete the test namespace:
 
 ```bash
@@ -352,4 +346,8 @@ kubectl delete ns ns-kernel2vlan-multins-1
 
 ```bash
 kubectl delete ns ns-kernel2vlan-multins-2
+```
+
+```bash
+kubectl delete ns ns-kernel2vlan-multins-3
 ```
