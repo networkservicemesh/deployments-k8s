@@ -264,7 +264,7 @@ fi
 Get the NSC pods from nsm-system k8s namespace:
 
 ```bash
-NSCS=($(kubectl get pods -l app=alpine-4 -nns-kernel2vlan-multins-3 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS=($(kubectl get pods -l app=alpine-4 -n ns-kernel2vlan-multins-3 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
 Check the MTU adjustment for the NSC pods from nsm-system k8s namespace::
