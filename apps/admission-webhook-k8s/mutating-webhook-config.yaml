@@ -25,6 +25,10 @@ webhooks:
       - kube-system
       - spire
       - nsm-system
+    - key: name
+      operator: NotIn
+      values:
+      - spire
   objectSelector: {}
   reinvocationPolicy: Never
   rules:
