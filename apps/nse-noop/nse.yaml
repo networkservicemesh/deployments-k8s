@@ -18,7 +18,7 @@ spec:
       hostNetwork: true
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:ef628cc
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vfio:016cddf
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
