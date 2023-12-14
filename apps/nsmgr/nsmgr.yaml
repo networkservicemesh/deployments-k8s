@@ -31,7 +31,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
             - name: NSM_REGISTRY_URL
               value: "registry:5002"
             #            - name: DLV_LISTEN_NSMGR
@@ -86,7 +86,7 @@ spec:
           name: exclude-prefixes
           env:
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
           volumeMounts:
             - name: exclude-prefixes-volume
               mountPath: /var/lib/networkservicemesh/config/
