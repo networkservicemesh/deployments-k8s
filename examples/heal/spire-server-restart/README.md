@@ -57,20 +57,6 @@ Ping from NSE to NSC:
 kubectl exec deployments/nse-kernel -n ns-spire-server-restart -- ping -c 4 172.16.1.101
 ```
 
-Find SPIRE Agents:
-```bash
-AGENTS=$(kubectl get pods -l app=spire-agent -n spire --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}')
-```
-
-Back to initial state, restart SPIRE agents and wait for them to start:
-```bash
-kubectl delete pod $AGENTS -n spire
-```
-
-```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire
-```
-
 ## Cleanup
 
 Delete ns:
