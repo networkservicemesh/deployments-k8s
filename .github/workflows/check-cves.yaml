@@ -2,8 +2,8 @@
 name: Check CVEs
 on:
   schedule:
-    # At 00:00 on Sunday
-    - cron: '0 0 * * 0'
+    # At 00:00
+    - cron: '0 0 * * *'
 
 env:
   GH_TOKEN: ${{ github.token }}
