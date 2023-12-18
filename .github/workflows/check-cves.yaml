@@ -1,9 +1,6 @@
 ---
 name: Check CVEs
 on:
-  push:
-    branches:
-      - main
   schedule:
     # At 00:00 on Sunday
     - cron: '0 0 * * 0'
@@ -55,11 +52,11 @@ jobs:
             grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*:.*" | while read -r image ; do
               filename=$(echo $image | awk -F/ '{print $NF}' | awk -F: '{print $1F}')
               docker scout cves $image --format sarif --output cves/$filename.json
-              
+
               # set the location of the CVE
               echo $(jq --arg img "$image" '.runs.[].results.[].locations.[].physicalLocation.artifactLocation.uri = $img' \
               cves/$filename.json) > cves/$filename.json
-              
+
               # clear all other locations (they are useless anyway)
               echo $(jq '.runs[0].results.[].locations |= [.[0]]' cves/$filename.json) > cves/$filename.json
             done
