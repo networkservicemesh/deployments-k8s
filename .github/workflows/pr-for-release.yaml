@@ -26,7 +26,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: pull-request-action
-        uses: vsoch/pull-request-action@1.0.12
+        uses: vsoch/pull-request-action@1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
           BRANCH_PREFIX: "release/"

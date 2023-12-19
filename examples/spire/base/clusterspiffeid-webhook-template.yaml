@@ -1,0 +1,11 @@
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: nsm-workloads-webhook
+spec:
+  spiffeIDTemplate: "spiffe://{{.TrustDomain}}/ns/{{.PodMeta.Namespace}}/pod/{{.PodMeta.Name}}"
+  dnsNameTemplates: ["{{index .PodMeta.Labels \"spiffe.io/spiffe-dns-webhook\"}}.{{.PodMeta.Namespace}}", "{{index .PodMeta.Labels \"spiffe.io/spiffe-dns-webhook\"}}.{{.PodMeta.Namespace}}.svc"]
+  podSelector:
+    matchLabels:
+      app: admission-webhook-k8s

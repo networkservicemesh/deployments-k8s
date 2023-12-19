@@ -10,21 +10,21 @@ Make sure that you have completed steps from [remotevlan_ovs](../../remotevlan_o
 
 ## Run
 
-Deployment in first namespace
+Deployment in first namespace:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=e420c8c572eee763dfb1af42e3703eb48d337760
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=988b5a85aac087cd495941abb4ecc05988af71cd
 ```
 
 Deployment in second namespace:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e420c8c572eee763dfb1af42e3703eb48d337760/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e420c8c572eee763dfb1af42e3703eb48d337760/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=e420c8c572eee763dfb1af42e3703eb48d337760
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/988b5a85aac087cd495941abb4ecc05988af71cd/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/988b5a85aac087cd495941abb4ecc05988af71cd/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=988b5a85aac087cd495941abb4ecc05988af71cd
 ```
 
-Deploy the last client
+Deployment in third namespace:
 ```bash
-kubectl apply -n nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e420c8c572eee763dfb1af42e3703eb48d337760/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-3?ref=988b5a85aac087cd495941abb4ecc05988af71cd
 ```
 
 Wait for applications ready:
@@ -50,7 +50,7 @@ kubectl -n ns-kernel2vlan-multins-2 wait --for=condition=ready --timeout=1m pod 
 ```
 
 ```bash
-kubectl -n nsm-system wait --for=condition=ready --timeout=1m pod -l app=alpine-4
+kubectl -n ns-kernel2vlan-multins-3 wait --for=condition=ready --timeout=1m pod -l app=alpine-4
 ```
 
 Create a docker image for test external connections:
@@ -155,7 +155,7 @@ NSCS_BLUE=($(kubectl get pods -l app=alpine-2 -n ns-kernel2vlan-multins-2 --temp
 NSCS_GREEN=($(kubectl get pods -l app=alpine-3 -n ns-kernel2vlan-multins-2 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
-Check the MTU adjustment for the NSC pods from second k8s namespace::
+Check the MTU adjustment for the NSC pods from second k8s namespace:
 
 ```bash
 status=0
@@ -261,19 +261,19 @@ if test ${status} -eq 1
 fi
 ```
 
-Get the NSC pods from nsm-system k8s namespace:
+Get the NSC pods from the third k8s namespace:
 
 ```bash
-NSCS=($(kubectl get pods -l app=alpine-4 -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
+NSCS=($(kubectl get pods -l app=alpine-4 -n ns-kernel2vlan-multins-3 --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
-Check the MTU adjustment for the NSC pods from nsm-system k8s namespace::
+Check the MTU adjustment for the NSC pods from the third k8s namespace:
 
 ```bash
 status=0
 for nsc in "${NSCS[@]}"
 do
-  MTU=$(kubectl exec ${nsc} -c cmd-nsc -n nsm-system -- cat /sys/class/net/nsm-1/mtu)
+  MTU=$(kubectl exec ${nsc} -c cmd-nsc -n ns-kernel2vlan-multins-3 -- cat /sys/class/net/nsm-1/mtu)
 
   echo "$LINK_MTU vs $MTU"
 
@@ -292,13 +292,13 @@ if test ${status} -ne 0
 fi
 ```
 
-Get the IP addresses for NSCs from first k8s namespace:
+Get the IP addresses for NSCs from the third k8s namespace:
 
 ```bash
 declare -A IP_ADDR
 for nsc in "${NSCS[@]}"
 do
-  IP_ADDR[$nsc]=$(kubectl exec ${nsc} -n nsm-system -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+  IP_ADDR[$nsc]=$(kubectl exec ${nsc} -n ns-kernel2vlan-multins-3 -c alpine -- ip -4 addr show nsm-1 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 done
 ```
 
@@ -338,12 +338,6 @@ docker image rm rvm-tester:latest
 true
 ```
 
-Delete the last client:
-
-```bash
-kubectl delete --namespace=nsm-system -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/e420c8c572eee763dfb1af42e3703eb48d337760/examples/use-cases/Kernel2RVlanMultiNS/client.yaml
-```
-
 Delete the test namespace:
 
 ```bash
@@ -352,4 +346,8 @@ kubectl delete ns ns-kernel2vlan-multins-1
 
 ```bash
 kubectl delete ns ns-kernel2vlan-multins-2
+```
+
+```bash
+kubectl delete ns ns-kernel2vlan-multins-3
 ```

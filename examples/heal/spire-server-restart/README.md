@@ -18,7 +18,7 @@ kubectl create ns ns-spire-server-restart
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-server-restart?ref=e420c8c572eee763dfb1af42e3703eb48d337760
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-server-restart?ref=988b5a85aac087cd495941abb4ecc05988af71cd
 ```
 
 Wait for applications ready:
@@ -55,20 +55,6 @@ kubectl exec pods/alpine -n ns-spire-server-restart -- ping -c 4 172.16.1.100
 Ping from NSE to NSC:
 ```bash
 kubectl exec deployments/nse-kernel -n ns-spire-server-restart -- ping -c 4 172.16.1.101
-```
-
-Find SPIRE Agents:
-```bash
-AGENTS=$(kubectl get pods -l app=spire-agent -n spire --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}')
-```
-
-Back to initial state, restart SPIRE agents and wait for them to start:
-```bash
-kubectl delete pod $AGENTS -n spire
-```
-
-```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire
 ```
 
 ## Cleanup

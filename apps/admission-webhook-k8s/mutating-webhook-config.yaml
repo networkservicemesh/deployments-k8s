@@ -1,0 +1,56 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: nsm-mutating-webhook
+  labels:
+    spiffe.io/webhook: "true"
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: admission-webhook-svc
+      namespace: nsm-system
+      path: /mutate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Equivalent
+  name: nsm-mutating-webhook.networkservicemesh.io
+  namespaceSelector:
+    matchExpressions:
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - kube-system
+      - spire
+      - nsm-system
+  objectSelector: {}
+  reinvocationPolicy: Never
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+    scope: '*'
+  - apiGroups:
+    - apps
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - deployments
+    - statefulsets
+    - daemonsets
+    - replicasets
+    - namespaces
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 10

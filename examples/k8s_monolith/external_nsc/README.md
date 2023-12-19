@@ -22,7 +22,7 @@ NSC requests the service and creates the required interface on the monolith:
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=e420c8c572eee763dfb1af42e3703eb48d337760
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=988b5a85aac087cd495941abb4ecc05988af71cd
 ```
 
 Wait for registry service exposing:
@@ -34,7 +34,6 @@ kubectl get services registry -n nsm-system -o go-template='{{index (index (inde
 
 To free resources follow the next command:
 ```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl delete mutatingwebhookconfiguration ${WH}
+kubectl delete mutatingwebhookconfiguration nsm-mutating-webhook
 kubectl delete ns nsm-system
 ```
