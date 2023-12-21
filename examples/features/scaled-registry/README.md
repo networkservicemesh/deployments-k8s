@@ -51,7 +51,8 @@ kubectl scale --replicas=0 deployments/nse-kernel -n ns-scaled-registry
 
 Check there is no any NSEs in `etcd` after NSE unregisters itself through the new registries
 ```bash
-kubectl get nses -A | grep -v nse-kernel
+kubectl get nses -A | grep nse-kernel
+if [[ "$?" == "1" ]]; then echo OK; else echo "nse entry still exists"; false; fi
 ```
 
 ## Cleanup
@@ -59,4 +60,9 @@ kubectl get nses -A | grep -v nse-kernel
 Delete ns:
 ```bash
 kubectl delete ns ns-scaled-registry
+```
+
+Scale registry-k8s back to 1 replica
+```bash
+kubectl scale --replicas=1 deployments/registry-k8s -n nsm-system
 ```
