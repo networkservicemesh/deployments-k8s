@@ -45,14 +45,24 @@ jobs:
               echo $(jq '.runs[0].results.[].locations |= [.[0]]' cves/$filename.json) > cves/$filename.json
             done
 
-            # merge all files with CVEs
+            # collect all CVEs files
             files=""
             for file in cves/*; do
               files="${files} $file"
             done
+            
             jq '.runs.[].results += [inputs.runs.[].results.[]]' $files > temp.json
-            jq '.runs.[].tool.driver.rules += [inputs.runs.[].tool.driver.rules.[]] | .runs.[].tool.driver.rules |= unique_by(.id)' temp.json $files > results.json
+            jq '.runs.[].tool.driver.rules += [inputs.runs.[].tool.driver.rules.[]]' temp.json $files > merged.json
+            jq '.runs.[].tool.driver.rules |= unique_by(.id)' merged.json > unique.json
 
+            jq '.runs.[].results | group_by(.ruleId)' unique.json > group_by.json
+
+            jq 'map(.[0].message.text =
+              reduce .[] as $cve (""; . += $cve.locations[0].physicalLocation.artifactLocation.uri + "\n") + 
+              .[0].message.text) | [.[][0]]' group_by.json > reduced.json
+            
+            jq '.runs.[].results = input' unique.json reduced.json > results.json
+            jq 'reduce .runs.[].results.[] as $cve ({}; .[$cve.ruleId] += 1) ' results.json > count.json
       - name: Upload CVEs
         uses: github/codeql-action/upload-sarif@v2
         with:
