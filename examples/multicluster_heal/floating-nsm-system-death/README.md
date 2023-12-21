@@ -18,14 +18,14 @@ Make sure that you have completed steps from [multicluster_heal](../)
 
 Deploy NS:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-nsm-system-death/cluster3?ref=78e3e2a4e37c4ee9ac2cc657bf58994c162e2020
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-nsm-system-death/cluster3?ref=868a331e50685bba11e664185ce2d2627bd799ec
 ```
 
 **2. Deploy endpoint on cluster2**
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-nsm-system-death/cluster2?ref=78e3e2a4e37c4ee9ac2cc657bf58994c162e2020
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-nsm-system-death/cluster2?ref=868a331e50685bba11e664185ce2d2627bd799ec
 ```
 
 Wait for applications ready:
@@ -37,7 +37,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-nsm-system-death/cluster1?ref=78e3e2a4e37c4ee9ac2cc657bf58994c162e2020
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-nsm-system-death/cluster1?ref=868a331e50685bba11e664185ce2d2627bd799ec
 ```
 
 Wait for applications ready:
@@ -76,15 +76,15 @@ kubectl --kubeconfig=$KUBECONFIG3 delete ns nsm-system
 **6. Create new NSM components**
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=78e3e2a4e37c4ee9ac2cc657bf58994c162e2020
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster1?ref=868a331e50685bba11e664185ce2d2627bd799ec
 ```
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=78e3e2a4e37c4ee9ac2cc657bf58994c162e2020
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster2?ref=868a331e50685bba11e664185ce2d2627bd799ec
 ```
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=78e3e2a4e37c4ee9ac2cc657bf58994c162e2020
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster/clusters-configuration/cluster3?ref=868a331e50685bba11e664185ce2d2627bd799ec
 ```
 
 **7. Wait until new NSM components are ready**
