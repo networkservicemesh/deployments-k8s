@@ -19,9 +19,14 @@ Wait for NSE to be ready:
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-scaled-registry
 ```
 
+Find NSE pod by label:
+```bash
+NSE=$(kubectl get pod -n ns-scaled-registry --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=nse-kernel)
+```
+
 Check registered NSE in `etcd`
 ```bash
-kubectl get nses -A | grep nse-kernel
+kubectl get nses -A | grep $NSE
 ```
 
 Delete current instance of registry-k8s
@@ -31,7 +36,7 @@ kubectl scale --replicas=0 deployments/registry-k8s -n nsm-system
 
 Check registered NSE in `etcd` after registry-k8s instance deletion
 ```bash
-kubectl get nses -A | grep nse-kernel
+kubectl get nses -A | grep $NSE
 ```
 
 Deploy two new instances of registry-k8s
@@ -51,7 +56,7 @@ kubectl scale --replicas=0 deployments/nse-kernel -n ns-scaled-registry
 
 Check there is no any NSEs in `etcd` after NSE unregisters itself through the new registries
 ```bash
-kubectl get nses -A | grep nse-kernel
+kubectl get nses -A | grep $NSE
 if [[ "$?" == "1" ]]; then echo OK; else echo "nse entry still exists"; false; fi
 ```
 
