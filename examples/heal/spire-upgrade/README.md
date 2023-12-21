@@ -53,7 +53,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 ```
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-server -n spire
+kubectl wait --for=condition=ready --timeout=3m pod -l app=spire-server -n spire
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire

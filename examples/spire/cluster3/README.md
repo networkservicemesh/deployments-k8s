@@ -19,7 +19,7 @@ kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh
 
 Wait for PODs status ready:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-server
+kubectl --kubeconfig=$KUBECONFIG3 wait -n spire --timeout=3m --for=condition=ready pod -l app=spire-server
 ```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG3 wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
