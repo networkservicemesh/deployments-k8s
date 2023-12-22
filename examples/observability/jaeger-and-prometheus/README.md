@@ -16,7 +16,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=open
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/nsm-system?ref=75dc414337f93fb4512e93976289743815add297
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/nsm-system?ref=75dc414337f93fb4512e93976289743815add297
 ```
 
 Wait for admission-webhook-k8s:

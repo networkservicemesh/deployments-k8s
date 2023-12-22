@@ -8,14 +8,14 @@ The dashboard consists of two parts:
 
 ## Requires
 
-- [Basic NSM setup](../../basic/)
+- [Basic NSM setup](../nsm-system/)
 
 ## Run
 
 To run the dashboard in the cluster, execute the command:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/dashboard
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/dashboard?ref=75dc414337f93fb4512e93976289743815add297
 ```
 
 Wait for the dashboard pod to start:
