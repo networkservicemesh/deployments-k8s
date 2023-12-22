@@ -17,6 +17,8 @@ spec:
     env:
       - name: SPIFFE_ENDPOINT_SOCKET
         value: unix:///run/spire/sockets/agent.sock
+      - name: NSM_REGISTRY_URL
+        value: "registry:5002"
     volumeMounts:
       - name: spire-agent-socket
         mountPath: /run/spire/sockets
