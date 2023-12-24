@@ -4,8 +4,6 @@ on:
   schedule:
     # At 00:00
     - cron: '0 0 * * *'
-  push:
-    branches: [main]
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -56,17 +54,17 @@ jobs:
             jq '.runs[].results += [inputs.runs[].results.[]]' $files > temp.json
             jq '.runs[].tool.driver.rules += [inputs.runs[].tool.driver.rules[]]' temp.json $files > merged.json
             jq '.runs[].tool.driver.rules |= unique_by(.id)' merged.json > unique.json
-
             jq '.runs[].results | group_by(.ruleId)' unique.json > group_by.json
 
             jq 'map(.[0].message.text =
               reduce .[] as $cve (""; . += $cve.locations[0].physicalLocation.artifactLocation.uri + "\n") + 
               .[0].message.text) | [.[][0]]' group_by.json > reduced.json
-            
+
             jq '.runs[].results = input' unique.json reduced.json > final.json
             jq 'reduce .runs[].results[] as $cve ({}; .[$cve.ruleId] += 1) ' final.json > count.json
             jq --arg sha ${GITHUB_SHA} '.runs[].results[].locations[].physicalLocation.artifactLocation.uri 
-              = "deployments-k8s:" + $sha' final.json > results.json
+              = "github.com/networkservicemesh/deployments-k8s:" + $sha' final.json > results.json
+
       - name: Upload CVEs
         uses: github/codeql-action/upload-sarif@v2
         with:
