@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: nsm-system
 
 resources:
-  - ../../../basic
+  - ../../basic
 
 patchesStrategicMerge:
   - patch-nsmgr.yaml
