@@ -8,7 +8,7 @@ The dashboard consists of two parts:
 
 ## Requires
 
-- [Basic NSM setup](../nsm-system/)
+- [Basic NSM setup](../../basic/)
 
 ## Run
 
@@ -21,7 +21,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/dash
 Wait for the dashboard pod to start:
 
 ```bash
-kubectl wait --for=condition=ready pod -l app=dashboard --timeout=300s -n nsm-system
+kubectl wait --for=condition=ready pod -l app=dashboard --timeout=5m -n nsm-system
 ```
 
 Port-forward dashboard-backend REST-API:
