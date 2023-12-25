@@ -7,7 +7,7 @@ This example shows vl3-network recovery after one of the vl3-nse death.
 
 Deploy nsc and vl3 nses:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=ed87638e2f3bde5faea3349b2074fe6bae0e4a3c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-nse-death?ref=c9b507d2627c89a8d00780dc4226f6f42f4c10d5
 ```
 
 Wait for clients to be ready:
