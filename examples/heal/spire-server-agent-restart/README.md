@@ -50,7 +50,7 @@ kubectl delete pod spire-server-0 -n spire
 ```
 
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-server -n spire
+kubectl wait --for=condition=ready --timeout=3m pod -l app=spire-server -n spire
 ```
 
 Restart SPIRE agents and wait for them to start:
