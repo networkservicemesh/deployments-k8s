@@ -9,7 +9,7 @@ allowing the best performance for connectivity.
 
 Deploy NSC and supplier:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-scale-from-zero?ref=cdb0215386fe83f9ca040bcb5bc84cde380c97d2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-scale-from-zero?ref=cf89b40eda56e516a496acd8c1b091305cda3474
 ```
 
 Wait for applications ready:
