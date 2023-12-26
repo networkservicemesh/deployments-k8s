@@ -1,0 +1,12 @@
+---
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: my-network-service
+spec:
+  payload: ETHERNET
+  matches:
+    - source_selector:
+      routes:
+        - destination_selector:
+            color: Green

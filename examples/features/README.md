@@ -33,3 +33,5 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - [Inject clients in namespace via NSM annotation](./annotated-namespace)
 - [NSC connects to multiple services](./multiple-services)
 - [Scaled Registry K8s](./scaled-registry)
+- [NSC changes endpoints dynamically](./change-nse-dynamically)
+
