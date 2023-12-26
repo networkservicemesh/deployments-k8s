@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:e432c77
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:75f6b17
           imagePullPolicy: IfNotPresent
           env:
             - name: NSM_CIDR_PREFIX
