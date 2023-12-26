@@ -46,12 +46,12 @@ kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployment
 
 Ping from NSC to the green NSE:
 ```bash
-kubectl exec pods/alpine -n ns-change-nse-dynamically-- ping -c 4 172.16.1.100
+kubectl exec pods/alpine -n ns-change-nse-dynamically -- ping -c 4 172.16.1.100
 ```
 
 Ping from the green NSE to NSC:
 ```bash
-kubectl exec pods/green-nse -n ns-change-nse-dynamically-- ping -c 4 172.16.1.101
+kubectl exec pods/green-nse -n ns-change-nse-dynamically -- ping -c 4 172.16.1.101
 ```
 
 Change network service to select blue endpoint:
@@ -74,5 +74,5 @@ kubectl exec pods/blue-nse -n ns-change-nse-dynamically -- ping -c 4 172.16.2.10
 
 Delete ns:
 ```bash
-kubectl delete ns ns-multiple-services
+kubectl delete ns ns-change-nse-dynamically
 ```
