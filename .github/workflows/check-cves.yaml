@@ -2,20 +2,27 @@
 name: Check CVEs
 on:
   schedule:
-    # At 00:00 on Sunday
+    # At 00:00
     - cron: '0 0 * * *'
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
 jobs:
   check-images:
     name: Check & Upload CVEs
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out the code
         uses: actions/checkout@v4
-      - name: "Setup jq"
+
+      - name: Setup jq
         uses: dcarbone/install-jq-action@v2.1.0
         with:
           version: '1.7'
           force: true
+
       - name: Check CVEs
         run: |
             # login
@@ -28,15 +35,36 @@ jobs:
             mkdir cves
             grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*:.*" | while read -r image ; do
               filename=$(echo $image | awk -F/ '{print $NF}' | awk -F: '{print $1F}')
-              docker scout cves $image --format sarif --output cves/$filename.sarif
+              docker scout cves $image --format sarif --output cves/$filename.json
+
+              # set the location of the CVE
+              echo $(jq --arg img "$image" '.runs.[].results.[].locations.[].physicalLocation.artifactLocation.uri = $img' \
+              cves/$filename.json) > cves/$filename.json
+
+              # clear all other locations (they are useless anyway)
+              echo $(jq '.runs[0].results.[].locations |= [.[0]]' cves/$filename.json) > cves/$filename.json
             done
 
-            # merge all files with CVEs
+            # collect all CVEs files
             files=""
             for file in cves/*; do
               files="${files} $file"
             done
-            jq '.runs[0].results += [inputs.runs[0].results.[]] | .runs[0].results |= unique_by(.ruleId)' $files > results.json
+
+            jq '.runs[].results += [inputs.runs[].results.[]]' $files > temp.json
+            jq '.runs[].tool.driver.rules += [inputs.runs[].tool.driver.rules[]]' temp.json $files > merged.json
+            jq '.runs[].tool.driver.rules |= unique_by(.id)' merged.json > unique.json
+            jq '.runs[].results | group_by(.ruleId)' unique.json > group_by.json
+
+            jq 'map(.[0].message.text =
+              reduce .[] as $cve (""; . += $cve.locations[0].physicalLocation.artifactLocation.uri + "\n") +
+              .[0].message.text) | [.[][0]]' group_by.json > reduced.json
+
+            jq '.runs[].results = input' unique.json reduced.json > final.json
+            jq 'reduce .runs[].results[] as $cve ({}; .[$cve.ruleId] += 1) ' final.json > count.json
+            jq --arg sha ${GITHUB_SHA} '.runs[].results[].locations[].physicalLocation.artifactLocation.uri
+              = "github.com/networkservicemesh/deployments-k8s:" + $sha' final.json > results.json
+
       - name: Upload CVEs
         uses: github/codeql-action/upload-sarif@v2
         with:

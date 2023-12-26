@@ -3,10 +3,14 @@
 This example demonstrates how to setup Open Telemetry Collector with Jaeger and Prometheus to gather telemetry data from NSM components.
 [OpenTelemetry](https://opentelemetry.io/) is a collection of tools, APIs, and SDKs. It is used to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) to help you analyze your software’s performance and behavior.
 
+## Requires
+
+- [Basic NSM setup](../nsm_system/)
+
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus?ref=c2be7fdd14c49c0ad93ac42ceab365f56c220e74
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger_and_prometheus?ref=0a4a13ccc33c8dbc29dda9eadd6afb5a187c9644
 ```
 
 Wait for OpenTelemetry Collector POD status ready:
@@ -14,20 +18,9 @@ Wait for OpenTelemetry Collector POD status ready:
 kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=opentelemetry
 ```
 
-Apply NSM resources for basic tests:
-```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/nsm-system?ref=c2be7fdd14c49c0ad93ac42ceab365f56c220e74
-```
-
-Wait for admission-webhook-k8s:
-```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
-```
-
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger-and-prometheus/example?ref=c2be7fdd14c49c0ad93ac42ceab365f56c220e74
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger_and_prometheus/example?ref=0a4a13ccc33c8dbc29dda9eadd6afb5a187c9644
 ```
 
 Wait for applications ready:
@@ -84,11 +77,6 @@ echo ${result} | grep -q "forwarder"
 Delete ns:
 ```bash
 kubectl delete ns ns-jaeger-and-prometheus
-```
-
-```bash
-kubectl delete mutatingwebhookconfiguration nsm-mutating-webhook
-kubectl delete ns nsm-system
 ```
 
 ```bash
