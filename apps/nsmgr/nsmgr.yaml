@@ -81,7 +81,7 @@ spec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///var/lib/networkservicemesh/nsm.io.sock"]
             failureThreshold: 25
             periodSeconds: 5
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:e0fb1e9
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:3d53748
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:
