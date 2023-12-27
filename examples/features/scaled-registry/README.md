@@ -34,6 +34,11 @@ Delete current instance of registry-k8s
 kubectl scale --replicas=0 deployments/registry-k8s -n nsm-system
 ```
 
+Wait for registry-k8s to be deleted
+```bash
+kubectl wait --for=delete --timeout=1m pod -l app=registry -n nsm-system
+```
+
 Check registered NSE in `etcd` after registry-k8s instance deletion
 ```bash
 kubectl get nses -A | grep $NSE
