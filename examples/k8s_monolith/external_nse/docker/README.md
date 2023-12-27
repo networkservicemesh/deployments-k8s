@@ -35,6 +35,10 @@ docker compose -f docker-compose.yaml -f docker-compose.override.yaml up -d
 ## Cleanup
 
 ```bash
+docker logs nse-simple-vl3-docker
+```
+
+```bash
 docker compose -f docker-compose.yaml -f docker-compose.override.yaml down
 ```
 ```bash
