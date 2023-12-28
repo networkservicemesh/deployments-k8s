@@ -8,11 +8,10 @@ Make sure that you have completed steps from [basic](../../basic) or [ipsec mech
 
 ## Run
 
-Deploy NSC and and two NSEs:
+Deploy NSC and two NSEs:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/change-nse-dynamically?ref=c87becb62b83b96d0279cac976b615b7c3aff853
 ```
-
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c87becb62b83b96d0279cac976b615b7c3aff853/examples/features/change-nse-dynamically/blue-netsvc.yaml
@@ -58,7 +57,6 @@ Change network service to select blue endpoint:
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c87becb62b83b96d0279cac976b615b7c3aff853/examples/features/change-nse-dynamically/blue-netsvc.yaml
 ```
-
 
 Ping from NSC to the blue NSE:
 ```bash
