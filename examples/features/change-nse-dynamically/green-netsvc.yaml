@@ -3,6 +3,7 @@ apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
   name: my-network-service
+  namespace: ns-change-nse-dynamically
 spec:
   payload: ETHERNET
   matches:
