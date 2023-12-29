@@ -1,0 +1,49 @@
+---
+name: Check failed auto-pull-request workflows
+on:
+  schedule:
+    # At 00:00 every day
+    - cron: '0 0 * * *'
+jobs:
+  fetch-cmd-repositories:
+    name: Fetch organization repositories
+    runs-on: ubuntu-latest
+    outputs:
+      repositories: ${{ steps.organization-repositories.outputs.repositories }}
+    steps:
+      - name: Run `get-organization-repositories`
+        id: organization-repositories
+        uses: denis-tingajkin/get-organization-repositories@v1.0.1
+        with:
+          github-organization: 'networkservicemesh'
+          regex: 'cmd-.*'
+  check-failed-workflows:
+    strategy:
+      matrix:
+        repository: ${{ fromJSON(needs.fetch-repositories.outputs.repositories) }}
+    needs: fetch-repositories
+    name: Check failed auto-pull-request workflows
+    runs-on: ubuntu-latest
+    if: github.repository != 'networkservicemesh/cmd-template'
+    steps:
+      - name: Check Failed Workflows
+        run: |
+          repo="deployments-k8s"
+          owner="networkservicemesh"
+
+          runs=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/$owner/$repo/actions/runs?branch=update/$owner/${{ matrix.repository }})
+
+          lastRun=$(echo $runs | jq '[.workflow_runs | .[] | select(.name=="Pull Request on update/* Branch Push")][0]')
+          lastRunConclusion=$(echo $lastRun | jq -r '.conclusion')
+          lastRunStatus=$(echo $lastRun | jq -r '.status')
+
+          echo Conclusion for ${{ matrix.repository }} is $lastRunConclusion
+          if [ "$lastRunConclusion" == "failure" ] && [ "$lastRunStatus" == "completed" ]; then
+            runID=$(echo $lastRun | jq -r '.id')
+            gh run rerun $runID --repo $owner/$repo
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
