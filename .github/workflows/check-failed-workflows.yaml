@@ -38,9 +38,10 @@ jobs:
 
           lastRun=$(echo $runs | jq '[.workflow_runs | .[] | select(.name=="Pull Request on update/* Branch Push")][0]')
           lastRunConclusion=$(echo $lastRun | jq -r '.conclusion')
+          lastRunStatus=$(echo $lastRun | jq -r '.status')
 
           echo Conclusion for ${{ matrix.repository }} is $lastRunConclusion
-          if [ "$lastRunConclusion" != "success" ]; then
+          if [ "$lastRunConclusion" == "failure" ] && [ "$lastRunStatus" == "completed" ]; then
             runID=$(echo $lastRun | jq -r '.id')
             gh run rerun $runID --repo $owner/$repo
           fi
