@@ -23,7 +23,7 @@ spec:
             - name: NSM_LISTEN_ON
               value: tcp://:5005
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
           imagePullPolicy: IfNotPresent
           name: registry
           ports:
