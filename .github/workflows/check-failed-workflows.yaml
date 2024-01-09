@@ -20,8 +20,8 @@ jobs:
   check-failed-workflows:
     strategy:
       matrix:
-        repository: ${{ fromJSON(needs.fetch-repositories.outputs.repositories) }}
-    needs: fetch-repositories
+        repository: ${{ fromJSON(needs.fetch-cmd-repositories.outputs.repositories) }}
+    needs: fetch-cmd-repositories
     name: Check failed auto-pull-request workflows
     runs-on: ubuntu-latest
     if: github.repository != 'networkservicemesh/cmd-template'
