@@ -1,5 +1,5 @@
 ---
-name: Check failed auto-pull-request workflows
+name: Check failed workflows and pull requests
 on:
   schedule:
     # At 00:00 every day
@@ -22,7 +22,7 @@ jobs:
       matrix:
         repository: ${{ fromJSON(needs.fetch-cmd-repositories.outputs.repositories) }}
     needs: fetch-cmd-repositories
-    name: Check failed auto-pull-request workflows
+    name: Check failed update workflows and pull requests
     runs-on: ubuntu-latest
     if: github.repository != 'networkservicemesh/cmd-template'
     steps:
@@ -30,6 +30,30 @@ jobs:
         run: |
           repo="deployments-k8s"
           owner="networkservicemesh"
+
+          pulls=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/$owner/$repo/pulls?head=$owner:update/$owner/${{ matrix.repository }})
+
+          lastPR=$(echo $pulls | jq '.[0]')
+          prNumber=$(echo $lastPR | jq '.number')
+
+          if [ "$prNumber" != "null" ]; then
+            gh api \
+              --method PUT \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/$owner/$repo/pulls/$pr_number/merge
+
+            if [ $? -eq 0 ]; then
+              echo "Successfully merged PR $prNumber"
+              exit 0
+            else
+              echo "Failed to merge PR $prNumber"
+              exit 1
+            fi
+          fi
 
           runs=$(gh api \
           -H "Accept: application/vnd.github+json" \
@@ -45,5 +69,6 @@ jobs:
             runID=$(echo $lastRun | jq -r '.id')
             gh run rerun $runID --repo $owner/$repo
           fi
+   
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
