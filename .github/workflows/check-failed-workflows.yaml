@@ -36,8 +36,7 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/$owner/$repo/pulls?head=$owner:update/$owner/${{ matrix.repository }})
 
-          lastPR=$(echo $pulls | jq '.[0]')
-          prNumber=$(echo $lastPR | jq '.number')
+          prNumber=$(echo $pulls | jq '[.[] | select(.user.login == "nsmbot")][0] | .number')
 
           if [ "$prNumber" != "null" ]; then
             gh api \
