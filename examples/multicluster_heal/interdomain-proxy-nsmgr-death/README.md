@@ -18,7 +18,7 @@ Make sure that you have completed steps from [multicluster_heal](../)
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/interdomain-proxy-nsmgr-death/cluster2?ref=da1aab20f74a310969395efeb8d0978002842bc2
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/interdomain-proxy-nsmgr-death/cluster2?ref=21c4efad2c85519b75a32dac6f856b4075f90271
 ```
 
 Wait for applications ready:
@@ -30,7 +30,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/interdomain-proxy-nsmgr-death/cluster1?ref=da1aab20f74a310969395efeb8d0978002842bc2
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/interdomain-proxy-nsmgr-death/cluster1?ref=21c4efad2c85519b75a32dac6f856b4075f90271
 ```
 
 Wait for applications ready:
