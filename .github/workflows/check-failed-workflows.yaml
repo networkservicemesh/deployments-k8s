@@ -22,7 +22,7 @@ jobs:
       matrix:
         repository: ${{ fromJSON(needs.fetch-cmd-repositories.outputs.repositories) }}
     needs: fetch-cmd-repositories
-    name: Check failed update workflows and pull requests
+    name: Check failed workflows and pull requests
     runs-on: ubuntu-latest
     if: github.repository != 'networkservicemesh/cmd-template'
     steps:
@@ -69,6 +69,5 @@ jobs:
             runID=$(echo $lastRun | jq -r '.id')
             gh run rerun $runID --repo $owner/$repo
           fi
-   
         env:
           GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
