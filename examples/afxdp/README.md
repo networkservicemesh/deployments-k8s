@@ -34,7 +34,7 @@ If the packet belongs to the NSM interface it forwards it to the VPP, otherwise 
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/afxdp?ref=1d70530a3f096f0f6132184f86f7428b3ba24ba9
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/afxdp?ref=b34df565bcf135bb0318b0bc467b79dd9a96fd1e
 ```
 
 Wait for admission-webhook-k8s:
