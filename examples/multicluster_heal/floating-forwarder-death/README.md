@@ -17,14 +17,14 @@ Make sure that you have completed steps from [multicluster_heal](../)
 
 Deploy NS:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-forwarder-death/cluster3?ref=c57d2340e13228e8e0081f6312095fc9963e9f66
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-forwarder-death/cluster3?ref=c1c0ddd4c605170d6b591954876ee60942f4a69f
 ```
 
 **2. Deploy endpoint on cluster2**
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-forwarder-death/cluster2?ref=c57d2340e13228e8e0081f6312095fc9963e9f66
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-forwarder-death/cluster2?ref=c1c0ddd4c605170d6b591954876ee60942f4a69f
 ```
 
 Wait for applications ready:
@@ -36,7 +36,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-forwarder-death/cluster1?ref=c57d2340e13228e8e0081f6312095fc9963e9f66
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multicluster_heal/floating-forwarder-death/cluster1?ref=c1c0ddd4c605170d6b591954876ee60942f4a69f
 ```
 
 Wait for applications ready:
