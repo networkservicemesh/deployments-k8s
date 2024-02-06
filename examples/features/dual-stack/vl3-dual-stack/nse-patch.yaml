@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-vl3-vpp
+  labels:
+    app: nse-vl3-vpp
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: nse
+          env:
+            - name: NSM_PREFIX_SERVER_URL
+              value: "vl3-ipam:5006,vl3-ipam-ipv6:5006"
+            - name: NSM_SERVICE_NAMES
+              value: "vl3-dual-stack"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
