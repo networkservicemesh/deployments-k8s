@@ -46,14 +46,14 @@ done
 ```
 
 Ping each vl3-nse by each client.
-Note: ipam prefix is `2001:db8::/64` and client prefix len is `112`. We also have two vl3 nses in this example. So we expect to have two vl3 addresses: `2001:db8::` and `2001:db8::1` that should be accessible by each client.
+Note: ipam prefix is `2001:db8::/64` and client prefix len is `112`. We also have two vl3 nses in this example. So we expect to have two vl3 addresses: `2001:db8::` and `2001:db8::1:0` that should be accessible by each client.
 ```bash
 (
 for nsc in $nscs
 do
     echo $nsc pings nses
     kubectl exec -n ns-vl3-ipv6 $nsc -- ping6 2001:db8:: -c2 -i 0.5 || exit
-    kubectl exec -n ns-vl3-ipv6 $nsc -- ping6 2001:db8::1 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-ipv6 $nsc -- ping6 2001:db8::1:0 -c2 -i 0.5 || exit
 done
 )
 ```
