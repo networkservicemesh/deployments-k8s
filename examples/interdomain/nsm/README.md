@@ -8,13 +8,13 @@ This example simply show how can be deployed and configured two NSM on different
 Create basic NSM deployment on cluster 1:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=6c9558609c79a180ad767c57f7cb46775a4bd0c9
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=c8a1856b7472dc6253a06955de1e67693c766460
 ```
 
 Create basic NSM deployment on cluster 2:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=6c9558609c79a180ad767c57f7cb46775a4bd0c9
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=c8a1856b7472dc6253a06955de1e67693c766460
 ```
 
 Wait for NSM admission webhook on cluster 1:
@@ -33,6 +33,6 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -n
 
 Cleanup NSM
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=6c9558609c79a180ad767c57f7cb46775a4bd0c9
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=6c9558609c79a180ad767c57f7cb46775a4bd0c9
+kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster1?ref=c8a1856b7472dc6253a06955de1e67693c766460
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/nsm/cluster2?ref=c8a1856b7472dc6253a06955de1e67693c766460
 ```
