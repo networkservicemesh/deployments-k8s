@@ -1,0 +1,10 @@
+---
+- op: replace
+  path: /metadata/name
+  value: vl3-ipam-ipv6
+- op: replace
+  path: /spec/selector/app
+  value: vl3-ipam-ipv6
+- op: replace
+  path: /spec/ports/0/name
+  value: vl3-ipam-ipv6

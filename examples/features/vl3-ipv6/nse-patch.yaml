@@ -12,6 +12,8 @@ spec:
       containers:
         - name: nse
           env:
+            - name: NSM_PREFIX_SERVER_URL
+              value: "vl3-ipam-ipv6:5006"
             - name: NSM_SERVICE_NAMES
               value: "vl3-ipv6"
             - name: NSM_REGISTER_SERVICE
