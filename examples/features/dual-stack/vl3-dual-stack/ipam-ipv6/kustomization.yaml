@@ -5,14 +5,10 @@ kind: Kustomization
 namespace: ns-vl3-dual-stack
 
 resources:
-- ns-vl3-dual-stack.yaml
-- netsvc.yaml
-- client.yaml
-- ../../../../apps/vl3-ipam
-- ../../../../apps/nse-vl3-vpp
+- ../../../../../apps/vl3-ipam
 
 patchesStrategicMerge:
-- nse-patch.yaml
+- ipam-patch.yaml
 
 patches:
  - target:

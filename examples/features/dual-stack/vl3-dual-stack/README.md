@@ -14,6 +14,7 @@ Diagram:
 Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/vl3-dual-stack?ref=2912ab705929a9ca7d1746399c3bf3d8e24f31cb
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/vl3-dual-stack/ipam-ipv6?ref=2912ab705929a9ca7d1746399c3bf3d8e24f31cb
 ```
 
 Wait for clients to be ready:
@@ -37,10 +38,12 @@ do
     ipv6Addr=$(echo $ipAddr | grep -Eo 'inet6 addr: 2001:.*' | cut -d ' ' -f 3 | cut -d '/' -f 1)
     for pinger in $nscs
     do
-        echo $pinger pings $ipv4Addr
-        kubectl exec $pinger -n ns-vl3-dual-stack -- ping -c2 -i 0.5 $ipv4Addr || exit
-        echo $pinger pings $ipv6Addr
-        kubectl exec $pinger -n ns-vl3-dual-stack -- ping6 -c2 -i 0.5 $ipv6Addr || exit
+        if [ "$nsc" != "$pinger" ]; then
+            echo $pinger pings $ipv4Addr
+            kubectl exec $pinger -n ns-vl3-dual-stack -- ping -c2 -i 0.5 $ipv4Addr || exit
+            echo $pinger pings $ipv6Addr
+            kubectl exec $pinger -n ns-vl3-dual-stack -- ping6 -c2 -i 0.5 $ipv6Addr || exit
+        fi
     done
 done
 )

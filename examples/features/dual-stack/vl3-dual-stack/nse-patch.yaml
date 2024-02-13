@@ -13,7 +13,7 @@ spec:
         - name: nse
           env:
             - name: NSM_PREFIX_SERVER_URL
-              value: "vl3-ipam:5006,vl3-ipam-ipv6:5006"
+              value: "vl3-ipam-ds-ipv4:5006,vl3-ipam-ds-ipv6:5006"
             - name: NSM_SERVICE_NAMES
               value: "vl3-dual-stack"
             - name: NSM_REGISTER_SERVICE
