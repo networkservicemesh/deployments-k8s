@@ -18,7 +18,7 @@ kubectl create ns ns-spire-server-restart
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-server-restart?ref=bf89a8a5005e7745e0160318d9162cdcb96732a0
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-server-restart?ref=2b942f7669c380579e58e30a6bd2ff060f3dc166
 ```
 
 Wait for applications ready:
