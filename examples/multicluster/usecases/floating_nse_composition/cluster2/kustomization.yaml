@@ -10,8 +10,8 @@ resources:
 - nse-passthrough-3
 - ns-interdomain-nse-composition.yaml
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml
 
 configMapGenerator:
   - name: nginx-config

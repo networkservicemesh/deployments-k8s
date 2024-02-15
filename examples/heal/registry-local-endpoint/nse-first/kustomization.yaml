@@ -8,5 +8,5 @@ resources:
 - ns-registry-local-endpoint.yaml
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
 - ../../../../apps/nse-supplier-k8s
 
-patchesStrategicMerge:
-- patch-supplier.yaml
+patches:
+- path: patch-supplier.yaml
 
 configMapGenerator:
   - name: supplier-pod-template-configmap

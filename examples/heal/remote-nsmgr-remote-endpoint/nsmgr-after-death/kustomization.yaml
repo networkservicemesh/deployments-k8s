@@ -7,5 +7,5 @@ namespace: ns-remote-nsmgr-remote-endpoint
 resources:
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

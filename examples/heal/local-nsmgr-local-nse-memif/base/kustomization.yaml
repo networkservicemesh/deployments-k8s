@@ -9,5 +9,5 @@ resources:
 - ../../../../apps/nsc-memif
 - ../../../../apps/nse-memif
 
-patchesStrategicMerge:
-- patch-nsc.yaml
+patches:
+- path: patch-nsc.yaml

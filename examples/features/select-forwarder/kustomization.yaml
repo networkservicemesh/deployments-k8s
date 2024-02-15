@@ -11,5 +11,5 @@ resources:
 - forwarder.yaml
 - ../../../apps/nse-kernel
 
-patchesStrategicMerge:
-- nse-patch.yaml
+patches:
+- path: nse-patch.yaml

@@ -8,10 +8,8 @@ resources:
 - nsm-system-namespace.yaml
 - ../../../../apps/registry-k8s
 
-patchesStrategicMerge:
-- patch-registry-k8s.yaml
-
 patches:
+ - path: patch-registry-k8s.yaml
  - target:
       version: v1
       kind: Service

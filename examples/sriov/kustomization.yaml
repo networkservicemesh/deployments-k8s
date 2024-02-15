@@ -10,5 +10,5 @@ resources:
   - ../../apps/forwarder-vpp
   - ../../apps/registry-k8s
 
-patchesStrategicMerge:
-  - forwarder-vpp.yaml
+patches:
+  - path: forwarder-vpp.yaml

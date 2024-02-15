@@ -46,8 +46,8 @@ kind: Kustomization
 resources:
 - control-plane.yaml
 
-patchesStrategicMerge:
-- https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/50c16720db5d2d75de3df3aae1b82c86cd85cf8e/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
+patches:
+- path: https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/50c16720db5d2d75de3df3aae1b82c86cd85cf8e/examples/interdomain/nsm_kuma_universal_vl3/patch-control-plane.yaml
 EOF
 ```
 

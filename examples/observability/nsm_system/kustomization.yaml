@@ -7,6 +7,6 @@ namespace: nsm-system
 resources:
   - ../../basic
 
-patchesStrategicMerge:
-  - patch-nsmgr.yaml
-  - patch-forwarder.yaml
+patches:
+  - path: patch-nsmgr.yaml
+  - path: patch-forwarder.yaml

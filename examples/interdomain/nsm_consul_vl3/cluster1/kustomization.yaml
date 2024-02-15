@@ -11,5 +11,5 @@ resources:
   - control_plane.yaml
   - counting.yaml
 
-patchesStrategicMerge:
-- nse-patch.yaml
+patches:
+- path: nse-patch.yaml

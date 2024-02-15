@@ -11,5 +11,5 @@ resources:
 - ../../apps/registry-k8s
 - ../../apps/admission-webhook-k8s
 
-patchesStrategicMerge:
-  - forwarder-vpp.yaml
+patches:
+- path: forwarder-vpp.yaml
