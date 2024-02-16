@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../../../../apps/nse-supplier-k8s
+
+patchesStrategicMerge:
+- patch-supplier.yaml
+
+configMapGenerator:
+  - name: supplier-pod-template-configmap-server
+    files:
+      - pod-template.yaml
+  - name: iptables-map
+    files:
+      - iptables-map.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
