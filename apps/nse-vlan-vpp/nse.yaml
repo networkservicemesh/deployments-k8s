@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-vlan-vpp:53fe8c6
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-vlan-vpp:dec75e5
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
