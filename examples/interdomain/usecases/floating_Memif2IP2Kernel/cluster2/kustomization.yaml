@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ns-floating-memif2ip2kernel
+
+resources:
+- ns-floating-memif2ip2kernel.yaml
+- ../../../../../apps/nse-kernel
+
+patches:
+- path: patch-nse.yaml
