@@ -8,5 +8,5 @@ resources:
 - ns-floating-memif2ip2kernel.yaml
 - ../../../../../apps/nsc-memif
 
-patchesStrategicMerge:
-  - patch-nsc.yaml
+patches:
+  - path: patch-nsc.yaml

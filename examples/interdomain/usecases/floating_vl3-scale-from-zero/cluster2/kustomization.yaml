@@ -9,8 +9,8 @@ resources:
   - ../../../../../apps/nse-supplier-k8s
   - client.yaml
 
-patchesStrategicMerge:
-  - supplier-patch.yaml
+patches:
+  - path: supplier-patch.yaml
 
 configMapGenerator:
   - name: supplier-pod-template-configmap

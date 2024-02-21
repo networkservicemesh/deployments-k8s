@@ -4,7 +4,7 @@ This document contains links for interdomain heal examples of NSM.
 
 ## Requires
 
-Please make sure to follow the steps from [basic multicluster NSM setup](../../three_cluster_configuration/basic)
+Please make sure to follow the steps from [basic interdomain NSM setup](../../three_cluster_configuration/basic)
 
 ## Includes
 

@@ -9,12 +9,10 @@ resources:
   - netsvc.yaml
   - ../../../../../apps/vl3-ipam
 
-patchesStrategicMerge:
-- patch-vl3-ipam.yaml
-
 patches:
- - target:
-      version: v1
-      kind: Service
-      name: vl3-ipam
-   path: patch-ipam-service.yaml
+- path: patch-vl3-ipam.yaml
+- path: patch-ipam-service.yaml
+  target:
+    version: v1
+    kind: Service
+    name: vl3-ipam

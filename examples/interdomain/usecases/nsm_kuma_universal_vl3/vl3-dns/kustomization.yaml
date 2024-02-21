@@ -9,5 +9,5 @@ resources:
 - ../../../../../apps/nse-vl3-vpp
 - ../../../../../apps/vl3-ipam
 
-patchesStrategicMerge:
-- nse-patch.yaml
+patches:
+- path: nse-patch.yaml

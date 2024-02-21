@@ -4,7 +4,7 @@ Unlike the [basic setup](../basic), which uses `Wireguard` as the default IP rem
 
 ## Requires
 
-Please make sure to follow the steps from [ipsec multicluster NSM setup](../../three_cluster_configuration/ipsec)
+Please make sure to follow the steps from [ipsec interdomain NSM setup](../../three_cluster_configuration/ipsec)
 
 ## Includes
 

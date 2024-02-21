@@ -7,6 +7,6 @@ namespace: ns-interdomain-nse-composition
 resources:
 - ../../../../../../apps/nse-firewall-vpp
 
-patchesStrategicMerge:
-- patch-nse-firewall-vpp.yaml
-- config-patch.yaml
+patches:
+- path: patch-nse-firewall-vpp.yaml
+- path: config-patch.yaml
