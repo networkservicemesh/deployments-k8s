@@ -10,7 +10,7 @@ This example demonstrates how to setup Open Telemetry Collector with Jaeger and 
 ## Run
 Apply Jaeger, Prometheus and OpenTelemetry Collector:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger_and_prometheus?ref=e3050e61b33b1833638145ae01c2bb3443aa42d3
+kubectl apply -k ../../../../../../../../../Users/user/repos/NSM/deployments-k8s/examples/observability/jaeger_and_prometheus
 ```
 
 Wait for OpenTelemetry Collector POD status ready:
@@ -20,7 +20,7 @@ kubectl wait -n observability --timeout=1m --for=condition=ready pod -l app=open
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/jaeger_and_prometheus/example?ref=e3050e61b33b1833638145ae01c2bb3443aa42d3
+kubectl apply -k ../../../../../../../../../Users/user/repos/NSM/deployments-k8s/examples/observability/jaeger_and_prometheus/example
 ```
 
 Wait for applications ready:

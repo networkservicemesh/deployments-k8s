@@ -7,7 +7,7 @@ This example shows that vl3 network recovers itself after dataplane interruption
 
 Deploy clients and vl3 nses:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/vl3-dataplane-interrupt?ref=e3050e61b33b1833638145ae01c2bb3443aa42d3
+kubectl apply -k ../../../../../../../../../Users/user/repos/NSM/deployments-k8s/examples/heal/vl3-dataplane-interrupt
 ```
 
 Wait for clients to be ready:
@@ -21,7 +21,6 @@ nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items
 [[ ! -z $nscs ]]
 ```
 
-Check connections between clients:
 ```bash
 (
 for nsc in $nscs 
@@ -37,9 +36,20 @@ done
 )
 ```
 
+```bash
+(
+for nsc in $nscs 
+do
+    echo $nsc pings nses
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.0.0 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.1.0 -c2 -i 0.5 || exit
+done
+)
+```
+
 Get vl3 NSEs:
 ```bash
-nses=$(kubectl get pods -l app=nse-vl3-vpp -n ns-vl3-dataplane-interrupt --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | tr '\n' ' ')
+nses=$(kubectl get pods -l app=nse-vl3-vpp -n ns-vl3-dataplane-interrupt --template '{{range .items}}{{.metadata.name}} {{end}}')
 NSE1=$(echo $nses | cut -d " " -f 1)
 NSE2=$(echo $nses | cut -d " " -f 2)
 ```
@@ -69,6 +79,17 @@ done
 )
 ```
 
+```bash
+(
+for nsc in $nscs 
+do
+    echo $nsc pings nses
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.0.0 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.1.0 -c2 -i 0.5 || exit
+done
+)
+```
+
 Disable all memif interfaces on the second vl3 NSE:
 ```bash
 ifaces=$(kubectl exec -n ns-vl3-dataplane-interrupt $NSE2 -- vppctl show int | grep memif | awk '{print $1}' | tr '\n' ' ')
@@ -90,6 +111,17 @@ do
         echo $pinger pings $ipAddr
         kubectl exec $pinger -n ns-vl3-dataplane-interrupt -- ping -c2 -i 0.5 $ipAddr || exit
     done
+done
+)
+```
+
+```bash
+(
+for nsc in $nscs 
+do
+    echo $nsc pings nses
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.0.0 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.1.0 -c2 -i 0.5 || exit
 done
 )
 ```
