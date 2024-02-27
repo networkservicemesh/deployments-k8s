@@ -14,6 +14,7 @@ Unlike the [basic setup](../basic), which uses `Wireguard` as the default IP rem
 - [Memif to IP to Memif Connection](../use-cases/Memif2IP2Memif)
 - [Kernel to IP to Memif Connection](../use-cases/Kernel2IP2Memif)
 - [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
+- [vL3-basic](../use-cases/vl3-basic)
 
 ## Run
 
