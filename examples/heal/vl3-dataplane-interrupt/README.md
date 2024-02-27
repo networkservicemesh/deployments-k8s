@@ -21,6 +21,7 @@ nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items
 [[ ! -z $nscs ]]
 ```
 
+Check connections between clients:
 ```bash
 (
 for nsc in $nscs 
@@ -36,6 +37,7 @@ done
 )
 ```
 
+Check connections between clients and vl3 endpoints:
 ```bash
 (
 for nsc in $nscs 
@@ -79,6 +81,7 @@ done
 )
 ```
 
+Check connections between clients and vl3 endpoints:
 ```bash
 (
 for nsc in $nscs 
@@ -115,6 +118,7 @@ done
 )
 ```
 
+Check connections between clients and vl3 endpoints:
 ```bash
 (
 for nsc in $nscs 
