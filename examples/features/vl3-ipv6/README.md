@@ -38,8 +38,10 @@ do
     ipAddr=$(echo $ipAddr | grep -Eo 'inet6 addr: 2001:.*' | cut -d ' ' -f 3 | cut -d '/' -f 1)
     for pinger in $nscs
     do
-        echo $pinger pings $ipAddr
-        kubectl exec $pinger -n ns-vl3-ipv6 -- ping6 -c2 -i 0.5 $ipAddr || exit
+        if [ "$nsc" != "$pinger" ]; then
+            echo $pinger pings $ipAddr
+            kubectl exec $pinger -n ns-vl3-ipv6 -- ping6 -c2 -i 0.5 $ipAddr || exit
+        fi
     done
 done
 )
