@@ -9,5 +9,5 @@ resources:
 - ns-remote-nsmgr-remote-endpoint.yaml
 - client.yaml
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

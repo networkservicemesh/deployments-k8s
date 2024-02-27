@@ -10,6 +10,6 @@ resources:
   - ../../../apps/nse-vfio
   - netsvc.yaml
 
-patchesStrategicMerge:
-  - patch-nsc-vfio.yaml
-  - patch-nse-vfio.yaml
+patches:
+  - path: patch-nsc-vfio.yaml
+  - path: patch-nse-vfio.yaml

@@ -8,5 +8,5 @@ resources:
 - ns-local-nsmgr-local-nse-memif.yaml
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

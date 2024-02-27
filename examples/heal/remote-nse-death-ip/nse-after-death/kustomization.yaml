@@ -7,5 +7,5 @@ namespace: ns-remote-nse-death-ip
 resources:
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

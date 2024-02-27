@@ -12,12 +12,10 @@ resources:
 - ../../../../apps/nsmgr-proxy
 - ../../../../apps/admission-webhook-k8s
 
-patchesStrategicMerge:
-- patch-forwarder.yaml
-- patch-registry-k8s.yaml
-- patch-nsmgr-proxy.yaml
-
 patches:
+ - path: patch-forwarder.yaml
+ - path: patch-registry-k8s.yaml
+ - path: patch-nsmgr-proxy.yaml
  - target:
       version: v1
       kind: Service

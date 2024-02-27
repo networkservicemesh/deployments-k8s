@@ -12,7 +12,7 @@ resources:
   - ../../../apps/nse-vfio
   - client.yaml
 
-patchesStrategicMerge:
-  - patch-nse.yaml
-  - patch-nsc-vfio.yaml
-  - patch-nse-vfio.yaml
+patches:
+  - path: patch-nse.yaml
+  - path: patch-nsc-vfio.yaml
+  - path: patch-nse-vfio.yaml

@@ -8,5 +8,5 @@ resources:
 - ns-remote-nse-death.yaml
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

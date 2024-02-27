@@ -7,5 +7,5 @@ namespace: ns-local-nsmgr-local-nse-memif
 resources:
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml
