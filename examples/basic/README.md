@@ -6,6 +6,21 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 
 - [spire](../spire/single_cluster/)
 
+## Run
+
+Apply NSM resources for basic tests:
+
+```bash
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=4d10646bde0eaaa8736b686a9a94b2aca3132c75
+```
+
+Wait for admission-webhook-k8s:
+
+```bash
+WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
+```
+
 ## Includes
 
 - [Memif to Memif Connection](../use-cases/Memif2Memif)

@@ -5,16 +5,6 @@ These examples include 2 forwarders - _forwarder-vpp_ and _forwarder-sriov_
 
 - [spire](../spire/single_cluster)
 
-## Includes
-
-- [VFIO Connection](../use-cases/Vfio2Noop)
-- [Kernel Connection](../use-cases/SriovKernel2Noop)
-- [Memif to Memif Connection](../use-cases/Memif2Memif)
-- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
-- [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
-- [Kernel to Kernel Connection & VFIO Connection](../use-cases/Kernel2Kernel_Vfio2Noop)
-- [Kernel to Ethernet to Kernel Connection & VFIO Connection](../use-cases/Kernel2Ethernet2Kernel_Vfio2Noop)
-
 ## SR-IOV config
 
 These tests require [SR-IOV config](../../doc/SRIOV_config.md) created on both `master` and `worker` nodes and located
@@ -48,6 +38,16 @@ Wait for admission-webhook-k8s:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
+
+## Includes
+
+- [VFIO Connection](../use-cases/Vfio2Noop)
+- [Kernel Connection](../use-cases/SriovKernel2Noop)
+- [Memif to Memif Connection](../use-cases/Memif2Memif)
+- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
+- [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
+- [Kernel to Kernel Connection & VFIO Connection](../use-cases/Kernel2Kernel_Vfio2Noop)
+- [Kernel to Ethernet to Kernel Connection & VFIO Connection](../use-cases/Kernel2Ethernet2Kernel_Vfio2Noop)
 
 ## Cleanup
 

@@ -8,14 +8,6 @@ Unlike the [basic setup](../basic), which uses `Wireguard` as the default IP rem
 
 - [spire](../spire/single_cluster/)
 
-## Includes
-
-- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
-- [Memif to IP to Memif Connection](../use-cases/Memif2IP2Memif)
-- [Kernel to IP to Memif Connection](../use-cases/Kernel2IP2Memif)
-- [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
-- [vL3-basic](../use-cases/vl3-basic)
-
 ## Run
 
 Apply NSM resources for basic tests:
@@ -30,6 +22,14 @@ Wait for admission-webhook-k8s:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
+
+## Includes
+
+- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
+- [Memif to IP to Memif Connection](../use-cases/Memif2IP2Memif)
+- [Kernel to IP to Memif Connection](../use-cases/Kernel2IP2Memif)
+- [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
+- [vL3-basic](../use-cases/vl3-basic)
 
 ## Cleanup
 
