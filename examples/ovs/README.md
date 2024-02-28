@@ -6,18 +6,6 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 
 - [spire](../spire/single_cluster)
 
-## Includes
-
-Basic examples
-
-- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
-- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
-- [Kernel to Kernel Connection over VLAN Trunking](../use-cases/Kernel2KernelVLAN)
-
-SmartVf examples
-
-- [SmartVF to SmartVF Connection](../use-cases/SmartVF2SmartVF)
-
 ## SR-IOV config
 
 These tests require [SR-IOV config](../../doc/SRIOV_config.md) created on both `master` and `worker` nodes and located
@@ -52,6 +40,18 @@ Wait for admission-webhook-k8s:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
+
+## Includes
+
+Basic examples
+
+- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
+- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
+- [Kernel to Kernel Connection over VLAN Trunking](../use-cases/Kernel2KernelVLAN)
+
+SmartVf examples
+
+- [SmartVF to SmartVF Connection](../use-cases/SmartVF2SmartVF)
 
 ## Cleanup
 

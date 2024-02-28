@@ -6,16 +6,6 @@ SR-IOV uses VLAN tagged connections
 
 - [spire](../spire/single_cluster)
 
-## Includes
-
-- [VLAN tagged VFIO Connection](../use-cases/Vfio2NoopVlanTag)
-- [VLAN tagged Kernel Connection](../use-cases/SriovKernel2NoopVlanTag)
-- [Memif to Memif Connection](../use-cases/Memif2Memif)
-- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
-- [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
-- [Kernel to Kernel Connection & VLAN tagged VFIO Connection](../use-cases/Kernel2Kernel_Vfio2NoopVlanTag)
-- [Kernel to Ethernet to Kernel Connection & VLAN tagged VFIO Connection](../use-cases/Kernel2Ethernet2Kernel_Vfio2NoopVlanTag)
-
 ## SR-IOV config
 
 These tests require [SR-IOV config](../../doc/SRIOV_config.md) created on both `master` and `worker` nodes and located
@@ -49,6 +39,17 @@ Wait for admission-webhook-k8s:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
+
+## Includes
+
+- [VLAN tagged VFIO Connection](../use-cases/Vfio2NoopVlanTag)
+- [VLAN tagged Kernel Connection](../use-cases/SriovKernel2NoopVlanTag)
+- [Memif to Memif Connection](../use-cases/Memif2Memif)
+- [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
+- [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
+- [Kernel to Kernel Connection & VLAN tagged VFIO Connection](../use-cases/Kernel2Kernel_Vfio2NoopVlanTag)
+- [Kernel to Ethernet to Kernel Connection & VLAN tagged VFIO Connection](../use-cases/Kernel2Ethernet2Kernel_Vfio2NoopVlanTag)
+
 
 ## Cleanup
 
