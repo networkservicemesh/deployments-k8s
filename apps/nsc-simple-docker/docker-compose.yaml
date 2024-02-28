@@ -1,7 +1,7 @@
 ---
 services:
   nsc-simple-docker:
-    image: ghcr.io/networkservicemesh/ci/cmd-nsc-simple-docker:15a5ac0
+    image: ghcr.io/networkservicemesh/ci/cmd-nsc-simple-docker:f6f1b57
     privileged: true
     container_name: nsc-simple-docker
     restart: always
