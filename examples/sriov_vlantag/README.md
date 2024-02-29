@@ -4,11 +4,6 @@
 
 - [spire](../spire/single_cluster)
 
-## Includes
-
-- [VLAN tagged VFIO Connection](../use-cases/Vfio2NoopVlanTag)
-- [VLAN tagged Kernel Connection](../use-cases/SriovKernel2NoopVlanTag)
-
 ## SR-IOV config
 
 These tests require [SR-IOV config](../../doc/SRIOV_config.md) created on both `master` and `worker` nodes and located
@@ -35,6 +30,11 @@ Apply NSM resources for sriov tests:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/sriov?ref=f69a0450ad8cab0a06e887d11f5ca1fd30d30142
 ```
+
+## Includes
+
+- [VLAN tagged VFIO Connection](../use-cases/Vfio2NoopVlanTag)
+- [VLAN tagged Kernel Connection](../use-cases/SriovKernel2NoopVlanTag)
 
 ## Cleanup
 

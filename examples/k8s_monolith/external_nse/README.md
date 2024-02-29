@@ -14,10 +14,6 @@ This NSE creates the required interface on the monolith:
     - [Spire in k8s](../../spire/single_cluster)
     - [Spiffe Federation](./spiffe_federation)
 
-## Includes
-
-- [Kernel to IP to Kernel Connection](./usecases/Kernel2IP2Kernel)
-
 ## Run
 
 Apply NSM resources for basic tests:
@@ -35,6 +31,10 @@ Wait for registry service exposing:
 ```bash
 kubectl get services registry -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
+
+## Includes
+
+- [Kernel to IP to Kernel Connection](./usecases/Kernel2IP2Kernel)
 
 ## Cleanup
 

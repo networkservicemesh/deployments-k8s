@@ -6,12 +6,6 @@ This setup can be used to check remote vlan mechanism with both  VPP forwarder. 
 
 - [spire](../spire/single_cluster)
 
-## Includes
-
-- [Kernel2RVlanInternal](../use-cases/Kernel2RVlanInternal)
-- [Kernel2RVlanBreakout](../use-cases/Kernel2RVlanBreakout)
-- [Kernel2RVlanMultiNS](../use-cases/Kernel2RVlanMultiNS)
-
 ## Run
 
 Create secondary bridge network and connect kind-worker nodes:
@@ -65,6 +59,12 @@ Wait for forwarder-vpp:
 ```bash
 kubectl -n nsm-system wait --for=condition=ready --timeout=2m pod -l app=forwarder-vpp
 ```
+
+## Includes
+
+- [Kernel2RVlanInternal](../use-cases/Kernel2RVlanInternal)
+- [Kernel2RVlanBreakout](../use-cases/Kernel2RVlanBreakout)
+- [Kernel2RVlanMultiNS](../use-cases/Kernel2RVlanMultiNS)
 
 ## Cleanup
 

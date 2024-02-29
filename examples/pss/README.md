@@ -11,10 +11,6 @@ Based on the [PSS profile](https://kubernetes.io/docs/concepts/security/pod-secu
 
 - [spire_csi](../spire/single_cluster_csi)
 
-## Includes
-
-- [Nginx service](use-cases/nginx)
-
 ## Run
 
 Apply NSM resources:
@@ -29,6 +25,10 @@ Wait for admission-webhook-k8s:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
+
+## Includes
+
+- [Nginx service](use-cases/nginx)
 
 ## Cleanup
 
