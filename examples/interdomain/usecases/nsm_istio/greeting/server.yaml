@@ -39,7 +39,7 @@ spec:
       serviceAccountName: greeting-sa
       containers:
       - name: server
-        image: hashicorp/http-echo:alpine
+        image: hashicorp/http-echo:1.0
         args:
           - -text="hello world from istio"
           - -listen=:9080
