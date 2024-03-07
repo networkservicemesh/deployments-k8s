@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: nettools
-        image: travelping/nettools:1.10.1
+        image: aeciopires/nettools:1.0.0
         imagePullPolicy: IfNotPresent
         # simple `sleep` command would work
         # but we need `trap` to be able to delete pods quckly

@@ -23,16 +23,15 @@ spec:
       initContainers:
         - name: init
           # This is a small image with wait-for-it, choose whatever image
-          # you prefer that waits for a service to be up. This image is built
-          # from https://github.com/lqhl/wait-for-it
-          image: gcr.io/spiffe-io/wait-for-it
+          # you prefer that waits for a service to be up.
+          # It is used by https://github.com/spiffe/spire-tutorials/blob/d27c579eb4f4e26f36f60373446c42c4ebd1e3da/k8s/quickstart/agent-daemonset.yaml#L27
+          image: cgr.dev/chainguard/wait-for-it
           imagePullPolicy: IfNotPresent
           args: ["-t", "30", "spire-server:8081"]
         - name: init-bundle
-          # Additional init container with the same wait-for-it image to
-          # provide workaround for https://github.com/spiffe/spire/issues/3032
+          # Additional init container to provide workaround for https://github.com/spiffe/spire/issues/3032
           # It checks if the bundle is in place and ready to be parsed or not.
-          image: gcr.io/spiffe-io/wait-for-it
+          image: alpine
           imagePullPolicy: IfNotPresent
           command: ['sh', '-c', "t=0; until [ -f /run/spire/bundle/bundle.crt 2>&1 ] || [ $t -eq 60 ]; do t=`expr $t + 1`; sleep 1; done"]
           volumeMounts:

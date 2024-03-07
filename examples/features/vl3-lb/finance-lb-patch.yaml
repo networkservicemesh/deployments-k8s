@@ -17,7 +17,7 @@ spec:
             - name: NSM_PORT
               value: "8080"
             - name: NSM_TARGET_PORT
-              value: "80"
+              value: "8081"
             - name: NSM_SELECTOR
               value: "app:finance"
             - name: NSM_NETWORK_SERVICES

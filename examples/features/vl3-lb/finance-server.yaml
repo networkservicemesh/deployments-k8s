@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: hashicorp/http-echo:alpine
+          image: hashicorp/http-echo:1.0
           env:
           - name: POD_NAME
             valueFrom:
@@ -26,6 +26,6 @@ spec:
                 fieldPath: metadata.name
           args:
             - "-text=Hello! I'm $(POD_NAME)"
-            - -listen=:80
+            - -listen=:8081
           ports:
-            - containerPort: 80
+            - containerPort: 8081
