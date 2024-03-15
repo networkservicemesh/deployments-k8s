@@ -39,7 +39,7 @@ For the `worker` node:
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=2e2680c4589244fe95787103e58d561ed9721056
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/multiforwarder?ref=f7d07834a44541299621eaba8790f1e2b9768b89
 ```
 
 Wait for admission-webhook-k8s:
