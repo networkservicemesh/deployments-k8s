@@ -102,14 +102,10 @@ jobs:
           git tag ${{ needs.get-tag.outputs.tag }}
           git push origin ${{ needs.get-tag.outputs.tag }} -f
       - name: Create release ${{ needs.get-tag.outputs.tag }}
-        uses: actions/create-release@v1
+        run: |
+          gh release create ${{ needs.get-tag.outputs.tag }} --title ${{ needs.get-tag.outputs.tag }} --target ${{github.event.workflow_run.head_branch}} --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-        with:
-          tag_name: refs/tags/${{ needs.get-tag.outputs.tag }}
-          release_name: ${{ needs.get-tag.outputs.tag }}
-          draft: false
-          prerelease: false
+          GH_TOKEN: ${{ secrets.token }}
 
   update-dependent-repositories:
     strategy:
