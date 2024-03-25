@@ -11,7 +11,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 Deploy NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scaled-registry?ref=c2af81c90b3731255a6db7347525d82959f3d230
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/scaled-registry?ref=0e9cc5df51dffee76287cfcb84920f3b75005b29
 ```
 
 Wait for NSE to be ready:
