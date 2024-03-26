@@ -11,10 +11,8 @@ resources:
 - ../../../../apps/vl3-ipam
 - ../../../../apps/nse-vl3-vpp
 
-patchesStrategicMerge:
-- nse-patch.yaml
-
 patches:
+ - path: nse-patch.yaml
  - target:
       version: v1
       kind: Deployment

@@ -1,0 +1,13 @@
+---
+- op: replace
+  path: /metadata/name
+  value: vl3-ipam-ipv6
+- op: replace
+  path: /metadata/labels/app
+  value: vl3-ipam-ipv6
+- op: replace
+  path: /spec/selector/matchLabels/app
+  value: vl3-ipam-ipv6
+- op: replace
+  path: /spec/template/metadata/labels/app
+  value: vl3-ipam-ipv6

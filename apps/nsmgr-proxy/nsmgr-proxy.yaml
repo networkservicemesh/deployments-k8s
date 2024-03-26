@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccount: nsmgr-proxy-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:9f5d4f3
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr-proxy:879b1f1
           imagePullPolicy: IfNotPresent
           name: nsmgr-proxy
           ports:
@@ -56,7 +56,7 @@ spec:
             limits:
               memory: 100Mi
               cpu: 400m
-        - image: ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:92c5958
+        - image: ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:11aee78
           imagePullPolicy: IfNotPresent
           name: map-ip-k8s
           env:

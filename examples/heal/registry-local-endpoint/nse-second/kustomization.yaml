@@ -7,5 +7,5 @@ namespace: ns-registry-local-endpoint
 resources:
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

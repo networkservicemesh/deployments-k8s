@@ -7,5 +7,5 @@ namespace: ns-local-nse-death
 resources:
 - ../base
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

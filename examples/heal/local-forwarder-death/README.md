@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-death?ref=6af98ac3296f08ac0dc7d9b8cf1fc3066c95df9d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/local-forwarder-death?ref=b567c5ba8d80fda1ee6a83a9aa1f22798bb5b245
 ```
 
 Wait for applications ready:
@@ -40,7 +40,7 @@ NSC_NODE=$(kubectl get pods -l app=alpine -n ns-local-forwarder-death --template
 
 Find local Forwarder:
 ```bash
-FORWARDER=$(kubectl get pods -l app=forwarder-vpp --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+FORWARDER=$(kubectl get pods -l 'app in (forwarder-ovs, forwarder-vpp)' --field-selector spec.nodeName==${NSC_NODE} -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
 Remove local Forwarder and wait for a new one to start:
@@ -48,7 +48,7 @@ Remove local Forwarder and wait for a new one to start:
 kubectl delete pod -n nsm-system ${FORWARDER}
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=forwarder-vpp --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
+kubectl wait --for=condition=ready --timeout=1m pod -l 'app in (forwarder-ovs, forwarder-vpp)' --field-selector spec.nodeName==${NSC_NODE} -n nsm-system
 ```
 
 Ping from NSC to NSE:

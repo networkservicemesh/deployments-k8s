@@ -7,5 +7,5 @@ namespace: nsm-system
 resources:
 - ../../../../apps/nsmgr
 
-patchesStrategicMerge:
-- patch-nsmgr.yaml
+patches:
+- path: patch-nsmgr.yaml

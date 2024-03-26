@@ -7,10 +7,8 @@ namespace: ns-vl3-dual-stack
 resources:
 - ../../../../../apps/vl3-ipam
 
-patchesStrategicMerge:
-- ipam-patch.yaml
-
 patches:
+ - path: ipam-patch.yaml
  - target:
       version: v1
       kind: Deployment

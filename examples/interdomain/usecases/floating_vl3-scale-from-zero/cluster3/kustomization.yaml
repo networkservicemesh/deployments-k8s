@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nsm-system
+
+resources:
+  - netsvc.yaml
+  - ../../../../../apps/vl3-ipam
+
+patches:
+- path: patch-vl3-ipam.yaml
+- path: patch-ipam-service.yaml
+  target:
+    version: v1
+    kind: Service
+    name: vl3-ipam

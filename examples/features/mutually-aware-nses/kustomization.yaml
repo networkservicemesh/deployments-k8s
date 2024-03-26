@@ -14,5 +14,5 @@ resources:
 - config-file-nse-2.yaml
 - ../../../apps/nsc-kernel
 
-patchesStrategicMerge:
-- patch-nsc.yaml
+patches:
+- path: patch-nsc.yaml

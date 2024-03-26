@@ -8,5 +8,5 @@ resources:
 - ../namespace
 - ../../../../apps/nse-kernel-ponger
 
-patchesStrategicMerge:
-  - patch-ponger.yaml
+patches:
+  - path: patch-ponger.yaml

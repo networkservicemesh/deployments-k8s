@@ -20,13 +20,14 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-vpp`, `registry-k8
 - [Memif to IP to Memif Connection](../use-cases/Memif2IP2Memif)
 - [Kernel to IP to Memif Connection](../use-cases/Kernel2IP2Memif)
 - [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
+- [vL3-basic](../use-cases/vl3-basic)
 
 ## Run
 
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=6af98ac3296f08ac0dc7d9b8cf1fc3066c95df9d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=b567c5ba8d80fda1ee6a83a9aa1f22798bb5b245
 ```
 
 Wait for admission-webhook-k8s:

@@ -11,5 +11,5 @@ resources:
 
 nameSuffix: -bg
 
-patchesStrategicMerge:
-  - patch-nse.yaml
+patches:
+  - path: patch-nse.yaml

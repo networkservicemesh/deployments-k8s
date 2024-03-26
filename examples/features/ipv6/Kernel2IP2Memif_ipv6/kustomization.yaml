@@ -10,5 +10,5 @@ resources:
 - netsvc.yaml
 - ../../../../apps/nse-memif
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

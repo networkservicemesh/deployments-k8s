@@ -10,6 +10,6 @@ resources:
 - ../../../apps/nsc-kernel
 - ../../../apps/nse-vlan-vpp
 
-patchesStrategicMerge:
-- patch-nsc.yaml
-- patch-nse.yaml
+patches:
+- path: patch-nsc.yaml
+- path: patch-nse.yaml

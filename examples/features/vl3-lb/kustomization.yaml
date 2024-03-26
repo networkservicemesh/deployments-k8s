@@ -13,6 +13,6 @@ resources:
 - ../../../apps/vl3-ipam
 - ../../../apps/vl3-lb
 
-patchesStrategicMerge:
-- nse-patch.yaml
-- finance-lb-patch.yaml
+patches:
+- path: nse-patch.yaml
+- path: finance-lb-patch.yaml

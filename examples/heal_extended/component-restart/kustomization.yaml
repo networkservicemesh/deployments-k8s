@@ -11,5 +11,5 @@ resources:
 - client-cp.yaml
 - ../../../apps/nse-kernel
 
-patchesStrategicMerge:
-- patch-nse.yaml
+patches:
+- path: patch-nse.yaml

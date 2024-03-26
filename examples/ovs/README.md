@@ -8,10 +8,15 @@ Contain basic setup for NSM that includes `nsmgr`, `forwarder-ovs`, `registry-k8
 
 ## Includes
 
+Basic examples
+
 - [Kernel to Kernel Connection](../use-cases/Kernel2Kernel)
+- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
 - [Kernel to Kernel Connection over VLAN Trunking](../use-cases/Kernel2KernelVLAN)
+
+SmartVf examples
+
 - [SmartVF to SmartVF Connection](../use-cases/SmartVF2SmartVF)
-- [Admission webhook SmartVF example](../features/webhook-smartvf)
 
 ## SR-IOV config
 
@@ -38,7 +43,7 @@ For the `worker` node:
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/ovs?ref=6af98ac3296f08ac0dc7d9b8cf1fc3066c95df9d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/ovs?ref=b567c5ba8d80fda1ee6a83a9aa1f22798bb5b245
 ```
 
 Wait for admission-webhook-k8s:
