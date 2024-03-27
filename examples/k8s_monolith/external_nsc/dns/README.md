@@ -87,13 +87,13 @@ kubectl rollout restart -n kube-system deployment/coredns
 
 Save the initial `resolv.conf` in a separate file:
 ```bash
-docker exec -d -i nsc-simple-docker cp /etc/resolv.conf /etc/resolv_init.conf
+docker exec nsc-simple-docker cp /etc/resolv.conf /etc/resolv_init.conf
 ```
 
 Add an entry to `resolv.conf` with a coredns address.
 Use a custom address to reduce the chance of it being used (default is 127.0.0.1)
 ```bash
-docker exec -d -i nsc-simple-docker sh -c "echo 'nameserver 127.0.1.1' > /etc/resolv.conf"
+docker exec nsc-simple-docker sh -c "echo 'nameserver 127.0.1.1' > /etc/resolv.conf"
 ```
 
 Create coredns config file:
@@ -104,12 +104,17 @@ cat > coredns-config << EOF
     log
     errors
     ready
-    file dnsentries.db
     forward . /etc/resolv_init.conf {
         max_concurrent 1000
     }
     loop
     reload 5s
+}
+docker.nsm:53 {
+    bind 127.0.1.1
+    log
+    errors
+    file dnsentries.db
 }
 k8s.nsm:53 {
     bind 127.0.1.1
@@ -132,7 +137,7 @@ cat > dnsentries.db << EOF
                                 1209600    ; expire (2 weeks)
                                 3600       ; minimum (1 hour)
                                 )
-spire-server.spire.docker.nsm   IN      A    ${ipdock}
+spire-server.spire   IN      A    ${ipdock}
 EOF
 ```
 
