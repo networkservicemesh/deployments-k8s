@@ -30,6 +30,11 @@ Wait for registry service exposing:
 kubectl get services registry -n nsm-system -o go-template='{{index (index (index (index .status "loadBalancer") "ingress") 0) "ip"}}'
 ```
 
+Wait for nsm system ready:
+```bash
+kubectl wait --timeout=10m --for=condition=ready pod --all -n nsm-system
+```
+
 ## Cleanup
 
 To free resources follow the next command:
