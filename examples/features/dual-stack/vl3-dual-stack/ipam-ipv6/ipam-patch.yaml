@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vl3-ipam
+  labels:
+    app: vl3-ipam
+spec:
+  template:
+    spec:
+      containers:
+        - name: vl3-ipam
+          env:
+            - name: NSM_PREFIX
+              value: 2001:db8::/64
+            - name: NSM_CLIENT_PREFIX_LEN
+              value: "112"
