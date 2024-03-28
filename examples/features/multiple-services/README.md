@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [ipsec mech
 
 Deploy NSC and and two NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/multiple-services?ref=5673cc7897065e7c238f9159ea8b7dd1035004be
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/multiple-services?ref=75393095b0ff6fef842aaf11f4e4be4b7ffa3cc4
 ```
 
 Wait for applications ready:
