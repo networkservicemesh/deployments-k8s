@@ -56,7 +56,7 @@ spec:
             limits:
               memory: 100Mi
               cpu: 400m
-        - image: ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:30059fe
+        - image: ghcr.io/networkservicemesh/ci/cmd-map-ip-k8s:43ce25e
           imagePullPolicy: IfNotPresent
           name: map-ip-k8s
           env:
