@@ -20,7 +20,7 @@ Based on the [PSS profile](https://kubernetes.io/docs/concepts/security/pod-secu
 Apply NSM resources:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/pss/nsm-system?ref=5df64d2fa91ad3967ff09f0372cf90e09203d45f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/pss/nsm-system?ref=63b4c7b7136488fd6a1f44639e70d209a9e9f2c6
 ```
 
 Wait for admission-webhook-k8s:
