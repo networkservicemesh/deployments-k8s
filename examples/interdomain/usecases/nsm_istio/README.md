@@ -24,24 +24,24 @@ istioctl --kubeconfig=$KUBECONFIG2 proxy-status
 
 Install networkservice for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a6b625f48ed05407c6ca9847d5e942f349c7162/examples/interdomain/usecases/nsm_istio/netsvc.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fb241ef3589420668d559b6f4bb5cc723fea6716/examples/interdomain/usecases/nsm_istio/netsvc.yaml
 ```
 
 Start `alpine` with networkservicemesh client on the first cluster:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a6b625f48ed05407c6ca9847d5e942f349c7162/examples/interdomain/usecases/nsm_istio/greeting/client.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fb241ef3589420668d559b6f4bb5cc723fea6716/examples/interdomain/usecases/nsm_istio/greeting/client.yaml
 ```
 
 Start `auto-scale` networkservicemesh endpoint:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_istio/nse-auto-scale?ref=6a6b625f48ed05407c6ca9847d5e942f349c7162
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_istio/nse-auto-scale?ref=fb241ef3589420668d559b6f4bb5cc723fea6716
 ```
 
 Install http-server for the second cluster:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection=enabled
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a6b625f48ed05407c6ca9847d5e942f349c7162/examples/interdomain/usecases/nsm_istio/greeting/server.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fb241ef3589420668d559b6f4bb5cc723fea6716/examples/interdomain/usecases/nsm_istio/greeting/server.yaml
 ```
 
 Wait for the `alpine` client to be ready:
@@ -66,10 +66,10 @@ You have made a interdomain connection between two clusters via NSM + Istio!
 ## Cleanup
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a6b625f48ed05407c6ca9847d5e942f349c7162/examples/interdomain/usecases/nsm_istio/greeting/server.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_istio/nse-auto-scale?ref=6a6b625f48ed05407c6ca9847d5e942f349c7162
-kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a6b625f48ed05407c6ca9847d5e942f349c7162/examples/interdomain/usecases/nsm_istio/greeting/client.yaml
-kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/6a6b625f48ed05407c6ca9847d5e942f349c7162/examples/interdomain/usecases/nsm_istio/netsvc.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fb241ef3589420668d559b6f4bb5cc723fea6716/examples/interdomain/usecases/nsm_istio/greeting/server.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_istio/nse-auto-scale?ref=fb241ef3589420668d559b6f4bb5cc723fea6716
+kubectl --kubeconfig=$KUBECONFIG1 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fb241ef3589420668d559b6f4bb5cc723fea6716/examples/interdomain/usecases/nsm_istio/greeting/client.yaml
+kubectl --kubeconfig=$KUBECONFIG2 delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/fb241ef3589420668d559b6f4bb5cc723fea6716/examples/interdomain/usecases/nsm_istio/netsvc.yaml
 kubectl --kubeconfig=$KUBECONFIG2 delete ns istio-system
 kubectl --kubeconfig=$KUBECONFIG2 label namespace default istio-injection-
 kubectl --kubeconfig=$KUBECONFIG2 delete pods --all
