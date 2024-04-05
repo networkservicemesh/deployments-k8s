@@ -19,7 +19,7 @@ Prioritize IPSec over other remote mechanisms
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/three_cluster_configuration/ipsec/cluster1?ref=8afbd7b6970727a307a5eec8bc7b293ebcb187bd
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/three_cluster_configuration/ipsec/cluster1?ref=25310185fd802d623d418c4dd5e3d44d7bc1b8dc
 ```
 
 Wait for nsmgr-proxy-service exposing:
@@ -38,7 +38,7 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=1m pod ${
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/three_cluster_configuration/ipsec/cluster2?ref=8afbd7b6970727a307a5eec8bc7b293ebcb187bd
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/three_cluster_configuration/ipsec/cluster2?ref=25310185fd802d623d418c4dd5e3d44d7bc1b8dc
 ```
 
 Wait for nsmgr-proxy-service exposing:
@@ -57,7 +57,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod ${
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/three_cluster_configuration/ipsec/cluster3?ref=8afbd7b6970727a307a5eec8bc7b293ebcb187bd
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/three_cluster_configuration/ipsec/cluster3?ref=25310185fd802d623d418c4dd5e3d44d7bc1b8dc
 ```
 
 Wait for nsmgr-proxy-service exposing:
