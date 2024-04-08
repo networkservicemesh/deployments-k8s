@@ -16,19 +16,6 @@ If the packet belongs to the NSM interface it forwards it to the VPP, otherwise 
 
 - [spire](../spire/single_cluster)
 
-## Includes
-
-- [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
-- [Memif to Ethernet to Memif Connection](../use-cases/Memif2Ethernet2Memif)
-- [Kernel to Ethernet to Memif Connection](../use-cases/Kernel2Ethernet2Memif)
-- [Memif to Ethernet to Kernel Connection](../use-cases/Memif2Ethernet2Kernel)
-- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
-- [Memif to IP to Memif Connection](../use-cases/Memif2IP2Memif)
-- [Kernel to IP to Memif Connection](../use-cases/Kernel2IP2Memif)
-- [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
-- [Kernel2IP2Kernel IPv6 example](../features/ipv6/Kernel2IP2Kernel_ipv6)
-- [Memif2IP2Memif IPv6 example](../features/ipv6/Memif2IP2Memif_ipv6)
-
 ## Run
 
 Apply NSM resources for basic tests:
@@ -43,6 +30,19 @@ Wait for admission-webhook-k8s:
 WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 ```
+
+## Includes
+
+- [Kernel to Ethernet to Kernel Connection](../use-cases/Kernel2Ethernet2Kernel)
+- [Memif to Ethernet to Memif Connection](../use-cases/Memif2Ethernet2Memif)
+- [Kernel to Ethernet to Memif Connection](../use-cases/Kernel2Ethernet2Memif)
+- [Memif to Ethernet to Kernel Connection](../use-cases/Memif2Ethernet2Kernel)
+- [Kernel to IP to Kernel Connection](../use-cases/Kernel2IP2Kernel)
+- [Memif to IP to Memif Connection](../use-cases/Memif2IP2Memif)
+- [Kernel to IP to Memif Connection](../use-cases/Kernel2IP2Memif)
+- [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
+- [Kernel2IP2Kernel IPv6 example](../features/ipv6/Kernel2IP2Kernel_ipv6)
+- [Memif2IP2Memif IPv6 example](../features/ipv6/Memif2IP2Memif_ipv6)
 
 ## Cleanup
 
