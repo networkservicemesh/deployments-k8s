@@ -37,21 +37,6 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 - [Memif to IP to Kernel Connection](../use-cases/Memif2IP2Kernel)
 - [vL3-basic](../use-cases/vl3-basic)
 
-## Run
-
-Apply NSM resources for basic tests:
-
-```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/basic?ref=6636a001ff2552e7167254cf3eea2d159f42c2c2
-```
-
-Wait for admission-webhook-k8s:
-
-```bash
-WH=$(kubectl get pods -l app=admission-webhook-k8s -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
-kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
-```
-
 ## Cleanup
 
 To free resources follow the next commands:
