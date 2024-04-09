@@ -33,9 +33,8 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 ## Includes
 
-- [Kernel2RVlanInternal](../use-cases/Kernel2RVlanInternal)
-- [Kernel2RVlanBreakout](../use-cases/Kernel2RVlanBreakout)
-- [Kernel2RVlanMultiNS](../use-cases/Kernel2RVlanMultiNS)
+- [VFIO Connection](../use-cases/Vfio2Noop)
+- [Kernel Connection](../use-cases/SriovKernel2Noop)
 
 ## Cleanup
 
