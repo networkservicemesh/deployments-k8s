@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: dashboard-backend
-    image: ghcr.io/networkservicemesh/ci/cmd-dashboard-backend:8c4f7b4
+    image: ghcr.io/networkservicemesh/ci/cmd-dashboard-backend:a2d3ba9
     imagePullPolicy: IfNotPresent
     ports:
       - containerPort: 3001
