@@ -54,7 +54,7 @@ jobs:
             --method DELETE \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/NikitaSkrynnik/deployments-k8s/git/refs/heads/$branch
+            /repos/networkservicemesh/deployments-k8s/git/refs/heads/$branch
         done
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
