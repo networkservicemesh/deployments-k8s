@@ -26,7 +26,7 @@ jobs:
 
     - name: Check release branches
       run: |
-        images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*" |  cut -d'/' -f4 | cut -d':' -f1 | sort -u) 
+        images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*" |  cut -d'/' -f4 | cut -d':' -f1 | sort -u)
         branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}" | cut -d'/' -f4 | sort -u)
         diff <(echo "$branches") <(echo "$images")
 
