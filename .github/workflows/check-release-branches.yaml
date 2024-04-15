@@ -1,0 +1,60 @@
+---
+name: Check release branches
+on:
+  push:
+      - "release/**"  # We should only react to branches like "release/networkservicemesh/*/v*.*.*"
+      - "!release/*"  # and ignore branches like "release/v*.*.*". "**" - any character, "*" - any character except "/"
+
+concurrency:
+  group: check-release-branches
+  cancel-in-progress: true
+
+jobs:
+  check-release-branches:
+    name: Check release branches
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get tag
+      id: tag
+      run: |
+        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_OUTPUT
+
+    - name: Check release branches
+      run: |
+        images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*" |  cut -d'/' -f4 | cut -d':' -f1 | sort -u) 
+        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}" | cut -d'/' -f4 | sort -u)
+        diff <(echo "$branches") <(echo "$images")
+
+    - name: Merge branches
+      run: |
+        git config --global user.email "nsmbot@networkservicmesh.io"
+        git config --global user.name "NSMBot"
+
+        git checkout -b release/${{ steps.tag.outputs.tag }}
+
+        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}")
+        for branch in $branches; do
+          git merge $branch
+        done
+
+        git push -u origin release/${{ steps.tag.outputs.tag }}
+
+    - name: Remove release branches
+      run: |
+        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}")
+        echo $branches
+        for branch in $branches; do
+          branch=${branch#"origin/"}
+          gh api \
+            --method DELETE \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/NikitaSkrynnik/deployments-k8s/git/refs/heads/$branch
+        done
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
