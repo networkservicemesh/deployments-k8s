@@ -26,7 +26,7 @@ spec:
               mountPath: /dev/vfio
 
         - name: nsc
-          image: ghcr.io/networkservicemesh/ci/cmd-nsc:b890539
+          image: ghcr.io/networkservicemesh/ci/cmd-nsc:15749c9
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET

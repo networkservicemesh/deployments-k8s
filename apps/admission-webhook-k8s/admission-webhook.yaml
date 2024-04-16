@@ -41,7 +41,7 @@ spec:
             - name: NSM_ANNOTATION
               value: networkservicemesh.io
             - name: NSM_CONTAINER_IMAGES
-              value: ghcr.io/networkservicemesh/ci/cmd-nsc:b890539
+              value: ghcr.io/networkservicemesh/ci/cmd-nsc:15749c9
             - name: NSM_INIT_CONTAINER_IMAGES
               value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:d653aca
             - name: NSM_LABELS
