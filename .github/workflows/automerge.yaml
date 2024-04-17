@@ -15,7 +15,7 @@ jobs:
 
   check-mergeability:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    uses: NikitaSkrynnik/.github/.github/workflows/check-mergeability.yaml@main
+    uses: networkservicemesh/.github/.github/workflows/check-mergeability.yaml@main
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
 
