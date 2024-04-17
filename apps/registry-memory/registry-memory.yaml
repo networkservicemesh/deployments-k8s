@@ -20,11 +20,11 @@ spec:
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
-            - name: REGISTRY_MEMORY_LISTEN_ON
+            - name: NSM_LISTEN_ON
               value: tcp://:5002
-            - name: REGISTRY_MEMORY_LOG_LEVEL
+            - name: NSM_LOG_LEVEL
               value: TRACE
-            - name: REGISTRY_MEMORY_PROXY_REGISTRY_URL
+            - name: NSM_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
           imagePullPolicy: IfNotPresent
           name: registry
