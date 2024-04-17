@@ -14,14 +14,20 @@ jobs:
       - uses: hmarr/debug-action@v2
 
   check-mergeability:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' }}
-    uses: networkservicemesh/.github/.github/workflows/check-mergeability.yaml@main
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    uses: NikitaSkrynnik/.github/.github/workflows/check-mergeability.yaml@main
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
 
   automerge:
     needs: [check-mergeability]
     if: ${{ needs.check-mergeability.outputs.pr_branch_ref != '' }}
-    run: gh pr merge ${{ github.event.workflow_run.head_branch }} --squash --delete-branch
-    env:
-      GH_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Automerge
+        run: gh pr merge ${{ github.event.workflow_run.head_branch }} --squash --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
