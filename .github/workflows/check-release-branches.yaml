@@ -19,15 +19,23 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Get tag
-      id: tag
+    - name: Set envs
       run: |
-        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_OUTPUT
+        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+        {
+          echo 'branches<<EOF'
+          echo $(git branch -r | grep -e "release/networkservicemesh/.*/${{ env.tag }}")
+          echo EOF
+        } >> $GITHUB_ENV
 
+      # On this step we get all image names from deployments-k8s/apps folder and
+      # compare them to the set of release/networkservicemesh/cmd-*/${tag} branches.
+      # If the sets of branches and images are equal then we merge all
+      # release/networkservicemesh/cmd-*/${tag} branches into release/${tag} branch.
     - name: Check release branches
       run: |
         images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*" |  cut -d'/' -f4 | cut -d':' -f1 | sort -u)
-        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}" | cut -d'/' -f4 | sort -u)
+        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ env.tag }}" | cut -d'/' -f4 | sort -u)
         diff <(echo "$branches") <(echo "$images")
 
     - name: Merge branches
@@ -35,20 +43,17 @@ jobs:
         git config --global user.email "nsmbot@networkservicmesh.io"
         git config --global user.name "NSMBot"
 
-        git checkout -b release/${{ steps.tag.outputs.tag }}
-
-        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}")
-        for branch in $branches; do
+        git checkout -b release/${{ env.tag }}
+        for branch in ${{ env.branches }; do
           git merge $branch
         done
 
-        git push -u origin release/${{ steps.tag.outputs.tag }}
+        git push -u origin release/${{ env.tag }}
 
+      # After merging all release branches we remove them from remote deployments-k8s
     - name: Remove release branches
       run: |
-        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ steps.tag.outputs.tag }}")
-        echo $branches
-        for branch in $branches; do
+        for branch in ${{ env.branches }; do
           branch=${branch#"origin/"}
           gh api \
             --method DELETE \
