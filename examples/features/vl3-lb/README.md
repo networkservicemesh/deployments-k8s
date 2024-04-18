@@ -56,7 +56,7 @@ When the http request reaches the balancer, it converts the destination address 
 
 Deploy the vL3 network service, vL3-NSE, vL3-LB, finance-servers and finance-client (the last 3 are actually clients of the vL3 network) (see `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-lb?ref=5ee8e5d0e308c71d496769d8e97293cdd366109c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/vl3-lb?ref=0b3d27cc10b8513dda1c8910baa4113c56de66ce
 ```
 
 Wait for vL3-clients to be ready:

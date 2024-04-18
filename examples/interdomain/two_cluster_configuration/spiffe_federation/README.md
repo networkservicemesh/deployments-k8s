@@ -11,12 +11,12 @@ Once federation is bootstrapped, the trust bundle updates are fetched through th
 
 Apply the ClusterSPIFFEID CR for the first cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5ee8e5d0e308c71d496769d8e97293cdd366109c/examples/interdomain/two_cluster_configuration/spiffe_federation/cluster1-spiffeid-template.yaml
+kubectl --kubeconfig=$KUBECONFIG1 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0b3d27cc10b8513dda1c8910baa4113c56de66ce/examples/interdomain/two_cluster_configuration/spiffe_federation/cluster1-spiffeid-template.yaml
 ```
 
 Apply the ClusterSPIFFEID CR for the second cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5ee8e5d0e308c71d496769d8e97293cdd366109c/examples/interdomain/two_cluster_configuration/spiffe_federation/cluster2-spiffeid-template.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/0b3d27cc10b8513dda1c8910baa4113c56de66ce/examples/interdomain/two_cluster_configuration/spiffe_federation/cluster2-spiffeid-template.yaml
 ```
 
 Get and store bundles for clusters:
