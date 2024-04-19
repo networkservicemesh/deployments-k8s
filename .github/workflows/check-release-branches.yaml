@@ -34,8 +34,8 @@ jobs:
       # release/networkservicemesh/cmd-*/${tag} branches into release/${tag} branch.
     - name: Check release branches
       run: |
-        images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*" |  cut -d'/' -f4 | cut -d':' -f1 | sort -u)
-        branches=$(git branch -r | grep -e "release/networkservicemesh/.*/${{ env.tag }}" | cut -d'/' -f4 | sort -u)
+        images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/ci\/.*" | cut -d'/' -f4 | cut -d':' -f1 | sort -u)
+        branches=$(echo ${{ env.branches }} | tr ' ' '\n' | cut -d'/' -f4 | sort -u)
         diff <(echo "$branches") <(echo "$images")
 
     - name: Merge branches
@@ -44,7 +44,7 @@ jobs:
         git config --global user.name "NSMBot"
 
         git checkout -b release/${{ env.tag }}
-        for branch in ${{ env.branches }; do
+        for branch in ${{ env.branches }}; do
           git merge $branch
         done
 
@@ -53,7 +53,7 @@ jobs:
       # After merging all release branches we remove them from remote deployments-k8s
     - name: Remove release branches
       run: |
-        for branch in ${{ env.branches }; do
+        for branch in ${{ env.branches }}; do
           branch=${branch#"origin/"}
           gh api \
             --method DELETE \
