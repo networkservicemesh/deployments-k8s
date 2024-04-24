@@ -26,7 +26,7 @@ spec:
           value: "2m"
         - name: NSM_REQUEST_TIMEOUT
           value: "5s"
-        - name: NSM_LIVENESSCHECKENABLED
+        - name: NSM_LIVENESS_CHECK_ENABLED
           value: "false"
       volumeMounts:
         - name: spire-agent-socket

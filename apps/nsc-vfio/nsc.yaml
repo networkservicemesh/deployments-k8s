@@ -41,7 +41,7 @@ spec:
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_NETWORK_SERVICES
               value: vfio://pingpong?sriovToken=worker.domain/10G
-            - name: NSM_LIVENESSCHECKENABLED
+            - name: NSM_LIVENESS_CHECK_ENABLED
               value: "false"
           volumeMounts:
             - name: spire-agent-socket
