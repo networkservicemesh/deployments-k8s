@@ -14,21 +14,21 @@ Make sure that you have completed steps from [interdomain](../../suites/basic)
 
 Deploy NetworkService:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_dns/cluster3?ref=a6faba2a2401149accdb538abe47a188068f677a
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_dns/cluster3?ref=2a2f9a5af2ad01fe67dd832247d4a91f5deef7b6
 ```
 
 **2. Deploy endpoint on cluster2**
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_dns/cluster2?ref=a6faba2a2401149accdb538abe47a188068f677a
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_dns/cluster2?ref=2a2f9a5af2ad01fe67dd832247d4a91f5deef7b6
 ```
 
 **3. Deploy client on cluster1**
 
 Deploy client:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_dns/cluster1?ref=a6faba2a2401149accdb538abe47a188068f677a
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_dns/cluster1?ref=2a2f9a5af2ad01fe67dd832247d4a91f5deef7b6
 ```
 
 Wait for applications ready:
