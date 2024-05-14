@@ -18,7 +18,7 @@ NSC requests the service and creates the required interface on the monolith:
 
 Apply NSM resources for basic tests:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=71f3dc0f4d996974da7670f49a40a1ae0c7ad738
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/k8s_monolith/configuration/cluster?ref=f573f45d7cc5fe19bd5be59a5207949b021bb62d
 ```
 
 Wait for registry service exposing:
