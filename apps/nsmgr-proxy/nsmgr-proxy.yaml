@@ -60,9 +60,9 @@ spec:
           imagePullPolicy: IfNotPresent
           name: map-ip-k8s
           env:
-            - name: NSM_OUTPUTPATH
+            - name: NSM_OUTPUT_PATH
               value: "/etc/mapip/config.yaml"
-            - name: NSM_NODENAME
+            - name: NSM_NODE_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
