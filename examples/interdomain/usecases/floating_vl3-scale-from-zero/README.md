@@ -2,9 +2,7 @@
 
 ## Description
 
-This example shows how to configure autoscaled vL3-network for interdomain.
-
-The diagram is presented below ([source](https://drive.google.com/file/d/1Fv0g6N-wqlA1VKoeNAoysb6W3JAn8OTe/view?usp=sharing)).
+This example shows how to configure autoscaled vL3-network for interdomain. The diagram is presented below.
 
 ![NSM kernel2kernel Diagram](./floating_vl3_autoscale.svg "NSM Kernel2Kernel Scheme")
 
