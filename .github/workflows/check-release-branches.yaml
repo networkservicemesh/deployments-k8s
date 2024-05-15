@@ -2,6 +2,7 @@
 name: Check release branches
 on:
   push:
+    branches:
       - "release/**"  # We should only react to branches like "release/networkservicemesh/*/v*.*.*"
       - "!release/*"  # and ignore branches like "release/v*.*.*". "**" - any character, "*" - any character except "/"
 
