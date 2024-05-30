@@ -22,10 +22,11 @@ jobs:
 
     - name: Set envs
       run: |
-        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+        tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')
+        echo "tag=$tag" >> $GITHUB_ENV
         {
           echo 'branches<<EOF'
-          echo $(git branch -r | grep -e "release/networkservicemesh/.*/${{ env.tag }}")
+          echo $(git branch -r | grep -e "release/networkservicemesh/.*/$tag")
           echo EOF
         } >> $GITHUB_ENV
 
