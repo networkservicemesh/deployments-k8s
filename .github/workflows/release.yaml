@@ -45,13 +45,6 @@ jobs:
               docker pull $image
             done
 
-      - name: Check CVEs
-        run: |
-            images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:${{ needs.get-tag.outputs.tag }}")
-            for image in $images; do
-              docker scout cves $image
-            done
-
   create-release:
     name: Create release
     needs: [get-tag, check-images]
