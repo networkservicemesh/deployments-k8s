@@ -1,0 +1,75 @@
+---
+name: Check tag
+on:
+  push:
+    branches:
+      - "release/*"
+
+concurrency:
+  group: check-tag
+  cancel-in-progress: true
+
+jobs:
+  check-tags:
+    name: Check tags
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set envs
+      run: |
+        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+
+    - name: Check tags in images
+      run: |
+        images=$(grep -ro * -e "ghcr\.io\/networkservicemesh\/.*")
+        for image in $images; do
+          if [[ "$image" != *"${{ env.tag }}"* ]]; then
+            exit 0
+          fi
+        done
+        exit 1
+
+  replace-params:
+    name: Replace params
+    runs-on: ubuntu-latest
+    needs: [check-tags]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "nsmbot@networkservicmesh.io"
+        git config --global user.name "NSMBot"
+
+    - name: Set envs
+      run: |
+        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+
+    - name: Replace image versions in apps folder
+      run: |
+        grep 'ghcr\.io\/networkservicemesh\/ci\/.*' -rl * | xargs sed -i "/ghcr\.io\/networkservicemesh\/ci/ s#ci\/\(.*\):.*#\1:${{ env.tag }}#g"
+  
+        git add -- .
+        git commit -sm "Replace image versions"
+
+    - name: Replace logging level with INFO
+      run: |
+        grep 'NSM_LOG_LEVEL' -rl * | xargs sed -i '/name: NSM_LOG_LEVEL/{ n; s/value: .*/value: INFO/g }'
+        grep 'NSM_LOG_LEVEL' -rl * | xargs sed -i 's/NSM_LOG_LEVEL: .*/NSM_LOG_LEVEL: INFO/g'
+        grep 'NSM_LOG_LEVEL' -rl * | xargs sed -i 's/NSM_LOG_LEVEL=TRACE/NSM_LOG_LEVEL=INFO/g'
+
+        git add -- .
+        git commit -s -m "Replace logging level with INFO"
+
+    - name: Update references to the latest tag
+      run: |
+        grep '?ref=' -rl * | xargs sed -i "/github.com\/networkservicemesh\/deployments-k8s/ s/\?ref=[a-z0-9]*/\?ref=${{ env.tag }}/g"
+        grep 'raw.githubusercontent.com' -rl * | xargs sed -i "/raw.githubusercontent.com\/networkservicemesh\/deployments-k8s/ s/deployments-k8s\/[a-z0-9]*/deployments-k8s\/${{ env.tag }}/g"
+        
+        git add -- .
+        git commit -s -m "Update references to the latest tag"
+        ref=${{ github.event.ref }}
+        git push origin ${ref#refs/heads/}
