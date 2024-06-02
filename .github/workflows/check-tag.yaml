@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - "release/*"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Release branch
+        required: true
+        type: string
 
 concurrency:
   group: check-tag
@@ -13,47 +19,56 @@ jobs:
   check-tags:
     name: Check tags
     runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.check-tags.outputs.result }}
     steps:
+    - name: Set envs
+      run: |      
+        branch=${{ inputs.branch }} && [[ -z "$branch" ]] && branch=${{ github.event.ref }}
+        echo "tag=$(echo $branch | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Set envs
-      run: |
-        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+      with:
+        ref: release/${{ env.tag }}
 
     - name: Check tags in images
+      id: check-tags
       run: |
         images=$(grep -ro * -e "ghcr\.io\/networkservicemesh\/.*")
         for image in $images; do
           if [[ "$image" != *"${{ env.tag }}"* ]]; then
+            echo "result=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
         done
-        exit 1
+        echo "result=1" >> "$GITHUB_OUTPUT"
 
   replace-params:
     name: Replace params
     runs-on: ubuntu-latest
-    needs: [check-tags]
+    needs: check-tags
+    if: ${{ needs.check-tags.outputs.result == 0 }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Configure Git
+    - name: Set envs
       run: |
+        branch=${{ inputs.branch }} && [[ -z "$branch" ]] && branch=${{ github.event.ref }}
+        echo "tag=$(echo $branch | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+
         git config --global user.email "nsmbot@networkservicmesh.io"
         git config --global user.name "NSMBot"
 
-    - name: Set envs
-      run: |
-        echo "tag=$(echo ${{ github.event.ref }} | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: release/${{ env.tag }}
 
     - name: Replace image versions in apps folder
       run: |
         grep 'ghcr\.io\/networkservicemesh\/ci\/.*' -rl * | xargs sed -i "/ghcr\.io\/networkservicemesh\/ci/ s#ci\/\(.*\):.*#\1:${{ env.tag }}#g"
   
         git add -- .
-        git commit -sm "Replace image versions"
+        git commit -sm "Update image versions"
 
     - name: Replace logging level with INFO
       run: |
@@ -70,6 +85,5 @@ jobs:
         grep 'raw.githubusercontent.com' -rl * | xargs sed -i "/raw.githubusercontent.com\/networkservicemesh\/deployments-k8s/ s/deployments-k8s\/[a-z0-9]*/deployments-k8s\/${{ env.tag }}/g"
         
         git add -- .
-        git commit -s -m "Update references to the latest tag"
-        ref=${{ github.event.ref }}
-        git push origin ${ref#refs/heads/}
+        git commit -s -m "Update references"
+        git push origin release/${{ env.tag }}
