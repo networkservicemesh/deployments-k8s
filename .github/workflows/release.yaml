@@ -19,9 +19,6 @@ jobs:
     outputs:
       tag: ${{ steps.tag-step.outputs.tag }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Tag env
         run: |
           branch=${{ github.event.workflow_run.head_branch }}
@@ -40,10 +37,10 @@ jobs:
 
       - name: Check images are pullable
         run: |
-            images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:${{ needs.get-tag.outputs.tag }}")
-            for image in $images; do
-              docker pull $image
-            done
+          images=$(grep -roh 'apps' -e "ghcr\.io\/networkservicemesh\/.*:${{ needs.get-tag.outputs.tag }}")
+          for image in $images; do
+            docker pull $image
+          done
 
   create-release:
     name: Create release
