@@ -23,7 +23,7 @@ jobs:
       result: ${{ steps.check-tags.outputs.result }}
     steps:
     - name: Set envs
-      run: |      
+      run: |
         branch=${{ inputs.branch }} && [[ -z "$branch" ]] && branch=${{ github.event.ref }}
         echo "tag=$(echo $branch | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
 
@@ -66,7 +66,7 @@ jobs:
     - name: Replace image versions in apps folder
       run: |
         grep 'ghcr\.io\/networkservicemesh\/ci\/.*' -rl * | xargs sed -i "/ghcr\.io\/networkservicemesh\/ci/ s#ci\/\(.*\):.*#\1:${{ env.tag }}#g"
-  
+
         git add -- .
         git commit -sm "Update image versions"
 
@@ -83,7 +83,7 @@ jobs:
       run: |
         grep '?ref=' -rl * | xargs sed -i "/github.com\/networkservicemesh\/deployments-k8s/ s/\?ref=[a-z0-9]*/\?ref=${{ env.tag }}/g"
         grep 'raw.githubusercontent.com' -rl * | xargs sed -i "/raw.githubusercontent.com\/networkservicemesh\/deployments-k8s/ s/deployments-k8s\/[a-z0-9]*/deployments-k8s\/${{ env.tag }}/g"
-        
+
         git add -- .
         git commit -s -m "Update references"
         git push origin release/${{ env.tag }}
