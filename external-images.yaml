@@ -6,8 +6,8 @@ images:
   - docker.io/library/nginx:latest
   - docker.io/nginxinc/nginx-unprivileged:latest
   - docker.io/coredns/coredns:1.8.3
-  - ghcr.io/spiffe/spire-agent:1.6.1
-  - ghcr.io/spiffe/spire-server:1.6.1
+  - ghcr.io/spiffe/spire-agent:1.9.5
+  - ghcr.io/spiffe/spire-server:1.9.5
   - cgr.dev/chainguard/wait-for-it:latest
   - ghcr.io/spiffe/spire-controller-manager:0.2.2
   - ghcr.io/spiffe/spiffe-csi-driver:0.2.3
