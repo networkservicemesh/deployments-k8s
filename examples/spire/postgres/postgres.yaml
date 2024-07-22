@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
-  namespace: postgres
+  name: spire-postgres
+  namespace: spire
   labels:
-    app: postgres
+    app: spire-postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: spire-postgres
   template:
     metadata:
       labels:
-        app: postgres
+        app: spire-postgres
     spec:
       containers:
-        - name: postgres
+        - name: spire-postgres
           image: postgres
           imagePullPolicy: IfNotPresent
           ports:
@@ -34,15 +34,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
+  name: spire-postgres
   labels:
-    app: postgres
+    app: spire-postgres
 spec:
   type: ClusterIP
   ports:
-    - name: postgres
+    - name: spire-postgres
       port: 5432
       targetPort: 5432
       protocol: TCP
   selector:
-    app: postgres
+    app: spire-postgres
