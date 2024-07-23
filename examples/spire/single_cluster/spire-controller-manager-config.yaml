@@ -17,4 +17,3 @@ ignoreNamespaces:
   - kube-public
   - spire
   - local-path-storage
-  - postgres

@@ -34,6 +34,9 @@ spec:
               readOnly: true
             - name: spire-server-socket
               mountPath: /tmp/spire-server/private
+            - name: spire-data
+              mountPath: /run/spire/data
+              readOnly: false
           livenessProbe:
             exec:
               command:
@@ -69,3 +72,13 @@ spec:
         - name: spire-controller-manager-config
           configMap:
             name: spire-controller-manager-config
+  volumeClaimTemplates:
+    - metadata:
+        name: spire-data
+        namespace: spire
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
