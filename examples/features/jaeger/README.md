@@ -104,7 +104,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for Spire pods status ready:
 ```bash
-kubectl wait -n spire --timeout=3m --for=condition=ready pod -l app=spire-server
+kubectl wait -n spire --timeout=4m --for=condition=ready pod -l app=spire-server
 ```
 ```bash
 kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
