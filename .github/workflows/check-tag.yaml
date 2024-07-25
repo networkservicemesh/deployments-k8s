@@ -79,6 +79,13 @@ jobs:
         git add -- .
         git commit -s -m "Replace logging level with INFO"
 
+    - name: Replace pprof enabled value with false
+      run: |
+        grep 'NSM_PPROF_ENABLED' -rl * | xargs sed -i '/name: NSM_PPROF_ENABLED/{ n; s/value: .*/value: false/g }'
+
+        git add -- .
+        git commit -s -m "Replace pprof enabled value with false"
+
     - name: Update references to the latest tag
       run: |
         grep '?ref=' -rl * | xargs sed -i "/github.com\/networkservicemesh\/deployments-k8s/ s/\?ref=[a-z0-9]*/\?ref=${{ env.tag }}/g"

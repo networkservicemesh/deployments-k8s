@@ -32,6 +32,10 @@ spec:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
               value: TRACE
+            - name: NSM_PPROF_ENABLED
+              value: true
+            - name: NSM_PPROF_PORT
+              value: 6060
             - name: NSM_REGISTRY_URL
               value: "registry:5002"
             #            - name: DLV_LISTEN_NSMGR
