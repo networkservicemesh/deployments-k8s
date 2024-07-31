@@ -6,6 +6,7 @@ namespace: spire
 
 resources:
 - ../base
+- ../postgres
 
 generatorOptions:
   disableNameSuffixHash: true

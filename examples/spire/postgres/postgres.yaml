@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spire-postgres
+  namespace: spire
+  labels:
+    app: spire-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spire-postgres
+  template:
+    metadata:
+      labels:
+        app: spire-postgres
+    spec:
+      containers:
+        - name: spire-postgres
+          image: postgres
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: spire
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: admin
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spire-postgres
+  labels:
+    app: spire-postgres
+spec:
+  type: ClusterIP
+  ports:
+    - name: spire-postgres
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: spire-postgres
