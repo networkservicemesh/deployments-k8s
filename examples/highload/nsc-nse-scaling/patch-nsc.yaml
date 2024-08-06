@@ -1,0 +1,14 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsc-kernel
+spec:
+  replicas: 0
+  template:
+    spec:
+      containers:
+        - name: nsc
+          env:
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://2registry3nsexnscv4/nsm-v4
