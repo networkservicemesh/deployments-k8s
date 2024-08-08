@@ -11,7 +11,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 Deploy metrics server:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/56d14f1cd3c8e1b3070e78b8686138ee98e9681d/examples/highload/nsc-nse-scaling/metrics-server.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4b42afefaf090a724f79767ed6b3f2d61643a726/examples/highload/nsc-nse-scaling/metrics-server.yaml
 ```
 
 Wait for metrics server's readiness:
@@ -27,7 +27,7 @@ kubectl top pod -A > $ARTIFACTS_DIR/highload/nsc-nse-scaling/metrics-before
 
 Deploy NSCs and NSEs, 0 replicas each:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/highload/nsc-nse-scaling?ref=56d14f1cd3c8e1b3070e78b8686138ee98e9681d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/highload/nsc-nse-scaling?ref=4b42afefaf090a724f79767ed6b3f2d61643a726
 ```
 
 A function to check connectivity between NSCs and NSEs:
@@ -98,5 +98,5 @@ done
 Delete ns:
 ```bash
 kubectl delete ns ns-nsc-nse-scaling
-kubectl delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/56d14f1cd3c8e1b3070e78b8686138ee98e9681d/examples/highload/nsc-nse-scaling/metrics-server.yaml
+kubectl delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/4b42afefaf090a724f79767ed6b3f2d61643a726/examples/highload/nsc-nse-scaling/metrics-server.yaml
 ```
