@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       app: nse-kernel
+  replicas: 0
   template:
     metadata:
       labels:

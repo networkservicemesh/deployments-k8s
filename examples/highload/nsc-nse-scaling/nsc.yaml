@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       app: nsc-kernel
+  replicas: 0
   template:
     metadata:
       labels:
@@ -23,7 +24,9 @@ spec:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_LOG_LEVEL
-              value: INFO:
+              value: INFO
+            - name: NSM_NETWORK_SERVICES
+              value: kernel://nsc-nse-scaling/nsm-1
             - name: NSM_NAME
               valueFrom:
                 fieldRef:

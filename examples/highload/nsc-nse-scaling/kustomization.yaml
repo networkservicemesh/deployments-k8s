@@ -6,9 +6,6 @@ namespace: ns-nsc-nse-scaling
 
 resources:
 - ns-nsc-nse-scaling.yaml
-- metrics-server.yaml
-- nsc.yaml
 - netsvc.yaml
+- nsc.yaml
 - nse.yaml
-patches:
-- path: patch-nsc.yaml

@@ -9,65 +9,87 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 ## Run
 
-Deploy NSCs and NSE:
+Deploy metrics server:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal_extended/component-restart?ref=56d14f1cd3c8e1b3070e78b8686138ee98e9681d
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/56d14f1cd3c8e1b3070e78b8686138ee98e9681d/examples/highload/nsc-nse-scaling/metrics-server.yaml
 ```
 
-Wait for applications ready:
+Wait for metrics server's readiness:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l k8s-app=metrics-server -n ns-nsc-nse-scaling
+kubectl wait --for=condition=ready --timeout=1m pod -l k8s-app=metrics-server -n kube-system
 ```
 
-Define env variables for scripts:
+Collect pod metrics before scaling:
 ```bash
-# N_RESTARTS - number of restarts
-# TEST_TIME - determines how long the test will take (sec)
-# DELAY - delay between restarts (sec)
-# INTERFACE_READY_WAIT - how long do we wait for the interface to be ready (sec). Equals to NSM_REQUEST_TIMEOUT * 2 (for Close and Request)
-N_RESTARTS=15
-TEST_TIME=900
-DELAY=$(($TEST_TIME/$N_RESTARTS))
-INTERFACE_READY_WAIT=10
+mkdir -p $ARTIFACTS_DIR/highload/nsc-nse-scaling
+kubectl top pod -A > $ARTIFACTS_DIR/highload/nsc-nse-scaling/metrics-before
 ```
 
-Test functions:
+Deploy NSCs and NSEs, 0 replicas each:
 ```bash
-ping() {
-  nscs=$(kubectl get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-nsc-nse-scaling)
-  for nsc in $nscs; do
-      ipv4=$(kubectl exec $nsc -n ns-nsc-nse-scaling -- ip route show dev nsm-1 | cut -d' ' -f1 | tr '\n' ' ' | cut -d' ' -f1)
-      kubectl exec $nsc -n ns-nsc-nse-scaling -- ping -c2 -i0.5 $ipv4 2>&1 > error
-      if [[ "$?" != 0 ]]; then
-          echo "failed to ping from $nsc"
-          echo "address: $ipv4"
-          echo "date: $(date)"
-          echo "Error:"
-          cat error
-          return 1
-      fi
-  done
-  return 1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/highload/nsc-nse-scaling?ref=56d14f1cd3c8e1b3070e78b8686138ee98e9681d
+```
+
+A function to check connectivity between NSCs and NSEs:
+```bash
+function ping() {
+    nscs=$(kubectl get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-nsc-nse-scaling)
+    for nsc in $nscs; do
+        ipv4=$(kubectl exec $nsc -n ns-nsc-nse-scaling -- ip route show dev nsm-1 | cut -d' ' -f1 | tr '\n' ' ' | cut -d' ' -f1)
+        kubectl exec $nsc -n ns-nsc-nse-scaling -- ping -c2 -i0.5 $ipv4
+        if [[ "$?" != 0 ]]; then
+            echo "failed to ping from $nsc"
+            return 1
+        fi
+    done
+    return 0
 }
 ```
 
-Main loop:
+Define the number of scaling iterations:
 ```bash
-for i in {1..20}; do
-    echo "Attempt #$i"
+SCALING_COUNT=50
+```
 
-    kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=10
-    kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=10s
-    sleep 60
+Main loop function:
+```bash
+function scaling() {
+    for i in {1..$SCALING_COUNT}; do
+        echo "Attempt #$i"
 
-    ping
-    if [[ "$?" != 0 ]]; then
-        echo "failed to ping!!!!!!!!!"
-    fi 
+        kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=10
+        kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=10
+        sleep 60
 
-    kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=0;
-    kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=0;
-    sleep 60
+        ping
+        if [[ "$?" != 0 ]]; then
+            echo "failed to ping!!!!!!!!!"
+        fi 
+
+        kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=0
+        kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=0
+        sleep 60
+    done
+    return 0
+}
+```
+
+
+Run the loop:
+```bash
+scaling
+```
+
+Collect metrics after the test:
+```bash
+kubectl top pod -A > $ARTIFACTS_DIR/highload/nsc-nse-scaling/metrics-after
+```
+
+Collect `vpp` interfaces from the forwarders:
+```bash
+fwds=$(kubectl get pods -l app=forwarder-vpp -n nsm-system --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+for fwd in $fwds; do
+    kubectl exec -n nsm-system $fwd -- vppctl show int > $ARTIFACTS_DIR/highload/nsc-nse-scaling/$fwd-ifaces
 done
 ```
 
@@ -76,4 +98,5 @@ done
 Delete ns:
 ```bash
 kubectl delete ns ns-nsc-nse-scaling
+kubectl delete -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/56d14f1cd3c8e1b3070e78b8686138ee98e9681d/examples/highload/nsc-nse-scaling/metrics-server.yaml
 ```
