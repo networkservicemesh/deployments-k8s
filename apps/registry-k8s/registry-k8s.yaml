@@ -32,9 +32,9 @@ spec:
             - name: NSM_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
             - name: NSM_PPROF_ENABLED
-              value: true
+              value: "true"
             - name: NSM_PPROF_PORT
-              value: 6060
+              value: "6060"
           imagePullPolicy: IfNotPresent
           name: registry
           ports:
