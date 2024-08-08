@@ -35,12 +35,8 @@ A function to check connectivity between NSCs and NSEs:
 function ping() {
     nscs=$(kubectl get pods -l app=nsc-kernel -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-nsc-nse-scaling)
     for nsc in $nscs; do
-        ipv4=$(kubectl exec $nsc -n ns-nsc-nse-scaling -- ip route show dev nsm-1 | cut -d' ' -f1 | tr '\n' ' ' | cut -d' ' -f1)
-        kubectl exec $nsc -n ns-nsc-nse-scaling -- ping -c2 -i0.5 $ipv4
-        if [[ "$?" != 0 ]]; then
-            echo "failed to ping from $nsc"
-            return 1
-        fi
+        ipv4=$(kubectl exec $nsc -n ns-nsc-nse-scaling -- ip route | grep -Eo '172\.16\.0\.[0-9]{1,3}')
+        kubectl exec $nsc -n ns-nsc-nse-scaling -- ping -c2 -i0.5 $ipv4 || return 1
     done
     return 0
 }
@@ -48,23 +44,18 @@ function ping() {
 
 Define the number of scaling iterations:
 ```bash
-SCALING_COUNT=50
+SCALING_COUNT=100
 ```
 
 Main loop function:
 ```bash
 function scaling() {
-    for i in {1..$SCALING_COUNT}; do
-        echo "Attempt #$i"
-
+    for i in $(seq 1 $SCALING_COUNT); do
         kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=10
         kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=10
         sleep 60
 
-        ping
-        if [[ "$?" != 0 ]]; then
-            echo "failed to ping!!!!!!!!!"
-        fi 
+        ping || return 1
 
         kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=0
         kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=0
