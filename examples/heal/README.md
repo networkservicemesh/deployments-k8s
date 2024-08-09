@@ -45,3 +45,4 @@ SPIRE:
  vl3:
  - [vl3 NSE death](./vl3-nse-death)
  - [vl3 NSCs death](./vl3-nscs-death)
+ - [vl3 Dataplane Interruption](./vl3-dataplane-interrupt)
