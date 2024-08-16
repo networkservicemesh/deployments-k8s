@@ -24,6 +24,10 @@ spec:
               value: tcp://:5005
             - name: NSM_LOG_LEVEL
               value: TRACE
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           imagePullPolicy: IfNotPresent
           name: registry
           ports:

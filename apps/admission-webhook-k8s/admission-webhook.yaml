@@ -47,7 +47,7 @@ spec:
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
-              value: NSM_LOG_LEVEL=TRACE
+              value: "NSM_LOG_LEVEL=TRACE,NSM_PPROF_ENABLED=true,NSM_PPROF_LISTEN_ON=localhost:6060"
             - name: NSM_SIDECAR_LIMITS_MEMORY
               value: 80Mi
             - name: NSM_SIDECAR_REQUESTS_MEMORY
@@ -56,6 +56,10 @@ spec:
               value: 200m
             - name: NSM_SIDECAR_REQUESTS_CPU
               value: 100m
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

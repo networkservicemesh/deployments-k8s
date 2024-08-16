@@ -40,6 +40,10 @@ spec:
               value: TRACE
             - name: NSM_POD_DESCRIPTION_FILE
               value: /run/supplier/pod-template.yaml
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           volumeMounts:
             - name: pod-file
               mountPath: /run/supplier
