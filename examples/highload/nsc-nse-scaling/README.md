@@ -45,14 +45,16 @@ function ping() {
 Define the number of scaling iterations:
 ```bash
 SCALING_COUNT=100
+NSC_COUNT=5
+NSE_COUNT=5
 ```
 
 Main loop function:
 ```bash
 function scaling() {
     for i in $(seq 1 $SCALING_COUNT); do
-        kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=10
-        kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=10
+        kubectl scale deployment -n ns-nsc-nse-scaling nsc-kernel --replicas=$NSC_COUNT
+        kubectl scale deployment -n ns-nsc-nse-scaling nse-kernel --replicas=$NSE_COUNT
         sleep 60
 
         ping || return 1
