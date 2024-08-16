@@ -23,6 +23,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           imagePullPolicy: IfNotPresent
           name: cluster-info
           volumeMounts:

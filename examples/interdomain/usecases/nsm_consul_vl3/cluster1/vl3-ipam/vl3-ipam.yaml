@@ -26,6 +26,10 @@ spec:
               value: 169.254.0.0/16
             - name: NSM_LOG_LEVEL
               value: TRACE
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           imagePullPolicy: IfNotPresent
           name: vl3-ipam
           ports:

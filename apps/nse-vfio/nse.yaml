@@ -44,6 +44,10 @@ spec:
               value: TRACE
             - name: NSM_SERVICE_NAMES
               value: "pingpong: { addr: 0a:55:44:33:22:11 }"
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

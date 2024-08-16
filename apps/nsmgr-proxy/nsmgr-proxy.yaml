@@ -44,6 +44,10 @@ spec:
                   fieldPath: status.podIP
             - name: NSM_MAP_IP_FILE_PATH
               value: "/etc/mapip/config.yaml"
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
@@ -66,6 +70,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           volumeMounts:
             - name: mapip-volume
               mountPath: /etc/mapip

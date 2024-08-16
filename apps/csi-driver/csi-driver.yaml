@@ -54,6 +54,10 @@ spec:
               value: "/nsm-csi/csi.sock"
             - name: NSM_VERSION
               value: cmd-csi-driver:811999f
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
           volumeMounts:
             # The volume containing the Network Service API socket.
             # The NSM CSI driver will mount this directory into containers.
