@@ -81,7 +81,9 @@ jobs:
 
     - name: Replace pprof enabled value with false
       run: |
-        grep 'NSM_PPROF_ENABLED' -rl * | xargs sed -i '/name: NSM_PPROF_ENABLED/{ n; s/value: .*/value: false/g }'
+        grep 'NSM_PPROF_ENABLED' -rl * | xargs sed -i '/name: NSM_PPROF_ENABLED/{ n; s/value: .*/value: "false"/g }'
+        grep 'NSM_PPROF_ENABLED' -rl * | xargs sed -i 's/NSM_PPROF_ENABLED: .*/NSM_PPROF_ENABLED: "false"/g'
+        grep 'NSM_PPROF_ENABLED' -rl * | xargs sed -i 's/NSM_PPROF_ENABLED=true/NSM_PPROF_ENABLED=false/g'
 
         git add -- .
         git commit -s -m "Replace pprof enabled value with false"
