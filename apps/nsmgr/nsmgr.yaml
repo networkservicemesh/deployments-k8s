@@ -34,8 +34,8 @@ spec:
               value: TRACE
             - name: NSM_PPROF_ENABLED
               value: "true"
-            - name: NSM_PPROF_PORT
-              value: "6060"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
             - name: NSM_REGISTRY_URL
               value: "registry:5002"
             #            - name: DLV_LISTEN_NSMGR
