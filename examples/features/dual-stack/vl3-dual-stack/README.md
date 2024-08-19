@@ -13,8 +13,8 @@ Diagram:
 
 Deploy network service, nsc and vl3 nses (See at `kustomization.yaml`):
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/vl3-dual-stack?ref=bd50a80342a6546be77d5f3dd0b7aa57cc218b04
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/vl3-dual-stack/ipam-ipv6?ref=bd50a80342a6546be77d5f3dd0b7aa57cc218b04
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/vl3-dual-stack?ref=d39c96f98bdfdba8d68a99621085645fa62a2dd1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/dual-stack/vl3-dual-stack/ipam-ipv6?ref=d39c96f98bdfdba8d68a99621085645fa62a2dd1
 ```
 
 Wait for clients to be ready:
