@@ -35,4 +35,5 @@ To run any feature example follow steps for [Basic NSM setup](../basic)
 - [NSC connects to multiple services](./multiple-services)
 - [Scaled Registry K8s](./scaled-registry)
 - [NSC changes endpoints dynamically](./change-nse-dynamically)
+- [NSE IPAM Policies](./ipam-policies)
 
