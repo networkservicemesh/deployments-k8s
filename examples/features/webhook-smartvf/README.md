@@ -18,7 +18,7 @@ kubectl wait --for=condition=ready --timeout=1m pod ${WH} -n nsm-system
 
 Deploy postgres-nsc and postgres-nse
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook-smartvf?ref=0658366549f562861395b99de11de7f5d1527d00
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/webhook-smartvf?ref=2480cbb57f7dba2567d6aac8f9ce1d49e91fd5bb
 ```
 
 Wait for applications ready:
