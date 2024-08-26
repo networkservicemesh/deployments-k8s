@@ -17,12 +17,13 @@ jobs:
         with:
           config_file: .yamllint.yml
           strict: true
-      - name: Scan repo with kube-linter
-        uses: stackrox/kube-linter-action@v1.0.4
+      - name: login to Github Packages
+        run: echo "${{ github.token }}" | docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
+      - name: Lint K8s files
+        uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
-          directory: apps
-          format: sarif
-          output-file: kube-linter.sarif
+          entrypoint: '/kubeconform'
+          args: "-summary -ignore-missing-schemas -ignore-filename-pattern docker-compose.yaml apps/"
   shellcheck:
     name: shellcheck
     runs-on: ubuntu-latest
