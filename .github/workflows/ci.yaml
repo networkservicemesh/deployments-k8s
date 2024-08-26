@@ -17,6 +17,11 @@ jobs:
         with:
           config_file: .yamllint.yml
           strict: true
+      - name: Scan repo with kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          format: sarif
+          output-file: kube-linter.sarif
   shellcheck:
     name: shellcheck
     runs-on: ubuntu-latest
