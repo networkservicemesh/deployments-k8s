@@ -9,5 +9,3 @@ resources:
 - binding.yaml
 - role.yaml
 - mutating-webhook-config.yaml
-
-namespace: default
