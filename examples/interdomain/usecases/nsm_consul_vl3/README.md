@@ -10,7 +10,6 @@ Make sure that you have completed steps from [multiservicemesh](../../suites/mul
 
 References:
 https://learn.hashicorp.com/tutorials/consul/deployment-guide?in=consul/production-deploy
-https://learn.hashicorp.com/tutorials/consul/tls-encryption-secure
 https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=consul/developer-mesh
 
 Start vl3, install Consul control plane and counting service on the first cluster and dashboard on the second:
