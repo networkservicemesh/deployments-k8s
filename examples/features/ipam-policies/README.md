@@ -17,7 +17,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 Deploy the client and the first NSE with CIDR `172.16.1.0/31` and `default` IPAM Policy:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipam-policies?ref=24b78bbb35aa485a22d31f2ac1750442e5f71075
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipam-policies?ref=d03518e1fcfa99f4540056126d502321e2b0ddc2
 ```
 
 Wait for applications ready:
@@ -45,7 +45,7 @@ kubectl delete pod -l app=first-nse -n ns-ipam-policies
 
 Apply the second NSE with CIDR `172.16.2.0/31` and `strict` IPAM Policy:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/24b78bbb35aa485a22d31f2ac1750442e5f71075/examples/features/ipam-policies/second-nse.yaml -n ns-ipam-policies
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/d03518e1fcfa99f4540056126d502321e2b0ddc2/examples/features/ipam-policies/second-nse.yaml -n ns-ipam-policies
 ```
 
 Ping the second NSE from the client:
