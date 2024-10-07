@@ -16,7 +16,7 @@ spec:
         "spiffe.io/spiffe-id": "true"
     spec:
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-ipam-vl3:9af9aa0
+        - image: ghcr.io/networkservicemesh/ci/cmd-ipam-vl3:02c42bd
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
