@@ -10,7 +10,7 @@ Make sure that you have completed steps from [ovs](../../ovs) setup.
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=1ce6b4bfee6e4aaf9fabee5f05093a912bcd4479
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/SmartVF2SmartVF?ref=d7ed66d9aef6331c706ac523a85aefabe0928fd2
 ```
 
 Wait for applications ready:
