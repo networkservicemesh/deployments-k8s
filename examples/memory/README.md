@@ -11,7 +11,7 @@ Memory example contains setup and tear down logic with default NSM infrastructur
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=925888a008bbf5ad2816d59674261496c23230dc
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/memory?ref=e80b615e08e13f3fee1a83f1ccc51917865ca921
 ```
 
 Wait for admission-webhook-k8s:
