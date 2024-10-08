@@ -24,7 +24,7 @@ spec:
         mountPath: /run/spire/sockets
         readOnly: true
   - name: dashboard-ui
-    image: ghcr.io/networkservicemesh/ci/cmd-dashboard-ui:2a0f199
+    image: ghcr.io/networkservicemesh/ci/cmd-dashboard-ui:14da2e1
     imagePullPolicy: IfNotPresent
     ports:
       - containerPort: 3000
