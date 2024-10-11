@@ -15,7 +15,7 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 Deploy NSCs and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal_extended/component-restart?ref=eb5c48e8243cb34990432b1ae6cc96344ed5ab12
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal_extended/component-restart?ref=849d9718e4f100fc1fdb1852c3054d5ec0bb3153
 ```
 
 Wait for applications ready:
