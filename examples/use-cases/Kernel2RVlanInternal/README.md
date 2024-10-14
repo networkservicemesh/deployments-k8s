@@ -13,7 +13,7 @@ Make sure that you have completed steps from [remotevlan_ovs](../../remotevlan_o
 Deploy iperf server:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanInternal?ref=e3cdc82126f484e63aacdae1213e6d2b138ad670
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanInternal?ref=91943d9d62a6bb8d992e4f6f82db54312b798eee
 ```
 
 Wait for applications ready:
