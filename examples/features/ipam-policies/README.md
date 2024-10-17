@@ -15,27 +15,40 @@ Make sure that you have completed steps from [basic](../../basic) setup.
 
 ## Run
 
-Deploy the client and the first NSE with CIDR `172.16.1.0/31` and `default` IPAM Policy:
+Deploy the client and the first NSE with CIDR `172.16.1.0/29` and `default` IPAM Policy:
 ```bash
 kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipam-policies?ref=42440f9d1b3e4daf8696da435bd128da8dd93b22
 ```
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-ipam-policies
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine-1 -n ns-ipam-policies
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine-2 -n ns-ipam-policies
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=first-nse -n ns-ipam-policies
 ```
 
-Ping the first NSE from the client:
+Ping the first NSE from the first client:
 ```bash
-kubectl exec pods/alpine -n ns-ipam-policies -- ping -c 4 172.16.1.0
+kubectl exec pods/alpine-1 -n ns-ipam-policies -- ping -c 4 172.16.1.0 || kubectl exec pods/alpine-2 -n ns-ipam-policies -- ping -c 4 172.16.1.2
 ```
 
-Ping the client from the first NSE:
+Ping the first NSE from the second client:
+```bash
+kubectl exec pods/alpine-2 -n ns-ipam-policies -- ping -c 4 172.16.1.0 || kubectl exec pods/alpine-2 -n ns-ipam-policies -- ping -c 4 172.16.1.2
+```
+
+Ping the first client from the first NSE:
 ```bash
 kubectl exec pods/first-nse -n ns-ipam-policies -- ping -c 4 172.16.1.1
+```
+
+Ping the second client from the first NSE:
+```bash
+kubectl exec pods/first-nse -n ns-ipam-policies -- ping -c 4 172.16.1.3
 ```
 
 Delete the first NSE:
@@ -43,30 +56,52 @@ Delete the first NSE:
 kubectl delete pod -l app=first-nse -n ns-ipam-policies
 ```
 
-Apply the second NSE with CIDR `172.16.2.0/31` and `strict` IPAM Policy:
+Apply the second NSE with CIDR `172.16.2.0/29` and `strict` IPAM Policy:
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/42440f9d1b3e4daf8696da435bd128da8dd93b22/examples/features/ipam-policies/second-nse.yaml -n ns-ipam-policies
 ```
 
-Ping the second NSE from the client:
+Wait for application ready:
 ```bash
-kubectl exec pods/alpine -n ns-ipam-policies -- ping -c 4 172.16.2.0
+kubectl wait --for=condition=ready --timeout=1m pod -l app=second-nse -n ns-ipam-policies
 ```
 
-Ping the client from the second NSE:
+Ping the second NSE from the first client:
+```bash
+kubectl exec pods/alpine-1 -n ns-ipam-policies -- ping -c 4 172.16.2.0 || kubectl exec pods/alpine-1 -n ns-ipam-policies -- ping -c 4 172.16.2.2
+```
+
+Ping the second NSE from the second client:
+```bash
+kubectl exec pods/alpine-2 -n ns-ipam-policies -- ping -c 4 172.16.2.0 || kubectl exec pods/alpine-2 -n ns-ipam-policies -- ping -c 4 172.16.2.2
+```
+
+Ping the first client from the NSE:
 ```bash
 kubectl exec pods/second-nse -n ns-ipam-policies -- ping -c 4 172.16.2.1
 ```
 
-Check routes on the client. They should contain only the routes from CIDR `172.16.2.0/31`:
+Ping the second client from the NSE:
 ```bash
-routes=$(kubectl exec pods/alpine -n ns-ipam-policies -- ip r show dev nsm-1 | xargs) # Use xargs here just to trim whitespaces in the routes
-if [[ "$routes" != "172.16.2.0 dev nsm-1" ]]; then
+kubectl exec pods/second-nse -n ns-ipam-policies -- ping -c 4 172.16.2.3
+```
+
+Check routes on the clients. They should contain only the routes from CIDR `172.16.2.0/29`:
+```bash
+routes=$(kubectl exec pods/alpine-1 -n ns-ipam-policies -- ip r show dev nsm-1 | xargs) # Use xargs here just to trim whitespaces in the routes
+if [[ "$routes" != "172.16.2.0 dev nsm-1" && "$routes" != "172.16.2.2 dev nsm-1" ]]; then
     echo "routes on the client are invalid"
     exit
 fi
 ```
 
+```bash
+routes=$(kubectl exec pods/alpine-2 -n ns-ipam-policies -- ip r show dev nsm-2 | xargs) # Use xargs here just to trim whitespaces in the routes
+if [[ "$routes" != "172.16.2.0 dev nsm-2" && "$routes" != "172.16.2.2 dev nsm-2" ]]; then
+    echo "routes on the client are invalid"
+    exit
+fi
+```
 
 ## Cleanup
 
