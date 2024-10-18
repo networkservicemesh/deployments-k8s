@@ -29,7 +29,7 @@ spec:
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_CIDR_PREFIX
-          value: 172.16.1.0/31
+          value: 172.16.1.0/29
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
