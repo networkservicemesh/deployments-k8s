@@ -47,7 +47,7 @@ spec:
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
-              value: NSM_LOG_LEVEL=TRACE
+              value: NSM_LOG_LEVEL=INFO
             - name: NSM_SIDECAR_LIMITS_MEMORY
               value: 80Mi
             - name: NSM_SIDECAR_REQUESTS_MEMORY
