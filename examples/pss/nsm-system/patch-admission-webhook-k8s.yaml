@@ -10,4 +10,4 @@ spec:
         - name: admission-webhook-k8s
           env:
             - name: NSM_ENVS
-              value: NSM_LOG_LEVEL=TRACE,NSM_LOCAL_DNS_SERVER_ENABLED=False
+              value: NSM_LOG_LEVEL=INFO,NSM_LOCAL_DNS_SERVER_ENABLED=False
