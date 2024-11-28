@@ -44,7 +44,7 @@ Create ns for deployments:
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan_ovs?ref=b2f1cc94c129264f6dd1f529087e6ee1a6714564
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/remotevlan_ovs?ref=36af411c7cccdda22cbd6ca1e8ffe0c299ec4638
 ```
 
 Wait for NSE application:
