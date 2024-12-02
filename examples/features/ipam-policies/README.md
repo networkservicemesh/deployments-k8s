@@ -33,7 +33,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=first-nse -n ns-ipam-
 
 Ping the first NSE from the first client:
 ```bash
-kubectl exec pods/alpine-1 -n ns-ipam-policies -- ping -c 4 172.16.1.0 || kubectl exec pods/alpine-2 -n ns-ipam-policies -- ping -c 4 172.16.1.2
+kubectl exec pods/alpine-1 -n ns-ipam-policies -- ping -c 4 172.16.1.0 || kubectl exec pods/alpine-1 -n ns-ipam-policies -- ping -c 4 172.16.1.2
 ```
 
 Ping the first NSE from the second client:
