@@ -4,6 +4,9 @@ kind: DaemonSet
 metadata:
   name: forwarder-vpp
 spec:
+  selector:
+    matchLabels:
+       app: forwarder-vpp
   template:
     spec:
       containers:
