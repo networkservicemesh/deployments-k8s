@@ -12,7 +12,7 @@ Make sure that you have completed steps from [sriov](../../sriov_vlantag) setup.
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2NoopVlanTag?ref=3202790e8fb5c4c0fea88a93a52b089faac20a0f
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2NoopVlanTag?ref=4ab4e8b32f16eaa2b4b9e96ffcf69cbb847e9e2a
 ```
 
 Wait for applications ready:
