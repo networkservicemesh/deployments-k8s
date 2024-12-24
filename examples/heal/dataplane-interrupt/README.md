@@ -12,7 +12,7 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/dataplane-interrupt?ref=cf284ac7d5f8f58502b30ba6626970f1a9e81650
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/dataplane-interrupt?ref=2aa09d67b569074d155ff2dd286cf4632bc9ad0e
 ```
 
 Wait for applications ready:
