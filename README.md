@@ -1,6 +1,6 @@
 # deployment-k8s
 
-![GithubActions Build Status](https://github.com/networkservicemesh/cloudtest/workflows/ci/badge.svg)
+![GithubActions Build Status](https://github.com/networkservicemesh/integration-k8s-kind/actions/workflows/ci.yaml/badge.svg)
 [![Weekly minutes](https://img.shields.io/badge/Weekly%20Meeting%20Minutes-Tue%208am%20PT-blue.svg?style=plastic")](https://docs.google.com/document/d/1C9NKjo0PWNWypROEO9-Y6haw5h9Xmurvl14SXpciz2Y/edit#heading=h.rc9df0a6n3ng)
 [![Mailing list](https://img.shields.io/badge/Mailing%20List-networkservicemesh-blue.svg?style=plastic")](https://groups.google.com/forum/#!forum/networkservicemesh)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20license%202.0-blue.svg)](https://github.com/networkservicemesh/cloudtest/blob/master/LICENSE)
@@ -9,7 +9,7 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2725/badge)](https://bestpractices.coreinfrastructure.org/projects/2725)
 
 <p align="center">
-  <a href="https://www.networkservicemesh.io/"><img src="https://github.com/cncf/artwork/blob/master/projects/networkservicemesh/horizontal/color/networkservicemesh-horizontal-color.png?raw=true" width="70%" height="70%"></a>
+  <a href="https://www.networkservicemesh.io/"><img src="https://raw.githubusercontent.com/cncf/artwork/refs/heads/main/projects/networkservicemesh/horizontal/color/networkservicemesh-horizontal-color.png" width="70%" height="70%"></a>
 </p>
 
 **deployments-k8s** repository provides native kubernetes yaml deployments and markdown examples for Network Service Mesh.
