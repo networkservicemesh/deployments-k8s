@@ -13,14 +13,14 @@ Make sure that you have completed steps from [interdomain](../../suites/basic)
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/interdomain_dns/cluster2?ref=d091e36be882950ef10f97ad530807f82c96c51d
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/interdomain_dns/cluster2?ref=447351be510040aee7497d38ea30b77bbff2289f
 ```
 
 **2. Deploy client on cluster1**
 
 Deploy client:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/interdomain_dns/cluster1?ref=d091e36be882950ef10f97ad530807f82c96c51d
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/interdomain_dns/cluster1?ref=447351be510040aee7497d38ea30b77bbff2289f
 ```
 
 Wait for applications ready:

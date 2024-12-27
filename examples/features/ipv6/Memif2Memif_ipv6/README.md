@@ -8,7 +8,7 @@ NSC and NSE are using the `memif` mechanism to connect to its local forwarder.
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Memif2Memif_ipv6?ref=d091e36be882950ef10f97ad530807f82c96c51d
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/ipv6/Memif2Memif_ipv6?ref=447351be510040aee7497d38ea30b77bbff2289f
 ```
 
 Wait for applications ready:
