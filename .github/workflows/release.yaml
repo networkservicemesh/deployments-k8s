@@ -11,7 +11,7 @@ jobs:
     name: Print debug info for Release workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: hmarr/debug-action@v2
+      - uses: hmarr/debug-action@v3
 
   get-tag:
     name: Tag
