@@ -14,7 +14,7 @@ jobs:
       - uses: hmarr/debug-action@v3
 
   check-mergeability:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' }}
     uses: networkservicemesh/.github/.github/workflows/check-mergeability.yaml@main
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
