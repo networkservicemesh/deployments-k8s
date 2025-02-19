@@ -19,7 +19,7 @@ Expected that Endpoint(in this case NSMgr) will fail the Request from the client
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/opa?ref=eada5deb65f061789faa6683c740f84f7059eab1
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/opa?ref=d1e5ab789a5b1f520a287f62170f25c1fb3ce4c2
 ```
 
 Wait for applications ready:
