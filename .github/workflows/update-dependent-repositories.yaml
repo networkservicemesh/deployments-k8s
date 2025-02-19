@@ -45,7 +45,7 @@ jobs:
         run: |
           echo '::set-output name=hash::'$(git rev-parse HEAD^)
       - name: Find merged PR
-        uses: jwalton/gh-find-current-pr@v1.0.2
+        uses: jwalton/gh-find-current-pr@v1.3.3
         id: findPr
         with:
           sha: ${{ steps.get-pr-hash.outputs.hash }}
