@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup jq
-        uses: dcarbone/install-jq-action@v2.1.0
+        uses: dcarbone/install-jq-action@v3.0.1
         with:
           version: '1.7'
           force: true
