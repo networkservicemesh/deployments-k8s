@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Run `get-organization-repositories`
         id: organization-repositories
-        uses: denis-tingajkin/get-organization-repositories@v1.0.1
+        uses: denis-tingajkin/get-organization-repositories@v2
         with:
           github-organization: 'networkservicemesh'
           regex: 'cmd-.*'
