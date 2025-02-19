@@ -18,7 +18,7 @@ jobs:
         GITHUB_TOKEN: $LYCHEE_GITHUB_TOKEN
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Check external links using lychee
         run: |
           lychee -v '**/*.md' --exclude-mail --exclude-path examples/interdomain/usecases/nsm_kuma_universal_vl3/README.md examples/interdomain/usecases/nsm_consul_vl3/README.md --exclude '.*?ref=.*' --exclude 'slack\.cncf\.io'

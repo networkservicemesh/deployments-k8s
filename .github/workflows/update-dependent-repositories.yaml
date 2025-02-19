@@ -25,7 +25,7 @@ jobs:
           echo GO111MODULE=on >> $GITHUB_ENV
           echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
           repository: ${{ github.repository }}
@@ -51,7 +51,7 @@ jobs:
           sha: ${{ steps.get-pr-hash.outputs.hash }}
           github-token: ${{ github.token }}
       - name: Checkout networkservicemesh/${{ matrix.repository }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/src/github.com/networkservicemesh/${{ matrix.repository }}
           repository: networkservicemesh/${{ matrix.repository }}
