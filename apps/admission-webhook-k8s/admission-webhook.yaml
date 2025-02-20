@@ -18,7 +18,7 @@ spec:
       serviceAccount: admission-webhook-sa
       containers:
         - name: admission-webhook-k8s
-          image: ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:3f2c6f9
+          image: ghcr.io/networkservicemesh/ci/cmd-admission-webhook-k8s:c9c69b2
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
