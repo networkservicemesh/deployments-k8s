@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: nse
-      image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:420c0b8
+      image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:d725957
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
