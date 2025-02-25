@@ -18,7 +18,7 @@ kubectl create ns ns-spire-upgrade
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-upgrade?ref=42446fdfd18e1e673fb1d26a8d4ce4a30cdd7e4a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/heal/spire-upgrade?ref=3a647ac23e1e4626f734540de376b20497d63184
 ```
 
 Wait for applications ready:
@@ -49,7 +49,7 @@ kubectl delete ns spire
 
 Deploy SPIRE and wait for SPIRE server and agents:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster?ref=42446fdfd18e1e673fb1d26a8d4ce4a30cdd7e4a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster?ref=3a647ac23e1e4626f734540de376b20497d63184
 ```
 
 ```bash
@@ -61,11 +61,11 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/42446fdfd18e1e673fb1d26a8d4ce4a30cdd7e4a/examples/spire/single_cluster/clusterspiffeid-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3a647ac23e1e4626f734540de376b20497d63184/examples/spire/single_cluster/clusterspiffeid-template.yaml
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/42446fdfd18e1e673fb1d26a8d4ce4a30cdd7e4a/examples/spire/base/clusterspiffeid-webhook-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3a647ac23e1e4626f734540de376b20497d63184/examples/spire/base/clusterspiffeid-webhook-template.yaml
 ```
 
 Ping from NSC to NSE:
