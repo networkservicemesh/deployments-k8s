@@ -39,7 +39,7 @@ spec:
       containers:
         # This is the container which runs the NSM CSI driver.
         - name: nsm-csi-driver
-          image: ghcr.io/networkservicemesh/ci/cmd-csi-driver:c74eaf2
+          image: ghcr.io/networkservicemesh/cmd-csi-driver:v1.14.3
           imagePullPolicy: IfNotPresent
           env:
             # The CSI driver needs a unique node ID. The node name can be
