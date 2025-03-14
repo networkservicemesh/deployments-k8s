@@ -18,7 +18,7 @@ Make sure that you have completed steps from [heal](../../suites/heal)
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-proxy-nsmgr-death/cluster2?ref=2327ce86fe64739cb2e9e3b265351315bff403f7
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-proxy-nsmgr-death/cluster2?ref=99a83a4ed4568a29fe5628309f5e24189738c047
 ```
 
 Wait for applications ready:
@@ -30,7 +30,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-proxy-nsmgr-death/cluster1?ref=2327ce86fe64739cb2e9e3b265351315bff403f7
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-proxy-nsmgr-death/cluster1?ref=99a83a4ed4568a29fe5628309f5e24189738c047
 ```
 
 Wait for applications ready:

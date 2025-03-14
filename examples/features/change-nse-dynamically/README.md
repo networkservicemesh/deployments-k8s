@@ -10,11 +10,11 @@ Make sure that you have completed steps from [basic](../../basic) or [ipsec mech
 
 Deploy NSC and two NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/change-nse-dynamically?ref=2327ce86fe64739cb2e9e3b265351315bff403f7
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/change-nse-dynamically?ref=99a83a4ed4568a29fe5628309f5e24189738c047
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2327ce86fe64739cb2e9e3b265351315bff403f7/examples/features/change-nse-dynamically/blue-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/99a83a4ed4568a29fe5628309f5e24189738c047/examples/features/change-nse-dynamically/blue-netsvc.yaml
 ```
 
 Wait for applications ready:
@@ -40,7 +40,7 @@ kubectl exec pods/blue-nse -n ns-change-nse-dynamically -- ping -c 4 172.16.2.10
 
 Change network service to select green endpoint:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2327ce86fe64739cb2e9e3b265351315bff403f7/examples/features/change-nse-dynamically/green-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/99a83a4ed4568a29fe5628309f5e24189738c047/examples/features/change-nse-dynamically/green-netsvc.yaml
 ```
 
 Ping from NSC to the green NSE:
@@ -55,7 +55,7 @@ kubectl exec pods/green-nse -n ns-change-nse-dynamically -- ping -c 4 172.16.1.1
 
 Change network service to select blue endpoint:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/2327ce86fe64739cb2e9e3b265351315bff403f7/examples/features/change-nse-dynamically/blue-netsvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/99a83a4ed4568a29fe5628309f5e24189738c047/examples/features/change-nse-dynamically/blue-netsvc.yaml
 ```
 
 Ping from NSC to the blue NSE:
