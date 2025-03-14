@@ -18,7 +18,7 @@ Make sure that you have completed steps from [heal](../../suites/heal)
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-registry-death/cluster2?ref=6c714385b9f34c7008329259a755f6365f384a5f
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-registry-death/cluster2?ref=54ca036d7439bd7ceee1e5d0e6d9bbbbd6818096
 ```
 
 Wait for applications ready:
@@ -30,7 +30,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-registry-death/cluster1?ref=6c714385b9f34c7008329259a755f6365f384a5f
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/heal_interdomain-registry-death/cluster1?ref=54ca036d7439bd7ceee1e5d0e6d9bbbbd6818096
 ```
 
 Wait for applications ready:
