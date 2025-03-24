@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: nsc
-      image: ghcr.io/networkservicemesh/ci/cmd-nsc:b3832c9
+      image: ghcr.io/networkservicemesh/ci/cmd-nsc:8b7c323
       imagePullPolicy: IfNotPresent
       env:
         - name: SPIFFE_ENDPOINT_SOCKET
