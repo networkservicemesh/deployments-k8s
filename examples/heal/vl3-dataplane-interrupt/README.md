@@ -12,12 +12,12 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for clients to be ready:
 ```bash
-kubectl wait -n ns-vl3-dataplane-interrupt --for=condition=ready --timeout=1m pod -l app=alpine
+kubectl wait -n ns-vl3-dataplane-interrupt --for=condition=ready --timeout=1m pod -l app=nettools
 ```
 
 Find all clients:
 ```bash
-nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-dataplane-interrupt)
+nscs=$(kubectl  get pods -l app=nettools -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-dataplane-interrupt)
 [[ ! -z $nscs ]]
 ```
 
@@ -26,7 +26,7 @@ Check connections between clients:
 (
 for nsc in $nscs 
 do
-    ipAddr=$(kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ifconfig nsm-1) || exit
+    ipAddr=$(kubectl exec -n ns-vl3-dataplane-interrupt $nsc -c nettools -- ifconfig nsm-1) || exit
     ipAddr=$(echo $ipAddr | grep -Eo 'inet addr:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'| cut -c 11-)
     for pinger in $nscs
     do
@@ -43,8 +43,8 @@ Check connections between clients and vl3 endpoints:
 for nsc in $nscs 
 do
     echo $nsc pings nses
-    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.0.0 -c2 -i 0.5 || exit
-    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.1.0 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping -c2 -i 0.5 172.16.0.0 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping -c2 -i 0.5 172.16.1.0 || exit
 done
 )
 ```
@@ -87,8 +87,8 @@ Check connections between clients and vl3 endpoints:
 for nsc in $nscs 
 do
     echo $nsc pings nses
-    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.0.0 -c2 -i 0.5 || exit
-    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.1.0 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping -c2 -i 0.5 172.16.0.0 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping -c2 -i 0.5 172.16.1.0 || exit
 done
 )
 ```
@@ -124,8 +124,8 @@ Check connections between clients and vl3 endpoints:
 for nsc in $nscs 
 do
     echo $nsc pings nses
-    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.0.0 -c2 -i 0.5 || exit
-    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping 172.16.1.0 -c2 -i 0.5 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping -c2 -i 0.5 172.16.0.0 || exit
+    kubectl exec -n ns-vl3-dataplane-interrupt $nsc -- ping -c2 -i 0.5 172.16.1.0 || exit
 done
 )
 ```

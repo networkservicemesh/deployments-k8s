@@ -31,7 +31,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-spir
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-spire-upgrade -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-spire-upgrade -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
@@ -70,7 +70,7 @@ kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployment
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-spire-upgrade -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-spire-upgrade -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:

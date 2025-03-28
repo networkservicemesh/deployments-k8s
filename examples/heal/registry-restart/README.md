@@ -17,7 +17,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-registry-restart
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ns-registry-restart
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-registry-restart
@@ -25,7 +25,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-regi
 
 Find nsc and nse pods by labels:
 ```bash
-NSC=$(kubectl get pods -l app=alpine -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+NSC=$(kubectl get pods -l app=nettools -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 ```bash
 NSE=$(kubectl get pods -l app=nse-kernel -n ns-registry-restart --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
@@ -33,7 +33,7 @@ NSE=$(kubectl get pods -l app=nse-kernel -n ns-registry-restart --template '{{ra
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-registry-restart -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-registry-restart -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
@@ -61,12 +61,12 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for a new NSC to start:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine-new -n ns-registry-restart
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools-new -n ns-registry-restart
 ```
 
 Ping from new NSC to NSE:
 ```bash
-kubectl exec pods/alpine-new -n ns-registry-restart -- ping -c 4 172.16.1.102
+kubectl exec pods/nettools-new -n ns-registry-restart -- ping -c 4 172.16.1.102
 ```
 
 Ping from NSE to new NSC:

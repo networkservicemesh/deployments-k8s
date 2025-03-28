@@ -15,11 +15,3 @@ spec:
               value: "false"
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-          volumeMounts:
-            - mountPath: /etc/policy-based-routing/config.yaml
-              subPath: config.yaml
-              name: policies-config-volume
-      volumes:
-        - name: policies-config-volume
-          configMap:
-            name: policies-config-file

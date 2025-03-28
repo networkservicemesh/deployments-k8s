@@ -12,12 +12,12 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for clients to be ready:
 ```bash
-kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=alpine
+kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=nettools
 ```
 
 Find all nscs:
 ```bash
-nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
+nscs=$(kubectl  get pods -l app=nettools -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
 [[ ! -z $nscs ]]
 ```
 
@@ -39,23 +39,23 @@ done
 
 Scale NSCs to zero:
 ```bash
-kubectl scale -n ns-vl3-nscs-death deployment alpine --replicas=0
+kubectl scale -n ns-vl3-nscs-death deployment nettools --replicas=0
 ```
 ```bash
-kubectl wait -n ns-vl3-nscs-death --for=delete --timeout=1m pod -l app=alpine
+kubectl wait -n ns-vl3-nscs-death --for=delete --timeout=1m pod -l app=nettools
 ```
 
 Rescale NSCs:
 ```bash
-kubectl scale -n ns-vl3-nscs-death deployment alpine --replicas=2
+kubectl scale -n ns-vl3-nscs-death deployment nettools --replicas=2
 ```
 ```bash
-kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=alpine
+kubectl wait -n ns-vl3-nscs-death --for=condition=ready --timeout=1m pod -l app=nettools
 ```
 
 Find all new nscs and run ping:
 ```bash
-nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
+nscs=$(kubectl  get pods -l app=nettools -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nscs-death)
 [[ ! -z $nscs ]]
 ```
 ```bash

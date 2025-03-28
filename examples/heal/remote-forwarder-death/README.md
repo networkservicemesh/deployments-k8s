@@ -18,7 +18,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-remote-forwarder-death
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ns-remote-forwarder-death
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-remote-forwarder-death
@@ -26,7 +26,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-remo
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-remote-forwarder-death -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-remote-forwarder-death -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
@@ -54,7 +54,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l 'app in (forwarder-ovs, f
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-remote-forwarder-death -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-remote-forwarder-death -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
