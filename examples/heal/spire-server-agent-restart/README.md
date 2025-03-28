@@ -23,7 +23,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-spire-server-agent-restart
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ns-spire-server-agent-restart
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-spire-server-agent-restart
@@ -31,7 +31,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-spir
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-spire-server-agent-restart -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-spire-server-agent-restart -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
@@ -64,7 +64,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=spire-agent -n spire
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-spire-server-agent-restart -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-spire-server-agent-restart -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
