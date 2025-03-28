@@ -53,27 +53,15 @@ kubectl -n ns-kernel2vlan-multins-2 wait --for=condition=ready --timeout=1m pod 
 kubectl -n ns-kernel2vlan-multins-3 wait --for=condition=ready --timeout=1m pod -l app=alpine-4
 ```
 
-Create a docker image for test external connections:
-
-```bash
-cat > Dockerfile <<EOF
-FROM alpine:3.15.0
-
-RUN apk add ethtool tcpdump iproute2
-
-ENTRYPOINT [ "tail", "-f", "/dev/null" ]
-EOF
-docker build . -t rvm-tester
-```
-
 Setup a docker container for traffic test:
 
 ```bash
-docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester rvm-tester tail -f /dev/null
+docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester aeciopires/nettools:1.0.0 tail -f /dev/null
 docker exec rvm-tester ip link set eth0 down
 docker exec rvm-tester ip link add link eth0 name eth0.100 type vlan id 100
 docker exec rvm-tester ip link add link eth0 name eth0.300 type vlan id 300
 docker exec rvm-tester ip link set eth0 up
+docker exec rvm-tester ip route add default dev eth0
 docker exec rvm-tester ip addr add 172.10.0.254/24 dev eth0.100
 docker exec rvm-tester ip addr add 172.10.1.254/24 dev eth0
 docker exec rvm-tester ip addr add 172.10.2.254/24 dev eth0.300
@@ -130,13 +118,13 @@ for nsc in "${NSCS[@]}"
 do
   for vlan_if_name in eth0.100 eth0.300
   do
-    docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR[$nsc]} -I ${vlan_if_name}
+    docker exec rvm-tester ping -w 1 -I ${vlan_if_name} -c 1 ${IP_ADDR[$nsc]}
     if test $? -eq 0
       then
         status=2
     fi
   done
-  docker exec rvm-tester ping -c 1 ${IP_ADDR[$nsc]} -I eth0
+  docker exec rvm-tester ping -I eth0 -c 1 ${IP_ADDR[$nsc]}
   if test $? -ne 0
     then
       status=1
@@ -203,13 +191,13 @@ for nsc in "${NSCS_BLUE[@]}"
 do
   for vlan_if_name in eth0.100 eth0
   do
-    docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR_BLUE[$nsc]} -I ${vlan_if_name}
+    docker exec rvm-tester ping -w 1 -I ${vlan_if_name} -c 1 ${IP_ADDR_BLUE[$nsc]}
     if test $? -eq 0
       then
         status=2
     fi
   done
-  docker exec rvm-tester ping -c 1 ${IP_ADDR_BLUE[$nsc]} -I eth0.300
+  docker exec rvm-tester ping -I eth0.300 -c 1 ${IP_ADDR_BLUE[$nsc]}
   if test $? -ne 0
     then
       status=1
@@ -219,13 +207,13 @@ for nsc in "${NSCS_GREEN[@]}"
 do
   for vlan_if_name in eth0.100 eth0
   do
-    docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR_GREEN[$nsc]} -I ${vlan_if_name}
+    docker exec rvm-tester ping -w 1 -I ${vlan_if_name} -c 1 ${IP_ADDR_GREEN[$nsc]}
     if test $? -eq 0
       then
         status=2
     fi
   done
-  docker exec rvm-tester ping -c 1 ${IP_ADDR_GREEN[$nsc]} -I eth0.300
+  docker exec rvm-tester ping -I eth0.300 -c 1 ${IP_ADDR_GREEN[$nsc]}
   if test $? -ne 0
     then
       status=1
@@ -249,7 +237,7 @@ Check vlan (300) from tester container:
 status=0
 for nsc in "${NSCS_GREEN[@]}"
 do
-  docker exec rvm-tester ping -c 1 ${IP_ADDR_GREEN[$nsc]} -I eth0.300
+  docker exec rvm-tester ping -I eth0.300 -c 1 ${IP_ADDR_GREEN[$nsc]}
   if test $? -ne 0
     then
       status=1
@@ -310,13 +298,13 @@ for nsc in "${NSCS[@]}"
 do
   for vlan_if_name in eth0 eth0.300
   do
-    docker exec rvm-tester ping -w 1 -c 1 ${IP_ADDR[$nsc]} -I ${vlan_if_name}
+    docker exec rvm-tester ping -I ${vlan_if_name} -w 1 -c 1 ${IP_ADDR[$nsc]}
     if test $? -eq 0
       then
         status=2
     fi
   done
-  docker exec rvm-tester ping -c 1 ${IP_ADDR[$nsc]} -I eth0.100
+  docker exec rvm-tester ping -I eth0.100 -c 1 ${IP_ADDR[$nsc]}
   if test $? -ne 0
     then
       status=1
@@ -333,8 +321,7 @@ fi
 Delete the tester container and image:
 
 ```bash
-docker stop rvm-tester && \
-docker image rm rvm-tester:latest
+docker stop rvm-tester
 true
 ```
 

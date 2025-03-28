@@ -28,25 +28,10 @@ Get the iperf-NSC pods:
 NSCS=($(kubectl get pods -l app=iperf1-s -n ns-kernel2rvlan-breakout --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'))
 ```
 
-Create a docker image for test external connections:
-
-```bash
-cat > Dockerfile <<EOF
-FROM networkstatic/iperf3
-
-RUN apt-get update \
-    && apt-get install -y ethtool iproute2 \
-    && rm -rf /var/lib/apt/lists/*
-
-ENTRYPOINT [ "tail", "-f", "/dev/null" ]
-EOF
-docker build . -t rvm-tester-breakout
-```
-
 Setup a docker container for traffic test:
 
 ```bash
-docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester-breakout rvm-tester-breakout tail -f /dev/null
+docker run --cap-add=NET_ADMIN --rm -d --network bridge-2 --name rvm-tester-breakout aeciopires/nettools:1.0.0 tail -f /dev/null
 docker exec rvm-tester-breakout ip link set eth0 down
 docker exec rvm-tester-breakout ip link add link eth0 name eth0.1000 type vlan id 1000
 docker exec rvm-tester-breakout ip link set eth0 up
@@ -142,7 +127,6 @@ Delete the tester container and image:
 
 ```bash
 docker stop rvm-tester-breakout
-docker image rm rvm-tester-breakout:latest
 true
 ```
 
