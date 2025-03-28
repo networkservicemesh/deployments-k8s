@@ -15,4 +15,3 @@ spec:
               value: "false"
             - name: NSM_CIDR_PREFIX
               value: 172.16.1.100/31
-
