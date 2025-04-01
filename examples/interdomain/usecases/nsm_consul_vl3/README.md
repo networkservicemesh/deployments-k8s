@@ -14,11 +14,11 @@ https://learn.hashicorp.com/tutorials/consul/service-mesh-with-envoy-proxy?in=co
 
 Start vl3, install Consul control plane and counting service on the first cluster and dashboard on the second:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster1?ref=83af61329e44bf6b17fda00133bf010ab360ee42
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster1?ref=807fdc7d8fe7279ace67218a626ae8fe2f8fe67d
 ```
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster2?ref=83af61329e44bf6b17fda00133bf010ab360ee42
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster2?ref=807fdc7d8fe7279ace67218a626ae8fe2f8fe67d
 ```
 
 Wait for pods to be ready:
@@ -547,9 +547,9 @@ pkill -f "port-forward"
 ```
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster1?ref=83af61329e44bf6b17fda00133bf010ab360ee42
+kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster1?ref=807fdc7d8fe7279ace67218a626ae8fe2f8fe67d
 ```
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster2?ref=83af61329e44bf6b17fda00133bf010ab360ee42
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/nsm_consul_vl3/cluster2?ref=807fdc7d8fe7279ace67218a626ae8fe2f8fe67d
 ```
