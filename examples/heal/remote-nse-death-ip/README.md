@@ -18,7 +18,7 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for applications ready:
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=alpine -n ns-remote-nse-death-ip
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ns-remote-nse-death-ip
 ```
 ```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-remote-nse-death-ip
@@ -26,7 +26,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-remo
 
 Ping from NSC to NSE:
 ```bash
-kubectl exec pods/alpine -n ns-remote-nse-death-ip -- ping -c 4 172.16.1.100
+kubectl exec pods/nettools -n ns-remote-nse-death-ip -- ping -c 4 172.16.1.100
 ```
 
 Ping from NSE to NSC:
@@ -51,7 +51,7 @@ NEW_NSE=$(kubectl get pods -l app=nse-kernel -l version=new -n ns-remote-nse-dea
 
 Ping from NSC to new NSE:
 ```bash
-kubectl exec pods/alpine -n ns-remote-nse-death-ip -- ping -c 4 172.16.1.102
+kubectl exec pods/nettools -n ns-remote-nse-death-ip -- ping -c 4 172.16.1.102
 ```
 
 Ping from new NSE to NSC:

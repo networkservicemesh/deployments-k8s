@@ -39,6 +39,9 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
+            - name: policies-config-volume
+              mountPath: /etc/policy-based-routing/config.yaml
+              subPath: config.yaml
           resources:
             requests:
               cpu: 100m
@@ -55,3 +58,6 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
+        - name: policies-config-volume
+          configMap:
+            name: policies-config-file

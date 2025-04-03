@@ -12,12 +12,12 @@ kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/
 
 Wait for clients to be ready:
 ```bash
-kubectl wait -n ns-vl3-nse-death --for=condition=ready --timeout=1m pod -l app=alpine
+kubectl wait -n ns-vl3-nse-death --for=condition=ready --timeout=1m pod -l app=nettools
 ```
 
 Find all nscs:
 ```bash
-nscs=$(kubectl  get pods -l app=alpine -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nse-death) 
+nscs=$(kubectl  get pods -l app=nettools -o go-template --template="{{range .items}}{{.metadata.name}} {{end}}" -n ns-vl3-nse-death) 
 [[ ! -z $nscs ]]
 ```
 
