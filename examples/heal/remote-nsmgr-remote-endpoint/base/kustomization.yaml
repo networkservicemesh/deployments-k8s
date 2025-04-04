@@ -6,4 +6,4 @@ namespace: ns-remote-nsmgr-remote-endpoint
 
 resources:
 - netsvc.yaml
-- ../../../../apps/nse-kernel
+- ../../../../apps/nse-kernel-pbr

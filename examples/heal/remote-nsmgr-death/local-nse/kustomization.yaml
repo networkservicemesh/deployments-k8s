@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: ns-remote-nsmgr-death
 
 resources:
-- ../../../../apps/nse-kernel
+- ../../../../apps/nse-kernel-pbr
 
 patches:
 - path: patch-nse.yaml
