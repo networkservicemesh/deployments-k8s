@@ -8,7 +8,7 @@ resources:
 - ns-memif2ip2kernel.yaml
 - netsvc.yaml
 - ../../../apps/nsc-memif
-- nse-kernel.yaml
+- ../../../apps/nse-kernel
 
 patches:
 - path: patch-nsc.yaml
