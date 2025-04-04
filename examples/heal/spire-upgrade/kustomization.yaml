@@ -8,7 +8,7 @@ resources:
 - netsvc.yaml
 - client.yaml
 - ../../../apps/nsc-kernel
-- ../../../apps/nse-kernel
+- ../../../apps/nse-kernel-pbr
 
 patches:
 - path: patch-nse.yaml

@@ -8,7 +8,7 @@ resources:
 - ns-dataplane-interrupt.yaml
 - netsvc.yaml
 - client.yaml
-- ../../../apps/nse-kernel
+- ../../../apps/nse-kernel-pbr
 
 patches:
 - path: patch-nse.yaml
