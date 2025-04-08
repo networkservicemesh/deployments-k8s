@@ -14,7 +14,7 @@ Check that we have config for the cluster:
 
 Apply spire deployments:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/cluster2?ref=a860c8e96e775e4346eff877fc6ac2599c3b3022
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/cluster2?ref=c0480b36278da2f84a21bc6e26984edefa14564c
 ```
 
 Wait for PODs status ready:
@@ -27,11 +27,11 @@ kubectl --kubeconfig=$KUBECONFIG2 wait -n spire --timeout=1m --for=condition=rea
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/a860c8e96e775e4346eff877fc6ac2599c3b3022/examples/spire/cluster2/clusterspiffeid-template.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c0480b36278da2f84a21bc6e26984edefa14564c/examples/spire/cluster2/clusterspiffeid-template.yaml
 ```
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/a860c8e96e775e4346eff877fc6ac2599c3b3022/examples/spire/base/clusterspiffeid-webhook-template.yaml
+kubectl --kubeconfig=$KUBECONFIG2 apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c0480b36278da2f84a21bc6e26984edefa14564c/examples/spire/base/clusterspiffeid-webhook-template.yaml
 ```
 
 ## Cleanup
