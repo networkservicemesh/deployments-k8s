@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:5095291
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:da4d7fc
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -39,6 +39,9 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
+            - name: policies-config-volume
+              mountPath: /etc/policy-based-routing/config.yaml
+              subPath: config.yaml
           resources:
             requests:
               cpu: 100m
@@ -55,3 +58,6 @@ spec:
           hostPath:
             path: /var/lib/networkservicemesh
             type: DirectoryOrCreate
+        - name: policies-config-volume
+          configMap:
+            name: policies-config-file

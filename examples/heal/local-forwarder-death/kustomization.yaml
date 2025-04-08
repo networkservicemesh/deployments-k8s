@@ -8,7 +8,7 @@ resources:
 - ns-local-forwarder-death.yaml
 - client.yaml
 - netsvc.yaml
-- ../../../apps/nse-kernel
+- ../../../apps/nse-kernel-pbr
 
 patches:
 - path: patch-nse.yaml
