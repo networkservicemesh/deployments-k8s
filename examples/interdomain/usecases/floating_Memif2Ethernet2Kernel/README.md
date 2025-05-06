@@ -22,14 +22,14 @@ Make sure that you have completed steps from [interdomain](../../suites/basic)
 
 Deploy NS:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_Memif2Ethernet2Kernel/cluster3?ref=be44be4f1d359205e3aca2d391e3f662d6697451
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_Memif2Ethernet2Kernel/cluster3?ref=8c66d19951d1af2833467dc55e27b21a67aef12a
 ```
 
 **2. Deploy endpoint on cluster2**
 
 Deploy NSE:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_Memif2Ethernet2Kernel/cluster2?ref=be44be4f1d359205e3aca2d391e3f662d6697451
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_Memif2Ethernet2Kernel/cluster2?ref=8c66d19951d1af2833467dc55e27b21a67aef12a
 ```
 
 Wait for applications ready:
@@ -41,7 +41,7 @@ kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=1m pod -l
 
 Deploy NSC:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_Memif2Ethernet2Kernel/cluster1?ref=be44be4f1d359205e3aca2d391e3f662d6697451
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_Memif2Ethernet2Kernel/cluster1?ref=8c66d19951d1af2833467dc55e27b21a67aef12a
 ```
 
 Wait for applications ready:
