@@ -10,7 +10,7 @@ Make sure that you have completed steps from [sriov](../../sriov) setup.
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2Noop?ref=c9a6c123ae1b4c0f7a907c0515f2ca17a3c6c08a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Vfio2Noop?ref=b25ddbfaf9a704c7d48cedfcf139b4bc16f8f967
 ```
 
 Wait for applications ready:
