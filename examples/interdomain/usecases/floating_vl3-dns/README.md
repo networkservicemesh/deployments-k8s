@@ -16,13 +16,13 @@ Make sure that you have completed steps from [interdomain](../../suites/basic)
 Note: *By default ipam prefix is `172.16.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we expect to have two vl3 addresses: `172.16.0.0` and `172.16.1.0` that should be accessible by each client.*
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster3?ref=82a8af40af96e91d6817259403fe0d62bf7942c3
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster3?ref=18cadf5d11b5637cf4add36e9b2f3ca77c3b3419
 ```
 
 1.2. Deploy a vl3-NSE and a client on the cluster1:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster1?ref=82a8af40af96e91d6817259403fe0d62bf7942c3
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster1?ref=18cadf5d11b5637cf4add36e9b2f3ca77c3b3419
 ```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-vl3-dns
@@ -31,7 +31,7 @@ kubectl --kubeconfig=$KUBECONFIG1 wait --for=condition=ready --timeout=5m pod -l
 1.3. Deploy a vl3-NSE and a client on the cluster2:
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster2?ref=82a8af40af96e91d6817259403fe0d62bf7942c3
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster2?ref=18cadf5d11b5637cf4add36e9b2f3ca77c3b3419
 ```
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 wait --for=condition=ready --timeout=5m pod -l app=alpine -n ns-floating-vl3-dns
@@ -87,15 +87,15 @@ kubectl --kubeconfig=$KUBECONFIG2 exec pods/alpine-2 -n ns-floating-vl3-dns -- p
 
 1. Cleanup floating domain:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster3?ref=82a8af40af96e91d6817259403fe0d62bf7942c3
+kubectl --kubeconfig=$KUBECONFIG3 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster3?ref=18cadf5d11b5637cf4add36e9b2f3ca77c3b3419
 ```
 
 2. Cleanup cluster2 domain:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster2?ref=82a8af40af96e91d6817259403fe0d62bf7942c3
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster2?ref=18cadf5d11b5637cf4add36e9b2f3ca77c3b3419
 ```
 
 3. Cleanup cluster1 domain:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster1?ref=82a8af40af96e91d6817259403fe0d62bf7942c3
+kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-dns/cluster1?ref=18cadf5d11b5637cf4add36e9b2f3ca77c3b3419
 ```
