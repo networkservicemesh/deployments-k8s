@@ -15,7 +15,7 @@ The dashboard consists of two parts:
 To run the dashboard in the cluster, execute the command:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/dashboard?ref=4d014ad4fc4f498892ee542421159c9d3644329c
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/apps/dashboard?ref=23648387fc30d0ec81ab44e3b6ed63c25358502b
 ```
 
 Wait for the dashboard pod to start:
