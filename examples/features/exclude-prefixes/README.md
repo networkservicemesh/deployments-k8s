@@ -12,12 +12,12 @@ Make sure that you have completed steps from [basic](../../basic) or [memory](..
 
 Create config map with excluded prefixes
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes/configmap?ref=b20cf7f660ba604a51f0356d7dc08ee55c7c4bf2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes/configmap?ref=d5f393cc4654e2e35cb20f6a369a3cd6cde4c839
 ```
 
 Deploy NSC and NSE:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes?ref=b20cf7f660ba604a51f0356d7dc08ee55c7c4bf2
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/features/exclude-prefixes?ref=d5f393cc4654e2e35cb20f6a369a3cd6cde4c839
 ```
 
 Wait for applications ready:
