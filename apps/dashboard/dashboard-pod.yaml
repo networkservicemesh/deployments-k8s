@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: dashboard-backend
-    image: ghcr.io/networkservicemesh/ci/cmd-dashboard-backend:91bacea
+    image: ghcr.io/networkservicemesh/cmd-dashboard-backend:v1.15.0-rc.1
     imagePullPolicy: IfNotPresent
     ports:
       - containerPort: 3001
@@ -24,7 +24,7 @@ spec:
         mountPath: /run/spire/sockets
         readOnly: true
   - name: dashboard-ui
-    image: ghcr.io/networkservicemesh/ci/cmd-dashboard-ui:14da2e1
+    image: ghcr.io/networkservicemesh/cmd-dashboard-ui:v1.15.0-rc.1
     imagePullPolicy: IfNotPresent
     ports:
       - containerPort: 3000
