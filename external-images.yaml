@@ -22,3 +22,4 @@ images:
   - prom/prometheus:v2.37.0
   - networkstatic/iperf3:latest
   - hashicorp/http-echo:1.0
+  - docker.io/kumahq/kuma-dp:1.7.0-amd64
