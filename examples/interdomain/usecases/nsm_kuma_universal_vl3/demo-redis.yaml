@@ -61,7 +61,8 @@ spec:
                 command: ["/bin/sleep", "30"]
             postStart:
               exec:
-                command: ["/usr/local/bin/redis-cli", "set", "zone", "local"]
+                command:
+                  ["/bin/sh", "-c", "for i in $(seq 1 10); do /usr/local/bin/redis-cli set zone local && exit 0 || sleep 1; done; exit 1"]
         - args:
           - run
           - --cp-address=https://control-plane-kuma.my-vl3-network:5678/
