@@ -43,7 +43,7 @@ spec:
             - name: NSM_CONTAINER_IMAGES
               value: ghcr.io/networkservicemesh/ci/cmd-nsc:dc68b5f
             - name: NSM_INIT_CONTAINER_IMAGES
-              value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:ac73f50
+              value: ghcr.io/networkservicemesh/ci/cmd-nsc-init:82ad157
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
