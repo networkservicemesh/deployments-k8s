@@ -14,11 +14,11 @@ Once federation is bootstrapped, the trust bundle updates are fetched trough the
 
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/96083f929c5a97e31988175b942094dad048191a/examples/k8s_monolith/external_nse/spiffe_federation/clusterspiffeid-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/69f37d6784f3d91351e5f2b5809b8067038500c2/examples/k8s_monolith/external_nse/spiffe_federation/clusterspiffeid-template.yaml
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/96083f929c5a97e31988175b942094dad048191a/examples/spire/base/clusterspiffeid-webhook-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/69f37d6784f3d91351e5f2b5809b8067038500c2/examples/spire/base/clusterspiffeid-webhook-template.yaml
 ```
 
 Get and store spire/spiffe bundles:
