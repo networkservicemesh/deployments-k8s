@@ -12,19 +12,19 @@ Make sure that you have completed steps from [remotevlan_ovs](../../remotevlan_o
 
 Deployment in first namespace:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=5de5c3ad0c327b6cc3ef0c7045631883e8b1f025
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-1?ref=3cc6884f7161c41ca3859a6bdb4b5d5fe5cf0f97
 ```
 
 Deployment in second namespace:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5de5c3ad0c327b6cc3ef0c7045631883e8b1f025/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/5de5c3ad0c327b6cc3ef0c7045631883e8b1f025/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=5de5c3ad0c327b6cc3ef0c7045631883e8b1f025
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3cc6884f7161c41ca3859a6bdb4b5d5fe5cf0f97/examples/use-cases/Kernel2RVlanMultiNS/ns-2/ns-kernel2vlan-multins-2.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/3cc6884f7161c41ca3859a6bdb4b5d5fe5cf0f97/examples/use-cases/Kernel2RVlanMultiNS/ns-2/netsvc.yaml
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-2?ref=3cc6884f7161c41ca3859a6bdb4b5d5fe5cf0f97
 ```
 
 Deployment in third namespace:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-3?ref=5de5c3ad0c327b6cc3ef0c7045631883e8b1f025
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2RVlanMultiNS/ns-3?ref=3cc6884f7161c41ca3859a6bdb4b5d5fe5cf0f97
 ```
 
 Wait for applications ready:
