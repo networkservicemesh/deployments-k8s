@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-kernel-ipv6
+  labels:
+    app: nse-kernel-ipv6
+spec:
+  selector:
+    matchLabels:
+      app: nse-kernel-ipv6
+  template:
+    metadata:
+      labels:
+        app: nse-kernel-ipv6
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      containers:
+        - name: nse
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:ce9ea97
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NSM_CIDR_PREFIX
+              value: "2001:db8::/116"
+            - name: NSM_SERVICE_NAMES
+              value: "registry-restart-ipv6"
+            - name: NSM_REGISTER_SERVICE
+              value: "false"
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: true
+            - name: policies-config-volume-1
+              mountPath: /etc/policy-based-routing/config.yaml
+              subPath: config.yaml
+          resources:
+            requests:
+              cpu: 100m
+              memory: 40Mi
+            limits:
+              memory: 80Mi
+              cpu: 200m
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+        - name: policies-config-volume-1
+          configMap:
+            name: policies-config-file-1

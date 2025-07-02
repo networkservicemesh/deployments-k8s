@@ -7,8 +7,12 @@ namespace: ns-registry-restart
 resources:
 - ns-registry-restart.yaml
 - netsvc.yaml
+- netsvc-ipv6.yaml
 - client.yaml
 - ../../../../apps/nse-kernel-pbr
+- nse-ipv6.yaml
+- client-cp.yaml
+- config-file-nse-1.yaml
 
 patches:
 - path: patch-nse.yaml

@@ -10,7 +10,7 @@ spec:
         - name: nse
           env:
             - name: NSM_CIDR_PREFIX
-              value: 172.16.1.100/30
+              value: 172.16.1.100/30,172.16.2.200/30
             - name: NSM_SERVICE_NAMES
               value: "registry-restart"
             - name: NSM_REGISTER_SERVICE
