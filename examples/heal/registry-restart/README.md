@@ -20,7 +20,13 @@ Wait for applications ready:
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nettools -n ns-registry-restart
 ```
 ```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=client-cp -n ns-registry-restart
+```
+```bash
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-registry-restart
+```
+```bash
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-ipv6 -n ns-registry-restart
 ```
 
 Find nsc and nse pods by labels:
@@ -39,6 +45,15 @@ kubectl exec pods/nettools -n ns-registry-restart -- ping -c 4 172.16.1.100
 Ping from NSE to NSC:
 ```bash
 kubectl exec deployments/nse-kernel -n ns-registry-restart -- ping -c 4 172.16.1.101
+```
+
+Get link IDs of NSM interfaces in NSCs:
+
+```bash
+kubectl exec -n ns-registry-restart pod/client-cp -c nsc -- ip link show dev nsm-2
+NSM_LINK_ID=$(kubectl exec -n ns-registry-restart pod/client-cp -c nsc -- ip link show dev nsm-2 | head -1| cut -f1 -d:)
+kubectl exec -n ns-registry-restart pod/nettools -c nettools -- ip link show dev nsm-1
+NSM_LID=$(kubectl exec -n ns-registry-restart pod/nettools -c nettools -- ip link show dev nsm-1 | head -1| cut -f1 -d:)
 ```
 
 Find Registry:
@@ -72,6 +87,17 @@ kubectl exec pods/nettools-new -n ns-registry-restart -- ping -c 4 172.16.1.102
 Ping from NSE to new NSC:
 ```bash
 kubectl exec deployments/nse-kernel -n ns-registry-restart -- ping -c 4 172.16.1.103
+```
+
+The interface ID should be the same after registry restart:
+
+```bash
+sleep 120
+kubectl exec -n ns-registry-restart pod/client-cp -c nsc -- ip link show dev nsm-2
+CHECK_NSM_LINK_ID=$(kubectl exec -n ns-registry-restart pod/client-cp -c nsc -- ip link show dev nsm-2 | head -1| cut -f1 -d:)
+kubectl exec -n ns-registry-restart pod/nettools -c nettools -- ip link show dev nsm-1
+CHECK_NSM_LID=$(kubectl exec -n ns-registry-restart pod/nettools -c nettools -- ip link show dev nsm-1 | head -1| cut -f1 -d:)
+test "$CHECK_NSM_LID" == "$NSM_LID" && test "$CHECK_NSM_LINK_ID" == "$NSM_LINK_ID"
 ```
 
 Check policy based routing:

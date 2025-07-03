@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: policies-config-file-1
+data:
+  config.yaml: |
+    - from: 172.16.3.101/32
+      proto: 6
+      dstport: 6666
+      routes:
+        - prefix: 172.16.3.100/32
