@@ -26,7 +26,7 @@ kubectl wait --for=condition=ready --timeout=1m pod -l app=client-cp -n ns-regis
 kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel -n ns-registry-restart
 ```
 ```bash
-kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-ipv6 -n ns-registry-restart
+kubectl wait --for=condition=ready --timeout=1m pod -l app=nse-kernel-ipv6 -n ns-registry-restart
 ```
 
 Find nsc and nse pods by labels:
