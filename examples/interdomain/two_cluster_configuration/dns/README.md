@@ -1,6 +1,6 @@
 ## Setup DNS for two clusters
 
-This example shows how to simply configure three k8s clusters to know each other. 
+This example shows how to simply configure two k8s clusters to know each other. 
 Can be skipped if clusters setupped with external DNS.
 
 ## Run
