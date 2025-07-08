@@ -2,15 +2,21 @@
 apiVersion: spire.spiffe.io/v1alpha1
 kind: ControllerManagerConfig
 metrics:
-  bindAddress: 127.0.0.1:8082
-healthProbe:
-  bindAddress: 127.0.0.1:8083
+  bindAddress: :8082
+health:
+  healthProbeBindAddress: :8083
+  readinessEndpointName: /readyz
+  livenessEndpointName: /healthz
 leaderElection:
   leaderElect: true
   resourceName: 98c9c988.spiffe.io
   resourceNamespace: spire
 clusterName: nsm.cluster2
 trustDomain: nsm.cluster2
+reconcile:
+  clusterSPIFFEIDs: true
+  clusterFederatedTrustDomains: true
+  clusterStaticEntries: false
 spireServerSocketPath: /run/spire/sockets/api.sock
 ignoreNamespaces:
   - kube-system
