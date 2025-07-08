@@ -54,8 +54,8 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9443
-            # - containerPort: 8083
-            #   name: health-port
+            - containerPort: 8083
+              name: health-port
           args:
             - "--config=spire-controller-manager-config.yaml"
           volumeMounts:
@@ -65,14 +65,14 @@ spec:
             - name: spire-controller-manager-config
               mountPath: /spire-controller-manager-config.yaml
               subPath: spire-controller-manager-config.yaml
-              # readinessProbe:
-              #   httpGet:
-              #     path: /readyz
-              #     port: health-port
-              # livenessProbe:
-              #   httpGet:
-              #     path: /healthz
-              #     port: health-port
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health-port
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health-port
       volumes:
         - name: spire-config
           configMap:

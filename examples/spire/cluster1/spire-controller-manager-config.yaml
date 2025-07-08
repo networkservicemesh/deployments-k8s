@@ -2,9 +2,9 @@
 apiVersion: spire.spiffe.io/v1alpha1
 kind: ControllerManagerConfig
 metrics:
-  bindAddress: 127.0.0.1:8082
+  bindAddress: :8082
 health:
-  healthProbeBindAddress: 127.0.0.1:8083
+  healthProbeBindAddress: :8083
   readinessEndpointName: /readyz
   livenessEndpointName: /healthz
 leaderElection:
