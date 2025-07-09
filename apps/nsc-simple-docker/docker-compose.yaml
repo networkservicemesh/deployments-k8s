@@ -10,4 +10,4 @@ services:
       NSM_CONNECT_TO: tcp://k8s.nsm
       NSM_FEDERATES_WITH: k8s.nsm
       NSM_TRUST_DOMAIN: docker.nsm
-      NSM_LOG_LEVEL: TRACE
+      NSM_LOG_LEVEL: INFO
