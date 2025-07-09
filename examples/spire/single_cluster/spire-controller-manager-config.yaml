@@ -21,4 +21,5 @@ spireServerSocketPath: /run/spire/sockets/api.sock
 ignoreNamespaces:
   - kube-system
   - kube-public
+  - spire
   - local-path-storage
