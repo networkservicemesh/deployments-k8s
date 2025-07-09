@@ -39,7 +39,7 @@ spec:
               mountPath: /run/spire/bundle
       containers:
         - name: spire-agent
-          image: ghcr.io/spiffe/spire-agent:1.12.4
+          image: ghcr.io/spiffe/spire-agent:1.9.5
           args: ["-config", "/run/spire/config/agent.conf"]
           volumeMounts:
             - name: spire-config

@@ -22,7 +22,7 @@ spec:
       shareProcessNamespace: true
       containers:
         - name: spire-server
-          image: ghcr.io/spiffe/spire-server:1.12.4
+          image: ghcr.io/spiffe/spire-server:1.9.5
           args:
             - -config
             - /run/spire/config/server.conf
@@ -50,12 +50,10 @@ spec:
             exec:
               command: ["/opt/spire/bin/spire-server", "healthcheck", "--shallow"]
         - name: spire-controller-manager
-          image: ghcr.io/spiffe/spire-controller-manager:0.6.2
+          image: ghcr.io/spiffe/spire-controller-manager:0.2.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9443
-            - containerPort: 8083
-              name: health-port
           args:
             - "--config=spire-controller-manager-config.yaml"
           volumeMounts:
@@ -65,14 +63,6 @@ spec:
             - name: spire-controller-manager-config
               mountPath: /spire-controller-manager-config.yaml
               subPath: spire-controller-manager-config.yaml
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: health-port
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: health-port
       volumes:
         - name: spire-config
           configMap:

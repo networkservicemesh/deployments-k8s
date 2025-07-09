@@ -7,8 +7,6 @@ namespace: spire
 resources:
 - spire.spiffe.io_clusterspiffeids.yaml
 - spire.spiffe.io_clusterfederatedtrustdomains.yaml
-- spire.spiffe.io_clusterstaticentries.yaml
-- spire.spiffe.io_controllermanagerconfigs.yaml
 - spire-namespace.yaml
 - agent-account.yaml
 - agent-cluster-role.yaml
