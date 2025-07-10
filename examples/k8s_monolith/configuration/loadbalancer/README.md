@@ -14,23 +14,24 @@ Therefore, for the `CLUSTER_CIDR` you can take for example `172.18.1.0/24`.
 Apply metallb for the cluster:
 ```bash
 if [[ ! -z $CLUSTER_CIDR ]]; then
-    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
-    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
-    kubectl apply -f - <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - $CLUSTER_CIDR
-EOF
+    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
     kubectl wait --for=condition=ready --timeout=5m pod -l app=metallb -n metallb-system
+    kubectl apply -f - <<EOF
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  addresses:
+  - $CLUSTER_CIDR
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+  metadata:
+  name: default
+    namespace: metallb-system
+EOF
 fi
 ```
 
