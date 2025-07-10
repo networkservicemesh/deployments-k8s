@@ -25,9 +25,9 @@ spec:
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
-  metadata:
+metadata:
   name: default
-    namespace: metallb-system
+  namespace: metallb-system
 EOF
 fi
 ```
@@ -49,9 +49,15 @@ spec:
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
-  metadata:
+metadata:
   name: default
-    namespace: metallb-system
+  namespace: metallb-system
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
 EOF
 fi
 ```
