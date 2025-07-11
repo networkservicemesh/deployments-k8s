@@ -22,7 +22,7 @@ spec:
       shareProcessNamespace: true
       containers:
         - name: spire-server
-          image: ghcr.io/spiffe/spire-server:1.9.5
+          image: ghcr.io/spiffe/spire-server:1.12.4
           args:
             - -config
             - /run/spire/config/server.conf
