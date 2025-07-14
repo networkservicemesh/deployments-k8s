@@ -40,6 +40,8 @@ Delete ns:
 ```bash
 kubectl --kubeconfig=$KUBECONFIG2 delete crd clusterspiffeids.spire.spiffe.io
 kubectl --kubeconfig=$KUBECONFIG2 delete crd clusterfederatedtrustdomains.spire.spiffe.io
+kubectl --kubeconfig=$KUBECONFIG2 delete crd clusterstaticentries.spire.spiffe.io
+kubectl --kubeconfig=$KUBECONFIG2 delete crd controllermanagerconfigs.spire.spiffe.io
 kubectl --kubeconfig=$KUBECONFIG2 delete validatingwebhookconfiguration.admissionregistration.k8s.io/spire-controller-manager-webhook
 kubectl --kubeconfig=$KUBECONFIG2 delete ns spire
 ```
