@@ -12,7 +12,7 @@ leaderElection:
 clusterName: nsm.cluster1
 trustDomain: nsm.cluster1
 reconcile:
-  clusterSPIFFEID: true
+  clusterSPIFFEIDs: true
   clusterFederatedTrustDomains: true
   clusterStaticEntries: false
 spireServerSocketPath: /run/spire/sockets/api.sock
