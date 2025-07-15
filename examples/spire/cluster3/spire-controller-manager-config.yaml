@@ -11,9 +11,13 @@ leaderElection:
   resourceNamespace: spire
 clusterName: nsm.cluster3
 trustDomain: nsm.cluster3
+reconcile:
+  clusterSPIFFEIDs: true
+  clusterFederatedTrustDomains: true
+  clusterStaticEntries: false
 spireServerSocketPath: /run/spire/sockets/api.sock
 ignoreNamespaces:
-  - kube-system
-  - kube-public
-  - spire
-  - local-path-storage
+  - ^kube-system$
+  - ^kube-public$
+  - ^spire$
+  - ^local-path-storage$

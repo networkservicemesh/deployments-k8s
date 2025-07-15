@@ -11,9 +11,13 @@ leaderElection:
   resourceNamespace: spire
 clusterName: k8s-nsm-cluster
 trustDomain: k8s.nsm
+reconcile:
+  clusterSPIFFEIDs: true
+  clusterFederatedTrustDomains: false
+  clusterStaticEntries: false
 spireServerSocketPath: /run/spire/sockets/api.sock
 ignoreNamespaces:
-  - kube-system
-  - kube-public
-  - spire
-  - local-path-storage
+  - ^kube-system$
+  - ^kube-public$
+  - ^spire$
+  - ^local-path-storage$

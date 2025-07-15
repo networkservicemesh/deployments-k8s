@@ -5,6 +5,7 @@ metadata:
   name: nsm-workloads
 spec:
   spiffeIDTemplate: "spiffe://k8s.nsm/ns/{{.PodMeta.Namespace}}/pod/{{.PodMeta.Name}}"
+  autoPopulateDNSNames: true
   podSelector:
     matchLabels:
       "spiffe.io/spiffe-id": "true"
