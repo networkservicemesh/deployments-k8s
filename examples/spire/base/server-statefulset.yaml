@@ -65,6 +65,14 @@ spec:
             - name: spire-controller-manager-config
               mountPath: /spire-controller-manager-config.yaml
               subPath: spire-controller-manager-config.yaml
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health-port
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health-port
       volumes:
         - name: spire-config
           configMap:
