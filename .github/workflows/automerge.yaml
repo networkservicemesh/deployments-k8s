@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Automerge
         run: gh pr merge ${{ github.event.workflow_run.head_branch }} --squash --delete-branch

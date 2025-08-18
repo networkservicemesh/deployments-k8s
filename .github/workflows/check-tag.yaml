@@ -28,7 +28,7 @@ jobs:
         echo "tag=$(echo $branch | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
 
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         ref: release/${{ env.tag }}
 
@@ -59,7 +59,7 @@ jobs:
         git config --global user.name "NSMBot"
 
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         ref: release/${{ env.tag }}
 
