@@ -9,7 +9,7 @@ jobs:
     name: Pull Request on update/* Branch Push
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Create a Pull Request
         run: |
           ref=${{ github.ref }}
