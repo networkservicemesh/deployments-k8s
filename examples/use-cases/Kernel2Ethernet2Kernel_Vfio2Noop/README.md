@@ -6,7 +6,7 @@ This example shows that remote kernel over Ethernet connection and VFIO connecti
 
 Deploy NSCs and NSEs:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Ethernet2Kernel_Vfio2Noop?ref=b04e192f5fea6af57bb351fe8f067741b3b57a3a
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/use-cases/Kernel2Ethernet2Kernel_Vfio2Noop?ref=96ebdabfc40042d572e6a04bf6d1f6a3023c3320
 ```
 
 Wait for applications ready:
