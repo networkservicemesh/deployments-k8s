@@ -32,7 +32,7 @@ spec:
             - name: NSM_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
             - name: NSM_PPROF_ENABLED
-              value: "true"
+              value: "false"
             - name: NSM_PPROF_LISTEN_ON
               value: "localhost:6060"
           imagePullPolicy: IfNotPresent
