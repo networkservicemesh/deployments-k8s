@@ -17,7 +17,7 @@ Wait for applications ready:
 kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=alpine
+kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=2m pod -l app=alpine
 ```
 ```bash
 kubectl wait -n ns-vl3-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-vl3-vpp

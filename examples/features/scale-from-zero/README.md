@@ -28,10 +28,10 @@ Wait for applications ready:
 kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-supplier-k8s
 ```
 ```bash
-kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=alpine
+kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=2m pod -l app=alpine
 ```
 ```bash
-kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=1m pod -l app=nse-icmp-responder
+kubectl wait -n ns-scale-from-zero --for=condition=ready --timeout=2m pod -l app=nse-icmp-responder
 ```
 
 Find NSE pod by label:
