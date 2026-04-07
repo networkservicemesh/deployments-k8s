@@ -29,7 +29,7 @@ spec:
             - name: NSM_NAME
               value: "$(POD_NAME)"
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
           volumeMounts:

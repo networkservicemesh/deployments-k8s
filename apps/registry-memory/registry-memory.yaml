@@ -23,7 +23,7 @@ spec:
             - name: NSM_LISTEN_ON
               value: tcp://:5002
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
             - name: NSM_PROXY_REGISTRY_URL
               value: nsmgr-proxy:5004
           imagePullPolicy: IfNotPresent
