@@ -6,7 +6,7 @@ This is a Spire setup for the single cluster scenario.
 
 To apply spire deployments following the next command:
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster?ref=c84ff650e7302d66d9414bf8bbc791d9240c8d90
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/spire/single_cluster?ref=f430976e6c9dddd560bbc46fda8c99e57e2c3e9d
 ```
 
 Wait for PODs status ready:
@@ -18,11 +18,11 @@ kubectl wait -n spire --timeout=1m --for=condition=ready pod -l app=spire-agent
 ```
 Apply the ClusterSPIFFEID CR for the cluster:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c84ff650e7302d66d9414bf8bbc791d9240c8d90/examples/spire/single_cluster/clusterspiffeid-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f430976e6c9dddd560bbc46fda8c99e57e2c3e9d/examples/spire/single_cluster/clusterspiffeid-template.yaml
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/c84ff650e7302d66d9414bf8bbc791d9240c8d90/examples/spire/base/clusterspiffeid-webhook-template.yaml
+kubectl apply -f https://raw.githubusercontent.com/networkservicemesh/deployments-k8s/f430976e6c9dddd560bbc46fda8c99e57e2c3e9d/examples/spire/base/clusterspiffeid-webhook-template.yaml
 ```
 
 ## Cleanup
