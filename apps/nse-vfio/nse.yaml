@@ -41,7 +41,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
             - name: NSM_SERVICE_NAMES
               value: "pingpong: { addr: 0a:55:44:33:22:11 }"
           volumeMounts:

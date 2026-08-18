@@ -14,7 +14,7 @@ spec:
     imagePullPolicy: IfNotPresent
     env:
       - name: NSM_LOG_LEVEL
-        value: TRACE
+        value: INFO
     # simple `sleep` command would work
     # but we need `trap` to be able to delete pods quckly
     command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]
