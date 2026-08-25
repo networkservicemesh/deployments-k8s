@@ -27,7 +27,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

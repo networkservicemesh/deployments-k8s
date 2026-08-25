@@ -32,7 +32,7 @@ spec:
         - name: NSM_IDLE_TIMEOUT
           value: 15s
         - name: NSM_LOG_LEVEL
-          value: TRACE
+          value: INFO
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets
