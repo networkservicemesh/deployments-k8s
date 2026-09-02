@@ -35,17 +35,17 @@ Start **vl3 ipam** and register **vl3 network service** in the *floating domain*
 Note: *By default ipam prefix is `172.16.0.0/16` and client prefix len is `24`. We also have two vl3 nses in this example. So we expect to have two vl3 addresses: `172.16.0.0` and `172.16.1.0` that should be accessible by each client.*
 
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster3?ref=116ff9c873a62a64ba5c3ea8b355b4b8475fd8f0
+kubectl --kubeconfig=$KUBECONFIG3 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster3?ref=420f53a7054f2ee72c58824e86c1e9ea2690942e
 ```
 
 Deploy a vl3-NSE and a client on the cluster1:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster1?ref=116ff9c873a62a64ba5c3ea8b355b4b8475fd8f0
+kubectl --kubeconfig=$KUBECONFIG1 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster1?ref=420f53a7054f2ee72c58824e86c1e9ea2690942e
 ```
 
 Deploy a vl3-NSE and a client on the cluster2:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster2?ref=116ff9c873a62a64ba5c3ea8b355b4b8475fd8f0
+kubectl --kubeconfig=$KUBECONFIG2 apply -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster2?ref=420f53a7054f2ee72c58824e86c1e9ea2690942e
 ```
 
 **2. Wait for clients to be ready**
@@ -89,15 +89,15 @@ kubectl --kubeconfig=$KUBECONFIG2 exec pods/alpine -n ns-floating-vl3-basic -- p
 
 Cleanup floating domain:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG3 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster3?ref=116ff9c873a62a64ba5c3ea8b355b4b8475fd8f0
+kubectl --kubeconfig=$KUBECONFIG3 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster3?ref=420f53a7054f2ee72c58824e86c1e9ea2690942e
 ```
 
 Cleanup cluster2 domain:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster2?ref=116ff9c873a62a64ba5c3ea8b355b4b8475fd8f0
+kubectl --kubeconfig=$KUBECONFIG2 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster2?ref=420f53a7054f2ee72c58824e86c1e9ea2690942e
 ```
 
 Cleanup cluster1 domain:
 ```bash
-kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster1?ref=116ff9c873a62a64ba5c3ea8b355b4b8475fd8f0
+kubectl --kubeconfig=$KUBECONFIG1 delete -k https://github.com/networkservicemesh/deployments-k8s/examples/interdomain/usecases/floating_vl3-basic/cluster1?ref=420f53a7054f2ee72c58824e86c1e9ea2690942e
 ```
