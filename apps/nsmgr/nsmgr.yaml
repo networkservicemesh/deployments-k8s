@@ -100,7 +100,7 @@ spec:
                 ]
             failureThreshold: 25
             periodSeconds: 5
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:6a820f4
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:7ac3880
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:
