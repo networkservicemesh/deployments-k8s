@@ -12,7 +12,7 @@ Special env variable is used for this setup to support telemetry.
 Apply NSM resources for basic tests:
 
 ```bash
-kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/nsm_system?ref=1448b3215d1416ef21af0e81b1cf9d629dfd3765
+kubectl apply -k https://github.com/networkservicemesh/deployments-k8s/examples/observability/nsm_system?ref=485ed259da9e04a4daa63637ea28d67b7e4617d2
 ```
 
 Wait for admission-webhook-k8s:
