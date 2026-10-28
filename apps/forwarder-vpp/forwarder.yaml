@@ -38,7 +38,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_PPROF_ENABLED
-              value: "true"
+              value: "false"
             - name: NSM_PPROF_LISTEN_ON
               value: "localhost:6060"
           volumeMounts:
