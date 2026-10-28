@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccount: nsmgr-sa
       containers:
-        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:4de19fc
+        - image: ghcr.io/networkservicemesh/cmd-nsmgr:v1.20.0
           imagePullPolicy: IfNotPresent
           name: nsmgr
           ports:
@@ -100,7 +100,7 @@ spec:
                 ]
             failureThreshold: 25
             periodSeconds: 5
-        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:2d5f947
+        - image: ghcr.io/networkservicemesh/cmd-exclude-prefixes-k8s:v1.20.0
           imagePullPolicy: IfNotPresent
           name: exclude-prefixes
           env:
