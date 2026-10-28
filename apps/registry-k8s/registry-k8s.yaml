@@ -26,7 +26,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
             - name: NSM_LISTEN_ON
               value: tcp://:5002
             - name: NSM_PROXY_REGISTRY_URL

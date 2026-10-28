@@ -35,7 +35,7 @@ spec:
             - name: NSM_LISTEN_ON
               value: "tcp://:5003"
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets

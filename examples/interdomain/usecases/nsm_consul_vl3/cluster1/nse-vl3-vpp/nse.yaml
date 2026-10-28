@@ -27,7 +27,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
-              value: TRACE
+              value: INFO
             - name: POD_NAME
               valueFrom:
                 fieldRef:
